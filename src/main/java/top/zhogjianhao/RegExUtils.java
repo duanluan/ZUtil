@@ -1,6 +1,6 @@
 package top.zhogjianhao;
 
-import com.sun.istack.internal.NotNull;
+import com.sun.istack.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
