@@ -17,9 +17,6 @@ import java.util.regex.Pattern;
 @Slf4j
 public class RegExUtils extends org.apache.commons.lang3.RegExUtils {
 
-  private RegExUtils() {
-  }
-
   /**
    * 替换特殊字符
    *
@@ -117,7 +114,7 @@ public class RegExUtils extends org.apache.commons.lang3.RegExUtils {
    */
   public static String match(@NotNull String text, @NotNull String regex, int item, int group, int flags) {
     if (item < 0 || group < 0) {
-      log.warn("match 或 group 参数错误！");
+      log.warn("match 或 group 参数错误");
       return null;
     }
     String result = null;
@@ -218,7 +215,7 @@ public class RegExUtils extends org.apache.commons.lang3.RegExUtils {
    * @return 是否能匹配
    */
   public static boolean isMatch(@NotNull String text, @NotNull String regex) {
-    return StringUtils.isNotBlank(matchFirst(text, regex, 0));
+    return Pattern.compile(regex).matcher(text).find();
   }
 
 
@@ -281,7 +278,7 @@ public class RegExUtils extends org.apache.commons.lang3.RegExUtils {
    */
   public static String replace(@NotNull String text, @NotNull String regex, @NotNull String replacement, int item, int group, int flags) {
     if (item < 0 || group < 0) {
-      log.warn("match 或 group 参数错误！");
+      log.warn("match 或 group 参数错误");
       return null;
     }
     Matcher matcher = getMatcher(text, regex, flags);
@@ -373,7 +370,7 @@ public class RegExUtils extends org.apache.commons.lang3.RegExUtils {
    */
   public static String replaceAll(@NotNull String text, @NotNull String regex, @NotNull String replacement, int group, int flags) {
     if (group < 0) {
-      log.warn("group 参数错误！");
+      log.warn("group 参数错误");
       return null;
     }
     StringBuilder result = new StringBuilder();
