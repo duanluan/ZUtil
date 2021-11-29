@@ -2,14 +2,25 @@ package top.zhogjianhao;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.ChronoField;
+import java.util.Locale;
 
-
+// @Slf4j
 @DisplayName("时间工具类测试")
 public class DateUtilsTest {
+
+  private static final Logger log = LoggerFactory.getLogger(DateUtilsTest.class);
+
+  public static void main(String[] args) {
+
+  }
 
   @DisplayName("探寻 ChronoField")
   @Test
@@ -86,5 +97,26 @@ public class DateUtilsTest {
     System.out.println(now.with(ChronoField.NANO_OF_DAY, 1) + indent.replaceFirst("\t\t\t", "") + "天的纳秒");
     // 秒的纳秒
     System.out.println(now.with(ChronoField.NANO_OF_SECOND, 1) + indent.replaceFirst("\t\t\t", "") + "秒的纳秒");
+  }
+
+  @DisplayName("getDefaultFormatter")
+  @Test
+  void getDefaultFormatter() {
+    // 格式中不含年
+    DateTimeFormatter dateTimeFormatter = new DateTimeFormatterBuilder().appendPattern("MM-dd").toFormatter();
+    // 获取年报错：Unsupported field: Year
+    try {
+      dateTimeFormatter.parse("08-08").get(ChronoField.YEAR);
+    } catch (Exception e) {
+      log.warn(e.getMessage());
+    }
+
+    // 使用 getDefaultFormatter() 时会赋默认值
+    dateTimeFormatter = DateUtils.getDefaultFormatter("MM-dd", Locale.ENGLISH, ZoneId.systemDefault());
+    System.out.println(dateTimeFormatter.parse("08-08").get(ChronoField.YEAR));
+
+    // 如果格式中已存在年，说明被转换的内容中已存在年，则不需要赋默认值
+    dateTimeFormatter = DateUtils.getDefaultFormatter("yyyy-MM-dd", Locale.ENGLISH, ZoneId.systemDefault());
+    System.out.println(dateTimeFormatter.parse("2021-08-08").get(ChronoField.YEAR));
   }
 }

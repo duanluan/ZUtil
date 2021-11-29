@@ -2,6 +2,7 @@ package top.zhogjianhao;
 
 import com.sun.istack.NotNull;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.WordUtils;
 
@@ -103,30 +104,34 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
   public static DateTimeFormatterBuilder getFormatterBuilder(@NotNull String pattern, Map<TemporalField, Long> fieldValueMap) {
     // 根据格式创建时间格式化构造器
     DateTimeFormatterBuilder formatterBuilder = new DateTimeFormatterBuilder().appendPattern(pattern);
+    String lowercasePattern = pattern.toLowerCase();
 
-    // 如果格式中存在特定字符，则不赋默认值
-    TemporalField maybeExistTemporalField = ChronoField.YEAR;
-    if (!pattern.toLowerCase().contains("y") && fieldValueMap.containsKey(maybeExistTemporalField)) {
-      formatterBuilder.parseDefaulting(maybeExistTemporalField, fieldValueMap.get(maybeExistTemporalField));
-      fieldValueMap.remove(maybeExistTemporalField);
-    }
-    maybeExistTemporalField = ChronoField.MONTH_OF_YEAR;
-    if (!pattern.contains("M") && !pattern.contains("L") && fieldValueMap.containsKey(maybeExistTemporalField)) {
-      formatterBuilder.parseDefaulting(maybeExistTemporalField, fieldValueMap.get(maybeExistTemporalField));
-      fieldValueMap.remove(maybeExistTemporalField);
-    }
-    maybeExistTemporalField = ChronoField.DAY_OF_MONTH;
-    if (!pattern.toLowerCase().contains("d") && !pattern.contains("F") && fieldValueMap.containsKey(maybeExistTemporalField)) {
-      formatterBuilder.parseDefaulting(maybeExistTemporalField, fieldValueMap.get(maybeExistTemporalField));
-      fieldValueMap.remove(maybeExistTemporalField);
-    }
-    maybeExistTemporalField = ChronoField.HOUR_OF_DAY;
-    if (!pattern.toLowerCase().contains("h") && !pattern.toLowerCase().contains("k") && fieldValueMap.containsKey(maybeExistTemporalField)) {
-      formatterBuilder.parseDefaulting(maybeExistTemporalField, fieldValueMap.get(maybeExistTemporalField));
-      fieldValueMap.remove(maybeExistTemporalField);
+    if (MapUtils.isNotEmpty(fieldValueMap)) {
+      // 如果格式中存在特定时间级别的字符，则不赋默认值，因为被转换的值中理应已经存在对应时间级别的值了
+      TemporalField maybeExistTemporalField = ChronoField.YEAR_OF_ERA;
+      if (lowercasePattern.contains("y") || pattern.contains("u")) {
+        if (fieldValueMap.containsKey(maybeExistTemporalField)) {
+          fieldValueMap.remove(maybeExistTemporalField);
+        }
+        maybeExistTemporalField = ChronoField.YEAR;
+        if (fieldValueMap.containsKey(maybeExistTemporalField)) {
+          fieldValueMap.remove(maybeExistTemporalField);
+        }
+      }
+      maybeExistTemporalField = ChronoField.MONTH_OF_YEAR;
+      if ((pattern.contains("M") || pattern.contains("L")) && fieldValueMap.containsKey(maybeExistTemporalField)) {
+        fieldValueMap.remove(maybeExistTemporalField);
+      }
+      maybeExistTemporalField = ChronoField.DAY_OF_MONTH;
+      if ((lowercasePattern.contains("d") || pattern.contains("F")) && fieldValueMap.containsKey(maybeExistTemporalField)) {
+        fieldValueMap.remove(maybeExistTemporalField);
+      }
+      maybeExistTemporalField = ChronoField.HOUR_OF_DAY;
+      if ((lowercasePattern.contains("h") || lowercasePattern.contains("k")) && fieldValueMap.containsKey(maybeExistTemporalField)) {
+        fieldValueMap.remove(maybeExistTemporalField);
+      }
     }
 
-    // 循环给不同时间级别赋默认值
     for (TemporalField temporalField : fieldValueMap.keySet()) {
       formatterBuilder.parseDefaulting(temporalField, fieldValueMap.get(temporalField));
     }
@@ -143,6 +148,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    */
   public static DateTimeFormatter getDefaultFormatter(@NotNull String pattern, Locale locale, ZoneId zoneId) {
     Map<TemporalField, Long> fieldValueMap = new HashMap<>();
+    fieldValueMap.put(ChronoField.YEAR_OF_ERA, 1970L);
     fieldValueMap.put(ChronoField.YEAR, 1970L);
     fieldValueMap.put(ChronoField.MONTH_OF_YEAR, 1L);
     fieldValueMap.put(ChronoField.DAY_OF_MONTH, 1L);
