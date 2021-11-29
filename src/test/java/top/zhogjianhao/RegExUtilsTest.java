@@ -1,24 +1,14 @@
 package top.zhogjianhao;
 
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDate;
 import java.util.regex.Pattern;
 
+@Slf4j
 @DisplayName("正则工具类测试")
 public class RegExUtilsTest {
-
-  public static void main(String[] args) {
-    // List<String> list = matches("${1123asdfbjxzc23}\n" +
-    //   "\n" +
-    //   "${123}", "(?<=\\$\\{).*(?=\\})");
-    // System.out.println();
-    LocalDate a = null;
-    if (a instanceof LocalDate || a ==null) {
-      System.out.println(123);
-    }
-  }
 
   @DisplayName("替换所有匹配项指定捕获组的匹配值")
   @Test

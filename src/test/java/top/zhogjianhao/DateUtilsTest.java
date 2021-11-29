@@ -1,9 +1,8 @@
 package top.zhogjianhao;
 
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -12,11 +11,9 @@ import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.ChronoField;
 import java.util.Locale;
 
-// @Slf4j
+@Slf4j
 @DisplayName("时间工具类测试")
 public class DateUtilsTest {
-
-  private static final Logger log = LoggerFactory.getLogger(DateUtilsTest.class);
 
   public static void main(String[] args) {
 
