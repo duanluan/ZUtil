@@ -4,11 +4,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.ChronoField;
+import java.util.Date;
 import java.util.Locale;
 
 @Slf4j
@@ -100,7 +103,7 @@ public class DateUtilsTest {
   @Test
   void getDefaultFormatter() {
     // 格式中不含年
-    DateTimeFormatter dateTimeFormatter = new DateTimeFormatterBuilder().appendPattern("MM-dd").toFormatter();
+    DateTimeFormatter dateTimeFormatter = new DateTimeFormatterBuilder().appendPattern(DateUtils.PATTERN_MM_DD).toFormatter();
     // 获取年报错：Unsupported field: Year
     try {
       dateTimeFormatter.parse("08-08").get(ChronoField.YEAR);
@@ -109,11 +112,27 @@ public class DateUtilsTest {
     }
 
     // 使用 getDefaultFormatter() 时会赋默认值
-    dateTimeFormatter = DateUtils.getDefaultFormatter("MM-dd", Locale.ENGLISH, ZoneId.systemDefault());
+    dateTimeFormatter = DateUtils.getDefaultFormatter(DateUtils.PATTERN_MM_DD, Locale.ENGLISH, ZoneId.systemDefault());
     System.out.println(dateTimeFormatter.parse("08-08").get(ChronoField.YEAR));
 
     // 如果格式中已存在年，说明被转换的内容中已存在年，则不需要赋默认值
-    dateTimeFormatter = DateUtils.getDefaultFormatter("yyyy-MM-dd", Locale.ENGLISH, ZoneId.systemDefault());
+    dateTimeFormatter = DateUtils.getDefaultFormatter(DateUtils.PATTERN_UUUU_MM_DD, Locale.ENGLISH, ZoneId.systemDefault());
     System.out.println(dateTimeFormatter.parse("2021-08-08").get(ChronoField.YEAR));
+  }
+
+  @DisplayName("format")
+  @Test
+  void format(){
+    // 指定格式
+    System.out.println(DateUtils.format(LocalDateTime.now(),DateUtils.PATTERN_UUUU_MM_DD_HH_MM_SS));
+    // 无格式
+    System.out.println(DateUtils.format(LocalDateTime.now()));
+    System.out.println(DateUtils.format(LocalDate.now()));
+    System.out.println(DateUtils.format(LocalTime.now()));
+
+    // 指定格式
+    System.out.println(DateUtils.format(new Date(),DateUtils.PATTERN_YYYY_MM_DD_HH_MM_SS));
+    // 无格式
+    System.out.println(DateUtils.format(new Date()));
   }
 }

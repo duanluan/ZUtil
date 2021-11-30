@@ -24,22 +24,22 @@ import java.util.stream.Stream;
 @Slf4j
 public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
 
-  // region java.time 下的类相关使用
   public static final String PATTERN_UUUU_MM_DD_HH_MM_SS = "uuuu-MM-dd HH:mm:ss";
   public static final String PATTERN_UUUUMMDDHHMMSS = "uuuuMMddHHmmss";
   public static final String PATTERN_UUUU_MM_DD_HH_MM = "uuuu-MM-dd HH:mm";
   public static final String PATTERN_UUUU_MM_DD = "uuuu-MM-dd";
   public static final String PATTERN_UUUU_MM = "uuuu-MM";
-  // endregion
 
-  // region java.util.Date 相关使用
   public static final String PATTERN_YYYY_MM_DD_HH_MM_SS = "yyyy-MM-dd HH:mm:ss";
   public static final String PATTERN_YYYYMMDDHHMMSS = "yyyyMMddHHmmss";
   public static final String PATTERN_YYYY_MM_DD_HH_MM = "yyyy-MM-dd HH:mm";
   public static final String PATTERN_YYYY_MM_DD = "yyyy-MM-dd";
   public static final String PATTERN_YYYY_MM = "yyyy-MM";
-  // endregion
 
+  public static final String PATTERN_MM_DD_HH_MM_SS = "MM-dd HH:mm:ss";
+  public static final String PATTERN_MMDDHHMMSS = "MMddHHmmss";
+  public static final String PATTERN_MM_DD_HH_MM = "MM-dd HH:mm";
+  public static final String PATTERN_MM_DD = "MM-dd";
   public static final String PATTERN_HH_MM_SS = "HH:mm:ss";
   public static final String PATTERN_HH_MM = "HH:mm";
 
@@ -221,27 +221,6 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
   /**
    * 格式化为指定格式的字符串
    *
-   * @param date    时间对象
-   * @param pattern 格式
-   * @return 格式化后的字符串
-   */
-  public static String format(@NotNull Date date, @NotNull String pattern) {
-    return new SimpleDateFormat(pattern).format(date);
-  }
-
-  /**
-   * 格式化为 DateUtils#defaultDatePattern
-   *
-   * @param date
-   * @return
-   */
-  public static String format(@NotNull Date date) {
-    return format(date, defaultDatePattern);
-  }
-
-  /**
-   * 格式化为指定格式的字符串
-   *
    * @param temporal 时间对象
    * @param pattern  格式
    * @return 格式化后的字符串
@@ -269,6 +248,27 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
       pattern = defaultLocalTimePattern;
     }
     return format(temporal, pattern);
+  }
+
+  /**
+   * 格式化为指定格式的字符串
+   *
+   * @param date    时间对象
+   * @param pattern 格式
+   * @return 格式化后的字符串
+   */
+  public static String format(@NotNull Date date, @NotNull String pattern) {
+    return format(date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime(), pattern);
+  }
+
+  /**
+   * 格式化为 DateUtils#defaultDatePattern
+   *
+   * @param date
+   * @return
+   */
+  public static String format(@NotNull Date date) {
+    return format(date, defaultDatePattern);
   }
 
   /**
