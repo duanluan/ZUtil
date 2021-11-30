@@ -2,10 +2,9 @@ package top.zhogjianhao;
 
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.beanutils.ConvertUtils;
-import org.apache.commons.beanutils.converters.DateConverter;
 import org.springframework.cglib.beans.BeanMap;
 
+import java.beans.PropertyDescriptor;
 import java.io.Serializable;
 import java.lang.invoke.SerializedLambda;
 import java.lang.reflect.InvocationTargetException;
@@ -36,13 +35,31 @@ public class BeanUtils extends org.springframework.beans.BeanUtils {
    * @param name 属性名
    * @return 属性值
    */
-  public static String getProperty(Object bean, String name) {
+  public static Object getProperty(Object bean, String name) {
     try {
-      return org.apache.commons.beanutils.BeanUtils.getProperty(bean, name);
-    } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+      PropertyDescriptor propertyDescriptor = org.springframework.beans.BeanUtils.getPropertyDescriptor(bean.getClass(), name);
+      if (propertyDescriptor != null) {
+        return propertyDescriptor.getReadMethod().invoke(bean, null);
+      }
+    } catch (IllegalAccessException | InvocationTargetException e) {
       log.error(e.getMessage(), e);
-      return null;
     }
+    return null;
+  }
+
+  /**
+   * 根据属性名获取属性值字符串
+   *
+   * @param bean 对象
+   * @param name 属性名
+   * @return 属性值字符串
+   */
+  public static String getPropertyStr(Object bean, String name) {
+    Object obj = getProperty(bean, name);
+    if (obj != null) {
+      return obj.toString();
+    }
+    return null;
   }
 
   /**
@@ -55,14 +72,15 @@ public class BeanUtils extends org.springframework.beans.BeanUtils {
    */
   public static boolean setProperty(Object bean, String name, Object value) {
     try {
-      // 避免报错：org.apache.commons.beanutils.ConversionException: No value specified for 'Date'
-      ConvertUtils.register(new DateConverter(null), java.util.Date.class);
-      org.apache.commons.beanutils.BeanUtils.setProperty(bean, name, value);
-      return true;
+      PropertyDescriptor propertyDescriptor = org.springframework.beans.BeanUtils.getPropertyDescriptor(bean.getClass(), name);
+      if (propertyDescriptor != null) {
+        propertyDescriptor.getWriteMethod().invoke(bean, value);
+        return true;
+      }
     } catch (IllegalAccessException | InvocationTargetException e) {
       log.error(e.getMessage(), e);
-      return false;
     }
+    return false;
   }
 
   @FunctionalInterface
