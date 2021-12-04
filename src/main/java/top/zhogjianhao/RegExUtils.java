@@ -1,6 +1,6 @@
 package top.zhogjianhao;
 
-import com.sun.istack.NotNull;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
@@ -45,7 +45,7 @@ public class RegExUtils extends org.apache.commons.lang3.RegExUtils {
    * @param flags 匹配模式
    * @return Matcher 对象
    */
-  public static Matcher getMatcher(@NotNull String text, @NotNull String regex, int flags) {
+  public static Matcher getMatcher(@NonNull String text, @NonNull String regex, int flags) {
     Pattern pattern = Pattern.compile(regex, flags);
     return pattern.matcher(text);
   }
@@ -57,7 +57,7 @@ public class RegExUtils extends org.apache.commons.lang3.RegExUtils {
    * @param text  需要匹配的内容
    * @return Matcher 对象
    */
-  public static Matcher getMatcher(@NotNull String text, @NotNull String regex) {
+  public static Matcher getMatcher(@NonNull String text, @NonNull String regex) {
     return getMatcher(text, regex, 0);
   }
 
@@ -69,7 +69,7 @@ public class RegExUtils extends org.apache.commons.lang3.RegExUtils {
    * @param flags 匹配模式
    * @return 匹配的下标
    */
-  public static int indexOf(@NotNull String text, @NotNull String regex, int flags) {
+  public static int indexOf(@NonNull String text, @NonNull String regex, int flags) {
     try {
       Matcher matcher = getMatcher(text, regex, flags);
       if (matcher.find()) {
@@ -89,7 +89,7 @@ public class RegExUtils extends org.apache.commons.lang3.RegExUtils {
    * @param text  需要匹配的内容
    * @return 匹配的下标
    */
-  public static int indexOf(@NotNull String text, @NotNull String regex) {
+  public static int indexOf(@NonNull String text, @NonNull String regex) {
     try {
       Matcher matcher = getMatcher(text, regex);
       if (matcher.find()) {
@@ -112,7 +112,7 @@ public class RegExUtils extends org.apache.commons.lang3.RegExUtils {
    * @param flags 匹配模式
    * @return 匹配值
    */
-  public static String match(@NotNull String text, @NotNull String regex, int item, int group, int flags) {
+  public static String match(@NonNull String text, @NonNull String regex, int item, int group, int flags) {
     if (item < 0 || group < 0) {
       log.warn("match 或 group 参数错误");
       return null;
@@ -143,7 +143,7 @@ public class RegExUtils extends org.apache.commons.lang3.RegExUtils {
    * @param group 捕获组
    * @return 匹配值
    */
-  public static String match(@NotNull String text, @NotNull String regex, int item, int group) {
+  public static String match(@NonNull String text, @NonNull String regex, int item, int group) {
     return match(text, regex, item, group, 0);
   }
 
@@ -155,7 +155,7 @@ public class RegExUtils extends org.apache.commons.lang3.RegExUtils {
    * @param item  匹配项
    * @return 匹配值
    */
-  public static String match(@NotNull String text, @NotNull String regex, int item) {
+  public static String match(@NonNull String text, @NonNull String regex, int item) {
     return match(text, regex, item, 0);
   }
 
@@ -168,7 +168,7 @@ public class RegExUtils extends org.apache.commons.lang3.RegExUtils {
    * @param flags 匹配模式
    * @return 匹配值
    */
-  public static String matchFirst(@NotNull String text, @NotNull String regex, int group, int flags) {
+  public static String matchFirst(@NonNull String text, @NonNull String regex, int group, int flags) {
     return match(text, regex, 0, group, flags);
   }
 
@@ -180,7 +180,7 @@ public class RegExUtils extends org.apache.commons.lang3.RegExUtils {
    * @param group 捕获组
    * @return 匹配值
    */
-  public static String matchFirst(@NotNull String text, @NotNull String regex, int group) {
+  public static String matchFirst(@NonNull String text, @NonNull String regex, int group) {
     return matchFirst(text, regex, group, 0);
   }
 
@@ -191,7 +191,7 @@ public class RegExUtils extends org.apache.commons.lang3.RegExUtils {
    * @param regex 正则
    * @return 匹配值
    */
-  public static String matchFirst(@NotNull String text, @NotNull String regex) {
+  public static String matchFirst(@NonNull String text, @NonNull String regex) {
     return matchFirst(text, regex, 0);
   }
 
@@ -203,7 +203,7 @@ public class RegExUtils extends org.apache.commons.lang3.RegExUtils {
    * @param flags 匹配模式
    * @return 是否能匹配
    */
-  public static boolean isMatch(@NotNull String text, @NotNull String regex, int flags) {
+  public static boolean isMatch(@NonNull String text, @NonNull String regex, int flags) {
     return StringUtils.isNotBlank(matchFirst(text, regex, 0, flags));
   }
 
@@ -214,7 +214,7 @@ public class RegExUtils extends org.apache.commons.lang3.RegExUtils {
    * @param regex 正则
    * @return 是否能匹配
    */
-  public static boolean isMatch(@NotNull String text, @NotNull String regex) {
+  public static boolean isMatch(@NonNull String text, @NonNull String regex) {
     return Pattern.compile(regex).matcher(text).find();
   }
 
@@ -228,7 +228,7 @@ public class RegExUtils extends org.apache.commons.lang3.RegExUtils {
    * @param flags 匹配模式
    * @return 匹配集合
    */
-  public static List<String> matches(@NotNull String text, @NotNull String regex, int group, int flags) {
+  public static List<String> matches(@NonNull String text, @NonNull String regex, int group, int flags) {
     List<String> resultList = new ArrayList<>();
     try {
       Matcher matcher = getMatcher(text, regex, flags);
@@ -250,7 +250,7 @@ public class RegExUtils extends org.apache.commons.lang3.RegExUtils {
    * @param group 捕获组
    * @return 匹配集合
    */
-  public static List<String> matches(@NotNull String text, @NotNull String regex, int group) {
+  public static List<String> matches(@NonNull String text, @NonNull String regex, int group) {
     return matches(text, regex, group, 0);
   }
 
@@ -261,7 +261,7 @@ public class RegExUtils extends org.apache.commons.lang3.RegExUtils {
    * @param regex 正则
    * @return 匹配集合
    */
-  public static List<String> matches(@NotNull String text, @NotNull String regex) {
+  public static List<String> matches(@NonNull String text, @NonNull String regex) {
     return matches(text, regex, 0);
   }
 
@@ -276,7 +276,7 @@ public class RegExUtils extends org.apache.commons.lang3.RegExUtils {
    * @param flags       匹配模式
    * @return 替换后的内容
    */
-  public static String replace(@NotNull String text, @NotNull String regex, @NotNull String replacement, int item, int group, int flags) {
+  public static String replace(@NonNull String text, @NonNull String regex, @NonNull String replacement, int item, int group, int flags) {
     if (item < 0 || group < 0) {
       log.warn("match 或 group 参数错误");
       return null;
@@ -303,7 +303,7 @@ public class RegExUtils extends org.apache.commons.lang3.RegExUtils {
    * @param flags       匹配模式
    * @return 替换后的内容
    */
-  public static String replace(@NotNull String text, @NotNull String regex, @NotNull String replacement, int item, int flags) {
+  public static String replace(@NonNull String text, @NonNull String regex, @NonNull String replacement, int item, int flags) {
     return replace(text, regex, replacement, item, 0, flags);
   }
 
@@ -316,7 +316,7 @@ public class RegExUtils extends org.apache.commons.lang3.RegExUtils {
    * @param item        匹配项
    * @return 替换后的内容
    */
-  public static String replace(@NotNull String text, @NotNull String regex, @NotNull String replacement, int item) {
+  public static String replace(@NonNull String text, @NonNull String regex, @NonNull String replacement, int item) {
     return replace(text, regex, replacement, item, 0);
   }
 
@@ -329,7 +329,7 @@ public class RegExUtils extends org.apache.commons.lang3.RegExUtils {
    * @param group       捕获组
    * @return 替换后的内容
    */
-  public static String replaceFirst(@NotNull String text, @NotNull String regex, @NotNull String replacement, int group, int flags) {
+  public static String replaceFirst(@NonNull String text, @NonNull String regex, @NonNull String replacement, int group, int flags) {
     return replace(text, regex, replacement, 0, group, flags);
   }
 
@@ -342,7 +342,7 @@ public class RegExUtils extends org.apache.commons.lang3.RegExUtils {
    * @param group       捕获组
    * @return 替换后的内容
    */
-  public static String replaceFirst(@NotNull String text, @NotNull String regex, @NotNull String replacement, int group) {
+  public static String replaceFirst(@NonNull String text, @NonNull String regex, @NonNull String replacement, int group) {
     return replaceFirst(text, regex, replacement, group, 0);
   }
 
@@ -354,7 +354,7 @@ public class RegExUtils extends org.apache.commons.lang3.RegExUtils {
    * @param replacement 替换值
    * @return 替换后的内容
    */
-  public static String replaceFirst(@NotNull String text, @NotNull String regex, @NotNull String replacement) {
+  public static String replaceFirst(@NonNull String text, @NonNull String regex, @NonNull String replacement) {
     return replaceFirst(text, regex, replacement, 0, 0);
   }
 
@@ -368,7 +368,7 @@ public class RegExUtils extends org.apache.commons.lang3.RegExUtils {
    * @param flags       匹配模式
    * @return 替换后的内容
    */
-  public static String replaceAll(@NotNull String text, @NotNull String regex, @NotNull String replacement, int group, int flags) {
+  public static String replaceAll(@NonNull String text, @NonNull String regex, @NonNull String replacement, int group, int flags) {
     if (group < 0) {
       log.warn("group 参数错误");
       return null;
@@ -423,7 +423,7 @@ public class RegExUtils extends org.apache.commons.lang3.RegExUtils {
    * @param group       捕获组
    * @return 替换后的内容
    */
-  public static String replaceAll(@NotNull String text, @NotNull String regex, @NotNull String replacement, int group) {
+  public static String replaceAll(@NonNull String text, @NonNull String regex, @NonNull String replacement, int group) {
     return replaceAll(text, regex, replacement, group, 0);
   }
 

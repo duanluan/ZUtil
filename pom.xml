@@ -6,7 +6,7 @@
 
   <groupId>top.zhogjianhao</groupId>
   <artifactId>ZUtil</artifactId>
-  <version>1.0.1</version>
+  <version>1.0.2</version>
 
   <name>ZUtil</name>
   <url>https://github.com/duanluan/ZUtil</url>
@@ -45,12 +45,6 @@
   </properties>
 
   <dependencies>
-    <dependency>
-      <groupId>com.sun.xml.bind</groupId>
-      <artifactId>jaxb-core</artifactId>
-      <version>3.0.2</version>
-    </dependency>
-
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
