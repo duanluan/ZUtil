@@ -1,6 +1,5 @@
 package top.zhogjianhao;
 
-import com.sun.istack.internal.NotNull;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.MapUtils;
@@ -755,7 +754,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * @param zoneId    时区
    * @return 指定时区的 Date 对象
    */
-  public static Date parseDate(@NotNull long timeStamp, ZoneId zoneId) {
+  public static Date parseDate(@NonNull long timeStamp, ZoneId zoneId) {
     Date date = new Date(timeStamp);
     if (zoneId != null) {
       date = Date.from(date.toInstant().atZone(SYSTEM_ZONE_ID).withZoneSameInstant(zoneId).toInstant());
@@ -781,7 +780,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * @param patterns 多个格式
    * @return 指定时区的 Date 对象
    */
-  public static Date parseDate(@NonNull String source, ZoneId zoneId, @NotNull String... patterns) {
+  public static Date parseDate(@NonNull String source, ZoneId zoneId, @NonNull String... patterns) {
     LocalDateTime localDateTime = parseLocalDateTime(source, zoneId, patterns);
     if (localDateTime != null) {
       return toDate(localDateTime);
@@ -796,7 +795,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * @param zoneId 时区
    * @return 指定时区的 Date 对象
    */
-  public static Date parseDate(@NonNull String source, @NotNull ZoneId zoneId) {
+  public static Date parseDate(@NonNull String source, @NonNull ZoneId zoneId) {
     LocalDateTime localDateTime = parseLocalDateTime(source, zoneId);
     if (localDateTime != null) {
       return toDate(localDateTime);
@@ -811,7 +810,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * @param patterns 多个格式
    * @return Date 对象
    */
-  public static Date parseDate(@NonNull String source, @NotNull String... patterns) {
+  public static Date parseDate(@NonNull String source, @NonNull String... patterns) {
     if (StringUtils.isAllBlank(patterns)) {
       return null;
     }
@@ -1038,7 +1037,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * @param <T>       时间类 extends Temporal
    * @return 转换时区后的时间对象
    */
-  public static <T extends Temporal> T withZoneInstant(@NotNull T temporal, @NonNull ZoneId oldZoneId, @NonNull ZoneId newZoneId) {
+  public static <T extends Temporal> T withZoneInstant(@NonNull T temporal, @NonNull ZoneId oldZoneId, @NonNull ZoneId newZoneId) {
     if (temporal instanceof LocalDateTime) {
       return (T) ((LocalDateTime) temporal).atZone(oldZoneId).withZoneSameInstant(newZoneId).toLocalDateTime();
     } else if (temporal instanceof LocalDate) {
@@ -1057,7 +1056,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * @param <T>       时间类 extends Temporal
    * @return 转换时区后的时间对象
    */
-  public static <T extends Temporal> T withZoneInstant(@NotNull T temporal, @NonNull ZoneId newZoneId) {
+  public static <T extends Temporal> T withZoneInstant(@NonNull T temporal, @NonNull ZoneId newZoneId) {
     return withZoneInstant(temporal, SYSTEM_ZONE_ID, newZoneId);
   }
 
