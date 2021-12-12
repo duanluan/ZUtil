@@ -1,12 +1,12 @@
 package top.zhogjianhao;
 
+import com.sun.istack.internal.NotNull;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.text.WordUtils;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
@@ -43,38 +43,37 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
   public static final String PATTERN_HH_MM = "HH:mm";
 
   /**
+   * 最小年份：java.time.temporal.ChronoField#EPOCH_DAY
+   */
+  public static final int MIN_YEAR = (int) (Year.MIN_VALUE * 365.25);
+
+  /**
    * 默认内容类型，比如月份是中文还是英文
    */
-  private static final Locale DEFAULT_LOCALE;
-  /**
-   * 默认日期时间格式器
-   */
-  private static final DateTimeFormatter DEFAULT_DATE_TIME_FORMATTER;
+  private static final Locale DEFAULT_LOCALE = Locale.ENGLISH;
   /**
    * 系统时区
    */
-  public static final ZoneId SYSTEM_ZONE_ID;
+  public static final ZoneId SYSTEM_ZONE_ID = ZoneId.systemDefault();
   /**
    * 系统时区偏移
    */
-  public static final ZoneOffset SYSTEM_ZONE_OFFSET;
+  public static final ZoneOffset SYSTEM_ZONE_OFFSET = OffsetDateTime.now(SYSTEM_ZONE_ID).getOffset();
   /**
-   * 默认解析模式
+   * 默认解析模式：严格模式（https://rumenz.com/java-topic/java/date-time/resolverstyle-strict-date-parsing/index.html）
    */
-  public static final ResolverStyle DEFAULT_RESOLVER_STYLE;
+  public static final ResolverStyle DEFAULT_RESOLVER_STYLE = ResolverStyle.STRICT;
 
-  static {
-    // 内容类型为英文
-    DEFAULT_LOCALE = Locale.ENGLISH;
-    // 默认时间格式：uuuu-MM-dd HH:mm:ss
-    DEFAULT_DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(PATTERN_UUUU_MM_DD_HH_MM_SS, DEFAULT_LOCALE);
-    // 系统时区
-    SYSTEM_ZONE_ID = ZoneId.systemDefault();
-    // 系统时区偏移
-    SYSTEM_ZONE_OFFSET = OffsetDateTime.now(SYSTEM_ZONE_ID).getOffset();
-    // 解析模式为严格模式（https://rumenz.com/java-topic/java/date-time/resolverstyle-strict-date-parsing/index.html）
-    DEFAULT_RESOLVER_STYLE = ResolverStyle.STRICT;
-  }
+  // static {
+  //   // 内容类型为英文
+  //   DEFAULT_LOCALE = Locale.ENGLISH;
+  //   // 系统时区
+  //   SYSTEM_ZONE_ID = ZoneId.systemDefault();
+  //   // 系统时区偏移
+  //   SYSTEM_ZONE_OFFSET = OffsetDateTime.now(SYSTEM_ZONE_ID).getOffset();
+  //   // 严格模式
+  //   DEFAULT_RESOLVER_STYLE = ResolverStyle.STRICT;
+  // }
 
   /**
    * Date 默认格式
@@ -145,8 +144,8 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    */
   public static DateTimeFormatter getDefaultFormatter(@NonNull String pattern, Locale locale, ZoneId atZoneId) {
     Map<TemporalField, Long> fieldValueMap = new HashMap<>();
-    fieldValueMap.put(ChronoField.YEAR_OF_ERA, 1970L);
-    fieldValueMap.put(ChronoField.YEAR, 1970L);
+    fieldValueMap.put(ChronoField.YEAR_OF_ERA, (long) MIN_YEAR);
+    fieldValueMap.put(ChronoField.YEAR, (long) MIN_YEAR);
     fieldValueMap.put(ChronoField.MONTH_OF_YEAR, 1L);
     fieldValueMap.put(ChronoField.DAY_OF_MONTH, 1L);
     fieldValueMap.put(ChronoField.HOUR_OF_DAY, 0L);
@@ -216,64 +215,14 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
   }
 
   /**
-   * 格式化为指定格式和时区的字符串
-   *
-   * @param zonedDateTime 时区时间
-   * @param pattern       格式
-   * @param zoneId        时区
-   * @return 指定格式和时区的字符串
-   */
-  public static String format(@NonNull ZonedDateTime zonedDateTime, String pattern, ZoneId zoneId) {
-    if (StringUtils.isBlank(pattern)) {
-      pattern = defaultLocalDateTimePattern;
-    }
-    if (zoneId != null) {
-      zonedDateTime = zonedDateTime.withZoneSameInstant(zoneId);
-    }
-    return zonedDateTime.format(getDefaultFormatter(pattern));
-  }
-
-  /**
-   * 格式化为指定格式的字符串
-   *
-   * @param zonedDateTime 时区时间
-   * @param pattern       格式
-   * @return 指定格式的字符串
-   */
-  public static String format(@NonNull ZonedDateTime zonedDateTime, @NonNull String pattern) {
-    return format(zonedDateTime, pattern, null);
-  }
-
-  /**
-   * 格式化为 uuuu-MM-dd HH:mm:ss 格式指定时区的字符串
-   *
-   * @param zonedDateTime 时区时间
-   * @param zoneId        格式
-   * @return uuuu-MM-dd HH:mm:ss 格式指定时区的字符串
-   */
-  public static String format(@NonNull ZonedDateTime zonedDateTime, @NonNull ZoneId zoneId) {
-    return format(zonedDateTime, null, zoneId);
-  }
-
-  /**
-   * 格式化为 uuuu-MM-dd HH:mm:ss 格式的字符串
-   *
-   * @param zonedDateTime 时区时间
-   * @return uuuu-MM-dd HH:mm:ss 格式的字符串
-   */
-  public static String format(@NonNull ZonedDateTime zonedDateTime) {
-    return format(zonedDateTime, null, null);
-  }
-
-  /**
-   * 格式化为指定格式和时区的字符串
+   * 格式化为指定时区和格式的字符串
    *
    * @param temporal 时间对象
-   * @param pattern  格式
    * @param zoneId   时区
-   * @return 指定格式和时区的字符串
+   * @param pattern  格式
+   * @return 指定时区和格式的字符串
    */
-  public static String format(@NonNull Temporal temporal, @NonNull String pattern, ZoneId zoneId) {
+  public static String format(@NonNull Temporal temporal, ZoneId zoneId, @NonNull String pattern) {
     DateTimeFormatter dateTimeFormatter = getDefaultFormatter(pattern);
     if (zoneId != null) {
       // 因为 LocalDate 和 LocalTime 不存在时区信息，所以先根据当前时间补全为 LocalDateTime
@@ -288,8 +237,37 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
       if (localDateTime != null) {
         return localDateTime.atZone(SYSTEM_ZONE_ID).withZoneSameInstant(zoneId).format(dateTimeFormatter);
       }
+      if (temporal instanceof ZonedDateTime) {
+        return ((ZonedDateTime) temporal).withZoneSameInstant(zoneId).format(dateTimeFormatter);
+      }
     }
     return dateTimeFormatter.format(temporal);
+  }
+
+  /**
+   * 格式化为指定时区和格式的字符串，格式根据时间对象的类型判断
+   * <p>
+   * LocalDateTime、ZonedDateTime：DateUtils#defaultLocalDatePattern<br>
+   * LocalDate：DateUtils#defaultLocalDateTimePattern<br>
+   * LocalTime：DateUtils#defaultLocalTimePattern
+   *
+   * @param temporal 时间对象
+   * @param zoneId   时区
+   * @return 指定时区和格式的字符串
+   */
+  public static String format(@NonNull Temporal temporal, ZoneId zoneId) {
+    // 根据不同的时间类型获取不同的默认格式
+    String pattern;
+    if (temporal instanceof LocalDateTime || temporal instanceof ZonedDateTime) {
+      pattern = defaultLocalDateTimePattern;
+    } else if (temporal instanceof LocalDate) {
+      pattern = defaultLocalDatePattern;
+    } else if (temporal instanceof LocalTime) {
+      pattern = defaultLocalTimePattern;
+    } else {
+      pattern = defaultLocalDateTimePattern;
+    }
+    return format(temporal, zoneId, pattern);
   }
 
   /**
@@ -300,68 +278,40 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * @return 指定格式的字符串
    */
   public static String format(@NonNull Temporal temporal, @NonNull String pattern) {
-    return format(temporal, pattern, null);
+    return format(temporal, null, pattern);
   }
 
   /**
-   * 格式化为 DateUtils#defaultLocalDatePattern（LocalDateTime）/ DateUtils#defaultLocalDateTimePattern（LocalDate）/ DateUtils#defaultLocalTimePattern（LocalTime）格式和时区的字符串
+   * 格式化为指定格式的字符串，格式根据时间对象的类型判断
+   * <p>
+   * LocalDateTime、ZonedDateTime：DateUtils#defaultLocalDatePattern<br>
+   * LocalDate：DateUtils#defaultLocalDateTimePattern<br>
+   * LocalTime：DateUtils#defaultLocalTimePattern
    *
    * @param temporal 时间对象
-   * @param zoneId   时区
-   * @return 格式为 DateUtils#defaultLocalDatePattern（LocalDateTime）/ DateUtils#defaultLocalDateTimePattern（LocalDate）/ DateUtils#defaultLocalTimePattern（LocalTime）格式和指定时区的字符串
-   */
-  public static String format(@NonNull Temporal temporal, ZoneId zoneId) {
-    // 根据不同的时间类型获取不同的默认格式
-    String pattern;
-    if (temporal instanceof LocalDateTime) {
-      pattern = defaultLocalDateTimePattern;
-    } else if (temporal instanceof LocalDate) {
-      pattern = defaultLocalDatePattern;
-    } else if (temporal instanceof LocalTime) {
-      pattern = defaultLocalTimePattern;
-    } else {
-      pattern = defaultLocalDateTimePattern;
-    }
-    return format(temporal, pattern, zoneId);
-  }
-
-  /**
-   * 格式化为 DateUtils#defaultLocalDatePattern（LocalDateTime）/ DateUtils#defaultLocalDateTimePattern（LocalDate）/ DateUtils#defaultLocalTimePattern（LocalTime）格式的字符串
-   *
-   * @param temporal 时间对象
-   * @return DateUtils#defaultLocalDatePattern（LocalDateTime）/ DateUtils#defaultLocalDateTimePattern（LocalDate）/ DateUtils#defaultLocalTimePattern（LocalTime）格式的字符串
+   * @return 指定格式的字符串
    */
   public static String format(@NonNull Temporal temporal) {
     return format(temporal, (ZoneId) null);
   }
 
   /**
-   * 格式化为指定格式和时区的字符串
+   * 格式化为指定时区和格式的字符串
    *
    * @param date    时间对象
-   * @param pattern 格式
    * @param zoneId  时区
-   * @return 指定格式和时区的字符串
-   */
-  public static String format(@NonNull Date date, String pattern, ZoneId zoneId) {
-    if (StringUtils.isBlank(pattern)) {
-      pattern = defaultDatePattern;
-    }
-    if (zoneId == null) {
-      zoneId = SYSTEM_ZONE_ID;
-    }
-    return format(date.toInstant().atZone(SYSTEM_ZONE_ID).withZoneSameInstant(zoneId).toLocalDateTime(), pattern);
-  }
-
-  /**
-   * 格式化为指定格式的字符串
-   *
-   * @param date    时间对象
    * @param pattern 格式
-   * @return 指定格式的字符串
+   * @return 指定时区和格式的字符串
    */
-  public static String format(@NonNull Date date, @NonNull String pattern) {
-    return format(date, pattern, null);
+  public static String format(@NonNull Date date, ZoneId zoneId, @NonNull String pattern) {
+    if (StringUtils.isBlank(pattern)) {
+      return null;
+    }
+    ZonedDateTime zonedDateTime = date.toInstant().atZone(SYSTEM_ZONE_ID);
+    if (zoneId != null) {
+      zonedDateTime = zonedDateTime.withZoneSameInstant(zoneId);
+    }
+    return format(zonedDateTime.toLocalDateTime(), pattern);
   }
 
   /**
@@ -372,7 +322,21 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * @return 指定时区的字符串
    */
   public static String format(@NonNull Date date, @NonNull ZoneId zoneId) {
-    return format(date, null, zoneId);
+    return format(date, zoneId, defaultDatePattern);
+  }
+
+  /**
+   * 格式化为指定格式的字符串
+   *
+   * @param date    时间对象
+   * @param pattern 格式
+   * @return 指定格式的字符串
+   */
+  public static String format(@NonNull Date date, @NonNull String pattern) {
+    if (StringUtils.isBlank(pattern)) {
+      return null;
+    }
+    return format(date, null, pattern);
   }
 
   /**
@@ -386,276 +350,123 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
   }
 
   /**
-   * 时间戳解析为 Date
+   * 转换为指定时区的 Date 对象
    *
-   * @param timeStamp 被解析的时间戳
-   * @return Date 对象
-   */
-  public static Date parseDate(@NonNull long timeStamp) {
-    return new Date(timeStamp);
-  }
-
-  /**
-   * String 解析为 Date，根据被解析字符串的长度判断格式
-   * <p>
-   * 19：DateUtils#PATTERN_UUUU_MM_DD_HH_MM_SS
-   * <br>16：DateUtils#PATTERN_UUUU_MM_DD_HH_MM
-   * <br>10：DateUtils#PATTERN_UUUU_MM_DD
-   * <br>7：DateUtils#PATTERN_UUUU_MM
-   * <br>8：DateUtils#PATTERN_HH_MM_SS
-   * <br>5：DateUtils#PATTERN_HH_MM
-   *
-   * @param source 被解析的字符串
-   * @return Date 对象
-   */
-  public static Date parseDate(@NonNull String source) {
-    try {
-      // 如果需要解析的字符串中含 - 或 :
-      if (source.contains("-") || source.contains(":")) {
-        String pattern = null;
-        switch (source.length()) {
-          case 19:
-            pattern = PATTERN_UUUU_MM_DD_HH_MM_SS;
-            break;
-          case 16:
-            pattern = PATTERN_UUUU_MM_DD_HH_MM;
-            break;
-          case 10:
-            pattern = PATTERN_UUUU_MM_DD;
-            break;
-          case 7:
-            pattern = PATTERN_UUUU_MM;
-            break;
-          case 8:
-            pattern = PATTERN_HH_MM_SS;
-            break;
-          case 5:
-            pattern = PATTERN_HH_MM;
-            break;
-          default:
-        }
-        if (pattern != null) {
-          return new SimpleDateFormat(pattern).parse(source);
-        }
-      }
-    } catch (ParseException e) {
-      log.error(e.getMessage(), e);
-      return null;
-    }
-    return null;
-  }
-
-  /**
-   * 时间戳解析为 LocalDate
-   *
-   * @param timeStamp 被解析的时间戳
-   * @param zoneId    时区
-   * @return LocalDate 对象
-   */
-  public static LocalDate parseLocalDate(@NonNull long timeStamp, @NonNull ZoneId zoneId) {
-    return Instant.ofEpochMilli(timeStamp).atZone(zoneId).toLocalDate();
-  }
-
-  /**
-   * 时间戳解析为 LocalDate
-   *
-   * @param timeStamp 被解析的时间戳
-   * @return LocalDate 对象
-   */
-  public static LocalDate parseLocalDate(@NonNull long timeStamp) {
-    return parseLocalDate(timeStamp, SYSTEM_ZONE_ID);
-  }
-
-  /**
-   * String 解析为 LocalDate
-   *
-   * @param source  被解析的字符串
-   * @param pattern 格式
-   * @param zoneId  时区
-   * @return LocalDate 对象
-   */
-  public static LocalDate parseLocalDate(@NonNull String source, @NonNull String pattern, @NonNull ZoneId zoneId) {
-    source = convertByPattern(source, pattern);
-    return LocalDate.parse(source, getDefaultFormatter(pattern, zoneId));
-  }
-
-  /**
-   * String 解析为 LocalDate
-   *
-   * @param source  被解析的字符串
-   * @param pattern 格式
-   * @return LocalDate 对象
-   */
-  public static LocalDate parseLocalDate(@NonNull String source, @NonNull String pattern) {
-    return parseLocalDate(source, pattern, SYSTEM_ZONE_ID);
-  }
-
-
-  /**
-   * String 解析为 LocalDate
-   *
-   * @param source   被解析的字符串
+   * @param temporal 时间对象
    * @param zoneId   时区
-   * @param patterns 多钟格式
-   * @return LocalDate 对象
+   * @return 指定时区的 Date 对象
    */
-  public static LocalDate parseLocalDate(@NonNull String source, @NonNull ZoneId zoneId, @NonNull String... patterns) {
-    LocalDate result = null;
-    for (String pattern : patterns) {
-      try {
-        result = parseLocalDate(source, pattern, zoneId);
-      } catch (Exception ignore) {
+  public static Date toDate(@NonNull Temporal temporal, ZoneId zoneId) {
+    if (temporal instanceof LocalDateTime) {
+      LocalDateTime localDateTime = ((LocalDateTime) temporal);
+      final ZonedDateTime[] zonedDateTime = new ZonedDateTime[1];
+      if (zoneId != null) {
+        // 设置时区为 当前偏移量 - (指定偏移量 - 当前偏移量)，比如 zoneId 偏移量为 10，理论上 toDate 后时间需要 +2，但是因为 Date.from 之后是反的，所以真实偏移量要为 6 才对，假设当前偏移量为 8，那 8 - (10 -8) = 6
+        zoneId.getRules().getOffset(localDateTime).query((TemporalQuery<Integer>) temporal1 -> {
+          zonedDateTime[0] = localDateTime.atZone(ZoneOffset.ofTotalSeconds(SYSTEM_ZONE_OFFSET.getTotalSeconds() - (((ZoneOffset) temporal1).getTotalSeconds() - SYSTEM_ZONE_OFFSET.getTotalSeconds())));
+          return null;
+        });
+      } else {
+        zonedDateTime[0] = localDateTime.atZone(SYSTEM_ZONE_ID);
       }
-    }
-    return result;
-  }
-
-  /**
-   * String 解析为 LocalDate
-   *
-   * @param source   被解析的字符串
-   * @param patterns 多钟格式
-   * @return LocalDate 对象
-   */
-  public static LocalDate parseLocalDate(@NonNull String source, @NonNull String... patterns) {
-    LocalDate result = null;
-    for (String pattern : patterns) {
-      try {
-        result = parseLocalDate(source, pattern);
-      } catch (Exception ignore) {
+      return Date.from(zonedDateTime[0].toInstant());
+    } else if (temporal instanceof LocalDate) {
+      return toDate(((LocalDate) temporal).atStartOfDay(), zoneId);
+    } else if (temporal instanceof LocalTime) {
+      return toDate(((LocalTime) temporal).atDate(LocalDate.of(MIN_YEAR, 1, 1)), zoneId);
+    } else if (temporal instanceof ZonedDateTime) {
+      final ZonedDateTime[] zonedDateTime = {(ZonedDateTime) temporal};
+      if (zoneId != null) {
+        LocalDateTime localDateTime = zonedDateTime[0].toLocalDateTime();
+        final int[] zonedDateTimeTotalSeconds = {0};
+        // 设置时区为 zonedDateTime 的偏移量 - (指定偏移量 - zonedDateTime 的偏移量)，同理如上
+        zonedDateTime[0].getZone().getRules().getOffset(localDateTime).query((TemporalQuery<Integer>) temporal1 -> {
+          zonedDateTimeTotalSeconds[0] = ((ZoneOffset) temporal1).getTotalSeconds();
+          return null;
+        });
+        zoneId.getRules().getOffset(localDateTime).query((TemporalQuery<Integer>) temporal1 -> {
+          zonedDateTime[0] = localDateTime.atZone(ZoneOffset.ofTotalSeconds(zonedDateTimeTotalSeconds[0] - (((ZoneOffset) temporal1).getTotalSeconds() - zonedDateTimeTotalSeconds[0])));
+          return null;
+        });
       }
-    }
-    return result;
-  }
-
-  /**
-   * String 解析为 LocalDate，根据被解析字符串的长度判断格式
-   * <p>
-   * 10：DateUtils#PATTERN_UUUU_MM_DD
-   * <br>7：DateUtils#PATTERN_UUUU_MM
-   *
-   * @param source 被解析的字符串
-   * @return LocalDate 对象
-   */
-  public static LocalDate parseLocalDate(@NonNull String source) {
-    int length = source.length();
-
-    String pattern = null;
-    if (source.contains("-") || source.contains(":")) {
-      switch (length) {
-        case 10:
-          pattern = PATTERN_UUUU_MM_DD;
-          break;
-        case 7:
-          pattern = PATTERN_UUUU_MM;
-          break;
-      }
-      if (pattern != null) {
-        return parseLocalDate(source, pattern);
-      }
+      return Date.from(zonedDateTime[0].toInstant());
     }
     return null;
   }
 
   /**
-   * 时间戳解析为 LocalDateTime
+   * 转换为 Date 对象
    *
-   * @param timeStamp 被解析的时间戳
-   * @param zoneId    时区
-   * @return LocalDateTime 对象
+   * @param temporal 时间对象
+   * @return Date 对象
    */
-  public static LocalDateTime parseLocalDateTime(@NonNull long timeStamp, @NonNull ZoneId zoneId) {
-    return Instant.ofEpochMilli(timeStamp).atZone(zoneId).toLocalDateTime();
+  public static Date toDate(@NonNull Temporal temporal) {
+    return toDate(temporal, null);
   }
 
   /**
-   * 时间戳解析为 LocalDateTime
+   * 解析为指定时区的 LocalDateTime 对象
    *
-   * @param timeStamp 被解析的时间戳
+   * @param timeStamp 时间戳
+   * @param zoneId    时区
+   * @return 指定时区的 LocalDateTime 对象
+   */
+  public static LocalDateTime parseLocalDateTime(@NonNull long timeStamp, ZoneId zoneId) {
+    ZonedDateTime zonedDateTime = Instant.ofEpochMilli(timeStamp).atZone(SYSTEM_ZONE_ID);
+    if (zoneId != null) {
+      zonedDateTime = zonedDateTime.withZoneSameInstant(zoneId);
+    }
+    return zonedDateTime.toLocalDateTime();
+  }
+
+  /**
+   * 解析为 LocalDateTime 对象
+   *
+   * @param timeStamp 时间戳
    * @return LocalDateTime 对象
    */
   public static LocalDateTime parseLocalDateTime(@NonNull long timeStamp) {
-    return parseLocalDateTime(timeStamp, SYSTEM_ZONE_ID);
+    return parseLocalDateTime(timeStamp, null);
   }
 
   /**
-   * String 解析为 LocalDateTime
+   * 满足任意格式时解析为指定时区的 LocalDateTime 对象
    *
-   * @param source  被解析的字符串
-   * @param pattern 格式
-   * @param zoneId  时区
-   * @return LocalDateTime 对象
-   */
-  public static LocalDateTime parseLocalDateTime(@NonNull String source, @NonNull String pattern, @NonNull ZoneId zoneId) {
-    if (StringUtils.isBlank(source)) {
-      return null;
-    }
-    source = convertByPattern(source, pattern);
-    return LocalDateTime.parse(source, getDefaultFormatter(pattern, zoneId));
-  }
-
-  /**
-   * String 解析为 LocalDateTime
-   *
-   * @param source  被解析的字符串
-   * @param pattern 格式
-   * @return LocalDateTime 对象
-   */
-  public static LocalDateTime parseLocalDateTime(@NonNull String source, @NonNull String pattern) {
-    return parseLocalDateTime(source, pattern, SYSTEM_ZONE_ID);
-  }
-
-  /**
-   * String 解析为 LocalDateTime
-   *
-   * @param source   被解析的字符串
+   * @param source   字符串
    * @param zoneId   时区
    * @param patterns 多种格式
-   * @return LocalDateTime 对象
+   * @return 指定时区的 LocalDateTime 对象
    */
-  public static LocalDateTime parseLocalDateTime(@NonNull String source, @NonNull ZoneId zoneId, @NonNull String... patterns) {
-    LocalDateTime result = null;
-    for (String pattern : patterns) {
-      try {
-        result = parseLocalDateTime(source, pattern, zoneId);
-      } catch (Exception ignore) {
-      }
+  public static LocalDateTime parseLocalDateTime(@NonNull String source, ZoneId zoneId, @NonNull String... patterns) {
+    if (StringUtils.isAllBlank(patterns)) {
+      return null;
     }
-    return result;
+    for (String pattern : patterns) {
+      source = convertByPattern(source, pattern);
+      ZonedDateTime zonedDateTime = LocalDateTime.parse(source, getDefaultFormatter(pattern)).atZone(SYSTEM_ZONE_ID);
+      if (zoneId != null) {
+        zonedDateTime = zonedDateTime.withZoneSameInstant(zoneId);
+      }
+      return zonedDateTime.toLocalDateTime();
+    }
+    return null;
   }
 
   /**
-   * String 解析为 LocalDateTime
-   *
-   * @param source   被解析的字符串
-   * @param patterns 多种格式
-   * @return LocalDateTime 对象
-   */
-  public static LocalDateTime parseLocalDateTime(@NonNull String source, @NonNull String... patterns) {
-    LocalDateTime result = null;
-    for (String pattern : patterns) {
-      try {
-        result = parseLocalDateTime(source, pattern);
-      } catch (Exception ignore) {
-      }
-    }
-    return result;
-  }
-
-  /**
-   * String 解析为 LocalDateTime，根据被解析字符串的长度判断格式
+   * 解析为指定时区的 LocalDateTime 对象，根据被解析字符串的长度判断格式
    * <p>
-   * 19：DateUtils#PATTERN_UUUU_MM_DD_HH_MM_SS
-   * <br>16：DateUtils#PATTERN_UUUU_MM_DD_HH_MM
-   * <br>10：DateUtils#PATTERN_UUUU_MM_DD
-   * <br>7：DateUtils#PATTERN_UUUU_MM
-   * <br>8：DateUtils#PATTERN_HH_MM_SS
-   * <br>5：DateUtils#PATTERN_HH_MM
+   * 19：DateUtils#PATTERN_UUUU_MM_DD_HH_MM_SS<br>
+   * 16：DateUtils#PATTERN_UUUU_MM_DD_HH_MM<br>
+   * 10：DateUtils#PATTERN_UUUU_MM_DD<br>
+   * 7：DateUtils#PATTERN_UUUU_MM<br>
+   * 8：DateUtils#PATTERN_HH_MM_SS<br>
+   * 5：DateUtils#PATTERN_HH_MM
    *
-   * @param source 被解析的字符串
-   * @return LocalDateTime 对象
+   * @param source 字符串
+   * @param zoneId 时区
+   * @return 指定时区的 LocalDateTime 对象
    */
-  public static LocalDateTime parseLocalDateTime(@NonNull String source) {
+  public static LocalDateTime parseLocalDateTime(@NonNull String source, ZoneId zoneId) {
     String pattern = null;
     if (source.contains("-") || source.contains(":")) {
       switch (source.length()) {
@@ -679,111 +490,116 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
           break;
         default:
       }
-      if (pattern != null) {
-        return parseLocalDateTime(source, pattern);
+      if (pattern == null) {
+        return null;
       }
+      return parseLocalDateTime(source, zoneId, pattern);
     }
     return null;
   }
 
   /**
-   * 时间戳解析为 LocalTime
+   * 满足任意格式时解析为 LocalDateTime 对象
+   *
+   * @param source   字符串
+   * @param patterns 多种格式
+   * @return LocalDateTime 对象
+   */
+  public static LocalDateTime parseLocalDateTime(@NonNull String source, @NonNull String... patterns) {
+    return parseLocalDateTime(source, null, patterns);
+  }
+
+  /**
+   * 解析为 LocalDateTime 对象，根据被解析字符串的长度判断格式
+   * <p>
+   * 19：DateUtils#PATTERN_UUUU_MM_DD_HH_MM_SS<br>
+   * 16：DateUtils#PATTERN_UUUU_MM_DD_HH_MM<br>
+   * 10：DateUtils#PATTERN_UUUU_MM_DD<br>
+   * 7：DateUtils#PATTERN_UUUU_MM<br>
+   * 8：DateUtils#PATTERN_HH_MM_SS<br>
+   * 5：DateUtils#PATTERN_HH_MM
+   *
+   * @param source 字符串
+   * @return LocalDateTime 对象
+   */
+  public static LocalDateTime parseLocalDateTime(@NonNull String source) {
+    return parseLocalDateTime(source, (ZoneId) null);
+  }
+
+  /**
+   * 解析为指定时区的 LocalDate 对象
    *
    * @param timeStamp 被解析的时间戳
    * @param zoneId    时区
-   * @return LocalTime 对象
+   * @return 指定时区的 LocalDate 对象
    */
-  public static LocalTime parseLocalTime(@NonNull long timeStamp, @NonNull ZoneId zoneId) {
-    return Instant.ofEpochMilli(timeStamp).atZone(zoneId).toLocalTime();
-  }
-
-  /**
-   * 时间戳解析为 LocalTime
-   *
-   * @param timeStamp 被解析的时间戳
-   * @return LocalTime 对象
-   */
-  public static LocalTime parseLocalTime(@NonNull long timeStamp) {
-    return parseLocalTime(timeStamp, SYSTEM_ZONE_ID);
-  }
-
-  /**
-   * String 解析为 LocalTime
-   *
-   * @param source  被解析的字符串
-   * @param pattern 格式
-   * @param zoneId  时区
-   * @return LocalTime 对象
-   */
-  public static LocalTime parseLocalTime(@NonNull String source, @NonNull String pattern, @NonNull ZoneId zoneId) {
-    if (StringUtils.isBlank(source)) {
-      return null;
+  public static LocalDate parseLocalDate(@NonNull long timeStamp, ZoneId zoneId) {
+    ZonedDateTime zonedDateTime = Instant.ofEpochMilli(timeStamp).atZone(SYSTEM_ZONE_ID);
+    if (zoneId != null) {
+      zonedDateTime = zonedDateTime.withZoneSameInstant(zoneId);
     }
-    source = convertByPattern(source, pattern);
-    return LocalTime.parse(source, getDefaultFormatter(pattern, zoneId));
+    return zonedDateTime.toLocalDate();
   }
 
   /**
-   * String 解析为 LocalTime
+   * 解析为 LocalDate 对象
    *
-   * @param source  被解析的字符串
-   * @param pattern 格式
-   * @return LocalTime 对象
+   * @param timeStamp 时间戳
+   * @return LocalDate 对象
    */
-  public static LocalTime parseLocalTime(@NonNull String source, @NonNull String pattern) {
-    return parseLocalTime(source, pattern, SYSTEM_ZONE_ID);
+  public static LocalDate parseLocalDate(@NonNull long timeStamp) {
+    return parseLocalDate(timeStamp, null);
   }
 
   /**
-   * String 解析为 LocalTime
+   * 满足任意格式时解析为指定时区的 LocalDate 对象
+   * <p>
+   * 需要注意的是 LocalDate 不存在时区概念，此处是将 time 补足为 LocalTime.MIN 后再转换为 LocalDate
    *
-   * @param source   被解析的字符串
+   * @param source   字符串
    * @param zoneId   时区
    * @param patterns 多种格式
-   * @return LocalTime 对象
+   * @return 指定时区的 LocalDate 对象
    */
-  public static LocalTime parseLocalTime(@NonNull String source, @NonNull ZoneId zoneId, @NonNull String... patterns) {
-    LocalTime result = null;
-    for (String pattern : patterns) {
-      try {
-        result = parseLocalTime(source, pattern, zoneId);
-      } catch (Exception ignore) {
-      }
+  public static LocalDate parseLocalDate(@NonNull String source, ZoneId zoneId, @NonNull String... patterns) {
+    if (StringUtils.isAllBlank(patterns)) {
+      return null;
     }
-    return result;
+    for (String pattern : patterns) {
+      source = convertByPattern(source, pattern);
+      LocalDate localDate = LocalDate.parse(source, getDefaultFormatter(pattern));
+      if (zoneId != null) {
+        return localDate.atTime(LocalTime.MIN).atZone(SYSTEM_ZONE_ID).withZoneSameInstant(zoneId).toLocalDate();
+      }
+      return localDate;
+    }
+    return null;
   }
 
   /**
-   * String 解析为 LocalTime
-   *
-   * @param source   被解析的字符串
-   * @param patterns 多种格式
-   * @return LocalTime 对象
-   */
-  public static LocalTime parseLocalTime(@NonNull String source, @NonNull String... patterns) {
-    LocalTime result = null;
-    for (String pattern : patterns) {
-      try {
-        result = parseLocalTime(source, pattern);
-      } catch (Exception ignore) {
-      }
-    }
-    return result;
-  }
-
-  /**
-   * String 解析为 LocalTime，根据被解析字符串的长度判断格式
+   * 解析为指定时区的 LocalDate 对象，根据被解析字符串的长度判断格式
    * <p>
-   * 8：DateUtils#PATTERN_HH_MM_SS
-   * <br>5：DateUtils#PATTERN_HH_MM
+   * 需要注意的是 LocalDate 不存在时区概念，此处是将 time 补足为 LocalTime.MIN 后再转换为 LocalDate
+   * <p>
+   * 10：DateUtils#PATTERN_UUUU_MM_DD<br>
+   * 7：DateUtils#PATTERN_UUUU_MM<br>
+   * 8：DateUtils#PATTERN_HH_MM_SS<br>
+   * 5：DateUtils#PATTERN_HH_MM
    *
-   * @param source 被解析的字符串
-   * @return LocalTime 对象
+   * @param source 字符串
+   * @param zoneId 时区
+   * @return 指定时区的 LocalDate 对象
    */
-  public static LocalTime parseLocalTime(@NonNull String source) {
+  public static LocalDate parseLocalDate(@NonNull String source, ZoneId zoneId) {
     String pattern = null;
     if (source.contains("-") || source.contains(":")) {
       switch (source.length()) {
+        case 10:
+          pattern = PATTERN_UUUU_MM_DD;
+          break;
+        case 7:
+          pattern = PATTERN_UUUU_MM;
+          break;
         case 8:
           pattern = PATTERN_HH_MM_SS;
           break;
@@ -792,157 +608,497 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
           break;
         default:
       }
-      if (pattern != null) {
-        return parseLocalTime(source, pattern);
+      if (pattern == null) {
+        return null;
+      }
+      return parseLocalDate(source, zoneId, pattern);
+    }
+    return null;
+  }
+
+  /**
+   * 满足任意格式就解析为 LocalDate 对象
+   *
+   * @param source  字符串
+   * @param pattern 格式
+   * @return LocalDate 对象
+   */
+  public static LocalDate parseLocalDate(@NonNull String source, @NonNull String... pattern) {
+    return parseLocalDate(source, null, pattern);
+  }
+
+  /**
+   * 解析为 LocalDate 对象，根据被解析字符串的长度判断格式
+   * <p>
+   * 10：DateUtils#PATTERN_UUUU_MM_DD<br>
+   * 7：DateUtils#PATTERN_UUUU_MM<br>
+   * 8：DateUtils#PATTERN_HH_MM_SS<br>
+   * 5：DateUtils#PATTERN_HH_MM
+   *
+   * @param source 字符串
+   * @return LocalDate 对象
+   */
+  public static LocalDate parseLocalDate(@NonNull String source) {
+    return parseLocalDate(source, (ZoneId) null);
+  }
+
+  /**
+   * 解析为指定时区的 LocalTime 对象
+   *
+   * @param timeStamp 时间戳
+   * @param zoneId    时区
+   * @return 指定时区的 LocalTime 对象
+   */
+  public static LocalTime parseLocalTime(@NonNull long timeStamp, ZoneId zoneId) {
+    ZonedDateTime zonedDateTime = Instant.ofEpochMilli(timeStamp).atZone(SYSTEM_ZONE_ID);
+    if (zoneId != null) {
+      zonedDateTime = zonedDateTime.withZoneSameInstant(zoneId);
+    }
+    return zonedDateTime.toLocalTime();
+  }
+
+  /**
+   * 解析为 LocalTime 对象
+   *
+   * @param timeStamp 时间戳
+   * @return LocalTime 对象
+   */
+  public static LocalTime parseLocalTime(@NonNull long timeStamp) {
+    return parseLocalTime(timeStamp, null);
+  }
+
+  /**
+   * 满足任意格式时解析为指定时区的 LocalTime 对象
+   * <p>
+   * 需要注意的是 LocalTime 不存在时区概念，此处是将 date 补足为 LocalDate.now() 后再转换为 LocalTime
+   *
+   * @param source   字符串
+   * @param zoneId   时区
+   * @param patterns 多个格式
+   * @return 指定时区的 LocalTime 对象
+   */
+  public static LocalTime parseLocalTime(@NonNull String source, ZoneId zoneId, @NonNull String... patterns) {
+    if (StringUtils.isAllBlank(source)) {
+      return null;
+    }
+    for (String pattern : patterns) {
+      source = convertByPattern(source, pattern);
+      LocalTime localTime = LocalTime.parse(source, getDefaultFormatter(pattern));
+      if (zoneId != null) {
+        return localTime.atDate(LocalDate.now()).atZone(SYSTEM_ZONE_ID).withZoneSameInstant(zoneId).toLocalTime();
+      }
+      return localTime;
+    }
+    return null;
+  }
+
+  /**
+   * 解析为指定时区的 LocalTime 对象，根据被解析字符串的长度判断格式
+   * <p>
+   * 需要注意的是 LocalTime 不存在时区概念，此处是将 date 补足为 LocalDate.now() 后再转换为 LocalTime
+   * <p>
+   * 8：DateUtils#PATTERN_HH_MM_SS<br>
+   * 5：DateUtils#PATTERN_HH_MM
+   *
+   * @param source 字符串
+   * @param zoneId 时区
+   * @return 指定时区的 LocalTime 对象
+   */
+  public static LocalTime parseLocalTime(@NonNull String source, ZoneId zoneId) {
+    String pattern = null;
+    if (source.contains("-") || source.contains(":")) {
+      int srcLen = source.length();
+      if (srcLen == 8 || srcLen == 5) {
+        switch (srcLen) {
+          case 8:
+            pattern = PATTERN_HH_MM_SS;
+            break;
+          case 5:
+            pattern = PATTERN_HH_MM;
+            break;
+          default:
+        }
+        return parseLocalTime(source, zoneId, pattern);
       }
     }
     return null;
   }
 
   /**
-   * java.util.time 对象 转 Date
+   * 满足任意格式就解析为 LocalTime 对象
    *
-   * @param temporal 时间对象
+   * @param source   字符串
+   * @param patterns 多种格式
+   * @return LocalTime 对象
+   */
+  public static LocalTime parseLocalTime(@NonNull String source, @NonNull String... patterns) {
+    return parseLocalTime(source, null, patterns);
+  }
+
+  /**
+   * 解析为 LocalTime，根据被解析字符串的长度判断格式
+   * <p>
+   * 8：DateUtils#PATTERN_HH_MM_SS
+   * <br>5：DateUtils#PATTERN_HH_MM
+   *
+   * @param source 被解析的字符串
+   * @return LocalTime 对象
+   */
+  public static LocalTime parseLocalTime(@NonNull String source) {
+    return parseLocalTime(source, (ZoneId) null);
+  }
+
+  /**
+   * 解析为指定时区的 Date 对象
+   *
+   * @param timeStamp 时间戳
+   * @param zoneId    时区
+   * @return 指定时区的 Date 对象
+   */
+  public static Date parseDate(@NotNull long timeStamp, ZoneId zoneId) {
+    Date date = new Date(timeStamp);
+    if (zoneId != null) {
+      date = Date.from(date.toInstant().atZone(SYSTEM_ZONE_ID).withZoneSameInstant(zoneId).toInstant());
+    }
+    return date;
+  }
+
+  /**
+   * 解析为 Date 对象
+   *
+   * @param timeStamp 时间戳
    * @return Date 对象
    */
-  public static Date toDate(@NonNull Temporal temporal) {
-    if (temporal instanceof LocalDate) {
-      return Date.from(((LocalDate) temporal).atStartOfDay().atZone(SYSTEM_ZONE_ID).toInstant());
-    } else if (temporal instanceof LocalDateTime) {
-      return Date.from(((LocalDateTime) temporal).atZone(SYSTEM_ZONE_ID).toInstant());
-    } else if (temporal instanceof LocalTime) {
-      return Date.from(minLocalDateTime(temporal).atZone(SYSTEM_ZONE_ID).toInstant());
+  public static Date parseDate(@NonNull long timeStamp) {
+    return parseDate(timeStamp, null);
+  }
+
+  /**
+   * 满足任意格式时解析为指定时区的 Date 对象
+   *
+   * @param source   字符串
+   * @param zoneId   时区
+   * @param patterns 多个格式
+   * @return 指定时区的 Date 对象
+   */
+  public static Date parseDate(@NonNull String source, ZoneId zoneId, @NotNull String... patterns) {
+    LocalDateTime localDateTime = parseLocalDateTime(source, zoneId, patterns);
+    if (localDateTime != null) {
+      return toDate(localDateTime);
     }
     return null;
   }
 
   /**
-   * Date 转 LocalDate
+   * 解析为指定时区的 Date 对象
    *
-   * @param date Date 对象
-   * @return LocalDate 对象
+   * @param source 字符串
+   * @param zoneId 时区
+   * @return 指定时区的 Date 对象
    */
-  public static LocalDate toLocalDate(@NonNull Date date) {
-    return parseLocalDate(date.getTime());
+  public static Date parseDate(@NonNull String source, @NotNull ZoneId zoneId) {
+    LocalDateTime localDateTime = parseLocalDateTime(source, zoneId);
+    if (localDateTime != null) {
+      return toDate(localDateTime);
+    }
+    return null;
   }
 
   /**
-   * Date 转 LocalDateTime
+   * 满足任意格式时解析为 Date 对象（org.apache.commons.lang3.time.DateUtils.parseDate）
    *
-   * @param date Date 对象
-   * @return LocalDateTime 对象
+   * @param source   字符串
+   * @param patterns 多个格式
+   * @return Date 对象
    */
-  public static LocalDateTime toLocalDateTime(@NonNull Date date) {
-    return parseLocalDateTime(date.getTime());
+  public static Date parseDate(@NonNull String source, @NotNull String... patterns) {
+    if (StringUtils.isAllBlank(patterns)) {
+      return null;
+    }
+    try {
+      return org.apache.commons.lang3.time.DateUtils.parseDate(source, patterns);
+    } catch (ParseException e) {
+      log.warn(e.getMessage());
+      return null;
+    }
   }
 
   /**
-   * Date 转 LocalTime
+   * 解析为 Date 对象
    *
-   * @param date Date 对象
-   * @return LocalTime 对象
+   * @param source 字符串
+   * @return Date 对象
    */
-  public static LocalTime toLocalTime(@NonNull Date date) {
-    return parseLocalTime(date.getTime());
+  public static Date parseDate(@NonNull String source) {
+    LocalDateTime localDateTime = parseLocalDateTime(source);
+    if (localDateTime != null) {
+      return toDate(localDateTime);
+    }
+    return null;
   }
 
   /**
-   * 最小时间：1970-01-01 00:00:00.0
+   * 解析为指定时区的时间对象
    *
-   * @return LocalDateTime 对象
+   * @param timeStamp 时间戳
+   * @param zoneId    时区
+   * @param clazz     时间类
+   * @param <T>       时间类
+   * @return 指定时区的时间对象
    */
-  public static LocalDateTime minLocalDateTime(@NonNull Temporal temporal) {
+  public static <T> T parse(@NonNull long timeStamp, ZoneId zoneId, @NonNull Class<T> clazz) {
+    if (clazz.equals(LocalDateTime.class)) {
+      return (T) parseLocalDateTime(timeStamp, zoneId);
+    } else if (clazz.equals(LocalDate.class)) {
+      return (T) parseLocalDate(timeStamp, zoneId);
+    } else if (clazz.equals(LocalTime.class)) {
+      return (T) parseLocalTime(timeStamp, zoneId);
+    } else if (clazz.equals(Date.class)) {
+      return (T) parseDate(timeStamp, zoneId);
+    }
+    return null;
+  }
+
+  /**
+   * 解析为时间对象
+   *
+   * @param timeStamp 时间戳
+   * @param clazz     时间类
+   * @param <T>       时间类
+   * @return 时间对象
+   */
+  public static <T> T parse(@NonNull long timeStamp, @NonNull Class<T> clazz) {
+    return parse(timeStamp, null, clazz);
+  }
+
+  /**
+   * 满足任意格式时解析为指定时区的时间对象
+   *
+   * @param source   字符串
+   * @param zoneId   时区
+   * @param clazz    时间类
+   * @param patterns 多个格式
+   * @param <T>      时间类
+   * @return 指定时区的时间对象
+   */
+  public static <T> T parse(@NonNull String source, ZoneId zoneId, @NonNull Class<T> clazz, @NonNull String... patterns) {
+    if (clazz.equals(LocalDateTime.class)) {
+      return (T) parseLocalDateTime(source, zoneId, patterns);
+    } else if (clazz.equals(LocalDate.class)) {
+      return (T) parseLocalDate(source, zoneId, patterns);
+    } else if (clazz.equals(LocalTime.class)) {
+      return (T) parseLocalTime(source, zoneId, patterns);
+    } else if (clazz.equals(Date.class)) {
+      return (T) parseDate(source, zoneId, patterns);
+    }
+    return null;
+  }
+
+  /**
+   * 解析指定时区的时间对象
+   *
+   * @param source 字符串
+   * @param zoneId 时区
+   * @param clazz  时间类
+   * @param <T>    时间类
+   * @return 指定时区的时间对象
+   */
+  public static <T> T parse(@NonNull String source, @NonNull ZoneId zoneId, @NonNull Class<T> clazz) {
+    if (clazz.equals(LocalDateTime.class)) {
+      return (T) parseLocalDateTime(source, zoneId);
+    } else if (clazz.equals(LocalDate.class)) {
+      return (T) parseLocalDate(source, zoneId);
+    } else if (clazz.equals(LocalTime.class)) {
+      return (T) parseLocalTime(source, zoneId);
+    } else if (clazz.equals(Date.class)) {
+      return (T) parseDate(source, zoneId);
+    }
+    return null;
+  }
+
+  /**
+   * 满足任意格式时解析为时间对象
+   *
+   * @param source   字符串
+   * @param clazz    时间类
+   * @param patterns 多个格式
+   * @param <T>      时间类
+   * @return 时间对象
+   */
+  public static <T> T parse(@NonNull String source, @NonNull Class<T> clazz, @NonNull String... patterns) {
+    return parse(source, null, clazz, patterns);
+  }
+
+  /**
+   * 解析为时间对象
+   *
+   * @param source 字符串
+   * @param clazz  时间类
+   * @param <T>    时间类
+   * @return 时间对象
+   */
+  public static <T> T parse(@NonNull String source, @NonNull Class<T> clazz) {
+    if (clazz.equals(LocalDateTime.class)) {
+      return (T) parseLocalDateTime(source);
+    } else if (clazz.equals(LocalDate.class)) {
+      return (T) parseLocalDate(source);
+    } else if (clazz.equals(LocalTime.class)) {
+      return (T) parseLocalTime(source);
+    } else if (clazz.equals(Date.class)) {
+      return (T) parseDate(source);
+    }
+    return null;
+  }
+
+  // /**
+  //  * 转换时区
+  //  *
+  //  * @param localDateTime LocalDateTime 对象
+  //  * @param oldZoneId     旧时区
+  //  * @param newZoneId     新时区
+  //  * @return 转换时区后的 LocalDateTime 对象
+  //  */
+  // public static LocalDateTime withZoneInstant(@NonNull LocalDateTime localDateTime, @NonNull ZoneId oldZoneId, @NonNull ZoneId newZoneId) {
+  //   return localDateTime.atZone(oldZoneId).withZoneSameInstant(newZoneId).toLocalDateTime();
+  // }
+  //
+  // /**
+  //  * 转换时区
+  //  *
+  //  * @param localDateTime LocalDateTime 对象
+  //  * @param newZoneId     新时区
+  //  * @return 转换时区后的 LocalDateTime 对象
+  //  */
+  // public static LocalDateTime withZoneInstant(@NonNull LocalDateTime localDateTime, @NonNull ZoneId newZoneId) {
+  //   return withZoneInstant(localDateTime, SYSTEM_ZONE_ID, newZoneId);
+  // }
+  //
+  // /**
+  //  * 转换时区
+  //  * <p>
+  //  * 需要注意的是 LocalDate 不存在时区概念，此处是将 time 补足为 LocalTime.MIN 后再转换为 LocalDate
+  //  *
+  //  * @param localDate LocalDate 对象
+  //  * @param oldZoneId 旧时区
+  //  * @param newZoneId 新时区
+  //  * @return 转换时区后的 LocalDate 对象
+  //  */
+  // public static LocalDate withZoneInstant(@NonNull LocalDate localDate, @NonNull ZoneId oldZoneId, @NonNull ZoneId newZoneId) {
+  //   return localDate.atStartOfDay().atZone(oldZoneId).withZoneSameInstant(newZoneId).toLocalDate();
+  // }
+  //
+  // /**
+  //  * 转换时区
+  //  * <p>
+  //  * 需要注意的是 LocalDate 不存在时区概念，此处是将 time 补足为 LocalTime.MIN 后再转换为 LocalDate
+  //  *
+  //  * @param localDate LocalDate 对象
+  //  * @param newZoneId 新时区
+  //  * @return 转换时区后的 LocalDate 对象
+  //  */
+  // public static LocalDate withZoneInstant(@NonNull LocalDate localDate, @NonNull ZoneId newZoneId) {
+  //   return withZoneInstant(localDate, SYSTEM_ZONE_ID, newZoneId);
+  // }
+  //
+  // /**
+  //  * 转换时区
+  //  * <p>
+  //  * 需要注意的是 LocalTime 不存在时区概念，此处是将 date 补足为 LocalDate.now() 后再转换为 LocalTime
+  //  *
+  //  * @param localTime LocalTime 对象
+  //  * @param oldZoneId 旧时区
+  //  * @param newZoneId 新时区
+  //  * @return 转换时区后的 LocalTime 对象
+  //  */
+  // public static LocalTime withZoneInstant(@NonNull LocalTime localTime, @NonNull ZoneId oldZoneId, @NonNull ZoneId newZoneId) {
+  //   return localTime.atDate(LocalDate.of(MIN_YEAR, 1, 1)).atZone(oldZoneId).withZoneSameInstant(newZoneId).toLocalTime();
+  // }
+  //
+  // /**
+  //  * 转换时区
+  //  * <p>
+  //  * 需要注意的是 LocalTime 不存在时区概念，此处是将 date 补足为 LocalDate.now() 后再转换为 LocalTime
+  //  *
+  //  * @param localTime LocalTime 对象
+  //  * @param newZoneId 新时区
+  //  * @return 转换时区后的 LocalTime 对象
+  //  */
+  // public static LocalTime withZoneInstant(@NonNull LocalTime localTime, @NonNull ZoneId newZoneId) {
+  //   return withZoneInstant(localTime, SYSTEM_ZONE_ID, newZoneId);
+  // }
+
+  /**
+   * 从旧时区转换到新时区
+   * <p>
+   * ZonedDateTime 对象请直接用 .withZoneSameInstant(newZoneId)
+   *
+   * @param temporal  时间对象
+   * @param oldZoneId 旧时区
+   * @param newZoneId 新时区
+   * @param <T>       时间类 extends Temporal
+   * @return 转换时区后的时间对象
+   */
+  public static <T extends Temporal> T withZoneInstant(@NotNull T temporal, @NonNull ZoneId oldZoneId, @NonNull ZoneId newZoneId) {
     if (temporal instanceof LocalDateTime) {
-      return (LocalDateTime) temporal;
+      return (T) ((LocalDateTime) temporal).atZone(oldZoneId).withZoneSameInstant(newZoneId).toLocalDateTime();
+    } else if (temporal instanceof LocalDate) {
+      return (T) ((LocalDate) temporal).atStartOfDay().atZone(oldZoneId).withZoneSameInstant(newZoneId).toLocalDate();
+    } else if (temporal instanceof LocalTime) {
+      return (T) ((LocalTime) temporal).atDate(LocalDate.of(MIN_YEAR, 1, 1)).atZone(oldZoneId).withZoneSameInstant(newZoneId).toLocalTime();
     }
-    LocalDateTime localDateTime = LocalDateTime.now();
-    if (temporal instanceof LocalDate) {
-      localDateTime.with(ChronoField.YEAR, ((LocalDate) temporal).getYear());
-      localDateTime.with(ChronoField.MONTH_OF_YEAR, ((LocalDate) temporal).getMonthValue());
-      localDateTime.with(ChronoField.DAY_OF_MONTH, ((LocalDate) temporal).getDayOfMonth());
-    } else {
-      localDateTime.with(ChronoField.YEAR, 1970);
-      localDateTime.with(ChronoField.MONTH_OF_YEAR, 1);
-      localDateTime.with(ChronoField.DAY_OF_MONTH, 1);
-    }
-    if (temporal instanceof LocalTime) {
-      localDateTime.with(ChronoField.HOUR_OF_DAY, ((LocalTime) temporal).getHour());
-      localDateTime.with(ChronoField.MINUTE_OF_HOUR, ((LocalTime) temporal).getMinute());
-      localDateTime.with(ChronoField.SECOND_OF_MINUTE, ((LocalTime) temporal).getSecond());
-      localDateTime.with(ChronoField.MILLI_OF_SECOND, temporal.getLong(ChronoField.MILLI_OF_SECOND));
-    } else {
-      localDateTime.with(ChronoField.HOUR_OF_DAY, 0);
-      localDateTime.with(ChronoField.MINUTE_OF_HOUR, 0);
-      localDateTime.with(ChronoField.SECOND_OF_MINUTE, 0);
-      localDateTime.with(ChronoField.MILLI_OF_SECOND, 0);
-    }
-    return localDateTime;
+    return null;
   }
 
   /**
-   * 最小时间：1970-01-01 00:00:00.0
+   * 从系统时区转换到新时区
    *
-   * @return LocalDateTime 对象
+   * @param temporal  时间对象
+   * @param newZoneId 新时区
+   * @param <T>       时间类 extends Temporal
+   * @return 转换时区后的时间对象
    */
-  public static LocalDateTime minLocalDateTime() {
-    LocalDateTime localDateTime = LocalDateTime.now();
-    localDateTime.with(ChronoField.YEAR, 1970);
-    localDateTime.with(ChronoField.MONTH_OF_YEAR, 1);
-    localDateTime.with(ChronoField.DAY_OF_MONTH, 1);
-    localDateTime.with(ChronoField.HOUR_OF_DAY, 0);
-    localDateTime.with(ChronoField.MINUTE_OF_HOUR, 0);
-    localDateTime.with(ChronoField.SECOND_OF_MINUTE, 0);
-    localDateTime.with(ChronoField.MILLI_OF_SECOND, 0);
-    return localDateTime;
+  public static <T extends Temporal> T withZoneInstant(@NotNull T temporal, @NonNull ZoneId newZoneId) {
+    return withZoneInstant(temporal, SYSTEM_ZONE_ID, newZoneId);
   }
 
   /**
-   * 转换时区
+   * 从旧时区转换到新时区
    *
-   * @param localDate 被转换时区的 LocalDate 对象
+   * @param date      Date 对象
    * @param oldZoneId 旧时区
    * @param newZoneId 新时区
-   * @return 转换时区后的 LocalDate 对象
+   * @return 转换时区后的 Date 对象
    */
-  public static LocalDate withZoneInstant(@NonNull LocalDate localDate, @NonNull ZoneId oldZoneId, @NonNull ZoneId newZoneId) {
-    return localDate.atStartOfDay().atZone(oldZoneId).withZoneSameInstant(newZoneId).toLocalDate();
+  public static Date withZoneInstant(@NonNull Date date, @NonNull ZoneId oldZoneId, @NonNull ZoneId newZoneId) {
+    LocalDateTime localDateTime = withZoneInstant(LocalDateTime.ofInstant(date.toInstant(), SYSTEM_ZONE_ID), oldZoneId, newZoneId);
+    if (localDateTime == null) {
+      return null;
+    }
+    return toDate(localDateTime);
   }
 
   /**
-   * 转换时区
+   * 从系统时区转换到新时区
    *
-   * @param localDateTime 被转换时区的 LocalDateTime 对象
-   * @param oldZoneId     旧时区
-   * @param newZoneId     新时区
-   * @return 转换时区后的 LocalDateTime 对象
-   */
-  public static LocalDateTime withZoneInstant(@NonNull LocalDateTime localDateTime, @NonNull ZoneId oldZoneId, @NonNull ZoneId newZoneId) {
-    return localDateTime.atZone(oldZoneId).withZoneSameInstant(newZoneId).toLocalDateTime();
-  }
-
-  /**
-   * 转换时区
-   *
-   * @param localTime 被转换时区的 LocalTime 对象
-   * @param oldZoneId 旧时区
+   * @param date      Date 对象
    * @param newZoneId 新时区
-   * @return 转换时区后的 LocalTime 对象
+   * @return 转换时区后的 Date 对象
    */
-  public static LocalTime withZoneInstant(@NonNull LocalTime localTime, @NonNull ZoneId oldZoneId, @NonNull ZoneId newZoneId) {
-    return minLocalDateTime(localTime).atZone(oldZoneId).withZoneSameInstant(newZoneId).toLocalTime();
+  public static Date withZoneInstant(@NonNull Date date, @NonNull ZoneId newZoneId) {
+    return withZoneInstant(date, SYSTEM_ZONE_ID, newZoneId);
   }
 
   /**
-   * 当前时间字符串
+   * 获取当前时间字符串
    *
-   * @return 当前时间字符串
+   * @return 格式为 uuuu-MM-dd HH:mm:ss 的当前时间字符串
    */
   public static String now() {
     return format(LocalDateTime.now());
   }
 
   /**
-   * 当前时间字符串
+   * 获取指定格式的当前时间字符串
    *
    * @param pattern 格式
    * @return 指定格式的当前时间字符串
@@ -952,7 +1108,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
   }
 
   /**
-   * 当前时间字符串
+   * 获取指定时区的当前时间字符串
    *
    * @param zoneId 时区
    * @return 指定时区的当前时间字符串
@@ -962,108 +1118,177 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
   }
 
   /**
-   * 当前时间字符串
+   * 获取指定时区和格式的当前时间字符串
    *
-   * @param pattern 格式
    * @param zoneId  时区
-   * @return 指定格式和时区的当前时间字符串
+   * @param pattern 格式
+   * @return 指定时区和格式的当前时间字符串
    */
-  public static String now(@NonNull String pattern, ZoneId zoneId) {
-    return format(LocalDateTime.now(), pattern, zoneId);
+  public static String now(@NonNull ZoneId zoneId, @NonNull String pattern) {
+    return format(LocalDateTime.now(), zoneId, pattern);
   }
 
-  /**
-   * 今天开始时间
-   *
-   * @return LocalDateTime 对象
-   */
-  public static LocalDateTime todayMinDateTime() {
-    return LocalDateTime.of(LocalDate.now(), LocalTime.MIN);
-  }
+  // /**
+  //  * 指定级别的最小时间
+  //  *
+  //  * @param temporal       时间对象
+  //  * @param temporalFields 多个最小时间的级别
+  //  *                       YEAR：原最小值为 Year.MIN_VALUE，此处为 1970 年
+  //  * @param <T>            时间类
+  //  * @return 时间对象
+  //  */
+  // public static <T extends Temporal> T min(@NonNull Temporal temporal, @NonNull TemporalField... temporalFields) {
+  //   if (CollectionUtils.isAllEmpty(temporalFields)) {
+  //     return null;
+  //   }
+  //   for (TemporalField temporalField : temporalFields) {
+  //     // 年月日
+  //     if (temporal instanceof ZonedDateTime || temporal instanceof LocalDateTime || temporal instanceof LocalDate) {
+  //       // 年的最小值
+  //       if (temporalField.equals(ChronoField.YEAR)) {
+  //         temporal.with(temporalField, MIN_YEAR);
+  //       }
+  //       // 公元年、预期月、以 1970-01-01 为 0 开始的天 的最小值为 0
+  //       else if (temporalField.equals(ChronoField.YEAR_OF_ERA)
+  //         || temporalField.equals(ChronoField.PROLEPTIC_MONTH)
+  //         || temporalField.equals(ChronoField.EPOCH_DAY)) {
+  //         temporal.with(temporalField, 0);
+  //       }
+  //       // 年的月、年的对齐周、月的对齐周、年的天、月的天、年的对齐周的天、月的对齐周的天、周的天的最小值为 1
+  //       else if (temporalField.equals(ChronoField.MONTH_OF_YEAR)
+  //         || temporalField.equals(ChronoField.ALIGNED_WEEK_OF_YEAR)
+  //         || temporalField.equals(ChronoField.ALIGNED_WEEK_OF_MONTH)
+  //         || temporalField.equals(ChronoField.DAY_OF_YEAR)
+  //         || temporalField.equals(ChronoField.DAY_OF_MONTH)
+  //         || temporalField.equals(ChronoField.ALIGNED_DAY_OF_WEEK_IN_YEAR)
+  //         || temporalField.equals(ChronoField.ALIGNED_DAY_OF_WEEK_IN_MONTH)
+  //         || temporalField.equals(ChronoField.DAY_OF_WEEK)) {
+  //         temporal.with(temporalField, 1);
+  //       }
+  //       // 以 1970-01-01T00:00Z (ISO) 为 0 开始的秒，必须和时区结合使用
+  //       if (temporal instanceof ZonedDateTime && temporalField.equals(ChronoField.INSTANT_SECONDS)) {
+  //         temporal.with(temporalField, 0);
+  //       }
+  //     }
+  //     // 时分秒
+  //     if (temporal instanceof ZonedDateTime || temporal instanceof LocalDateTime || temporal instanceof LocalTime) {
+  //       // 上午下午、天的小时、上午或下午的小时、天的分钟、小时的分钟、天的秒、小时的秒、天的毫秒、分钟的毫秒、天的微秒、秒的微秒、天的纳秒、秒的纳秒的最小值为 0
+  //       if (temporalField.equals(ChronoField.AMPM_OF_DAY)
+  //         || temporalField.equals(ChronoField.HOUR_OF_DAY)
+  //         || temporalField.equals(ChronoField.HOUR_OF_AMPM)
+  //         || temporalField.equals(ChronoField.MINUTE_OF_DAY)
+  //         || temporalField.equals(ChronoField.MINUTE_OF_HOUR)
+  //         || temporalField.equals(ChronoField.SECOND_OF_DAY)
+  //         || temporalField.equals(ChronoField.SECOND_OF_MINUTE)
+  //         || temporalField.equals(ChronoField.MILLI_OF_DAY)
+  //         || temporalField.equals(ChronoField.MILLI_OF_SECOND)
+  //         || temporalField.equals(ChronoField.MICRO_OF_DAY)
+  //         || temporalField.equals(ChronoField.MICRO_OF_SECOND)
+  //         || temporalField.equals(ChronoField.NANO_OF_DAY)
+  //         || temporalField.equals(ChronoField.NANO_OF_SECOND)) {
+  //         temporal.with(temporalField, 0);
+  //       }
+  //       // 24 小时制、12 小时制的最小值为 1
+  //       else if (temporalField.equals(ChronoField.CLOCK_HOUR_OF_DAY) || temporalField.equals(ChronoField.CLOCK_HOUR_OF_AMPM)) {
+  //         temporal.with(temporalField, 1);
+  //       }
+  //     }
+  //   }
+  //   return null;
+  // }
 
-  /**
-   * 今天开始时间
-   *
-   * @param zoneId 时区
-   * @return LocalDateTime 对象
-   */
-  public static LocalDateTime todayMinDateTime(@NonNull ZoneId zoneId) {
-    return todayMinDateTime().atZone(zoneId).toLocalDateTime();
-  }
-
-  /**
-   * 获取今天开始时间
-   *
-   * @return 今天开始时间字符串
-   */
-  public static String todayMinStr(@NonNull String pattern) {
-    return format(LocalDateTime.of(LocalDate.now(), LocalTime.MIN), pattern);
-  }
-
-  /**
-   * 获取今天开始时间
-   *
-   * @return 今天开始时间字符串
-   */
-  public static String todayMinStr() {
-    return format(LocalDateTime.of(LocalDate.now(), LocalTime.MIN), defaultLocalTimePattern);
-  }
-
-  /**
-   * 今天结束时间
-   *
-   * @return LocalDateTime 对象
-   */
-  public static LocalDateTime todayMaxDateTime() {
-    return LocalDateTime.of(LocalDate.now(), LocalTime.MAX);
-  }
-
-  /**
-   * 今天结束时间
-   *
-   * @param zoneId 时区
-   * @return LocalDateTime 对象
-   */
-  public static LocalDateTime todayMaxDateTime(@NonNull ZoneId zoneId) {
-    return todayMaxDateTime().atZone(zoneId).toLocalDateTime();
-  }
-
-  /**
-   * 今天结束时间
-   *
-   * @return LocalTime 对象
-   */
-  public static LocalTime todayMaxTime() {
-    return todayMaxDateTime().toLocalTime();
-  }
-
-  /**
-   * 今天结束时间
-   *
-   * @param zoneId 时区
-   * @return LocalTime 对象
-   */
-  public static LocalTime todayMaxTime(@NonNull ZoneId zoneId) {
-    return todayMaxDateTime(zoneId).toLocalTime();
-  }
-
-  /**
-   * 获取今天结束时间字符串
-   *
-   * @return 今天开始时间字符串
-   */
-  public static String todayMaxStr(@NonNull String pattern) {
-    return format(LocalDateTime.of(LocalDate.now(), LocalTime.MAX), pattern);
-  }
-
-  /**
-   * 获取今天结束时间字符串
-   *
-   * @return 今天开始时间字符串
-   */
-  public static String todayMaxStr() {
-    return format(LocalDateTime.of(LocalDate.now(), LocalTime.MAX), defaultLocalTimePattern);
-  }
+  // /**
+  //  * 今天开始时间
+  //  *
+  //  * @return LocalDateTime 对象
+  //  */
+  // public static LocalDateTime todayMinDateTime() {
+  //   return LocalDateTime.of(LocalDate.now(), LocalTime.MIN);
+  // }
+  //
+  // /**
+  //  * 今天开始时间
+  //  *
+  //  * @param zoneId 时区
+  //  * @return LocalDateTime 对象
+  //  */
+  // public static LocalDateTime todayMinDateTime(@NonNull ZoneId zoneId) {
+  //   return todayMinDateTime().atZone(zoneId).toLocalDateTime();
+  // }
+  //
+  // /**
+  //  * 获取今天开始时间
+  //  *
+  //  * @return 今天开始时间字符串
+  //  */
+  // public static String todayMinStr(@NonNull String pattern) {
+  //   return format(LocalDateTime.of(LocalDate.now(), LocalTime.MIN), pattern);
+  // }
+  //
+  // /**
+  //  * 获取今天开始时间
+  //  *
+  //  * @return 今天开始时间字符串
+  //  */
+  // public static String todayMinStr() {
+  //   return format(LocalDateTime.of(LocalDate.now(), LocalTime.MIN), defaultLocalTimePattern);
+  // }
+  //
+  // /**
+  //  * 今天结束时间
+  //  *
+  //  * @return LocalDateTime 对象
+  //  */
+  // public static LocalDateTime todayMaxDateTime() {
+  //   return LocalDateTime.of(LocalDate.now(), LocalTime.MAX);
+  // }
+  //
+  // /**
+  //  * 今天结束时间
+  //  *
+  //  * @param zoneId 时区
+  //  * @return LocalDateTime 对象
+  //  */
+  // public static LocalDateTime todayMaxDateTime(@NonNull ZoneId zoneId) {
+  //   return todayMaxDateTime().atZone(zoneId).toLocalDateTime();
+  // }
+  //
+  // /**
+  //  * 今天结束时间
+  //  *
+  //  * @return LocalTime 对象
+  //  */
+  // public static LocalTime todayMaxTime() {
+  //   return todayMaxDateTime().toLocalTime();
+  // }
+  //
+  // /**
+  //  * 今天结束时间
+  //  *
+  //  * @param zoneId 时区
+  //  * @return LocalTime 对象
+  //  */
+  // public static LocalTime todayMaxTime(@NonNull ZoneId zoneId) {
+  //   return todayMaxDateTime(zoneId).toLocalTime();
+  // }
+  //
+  // /**
+  //  * 获取今天结束时间字符串
+  //  *
+  //  * @return 今天开始时间字符串
+  //  */
+  // public static String todayMaxStr(@NonNull String pattern) {
+  //   return format(LocalDateTime.of(LocalDate.now(), LocalTime.MAX), pattern);
+  // }
+  //
+  // /**
+  //  * 获取今天结束时间字符串
+  //  *
+  //  * @return 今天开始时间字符串
+  //  */
+  // public static String todayMaxStr() {
+  //   return format(LocalDateTime.of(LocalDate.now(), LocalTime.MAX), defaultLocalTimePattern);
+  // }
 
   /**
    * 获取减去或加上指定类型数量的时间
@@ -1219,6 +1444,9 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * @return 符合周几的时间
    */
   public static List<LocalDateTime> getByWeeks(@NonNull String weeks, @NonNull LocalDateTime... times) {
+    if (CollectionUtils.isAllEmpty(times)) {
+      return null;
+    }
     List<LocalDateTime> timeList = null;
     if (!CollectionUtils.sizeIsEmpty(times)) {
       List<String> weekList = Arrays.asList(convertWeeks(weeks));

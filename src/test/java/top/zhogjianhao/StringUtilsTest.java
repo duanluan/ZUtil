@@ -8,10 +8,21 @@ import org.junit.jupiter.api.Test;
 @DisplayName("字符串工具类测试")
 public class StringUtilsTest {
 
-  @DisplayName("toUnderscore")
+  private void println(Object source) {
+    System.out.println(source);
+  }
+
+  @DisplayName("isAnyBlank")
+  @Test
+  void isAnyBlank() {
+    println(StringUtils.isAnyBlank("", ""));
+    println(StringUtils.isAnyBlank("1", ""));
+  }
+
+  @DisplayName("toUnderscore：转换为下划线命名")
   @Test
   void toUnderscore() {
-    System.out.println(StringUtils.toUnderscore("userName"));
-    System.out.println(StringUtils.toUnderscore("user_nick$Name"));
+    println(StringUtils.toUnderscore("userName"));
+    println(StringUtils.toUnderscore("user_nick$Name"));
   }
 }

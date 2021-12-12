@@ -1,7 +1,7 @@
 package top.zhogjianhao;
 
 
-import java.util.Collection;
+import java.util.*;
 
 /**
  * 集合工具类
@@ -11,7 +11,7 @@ import java.util.Collection;
 public class CollectionUtils {
 
   /**
-   * 为 null 或没有元素
+   * 是否为 null 或没有元素
    *
    * @param coll
    * @return
@@ -21,7 +21,7 @@ public class CollectionUtils {
   }
 
   /**
-   * 不为 null 且有元素
+   * 是否不为 null 且有元素
    *
    * @param coll
    * @return
@@ -31,7 +31,7 @@ public class CollectionUtils {
   }
 
   /**
-   * 不为 null 但内容为空
+   * 是否为 null 或没有元素
    *
    * @param obj
    * @return
@@ -41,7 +41,7 @@ public class CollectionUtils {
   }
 
   /**
-   * 不为 null 且内容不为空
+   * 是否不为 null 且有元素
    *
    * @param obj
    * @return
@@ -51,22 +51,60 @@ public class CollectionUtils {
   }
 
   /**
-   * 不为 null 但只有空元素
+   * 是否所有元素都为 null
    *
-   * @param coll
+   * @param obj
    * @return
    */
-  public static boolean allIsEmpty(Collection<?> coll) {
-    return org.apache.commons.collections4.CollectionUtils.removeAll(coll, null).size() == 0;
+  public static boolean isAllEmpty(Object obj) {
+    if (sizeIsEmpty(obj)) {
+      return true;
+    }
+    if (obj instanceof Collection) {
+      Collection obj1 = (Collection) obj;
+      obj1.removeIf(Objects::isNull);
+      return obj1.size() == 0;
+    } else if (obj instanceof Iterable) {
+      for (Object o : (Iterable) obj) {
+        if (o != null) {
+          return false;
+        }
+      }
+      return true;
+    } else if (obj instanceof Map) {
+      Map obj1 = (Map) obj;
+      obj1.keySet().removeIf(Objects::isNull);
+      return obj1.size() == 0;
+    } else if (obj instanceof Object[]) {
+      Object[] obj1 = (Object[]) obj;
+      return Arrays.stream(obj1).noneMatch(Objects::nonNull);
+    } else if (obj instanceof Iterator) {
+      Iterator obj1 = (Iterator) obj;
+      while (obj1.hasNext()) {
+        if (obj1.next() != null) {
+          return false;
+        }
+      }
+      return true;
+    } else if (obj instanceof Enumeration) {
+      Enumeration obj1 = (Enumeration) obj;
+      while (obj1.hasMoreElements()) {
+        if (obj1.nextElement() != null) {
+          return false;
+        }
+      }
+      return true;
+    }
+    return false;
   }
 
   /**
-   * 不为 null 且不只有空元素
+   * 是否任意元素不为 null
    *
-   * @param coll
+   * @param obj
    * @return
    */
-  public static boolean allIsNotEmpty(Collection<?> coll) {
-    return org.apache.commons.collections4.CollectionUtils.removeAll(coll, null).size() > 0;
+  public static boolean isNotAllEmpty(Object obj) {
+    return !isAllEmpty(obj);
   }
 }
