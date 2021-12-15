@@ -316,5 +316,38 @@ public class DateUtilsTest {
   @DisplayName("min：指定级别的最小时间")
   @Test
   void min() {
+    println("今天开始时间：" + DateUtils.min(nowLocalDateTime, ChronoField.HOUR_OF_DAY, ChronoField.MINUTE_OF_HOUR, ChronoField.SECOND_OF_MINUTE, ChronoField.NANO_OF_SECOND));
+    println("今天开始时间 1：" + DateUtils.min(nowLocalDateTime, ChronoField.NANO_OF_DAY));
+    println("——————————————————");
+    LocalDateTime localDateTime = nowLocalDateTime.withYear(2020).withMonth(2);
+    println("2020 年 2 月最后一天："+DateUtils.max(localDateTime, ChronoField.DAY_OF_MONTH));
+  }
+
+  @DisplayName("today：获取今天开始或结束时间")
+  @Test
+  void today() {
+    ZoneOffset zoneOffset = ZoneOffset.ofHours(-15);
+
+    println("指定时区的昨天开始时间：" + DateUtils.todayMinTime(zoneOffset, -1L));
+    println("指定时区今天开始时间：" + DateUtils.todayMinTime(zoneOffset));
+    println("昨天开始时间：" + DateUtils.todayMinTime(-1L));
+    println("今天开始时间：" + DateUtils.todayMinTime());
+
+    println("指定时区和格式的昨天开始时间字符串：" + DateUtils.todayMinTimeStr(zoneOffset, DateUtils.PATTERN_UUUU_MM_DD_HH_MM, -1L));
+    println("指定时区和格式的今天开始时间字符串：" + DateUtils.todayMinTimeStr(zoneOffset, DateUtils.PATTERN_UUUU_MM_DD_HH_MM_SS));
+    println("指定格式的今天开始时间字符串：" + DateUtils.todayMinTimeStr(DateUtils.PATTERN_UUUU_MM_DD_HH_MM_SS));
+    println("今天开始时间字符串：" + DateUtils.todayMinTimeStr());
+
+    println("——————————————————");
+
+    println("指定时区的昨天结束时间：" + DateUtils.todayMaxTime(zoneOffset, -1L));
+    println("指定时区今天结束时间：" + DateUtils.todayMaxTime(zoneOffset));
+    println("昨天结束时间：" + DateUtils.todayMaxTime(-1L));
+    println("今天结束时间：" + DateUtils.todayMaxTime());
+
+    println("指定时区和格式的昨天结束时间字符串：" + DateUtils.todayMaxTimeStr(zoneOffset, DateUtils.PATTERN_UUUU_MM_DD_HH_MM, -1L));
+    println("指定时区和格式的今天结束时间字符串：" + DateUtils.todayMaxTimeStr(zoneOffset, DateUtils.PATTERN_UUUU_MM_DD_HH_MM_SS));
+    println("指定格式的今天结束时间字符串：" + DateUtils.todayMaxTimeStr(DateUtils.PATTERN_UUUU_MM_DD_HH_MM_SS));
+    println("今天结束时间字符串：" + DateUtils.todayMaxTimeStr());
   }
 }

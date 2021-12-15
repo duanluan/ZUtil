@@ -1127,167 +1127,239 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     return format(LocalDateTime.now(), zoneId, pattern);
   }
 
-  // /**
-  //  * 指定级别的最小时间
-  //  *
-  //  * @param temporal       时间对象
-  //  * @param temporalFields 多个最小时间的级别
-  //  *                       YEAR：原最小值为 Year.MIN_VALUE，此处为 1970 年
-  //  * @param <T>            时间类
-  //  * @return 时间对象
-  //  */
-  // public static <T extends Temporal> T min(@NonNull Temporal temporal, @NonNull TemporalField... temporalFields) {
-  //   if (CollectionUtils.isAllEmpty(temporalFields)) {
-  //     return null;
-  //   }
-  //   for (TemporalField temporalField : temporalFields) {
-  //     // 年月日
-  //     if (temporal instanceof ZonedDateTime || temporal instanceof LocalDateTime || temporal instanceof LocalDate) {
-  //       // 年的最小值
-  //       if (temporalField.equals(ChronoField.YEAR)) {
-  //         temporal.with(temporalField, MIN_YEAR);
-  //       }
-  //       // 公元年、预期月、以 1970-01-01 为 0 开始的天 的最小值为 0
-  //       else if (temporalField.equals(ChronoField.YEAR_OF_ERA)
-  //         || temporalField.equals(ChronoField.PROLEPTIC_MONTH)
-  //         || temporalField.equals(ChronoField.EPOCH_DAY)) {
-  //         temporal.with(temporalField, 0);
-  //       }
-  //       // 年的月、年的对齐周、月的对齐周、年的天、月的天、年的对齐周的天、月的对齐周的天、周的天的最小值为 1
-  //       else if (temporalField.equals(ChronoField.MONTH_OF_YEAR)
-  //         || temporalField.equals(ChronoField.ALIGNED_WEEK_OF_YEAR)
-  //         || temporalField.equals(ChronoField.ALIGNED_WEEK_OF_MONTH)
-  //         || temporalField.equals(ChronoField.DAY_OF_YEAR)
-  //         || temporalField.equals(ChronoField.DAY_OF_MONTH)
-  //         || temporalField.equals(ChronoField.ALIGNED_DAY_OF_WEEK_IN_YEAR)
-  //         || temporalField.equals(ChronoField.ALIGNED_DAY_OF_WEEK_IN_MONTH)
-  //         || temporalField.equals(ChronoField.DAY_OF_WEEK)) {
-  //         temporal.with(temporalField, 1);
-  //       }
-  //       // 以 1970-01-01T00:00Z (ISO) 为 0 开始的秒，必须和时区结合使用
-  //       if (temporal instanceof ZonedDateTime && temporalField.equals(ChronoField.INSTANT_SECONDS)) {
-  //         temporal.with(temporalField, 0);
-  //       }
-  //     }
-  //     // 时分秒
-  //     if (temporal instanceof ZonedDateTime || temporal instanceof LocalDateTime || temporal instanceof LocalTime) {
-  //       // 上午下午、天的小时、上午或下午的小时、天的分钟、小时的分钟、天的秒、小时的秒、天的毫秒、分钟的毫秒、天的微秒、秒的微秒、天的纳秒、秒的纳秒的最小值为 0
-  //       if (temporalField.equals(ChronoField.AMPM_OF_DAY)
-  //         || temporalField.equals(ChronoField.HOUR_OF_DAY)
-  //         || temporalField.equals(ChronoField.HOUR_OF_AMPM)
-  //         || temporalField.equals(ChronoField.MINUTE_OF_DAY)
-  //         || temporalField.equals(ChronoField.MINUTE_OF_HOUR)
-  //         || temporalField.equals(ChronoField.SECOND_OF_DAY)
-  //         || temporalField.equals(ChronoField.SECOND_OF_MINUTE)
-  //         || temporalField.equals(ChronoField.MILLI_OF_DAY)
-  //         || temporalField.equals(ChronoField.MILLI_OF_SECOND)
-  //         || temporalField.equals(ChronoField.MICRO_OF_DAY)
-  //         || temporalField.equals(ChronoField.MICRO_OF_SECOND)
-  //         || temporalField.equals(ChronoField.NANO_OF_DAY)
-  //         || temporalField.equals(ChronoField.NANO_OF_SECOND)) {
-  //         temporal.with(temporalField, 0);
-  //       }
-  //       // 24 小时制、12 小时制的最小值为 1
-  //       else if (temporalField.equals(ChronoField.CLOCK_HOUR_OF_DAY) || temporalField.equals(ChronoField.CLOCK_HOUR_OF_AMPM)) {
-  //         temporal.with(temporalField, 1);
-  //       }
-  //     }
-  //   }
-  //   return null;
-  // }
+  /**
+   * 指定级别的最小时间
+   *
+   * @param temporal       时间对象
+   * @param temporalFields 多个最小时间的级别
+   * @param <T>            时间类
+   * @return 时间对象
+   */
+  public static <T extends Temporal> T min(@NonNull Temporal temporal, @NonNull TemporalField... temporalFields) {
+    if (CollectionUtils.isAllEmpty(temporalFields)) {
+      return null;
+    }
+    for (TemporalField temporalField : temporalFields) {
+      temporal = temporal.with(temporalField, temporalField.range().getMinimum());
+    }
+    return (T) temporal;
+  }
 
-  // /**
-  //  * 今天开始时间
-  //  *
-  //  * @return LocalDateTime 对象
-  //  */
-  // public static LocalDateTime todayMinDateTime() {
-  //   return LocalDateTime.of(LocalDate.now(), LocalTime.MIN);
-  // }
-  //
-  // /**
-  //  * 今天开始时间
-  //  *
-  //  * @param zoneId 时区
-  //  * @return LocalDateTime 对象
-  //  */
-  // public static LocalDateTime todayMinDateTime(@NonNull ZoneId zoneId) {
-  //   return todayMinDateTime().atZone(zoneId).toLocalDateTime();
-  // }
-  //
-  // /**
-  //  * 获取今天开始时间
-  //  *
-  //  * @return 今天开始时间字符串
-  //  */
-  // public static String todayMinStr(@NonNull String pattern) {
-  //   return format(LocalDateTime.of(LocalDate.now(), LocalTime.MIN), pattern);
-  // }
-  //
-  // /**
-  //  * 获取今天开始时间
-  //  *
-  //  * @return 今天开始时间字符串
-  //  */
-  // public static String todayMinStr() {
-  //   return format(LocalDateTime.of(LocalDate.now(), LocalTime.MIN), defaultLocalTimePattern);
-  // }
-  //
-  // /**
-  //  * 今天结束时间
-  //  *
-  //  * @return LocalDateTime 对象
-  //  */
-  // public static LocalDateTime todayMaxDateTime() {
-  //   return LocalDateTime.of(LocalDate.now(), LocalTime.MAX);
-  // }
-  //
-  // /**
-  //  * 今天结束时间
-  //  *
-  //  * @param zoneId 时区
-  //  * @return LocalDateTime 对象
-  //  */
-  // public static LocalDateTime todayMaxDateTime(@NonNull ZoneId zoneId) {
-  //   return todayMaxDateTime().atZone(zoneId).toLocalDateTime();
-  // }
-  //
-  // /**
-  //  * 今天结束时间
-  //  *
-  //  * @return LocalTime 对象
-  //  */
-  // public static LocalTime todayMaxTime() {
-  //   return todayMaxDateTime().toLocalTime();
-  // }
-  //
-  // /**
-  //  * 今天结束时间
-  //  *
-  //  * @param zoneId 时区
-  //  * @return LocalTime 对象
-  //  */
-  // public static LocalTime todayMaxTime(@NonNull ZoneId zoneId) {
-  //   return todayMaxDateTime(zoneId).toLocalTime();
-  // }
-  //
-  // /**
-  //  * 获取今天结束时间字符串
-  //  *
-  //  * @return 今天开始时间字符串
-  //  */
-  // public static String todayMaxStr(@NonNull String pattern) {
-  //   return format(LocalDateTime.of(LocalDate.now(), LocalTime.MAX), pattern);
-  // }
-  //
-  // /**
-  //  * 获取今天结束时间字符串
-  //  *
-  //  * @return 今天开始时间字符串
-  //  */
-  // public static String todayMaxStr() {
-  //   return format(LocalDateTime.of(LocalDate.now(), LocalTime.MAX), defaultLocalTimePattern);
-  // }
+  /**
+   * 指定级别的最大时间
+   *
+   * @param temporal       时间对象
+   * @param temporalFields 多个最大时间的级别
+   * @param <T>            时间类
+   * @return 时间对象
+   */
+  public static <T extends Temporal> T max(@NonNull Temporal temporal, @NonNull TemporalField... temporalFields) {
+    if (CollectionUtils.isAllEmpty(temporalFields)) {
+      return null;
+    }
+    for (TemporalField temporalField : temporalFields) {
+      long newValue;
+      ValueRange valueRange = temporalField.range();
+      // 最大值大小不固定，因为月的天最大可能 28 ~ 31 天
+      if (!(temporal instanceof LocalTime) && (temporalField.equals(ChronoField.YEAR_OF_ERA)
+        || temporalField.equals(ChronoField.ALIGNED_WEEK_OF_MONTH)
+        || temporalField.equals(ChronoField.DAY_OF_YEAR)
+        || temporalField.equals(ChronoField.DAY_OF_MONTH))) {
+        // 获取今天的 2 月份是否只有 28 天
+        int dayOfMonth = temporal.with(ChronoField.MONTH_OF_YEAR, 2).with(TemporalAdjusters.lastDayOfMonth()).get(ChronoField.DAY_OF_MONTH);
+        if (dayOfMonth == 28) {
+          newValue = valueRange.getSmallestMaximum();
+        } else if (temporalField.equals(ChronoField.DAY_OF_MONTH)) {
+          newValue = dayOfMonth;
+        } else {
+          newValue = valueRange.getMaximum();
+        }
+      } else {
+        newValue = valueRange.getMaximum();
+      }
+
+      temporal = temporal.with(temporalField, newValue);
+    }
+    return (T) temporal;
+  }
+
+  /**
+   * 获取指定时区和加减天的今天开始时间
+   *
+   * @param zoneId            时区
+   * @param addOrSubtractDays 加减天
+   * @return LocalDateTime 对象
+   */
+  public static LocalDateTime todayMinTime(ZoneId zoneId, Long addOrSubtractDays) {
+    LocalDateTime localDateTime = todayMinTime();
+    if (addOrSubtractDays != null && addOrSubtractDays != 0) {
+      localDateTime = plusOrMinus(localDateTime, addOrSubtractDays, ChronoUnit.DAYS);
+    }
+    if (zoneId != null) {
+      return localDateTime.atZone(SYSTEM_ZONE_ID).withZoneSameInstant(zoneId).toLocalDateTime();
+    }
+    return localDateTime;
+  }
+
+  /**
+   * 获取指定时区的今天开始时间
+   *
+   * @param zoneId 时区
+   * @return LocalDateTime 对象
+   */
+  public static LocalDateTime todayMinTime(@NonNull ZoneId zoneId) {
+    return todayMinTime(zoneId, null);
+  }
+
+  /**
+   * 获取指定加减天的今天开始时间
+   *
+   * @param days 加减天
+   * @return LocalDateTime 对象
+   */
+  public static LocalDateTime todayMinTime(@NonNull Long days) {
+    return todayMinTime(null, days);
+  }
+
+  /**
+   * 获取今天开始时间
+   *
+   * @return LocalDateTime 对象
+   */
+  public static LocalDateTime todayMinTime() {
+    return LocalDate.now().atStartOfDay();
+  }
+
+  /**
+   * 获取指定时区、格式和加减天的今天开始时间字符串
+   *
+   * @param zoneId            时区
+   * @param pattern           格式
+   * @param addOrSubtractDays 加减天
+   * @return 时间字符串
+   */
+  public static String todayMinTimeStr(ZoneId zoneId, @NonNull String pattern, Long addOrSubtractDays) {
+    return format(todayMinTime(zoneId, addOrSubtractDays), pattern);
+  }
+
+  /**
+   * 获取指定时区和格式的今天开始时间字符串
+   *
+   * @param zoneId  时区
+   * @param pattern 格式
+   * @return 时间字符串
+   */
+  public static String todayMinTimeStr(@NonNull ZoneId zoneId, @NonNull String pattern) {
+    return todayMinTimeStr(zoneId, pattern, null);
+  }
+
+  /**
+   * 获取指定格式的今天开始时间字符串
+   *
+   * @param pattern 格式
+   * @return 时间字符串
+   */
+  public static String todayMinTimeStr(@NonNull String pattern) {
+    return todayMinTimeStr(null, pattern, null);
+  }
+
+  /**
+   * 获取今天开始时间字符串
+   *
+   * @return 时间字符串
+   */
+  public static String todayMinTimeStr() {
+    return todayMinTimeStr(defaultLocalDateTimePattern);
+  }
+
+  /**
+   * 获取指定时区和加减天的今天结束时间
+   *
+   * @param zoneId            时区
+   * @param addOrSubtractDays 加减天
+   * @return LocalDateTime 对象
+   */
+  public static LocalDateTime todayMaxTime(ZoneId zoneId, Long addOrSubtractDays) {
+    LocalDateTime localDateTime = todayMaxTime();
+    if (addOrSubtractDays != null && addOrSubtractDays != 0) {
+      localDateTime = plusOrMinus(localDateTime, addOrSubtractDays, ChronoUnit.DAYS);
+    }
+    if (zoneId != null) {
+      return localDateTime.atZone(SYSTEM_ZONE_ID).withZoneSameInstant(zoneId).toLocalDateTime();
+    }
+    return localDateTime;
+  }
+
+  /**
+   * 获取指定时区的今天结束时间
+   *
+   * @param zoneId 时区
+   * @return LocalDateTime 对象
+   */
+  public static LocalDateTime todayMaxTime(@NonNull ZoneId zoneId) {
+    return todayMaxTime(zoneId, null);
+  }
+
+  /**
+   * 获取指定加减天的今天结束时间
+   *
+   * @param days 加减天
+   * @return LocalDateTime 对象
+   */
+  public static LocalDateTime todayMaxTime(@NonNull Long days) {
+    return todayMaxTime(null, days);
+  }
+
+  /**
+   * 获取今天结束时间
+   *
+   * @return LocalDateTime 对象
+   */
+  public static LocalDateTime todayMaxTime() {
+    return LocalDate.now().atTime(LocalTime.MAX);
+  }
+
+  /**
+   * 获取指定时区、格式和加减天的今天结束时间字符串
+   *
+   * @param zoneId            时区
+   * @param pattern           格式
+   * @param addOrSubtractDays 加减天
+   * @return 时间字符串
+   */
+  public static String todayMaxTimeStr(ZoneId zoneId, @NonNull String pattern, Long addOrSubtractDays) {
+    return format(todayMaxTime(zoneId, addOrSubtractDays), pattern);
+  }
+
+  /**
+   * 获取指定时区和格式的今天结束时间字符串
+   *
+   * @param zoneId  时区
+   * @param pattern 格式
+   * @return 时间字符串
+   */
+  public static String todayMaxTimeStr(@NonNull ZoneId zoneId, @NonNull String pattern) {
+    return todayMaxTimeStr(zoneId, pattern, null);
+  }
+
+  /**
+   * 获取指定格式的今天结束时间字符串
+   *
+   * @param pattern 格式
+   * @return 时间字符串
+   */
+  public static String todayMaxTimeStr(@NonNull String pattern) {
+    return todayMaxTimeStr(null, pattern, null);
+  }
+
+  /**
+   * 获取今天结束时间字符串
+   *
+   * @return 时间字符串
+   */
+  public static String todayMaxTimeStr() {
+    return todayMaxTimeStr(defaultLocalDateTimePattern);
+  }
 
   /**
    * 获取减去或加上指定类型数量的时间
