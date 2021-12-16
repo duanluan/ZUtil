@@ -1362,23 +1362,35 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
   }
 
   /**
-   * 获取减去或加上指定类型数量的时间
+   * 加减指定周期数量的时间
    *
-   * @param temporal        被加减的时间
+   * @param temporal        被加减的时间对象
    * @param augendOrMinuend 数量
-   * @param chronoUnit      时间类型
-   * @return 加减后的时间
+   * @param chronoUnits     多个时间类型
+   * @param <T>             时间类
+   * @return 加减后的时间对象
    */
-  public static <T extends Temporal> T plusOrMinus(@NonNull T temporal, @NonNull long augendOrMinuend, ChronoUnit chronoUnit) {
-    if (chronoUnit == null) {
-      chronoUnit = ChronoUnit.MILLIS;
-    }
-    if (augendOrMinuend < 0) {
-      return (T) temporal.minus(Math.abs(augendOrMinuend), chronoUnit);
-    } else if (augendOrMinuend > 0) {
-      return (T) temporal.plus(augendOrMinuend, chronoUnit);
+  public static <T extends Temporal> T plusOrMinus(@NonNull T temporal, @NonNull long augendOrMinuend, @NonNull ChronoUnit... chronoUnits) {
+    for (ChronoUnit chronoUnit : chronoUnits) {
+      if (augendOrMinuend < 0) {
+        temporal = (T) temporal.minus(Math.abs(augendOrMinuend), chronoUnit);
+      } else if (augendOrMinuend > 0) {
+        temporal = (T) temporal.plus(augendOrMinuend, chronoUnit);
+      }
     }
     return temporal;
+  }
+
+  /**
+   * 加减指定数量的时间，时间周期为毫秒
+   *
+   * @param temporal        被加减的时间对象
+   * @param augendOrMinuend 数量
+   * @param <T>             时间类
+   * @return 加减后的时间对象
+   */
+  public static <T extends Temporal> T plusOrMinus(@NonNull T temporal, @NonNull long augendOrMinuend) {
+    return plusOrMinus(temporal, augendOrMinuend, ChronoUnit.MILLIS);
   }
 
   // region 交集差集并集

@@ -8,6 +8,7 @@ import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.ChronoField;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.Locale;
 
@@ -320,7 +321,7 @@ public class DateUtilsTest {
     println("今天开始时间 1：" + DateUtils.min(nowLocalDateTime, ChronoField.NANO_OF_DAY));
     println("——————————————————");
     LocalDateTime localDateTime = nowLocalDateTime.withYear(2020).withMonth(2);
-    println("2020 年 2 月最后一天："+DateUtils.max(localDateTime, ChronoField.DAY_OF_MONTH));
+    println("2020 年 2 月最后一天：" + DateUtils.max(localDateTime, ChronoField.DAY_OF_MONTH));
   }
 
   @DisplayName("today：获取今天开始或结束时间")
@@ -349,5 +350,12 @@ public class DateUtilsTest {
     println("指定时区和格式的今天结束时间字符串：" + DateUtils.todayMaxTimeStr(zoneOffset, DateUtils.PATTERN_UUUU_MM_DD_HH_MM_SS));
     println("指定格式的今天结束时间字符串：" + DateUtils.todayMaxTimeStr(DateUtils.PATTERN_UUUU_MM_DD_HH_MM_SS));
     println("今天结束时间字符串：" + DateUtils.todayMaxTimeStr());
+  }
+
+  @DisplayName("plusOrMinus：加减时间")
+  @Test
+  void plusOrMinus() {
+    println("加一天 1 小时：" + DateUtils.plusOrMinus(nowLocalDateTime, 1, ChronoUnit.DAYS, ChronoUnit.HOURS));
+    println("减一天：" + DateUtils.plusOrMinus(nowLocalDateTime, -(1000 * 60 * 60 * 24)));
   }
 }
