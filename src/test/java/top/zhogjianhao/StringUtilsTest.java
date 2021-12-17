@@ -28,6 +28,7 @@ public class StringUtilsTest {
     println(StringUtils.toUnderscore("user_nick$Name"));
   }
 
+  @DisplayName("nCopies：字符串重复 n 遍")
   @Test
   void nCopies() {
     long currentTimeMillis = System.currentTimeMillis();
