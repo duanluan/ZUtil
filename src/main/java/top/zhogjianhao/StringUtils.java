@@ -26,4 +26,22 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
     }
     return sb.toString().toLowerCase();
   }
+
+  /**
+   * 字符串重复 n 遍
+   *
+   * @param source 字符串
+   * @param n      重复次数
+   * @return 重复 n 遍的字符串
+   */
+  public static String nCopies(String source, long n) {
+    if (isBlank(source) || n < 1) {
+      return null;
+    }
+    StringBuilder sb = new StringBuilder();
+    for (int i = 0; i < n; i++) {
+      sb.append(source);
+    }
+    return sb.toString();
+  }
 }
