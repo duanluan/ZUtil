@@ -1,6 +1,8 @@
 package top.zhogjianhao;
 
 
+import lombok.NonNull;
+
 import java.util.*;
 
 /**
@@ -106,5 +108,117 @@ public class CollectionUtils {
    */
   public static boolean isNotAllEmpty(Object obj) {
     return !isAllEmpty(obj);
+  }
+
+  /**
+   * 从指定下标开始，将后面的元素往前复制指定位数
+   *
+   * @param arr        数组
+   * @param arrLength  数组长度
+   * @param startIndex 开始下标
+   * @param length     位数
+   * @return 数组
+   */
+  public static boolean moveForward(@NonNull Object arr, int arrLength, int startIndex, int length) {
+    if (!(arr instanceof Object[] || arr instanceof int[] || arr instanceof long[] || arr instanceof double[] || arr instanceof float[] || arr instanceof boolean[] || arr instanceof short[] || arr instanceof byte[] || arr instanceof char[])) {
+      return false;
+    }
+    if (arrLength - length - startIndex >= 0) {
+      System.arraycopy(arr, startIndex + length, arr, startIndex, arrLength - length - startIndex);
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * 删除指定下标的元素
+   *
+   * @param arr              数组
+   * @param index            下标
+   * @param lastElementValue 最后一个元素的值
+   * @return 数组
+   */
+  public static boolean remove(@NonNull Object[] arr, int index, Object lastElementValue) {
+    if (index < 0) {
+      return false;
+    }
+    moveForward(arr, arr.length, index, 1);
+    arr[arr.length - 1] = lastElementValue;
+    return true;
+  }
+
+  /**
+   * 删除指定下标的元素
+   *
+   * @param arr   数组
+   * @param index 下标
+   * @return 数组
+   */
+  public static boolean remove(@NonNull Object[] arr, int index) {
+    return remove(arr, index, null);
+  }
+
+  /**
+   * 删除指定下标的元素
+   *
+   * @param arr              数组
+   * @param index            下标
+   * @param lastElementValue 最后一个元素的值
+   * @return 数组
+   */
+  public static <T> boolean remove(@NonNull T arr, int index, Object lastElementValue) {
+    if (arr instanceof int[]) {
+      moveForward(arr, ((int[]) arr).length, index, 1);
+      if (lastElementValue != null) {
+        ((int[]) arr)[((int[]) arr).length - 1] = (int) lastElementValue;
+      }
+    } else if (arr instanceof long[]) {
+      moveForward(arr, ((long[]) arr).length, index, 1);
+      if (lastElementValue != null) {
+        ((long[]) arr)[((long[]) arr).length - 1] = (long) lastElementValue;
+      }
+    } else if (arr instanceof double[]) {
+      moveForward(arr, ((double[]) arr).length, index, 1);
+      if (lastElementValue != null) {
+        ((double[]) arr)[((double[]) arr).length - 1] = (double) lastElementValue;
+      }
+    } else if (arr instanceof float[]) {
+      moveForward(arr, ((float[]) arr).length, index, 1);
+      if (lastElementValue != null) {
+        ((float[]) arr)[((float[]) arr).length - 1] = (float) lastElementValue;
+      }
+    } else if (arr instanceof boolean[]) {
+      moveForward(arr, ((boolean[]) arr).length, index, 1);
+      if (lastElementValue != null) {
+        ((boolean[]) arr)[((boolean[]) arr).length - 1] = (boolean) lastElementValue;
+      }
+    } else if (arr instanceof short[]) {
+      moveForward(arr, ((short[]) arr).length, index, 1);
+      if (lastElementValue != null) {
+        ((short[]) arr)[((short[]) arr).length - 1] = (short) lastElementValue;
+      }
+    } else if (arr instanceof byte[]) {
+      moveForward(arr, ((byte[]) arr).length, index, 1);
+      if (lastElementValue != null) {
+        ((byte[]) arr)[((byte[]) arr).length - 1] = (byte) lastElementValue;
+      }
+    } else if (arr instanceof char[]) {
+      moveForward(arr, ((char[]) arr).length, index, 1);
+      if (lastElementValue != null) {
+        ((char[]) arr)[((char[]) arr).length - 1] = (char) lastElementValue;
+      }
+    }
+    return true;
+  }
+
+  /**
+   * 删除指定下标的元素
+   *
+   * @param arr   数组
+   * @param index 下标
+   * @return 数组
+   */
+  public static <T> boolean remove(@NonNull T arr, int index) {
+    return remove(arr, index, null);
   }
 }
