@@ -75,8 +75,7 @@ public class CollectionUtils {
       return true;
     } else if (obj instanceof Map) {
       Map obj1 = (Map) obj;
-      obj1.keySet().removeIf(Objects::isNull);
-      return obj1.size() == 0;
+      return isAllEmpty(obj1.values());
     } else if (obj instanceof Object[]) {
       Object[] obj1 = (Object[]) obj;
       return Arrays.stream(obj1).noneMatch(Objects::nonNull);
@@ -108,6 +107,62 @@ public class CollectionUtils {
    */
   public static boolean isNotAllEmpty(Object obj) {
     return !isAllEmpty(obj);
+  }
+
+  /**
+   * 是否任意元素为 null
+   *
+   * @param obj
+   * @return
+   */
+  public static boolean isAnyEmpty(Object obj) {
+    if (sizeIsEmpty(obj)) {
+      return true;
+    }
+    if (obj instanceof Collection) {
+      Collection obj1 = (Collection) obj;
+      return obj1.contains(null);
+    } else if (obj instanceof Iterable) {
+      for (Object o : (Iterable) obj) {
+        if (o == null) {
+          return true;
+        }
+      }
+      return false;
+    } else if (obj instanceof Map) {
+      Map obj1 = (Map) obj;
+      return obj1.containsValue(null);
+    } else if (obj instanceof Object[]) {
+      Object[] obj1 = (Object[]) obj;
+      return Arrays.stream(obj1).anyMatch(Objects::isNull);
+    } else if (obj instanceof Iterator) {
+      Iterator obj1 = (Iterator) obj;
+      while (obj1.hasNext()) {
+        if (obj1.next() == null) {
+          return true;
+        }
+      }
+      return false;
+    } else if (obj instanceof Enumeration) {
+      Enumeration obj1 = (Enumeration) obj;
+      while (obj1.hasMoreElements()) {
+        if (obj1.nextElement() == null) {
+          return true;
+        }
+      }
+      return false;
+    }
+    return false;
+  }
+
+  /**
+   * 是否任意元素为 null
+   *
+   * @param obj
+   * @return
+   */
+  public static boolean isNotAnyEmpty(Object obj) {
+    return !isAnyEmpty(obj);
   }
 
   /**
