@@ -327,6 +327,7 @@ public class RegExUtils extends org.apache.commons.lang3.RegExUtils {
    * @param regex       正则
    * @param replacement 替换值
    * @param group       捕获组
+   * @param flags       匹配模式
    * @return 替换后的内容
    */
   public static String replaceFirst(@NonNull String text, @NonNull String regex, @NonNull String replacement, int group, int flags) {

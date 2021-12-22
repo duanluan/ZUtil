@@ -15,8 +15,8 @@ public class CollectionUtils {
   /**
    * 是否为 null 或没有元素
    *
-   * @param coll
-   * @return
+   * @param coll 集合
+   * @return 是否为 null 或没有元素
    */
   public static boolean isEmpty(Collection<?> coll) {
     return org.apache.commons.collections4.CollectionUtils.isEmpty(coll);
@@ -25,8 +25,8 @@ public class CollectionUtils {
   /**
    * 是否不为 null 且有元素
    *
-   * @param coll
-   * @return
+   * @param coll 集合
+   * @return 是否不为 null 且有元素
    */
   public static boolean isNotEmpty(Collection<?> coll) {
     return org.apache.commons.collections4.CollectionUtils.isNotEmpty(coll);
@@ -35,8 +35,16 @@ public class CollectionUtils {
   /**
    * 是否为 null 或没有元素
    *
-   * @param obj
-   * @return
+   * <ul>
+   * <li>Collection - via collection isEmpty
+   * <li>Map - via map isEmpty
+   * <li>Array - using array size
+   * <li>Iterator - via hasNext
+   * <li>Enumeration - via hasMoreElements
+   * </ul>
+   *
+   * @param obj 对象
+   * @return 是否为 null 或没有元素
    */
   public static boolean sizeIsEmpty(Object obj) {
     return org.apache.commons.collections4.CollectionUtils.sizeIsEmpty(obj);
@@ -45,18 +53,26 @@ public class CollectionUtils {
   /**
    * 是否不为 null 且有元素
    *
-   * @param obj
-   * @return
+   * @param obj 对象
+   * @return 是否不为 null 且有元素
    */
   public static boolean sizeIsNotEmpty(Object obj) {
-    return !org.apache.commons.collections4.CollectionUtils.sizeIsEmpty(obj);
+    return !sizeIsEmpty(obj);
   }
 
   /**
    * 是否所有元素都为 null
    *
-   * @param obj
-   * @return
+   * <ul>
+   * <li>Collection - removeIf null, size() == 0
+   * <li>Map - self(values())
+   * <li>Array - noneMatch nonNull
+   * <li>Iterator - !(next() != null)
+   * <li>Enumeration - 同 Iterator
+   * </ul>
+   *
+   * @param obj 对象
+   * @return 是否所有元素都为 null
    */
   public static boolean isAllEmpty(Object obj) {
     if (sizeIsEmpty(obj)) {
@@ -102,8 +118,8 @@ public class CollectionUtils {
   /**
    * 是否任意元素不为 null
    *
-   * @param obj
-   * @return
+   * @param obj 对象
+   * @return 是否任意元素不为 null
    */
   public static boolean isNotAllEmpty(Object obj) {
     return !isAllEmpty(obj);
@@ -112,8 +128,16 @@ public class CollectionUtils {
   /**
    * 是否任意元素为 null
    *
-   * @param obj
-   * @return
+   * <ul>
+   * <li>Collection - contains null
+   * <li>Map - containsValue null
+   * <li>Array - anyMatch null
+   * <li>Iterator - next() == null
+   * <li>Enumeration - 同 Iterator
+   * </ul>
+   *
+   * @param obj 对象
+   * @return 是否任意元素为 null
    */
   public static boolean isAnyEmpty(Object obj) {
     if (sizeIsEmpty(obj)) {
@@ -158,8 +182,8 @@ public class CollectionUtils {
   /**
    * 是否任意元素为 null
    *
-   * @param obj
-   * @return
+   * @param obj 对象
+   * @return 是否任意元素为 null
    */
   public static boolean isNotAnyEmpty(Object obj) {
     return !isAnyEmpty(obj);
@@ -216,6 +240,7 @@ public class CollectionUtils {
   /**
    * 删除指定下标的元素
    *
+   * @param <T>              基本数据类型
    * @param arr              数组
    * @param index            下标
    * @param lastElementValue 最后一个元素的值
@@ -269,6 +294,7 @@ public class CollectionUtils {
   /**
    * 删除指定下标的元素
    *
+   * @param <T>   基本数据类型
    * @param arr   数组
    * @param index 下标
    * @return 数组

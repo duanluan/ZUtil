@@ -83,6 +83,12 @@ public class BeanUtils extends org.springframework.beans.BeanUtils {
     return false;
   }
 
+  /**
+   * 属性 Function
+   *
+   * @param <T> 输入类型
+   * @param <R> 输出类型
+   */
   @FunctionalInterface
   public interface FieldFunction<T, R> extends Function<T, R>, Serializable {
   }
@@ -90,7 +96,8 @@ public class BeanUtils extends org.springframework.beans.BeanUtils {
   /**
    * 获取属性名（https://blog.csdn.net/qq_35410620/article/details/103007557）
    *
-   * @param fn 属性 Getter
+   * @param <T> 类
+   * @param fn  属性 Getter
    * @return 属性名
    */
   public static <T> String getFieldName(FieldFunction<T, ?> fn) {
@@ -118,7 +125,8 @@ public class BeanUtils extends org.springframework.beans.BeanUtils {
   /**
    * 获取列名
    *
-   * @param fn 属性 Getter
+   * @param <T> 类
+   * @param fn  属性 Getter
    * @return 列名
    */
   public static <T> String getColumnName(FieldFunction<T, ?> fn) {

@@ -97,13 +97,19 @@ public class NumberUtils extends org.apache.commons.lang3.math.NumberUtils {
   /**
    * 是否为整数
    *
-   * @param str
-   * @return
+   * @param str 字符串
+   * @return 是否为整数
    */
   public static boolean isInteger(String str) {
     return str.matches("^[-+]?[\\d]*$");
   }
 
+  /**
+   * 解析为 Long
+   *
+   * @param s 字符串
+   * @return Long 类型变量
+   */
   public static Long parseLong(String s) {
     try {
       return Long.parseLong(s);

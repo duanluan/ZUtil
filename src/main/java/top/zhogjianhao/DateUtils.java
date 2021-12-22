@@ -1501,7 +1501,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    *                            |     x1——————y1
    *                            x2——————y2
    *                            时间段 1 在时间段 2 后面时，差集的第二段的开始时间（x1）加；
-   * @param augendOrMinuend     加减数量，避免差集与交集相交，< 0 时忽略
+   * @param augendOrMinuend     加减数量，避免差集与交集相交，小于 0 时忽略
    * @param chronoUnits         加减数量的时间周期
    * @return 差集
    */
@@ -1713,8 +1713,10 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
   /**
    * 获取日期范围内的所有指定星期，包含开始日期和结束日期
    *
-   * @param weeks   周几，逗号或者无分隔，1 代表周一
-   * @param pattern 结果集元素的格式
+   * @param startTime 开始时间
+   * @param endTime   结束时间
+   * @param weeks     周几，逗号或者无分隔，1 代表周一
+   * @param pattern   结果集元素的格式
    * @return 所有指定星期的天集合
    */
   public static List<String> getByRangeAndWeeks(@NonNull LocalDateTime startTime, @NonNull LocalDateTime endTime, @NonNull String weeks, @NonNull String pattern) {
@@ -1744,7 +1746,9 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
   /**
    * 获取日期范围内的所有指定星期，包含开始日期和结束日期
    *
-   * @param weeks 周几，逗号或者无分隔，1 代表周一
+   * @param startTime 开始时间
+   * @param endTime   结束时间
+   * @param weeks     周几，逗号或者无分隔，1 代表周一
    * @return 所有指定星期的天集合
    */
   public static List<LocalDateTime> getByRangeAndWeeks(@NonNull LocalDateTime startTime, @NonNull LocalDateTime endTime, @NonNull String weeks) {
