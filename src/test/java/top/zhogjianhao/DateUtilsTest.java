@@ -358,4 +358,17 @@ public class DateUtilsTest {
     println("加一天 1 小时：" + DateUtils.plusOrMinus(nowLocalDateTime, 1, ChronoUnit.DAYS, ChronoUnit.HOURS));
     println("减一天：" + DateUtils.plusOrMinus(nowLocalDateTime, -(1000 * 60 * 60 * 24)));
   }
+
+  @DisplayName("交集差集并集")
+  @Test
+  void IntersectionAndDifferenceSetsAndConcatenation() {
+    println("两个时间段（y1 == x2）是否交集：" + DateUtils.isIntersection(DateUtils.todayMinTime(), nowLocalDateTime, nowLocalDateTime, DateUtils.todayMaxTime()));
+    println("两个时间段（y1 < x2）是否交集：" + DateUtils.isIntersection(DateUtils.todayMinTime(), nowLocalDateTime.minusNanos(1), nowLocalDateTime, DateUtils.todayMaxTime()));
+    LocalDateTime[][] differenceSetsByIntersection = DateUtils.getDifferenceSetsByIntersection(DateUtils.todayMinTime(), nowLocalDateTime, nowLocalDateTime, DateUtils.todayMaxTime(), 1, ChronoUnit.SECONDS);
+    println("交集的差集（y1 - 1 秒，避免有交集）：[" + differenceSetsByIntersection[0][0] + ", " + differenceSetsByIntersection[0][1] + "], [" + differenceSetsByIntersection[1][0] + ", " + differenceSetsByIntersection[1][1] + "]");
+    differenceSetsByIntersection = DateUtils.getDifferenceSetsByIntersection(DateUtils.todayMinTime(), nowLocalDateTime, nowLocalDateTime, DateUtils.todayMaxTime(), 1,1, ChronoUnit.SECONDS);
+    println("交集的差集（y1 - 1 秒，避免有交集）：[" + differenceSetsByIntersection[0][0] + ", " + differenceSetsByIntersection[0][1] + "], [" + differenceSetsByIntersection[1][0] + ", " + differenceSetsByIntersection[1][1] + "]");
+    differenceSetsByIntersection = DateUtils.getDifferenceSetsByIntersection(DateUtils.todayMinTime(), nowLocalDateTime, nowLocalDateTime, DateUtils.todayMaxTime(), 2,1, ChronoUnit.SECONDS);
+    println("交集的差集（x2 + 1 秒，避免有交集）：[" + differenceSetsByIntersection[0][0] + ", " + differenceSetsByIntersection[0][1] + "], [" + differenceSetsByIntersection[1][0] + ", " + differenceSetsByIntersection[1][1] + "]");
+  }
 }

@@ -1365,7 +1365,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * 加减指定周期数量的时间
    *
    * @param temporal        被加减的时间对象
-   * @param augendOrMinuend 数量
+   * @param augendOrMinuend 加减数量
    * @param chronoUnits     多个时间类型
    * @param <T>             时间类
    * @return 加减后的时间对象
@@ -1385,7 +1385,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * 加减指定数量的时间，时间周期为毫秒
    *
    * @param temporal        被加减的时间对象
-   * @param augendOrMinuend 数量
+   * @param augendOrMinuend 加减数量
    * @param <T>             时间类
    * @return 加减后的时间对象
    */
@@ -1405,6 +1405,11 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * @return 是否交集
    */
   public static boolean isIntersection(@NonNull LocalDateTime x1, @NonNull LocalDateTime y1, @NonNull LocalDateTime x2, @NonNull LocalDateTime y2) {
+    // x1——————y1
+    //          x2——————y2
+    // x2——————y2
+    //          x1——————y1
+    // (y1 < x2 || y2 < x1) 为不交集
     return !(y1.isBefore(x2) || y2.isBefore(x1));
   }
 
@@ -1421,23 +1426,207 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     if (!isIntersection(x1, y1, x2, y2)) {
       return null;
     }
-
     LocalDateTime[] result = new LocalDateTime[2];
+    // x1——————y1
+    //     x2——————y2
+    //
+    // x1—————————————y1
+    //     x2——————y2
+    //
+    // x1 >= x2
     if (x1.isBefore(x2) || x1.isEqual(x2)) {
+      // 交集的开始时间为 x2
       result[0] = x2;
-    } else if (x1.isAfter(x2)) {
+    }
+    //     x1——————y1
+    // x2——————y2
+    //
+    //     x1——————y1
+    // x2—————————————y2
+    //
+    // x1——————y1
+    // x2————————y2
+    //
+    // x1 >= x2
+    else if (x1.isAfter(x2) || x1.isEqual(x2)) {
+      // 交集的开始时间为 x1
       result[0] = x1;
     }
+    // x1——————y1
+    //     x2——————y2
+    //
+    //     x1——————y1
+    // x2—————————————y2
+    //
+    // y1 <= y2
     if (y1.isBefore(y2) || y1.isEqual(y2)) {
+      // 交集的结束时间为 y1
       result[1] = y1;
-    } else if (y1.isAfter(y2)) {
+    }
+    //     x1——————y1
+    // x2——————y2
+    //
+    // x1—————————————y1
+    //     x2——————y2
+    //
+    //   x1——————y1
+    // x2————————y2
+    //
+    // y1 > y2
+    else if (y1.isAfter(y2) || y1.isEqual(y2)) {
+      // 交集的结束时间为 y2
       result[1] = y2;
+    }
+    if (result[0] == null || result[1] == null) {
+      return null;
     }
     return result;
   }
 
   /**
-   * 获取两个时间段交集时差集的时间段
+   * 获取两个时间段交集时的差集
+   *
+   * @param x1                  时间段 1 开始时间
+   * @param y1                  时间段 1 结束时间
+   * @param x2                  时间段 2 开始时间
+   * @param y2                  时间段 2 结束时间
+   * @param augendOrMinuendType 谁加减数量，差集 [[x1, y1], [x2, y2]]
+   *                            1：y1 减
+   *                            2：x2 加
+   *                            其他：默认，见下文
+   *                            <p>
+   *                            x1——————y1
+   *                            |     x2——————y2
+   *                            时间段 1 在时间段 2 前面时，差集的第一段的结束时间（y1）减。
+   *                            |     x1——————y1
+   *                            x2——————y2
+   *                            时间段 1 在时间段 2 后面时，差集的第二段的开始时间（x1）加；
+   * @param augendOrMinuend     加减数量，避免差集与交集相交，< 0 时忽略
+   * @param chronoUnits         加减数量的时间周期
+   * @return 差集
+   */
+  public static LocalDateTime[][] getDifferenceSetsByIntersection(@NonNull LocalDateTime x1, @NonNull LocalDateTime y1, @NonNull LocalDateTime x2, @NonNull LocalDateTime y2, int augendOrMinuendType, long augendOrMinuend, @NonNull ChronoUnit... chronoUnits) {
+    // 获取交集
+    LocalDateTime[] intersections = getIntersection(x1, y1, x2, y2);
+    if (intersections == null) {
+      return null;
+    }
+    // 获取差集
+    LocalDateTime[][] result = new LocalDateTime[2][2];
+
+    // x1——————y1
+    //     x2——————y2
+    //
+    // x1—————————————y1
+    //     x2——————y2
+    //
+    // x1 < x2
+    if (x1.isBefore(x2)) {
+      // 差集的第一段为 x1 ~ x2
+      result[0] = new LocalDateTime[]{x1, x2};
+    }
+    //     x1——————y1
+    // x2——————y2
+    //
+    //     x1——————y1
+    // x2—————————————y2
+    //
+    // x1 > x2
+    else if (x1.isAfter(x2)) {
+      // 差集的第一段为 x2 ~ x1
+      result[0] = new LocalDateTime[]{x2, x1};
+    }
+
+    // x1——————y1
+    //     x2——————y2
+    //
+    //     x1——————y1
+    // x2—————————————y2
+    //
+    // y1 < y2
+    if (y1.isBefore(y2)) {
+      // 差集的第二段为 y1 ~ y2
+      result[1] = new LocalDateTime[]{y1, y2};
+    }
+    //     x1——————y1
+    // x2——————y2
+    //
+    // x1—————————————y1
+    //     x2——————y2
+    //
+    // y1 > y2
+    else if (y1.isAfter(y2)) {
+      // 差集的第二段为 y2 ~ y1
+      result[1] = new LocalDateTime[]{y2, y1};
+    }
+
+    if (augendOrMinuend > 0 && CollectionUtils.sizeIsNotEmpty(chronoUnits)) {
+      boolean isPlusOrMinus = augendOrMinuendType != 1 && augendOrMinuendType != 2;
+      // 循环两段差集
+      for (LocalDateTime[] localDateTimes : result) {
+        // x1——————y1
+        //       x2——————y2
+        // 如果差集的结束时间（y1）和交集的开始时间相等，结束时间 -= n，即差集与交集完全不相交
+        if (localDateTimes[1].equals(intersections[0])) {
+          if (isPlusOrMinus) {
+            localDateTimes[1] = plusOrMinus(localDateTimes[1], -augendOrMinuend, chronoUnits);
+          } else if (augendOrMinuendType == 1) {
+            result[0][1] = plusOrMinus(result[0][1], -augendOrMinuend, chronoUnits);
+          } else {
+            result[1][0] = plusOrMinus(result[1][0], augendOrMinuend, chronoUnits);
+          }
+          break;
+        }
+        //       x1——————y1
+        // x2——————y2
+        // 如果差集的开始时间（x1）和交集的结束时间相等，开始时间 += n，即差集与交集完全不相交
+        if (localDateTimes[0].equals(intersections[1])) {
+          if (isPlusOrMinus) {
+            localDateTimes[0] = plusOrMinus(localDateTimes[0], augendOrMinuend, chronoUnits);
+          } else if (augendOrMinuendType == 1) {
+            result[0][1] = plusOrMinus(result[0][1], -augendOrMinuend, chronoUnits);
+          } else {
+            result[1][0] = plusOrMinus(result[1][0], augendOrMinuend, chronoUnits);
+          }
+          break;
+        }
+      }
+    }
+    return result;
+  }
+
+  /**
+   * 获取两个时间段交集时的差集
+   *
+   * @param x1              时间段 1 开始时间
+   * @param y1              时间段 1 结束时间
+   * @param x2              时间段 2 开始时间
+   * @param y2              时间段 2 结束时间
+   * @param augendOrMinuend 加减数量，避免差集与交集相交，为 0 时忽略
+   *                        <p>
+   *                        x1——————y1
+   *                        |     x2——————y2
+   *                        时间段 1 在时间段 2 前面时，差集的第一段的结束时间（y1）减。
+   *                        |     x1——————y1
+   *                        x2——————y2
+   *                        时间段 1 在时间段 2 后面时，差集的第二段的开始时间（x1）加；
+   * @param chronoUnits     加减数量的时间周期
+   * @return 差集
+   */
+  public static LocalDateTime[][] getDifferenceSetsByIntersection(@NonNull LocalDateTime x1, @NonNull LocalDateTime y1, @NonNull LocalDateTime x2, @NonNull LocalDateTime y2, long augendOrMinuend, @NonNull ChronoUnit... chronoUnits) {
+    return getDifferenceSetsByIntersection(x1, y1, x2, y2, 0, augendOrMinuend, chronoUnits);
+  }
+
+  /**
+   * 获取两个时间段交集时的差集，如果差集和交集有相交就加减 1 毫秒
+   *
+   * <p>
+   * x1——————y1
+   * |     x2——————y2
+   * 时间段 1 在时间段 2 前面时，差集的第一段的结束时间（y1）减 1 毫秒
+   * |     x1——————y1
+   * x2——————y2
+   * 时间段 1 在时间段 2 后面时，差集的第二段的开始时间（x1）加 1 毫秒
    *
    * @param x1 时间段 1 开始时间
    * @param y1 时间段 1 结束时间
@@ -1445,44 +1634,8 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * @param y2 时间段 2 结束时间
    * @return 差集
    */
-  public static List<LocalDateTime[]> getDifferenceSetsByIntersectional(@NonNull LocalDateTime x1, @NonNull LocalDateTime y1, @NonNull LocalDateTime x2, @NonNull LocalDateTime y2) {
-    // 交集的部分
-    LocalDateTime[] intersections = getIntersection(x1, y1, x2, y2);
-    if (intersections == null || intersections.length == 0) {
-      return null;
-    }
-
-    // 获取差集
-    List<LocalDateTime[]> result = new ArrayList<>();
-    if (x1.isBefore(x2)) {
-      result.add(new LocalDateTime[]{x1, x2});
-    } else if (x1.isAfter(x2)) {
-      result.add(new LocalDateTime[]{x2, x1});
-    }
-    if (y1.isBefore(y2)) {
-      result.add(new LocalDateTime[]{y1, y2});
-    } else if (y1.isAfter(y2)) {
-      result.add(new LocalDateTime[]{y2, y1});
-    }
-
-    for (Iterator<LocalDateTime[]> iterator = result.iterator(); iterator.hasNext(); ) {
-      LocalDateTime[] localDateTimes = iterator.next();
-
-      // 如果差集的开始时间和交集的结束时间相等，开始时间 += 1
-      if (localDateTimes[0].equals(intersections[1])) {
-        localDateTimes[0] = plusOrMinus(localDateTimes[0], 1, ChronoUnit.DAYS);
-      }
-      // 如果差集的结束时间和交集的开始时间相等，结束时间 -= 1
-      if (localDateTimes[1].equals(intersections[0])) {
-        localDateTimes[1] = plusOrMinus(localDateTimes[1], -1, ChronoUnit.DAYS);
-      }
-
-      // 如果开始时间小于结束时间，删除这段时间
-      if (localDateTimes[1].isBefore(localDateTimes[0])) {
-        iterator.remove();
-      }
-    }
-    return result;
+  public static LocalDateTime[][] getDifferenceSetsByIntersection(@NonNull LocalDateTime x1, @NonNull LocalDateTime y1, @NonNull LocalDateTime x2, @NonNull LocalDateTime y2) {
+    return getDifferenceSetsByIntersection(x1, y1, x2, y2, 1, ChronoUnit.MILLIS);
   }
   // endregion 交集差集并集
 
