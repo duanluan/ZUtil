@@ -410,7 +410,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * @param zoneId    时区
    * @return 指定时区的 LocalDateTime 对象
    */
-  public static LocalDateTime parseLocalDateTime(@NonNull long timeStamp, ZoneId zoneId) {
+  public static LocalDateTime parseLocalDateTime(long timeStamp, ZoneId zoneId) {
     ZonedDateTime zonedDateTime = Instant.ofEpochMilli(timeStamp).atZone(SYSTEM_ZONE_ID);
     if (zoneId != null) {
       zonedDateTime = zonedDateTime.withZoneSameInstant(zoneId);
@@ -424,7 +424,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * @param timeStamp 时间戳
    * @return LocalDateTime 对象
    */
-  public static LocalDateTime parseLocalDateTime(@NonNull long timeStamp) {
+  public static LocalDateTime parseLocalDateTime(long timeStamp) {
     return parseLocalDateTime(timeStamp, null);
   }
 
@@ -532,7 +532,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * @param zoneId    时区
    * @return 指定时区的 LocalDate 对象
    */
-  public static LocalDate parseLocalDate(@NonNull long timeStamp, ZoneId zoneId) {
+  public static LocalDate parseLocalDate(long timeStamp, ZoneId zoneId) {
     ZonedDateTime zonedDateTime = Instant.ofEpochMilli(timeStamp).atZone(SYSTEM_ZONE_ID);
     if (zoneId != null) {
       zonedDateTime = zonedDateTime.withZoneSameInstant(zoneId);
@@ -546,7 +546,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * @param timeStamp 时间戳
    * @return LocalDate 对象
    */
-  public static LocalDate parseLocalDate(@NonNull long timeStamp) {
+  public static LocalDate parseLocalDate(long timeStamp) {
     return parseLocalDate(timeStamp, null);
   }
 
@@ -648,7 +648,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * @param zoneId    时区
    * @return 指定时区的 LocalTime 对象
    */
-  public static LocalTime parseLocalTime(@NonNull long timeStamp, ZoneId zoneId) {
+  public static LocalTime parseLocalTime(long timeStamp, ZoneId zoneId) {
     ZonedDateTime zonedDateTime = Instant.ofEpochMilli(timeStamp).atZone(SYSTEM_ZONE_ID);
     if (zoneId != null) {
       zonedDateTime = zonedDateTime.withZoneSameInstant(zoneId);
@@ -662,7 +662,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * @param timeStamp 时间戳
    * @return LocalTime 对象
    */
-  public static LocalTime parseLocalTime(@NonNull long timeStamp) {
+  public static LocalTime parseLocalTime(long timeStamp) {
     return parseLocalTime(timeStamp, null);
   }
 
@@ -754,7 +754,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * @param zoneId    时区
    * @return 指定时区的 Date 对象
    */
-  public static Date parseDate(@NonNull long timeStamp, ZoneId zoneId) {
+  public static Date parseDate(long timeStamp, ZoneId zoneId) {
     Date date = new Date(timeStamp);
     if (zoneId != null) {
       date = Date.from(date.toInstant().atZone(SYSTEM_ZONE_ID).withZoneSameInstant(zoneId).toInstant());
@@ -768,7 +768,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * @param timeStamp 时间戳
    * @return Date 对象
    */
-  public static Date parseDate(@NonNull long timeStamp) {
+  public static Date parseDate(long timeStamp) {
     return parseDate(timeStamp, null);
   }
 
@@ -845,7 +845,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * @param <T>       时间类
    * @return 指定时区的时间对象
    */
-  public static <T> T parse(@NonNull long timeStamp, ZoneId zoneId, @NonNull Class<T> clazz) {
+  public static <T> T parse(long timeStamp, ZoneId zoneId, @NonNull Class<T> clazz) {
     if (clazz.equals(LocalDateTime.class)) {
       return (T) parseLocalDateTime(timeStamp, zoneId);
     } else if (clazz.equals(LocalDate.class)) {
@@ -866,7 +866,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * @param <T>       时间类
    * @return 时间对象
    */
-  public static <T> T parse(@NonNull long timeStamp, @NonNull Class<T> clazz) {
+  public static <T> T parse(long timeStamp, @NonNull Class<T> clazz) {
     return parse(timeStamp, null, clazz);
   }
 
@@ -1217,7 +1217,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * @param days 加减天
    * @return LocalDateTime 对象
    */
-  public static LocalDateTime todayMinTime(@NonNull Long days) {
+  public static LocalDateTime todayMinTime(long days) {
     return todayMinTime(null, days);
   }
 
@@ -1306,7 +1306,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * @param days 加减天
    * @return LocalDateTime 对象
    */
-  public static LocalDateTime todayMaxTime(@NonNull Long days) {
+  public static LocalDateTime todayMaxTime(long days) {
     return todayMaxTime(null, days);
   }
 
@@ -1362,7 +1362,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
   }
 
   /**
-   * 加减指定周期数量的时间
+   * 加减指定时间类型数量的时间
    *
    * @param temporal        被加减的时间对象
    * @param augendOrMinuend 加减数量
@@ -1370,7 +1370,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * @param <T>             时间类
    * @return 加减后的时间对象
    */
-  public static <T extends Temporal> T plusOrMinus(@NonNull T temporal, @NonNull long augendOrMinuend, @NonNull ChronoUnit... chronoUnits) {
+  public static <T extends Temporal> T plusOrMinus(@NonNull T temporal, long augendOrMinuend, @NonNull ChronoUnit... chronoUnits) {
     for (ChronoUnit chronoUnit : chronoUnits) {
       if (augendOrMinuend < 0) {
         temporal = (T) temporal.minus(Math.abs(augendOrMinuend), chronoUnit);
@@ -1389,7 +1389,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * @param <T>             时间类
    * @return 加减后的时间对象
    */
-  public static <T extends Temporal> T plusOrMinus(@NonNull T temporal, @NonNull long augendOrMinuend) {
+  public static <T extends Temporal> T plusOrMinus(@NonNull T temporal, long augendOrMinuend) {
     return plusOrMinus(temporal, augendOrMinuend, ChronoUnit.MILLIS);
   }
 
