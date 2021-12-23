@@ -10,13 +10,19 @@ import java.lang.invoke.SerializedLambda;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
 
 /**
- * JavaBean 工具类
+ * Bean 工具类
+ *
+ * @author duanluan
  */
 @Slf4j
 public class BeanUtils extends org.springframework.beans.BeanUtils {
+
+  private static final String FIELD_METHOD_PREFIX_GET = "get";
+  private static final String FIELD_METHOD_PREFIX_IS = "is";
 
   /**
    * Bean 转 Map
@@ -24,8 +30,13 @@ public class BeanUtils extends org.springframework.beans.BeanUtils {
    * @param obj Bean 对象
    * @return Map
    */
-  public static HashMap<String, Object> toMap(Object obj) {
-    return new HashMap(BeanMap.create(obj));
+  public static Map<String, Object> toMap(Object obj) {
+    Map<String, Object> map = new HashMap<>();
+    BeanMap beanMap = BeanMap.create(obj);
+    for (Object key : beanMap.keySet()) {
+      map.put(key.toString(), beanMap.get(key));
+    }
+    return map;
   }
 
   /**
@@ -39,7 +50,7 @@ public class BeanUtils extends org.springframework.beans.BeanUtils {
     try {
       PropertyDescriptor propertyDescriptor = org.springframework.beans.BeanUtils.getPropertyDescriptor(bean.getClass(), name);
       if (propertyDescriptor != null) {
-        return propertyDescriptor.getReadMethod().invoke(bean, null);
+        return propertyDescriptor.getReadMethod().invoke(bean, (Object) null);
       }
     } catch (IllegalAccessException | InvocationTargetException e) {
       log.error(e.getMessage(), e);
@@ -104,13 +115,13 @@ public class BeanUtils extends org.springframework.beans.BeanUtils {
     try {
       // 通过获取对象方法，判断是否存在该方法
       Method method = fn.getClass().getDeclaredMethod("writeReplace");
-      method.setAccessible(Boolean.TRUE);
+      method.setAccessible(true);
       // 利用 jdk 的 SerializedLambda 解析方法引用
       java.lang.invoke.SerializedLambda serializedLambda = (SerializedLambda) method.invoke(fn);
       String implMethodName = serializedLambda.getImplMethodName();
-      if (implMethodName.startsWith("get")) {
+      if (implMethodName.startsWith(FIELD_METHOD_PREFIX_GET)) {
         implMethodName = implMethodName.substring(3);
-      } else if (implMethodName.startsWith("is")) {
+      } else if (implMethodName.startsWith(FIELD_METHOD_PREFIX_IS)) {
         implMethodName = implMethodName.substring(2);
       }
       if (StringUtils.isNotBlank(implMethodName)) {
