@@ -16,11 +16,6 @@ import java.util.Locale;
 @DisplayName("时间工具类测试")
 public class DateUtilsTest {
 
-  public static void main(String[] args) {
-    // Duration.between(nowLocalDateTime,nowLocalDateTime).to
-    // Period.between(nowLocalDate,nowLocalDate)
-  }
-
   private final ZonedDateTime nowZonedDateTime = ZonedDateTime.now();
   private final LocalDateTime nowLocalDateTime = LocalDateTime.now();
   private final LocalDate nowLocalDate = LocalDate.now();
