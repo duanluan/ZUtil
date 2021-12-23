@@ -48,7 +48,7 @@
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
-      <version>1.18.20</version>
+      <version>1.18.22</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -96,7 +96,7 @@
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
-      <version>5.7.2</version>
+      <version>5.8.2</version>
       <scope>test</scope>
     </dependency>
 
@@ -219,6 +219,11 @@
     <repository>
       <id>central</id>
       <url>https://maven.aliyun.com/repository/central</url>
+    </repository>
+    <repository>
+      <id>maven_central</id>
+      <name>Maven Central</name>
+      <url>https://repo.maven.apache.org/maven2/</url>
     </repository>
   </repositories>
 </project>
