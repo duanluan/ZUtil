@@ -1,6 +1,7 @@
 package top.zhogjianhao;
 
 
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cglib.beans.BeanMap;
 
@@ -10,7 +11,8 @@ import java.lang.invoke.SerializedLambda;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
 
 /**
@@ -152,18 +154,13 @@ public class BeanUtils extends org.springframework.beans.BeanUtils {
    * @param <T>
    * @return
    */
-  public static <T> T beanCopy(Object source, Class<T> targetCls) {
-    if (Objects.isNull(source)) {
-      return null;
-    }
-
-    // 判断是否存在无参构造方法
-    boolean hasConstructor = false;
-
-    Constructor[] constructors = targetCls.getConstructors();
-    for (Constructor constructor : constructors) {
+  public static <T> T copyProperties(@NonNull Object source, @NonNull Class<T> targetClass) {
+    // 判断目标类是否存在无参构造函数
+    boolean hasNoArgsConstructor = false;
+    Constructor<?>[] constructors = targetClass.getConstructors();
+    for (Constructor<?> constructor : constructors) {
       if (constructor.getParameterCount() == 0) {
-        hasConstructor = true;
+        hasNoArgsConstructor = true;
         break;
       }
     }
@@ -174,12 +171,11 @@ public class BeanUtils extends org.springframework.beans.BeanUtils {
 
     T target = null;
     try {
-      target = targetCls.newInstance();
+      target = targetClass.newInstance();
       org.springframework.beans.BeanUtils.copyProperties(source, target);
-    } catch (Exception e) {
-      log.error("BeanUtils beanCopy error!", e);
+    } catch (InstantiationException | IllegalAccessException e) {
+      log.error(e.getMessage(), e);
     }
-
     return target;
   }
 }
