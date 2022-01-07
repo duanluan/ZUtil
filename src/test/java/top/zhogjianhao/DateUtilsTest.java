@@ -361,9 +361,9 @@ public class DateUtilsTest {
     println("两个时间段（y1 < x2）是否交集：" + DateUtils.isIntersection(DateUtils.todayMinTime(), nowLocalDateTime.minusNanos(1), nowLocalDateTime, DateUtils.todayMaxTime()));
     LocalDateTime[][] differenceSetsByIntersection = DateUtils.getDifferenceSetsByIntersection(DateUtils.todayMinTime(), nowLocalDateTime, nowLocalDateTime, DateUtils.todayMaxTime(), 1, ChronoUnit.SECONDS);
     println("交集的差集（y1 - 1 秒，避免有交集）：[" + differenceSetsByIntersection[0][0] + ", " + differenceSetsByIntersection[0][1] + "], [" + differenceSetsByIntersection[1][0] + ", " + differenceSetsByIntersection[1][1] + "]");
-    differenceSetsByIntersection = DateUtils.getDifferenceSetsByIntersection(DateUtils.todayMinTime(), nowLocalDateTime, nowLocalDateTime, DateUtils.todayMaxTime(), 1,1, ChronoUnit.SECONDS);
+    differenceSetsByIntersection = DateUtils.getDifferenceSetsByIntersection(DateUtils.todayMinTime(), nowLocalDateTime, nowLocalDateTime, DateUtils.todayMaxTime(), 1, 1, ChronoUnit.SECONDS);
     println("交集的差集（y1 - 1 秒，避免有交集）：[" + differenceSetsByIntersection[0][0] + ", " + differenceSetsByIntersection[0][1] + "], [" + differenceSetsByIntersection[1][0] + ", " + differenceSetsByIntersection[1][1] + "]");
-    differenceSetsByIntersection = DateUtils.getDifferenceSetsByIntersection(DateUtils.todayMinTime(), nowLocalDateTime, nowLocalDateTime, DateUtils.todayMaxTime(), 2,1, ChronoUnit.SECONDS);
+    differenceSetsByIntersection = DateUtils.getDifferenceSetsByIntersection(DateUtils.todayMinTime(), nowLocalDateTime, nowLocalDateTime, DateUtils.todayMaxTime(), 2, 1, ChronoUnit.SECONDS);
     println("交集的差集（x2 + 1 秒，避免有交集）：[" + differenceSetsByIntersection[0][0] + ", " + differenceSetsByIntersection[0][1] + "], [" + differenceSetsByIntersection[1][0] + ", " + differenceSetsByIntersection[1][1] + "]");
   }
 }
