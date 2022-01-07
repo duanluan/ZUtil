@@ -7,10 +7,10 @@ import org.springframework.cglib.beans.BeanMap;
 import java.beans.PropertyDescriptor;
 import java.io.Serializable;
 import java.lang.invoke.SerializedLambda;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 
 /**
@@ -142,5 +142,63 @@ public class BeanUtils extends org.springframework.beans.BeanUtils {
    */
   public static <T> String getColumnName(FieldFunction<T, ?> fn) {
     return StringUtils.toUnderscore(getFieldName(fn));
+  }
+
+  /**
+   * 将原类型转为指定类型返回
+   *
+   * @param source
+   * @param targetCls
+   * @param <T>
+   * @return
+   */
+  public static <T> T beanCopy(Object source, Class<T> targetCls) {
+    if (Objects.isNull(source)) {
+      return null;
+    }
+
+    // 判断是否存在无参构造方法
+    boolean hasConstructor = false;
+
+    Constructor[] constructors = targetCls.getConstructors();
+    for (Constructor constructor : constructors) {
+      if (constructor.getParameterCount() == 0) {
+        hasConstructor = true;
+        break;
+      }
+    }
+
+    if (!hasConstructor) {
+      throw new RuntimeException("unsupport class:" + targetCls.getName() + "! must has a no args constructor!");
+    }
+
+    T target = null;
+    try {
+      target = targetCls.newInstance();
+      org.springframework.beans.BeanUtils.copyProperties(source, target);
+    } catch (Exception e) {
+      log.error("BeanUtils beanCopy error!", e);
+    }
+
+    return target;
+  }
+
+  /**
+   * 将原类型中的属性赋值给指定类型中的属性
+   * 对于SpringBeanUtils copyProperties的代理
+   *
+   * @param source
+   * @param target
+   * @return
+   */
+  public static void beanCopy(Object source, Object target) {
+    if (Objects.isNull(source) || Objects.isNull(target)) {
+      return;
+    }
+    try {
+      org.springframework.beans.BeanUtils.copyProperties(source, target);
+    } catch (Exception e) {
+      log.error("BeanUtils beanCopy error!", e);
+    }
   }
 }
