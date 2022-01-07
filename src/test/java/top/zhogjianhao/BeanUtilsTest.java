@@ -18,6 +18,10 @@ import java.util.Map;
 @DisplayName("Bean 工具类测试")
 public class BeanUtilsTest {
 
+  private void println(Object source) {
+    System.out.println(source);
+  }
+
   @NoArgsConstructor
   @Data
   public static class TestBean {
@@ -42,7 +46,7 @@ public class BeanUtilsTest {
     for (int i = 0; i < 1000000; i++) {
       new HashMap<String, Object>(BeanMap.create(testBean));
     }
-    System.out.println("Constructor: " + (LocalDateTime.now().get(ChronoField.MILLI_OF_DAY) - startTime));
+    println("Constructor: " + (LocalDateTime.now().get(ChronoField.MILLI_OF_DAY) - startTime));
 
     startTime = LocalDateTime.now().get(ChronoField.MILLI_OF_DAY);
     for (int i = 0; i < 1000000; i++) {
@@ -52,14 +56,14 @@ public class BeanUtilsTest {
         map.put(key.toString(), beanMap.get(key));
       }
     }
-    System.out.println("foreach: " + (LocalDateTime.now().get(ChronoField.MILLI_OF_DAY) - startTime));
+    println("foreach: " + (LocalDateTime.now().get(ChronoField.MILLI_OF_DAY) - startTime));
 
     startTime = LocalDateTime.now().get(ChronoField.MILLI_OF_DAY);
     for (int i = 0; i < 1000000; i++) {
       HashMap<String, Object> map1 = new HashMap<>();
       map1.putAll(BeanMap.create(testBean));
     }
-    System.out.println("putAll: " + (LocalDateTime.now().get(ChronoField.MILLI_OF_DAY) - startTime));
+    println("putAll: " + (LocalDateTime.now().get(ChronoField.MILLI_OF_DAY) - startTime));
   }
 
   @DisplayName("Spring 和 Apache getProperty 性能测试（Spring > Apache）")
@@ -79,7 +83,7 @@ public class BeanUtilsTest {
         e.printStackTrace();
       }
     }
-    System.out.println("Spring get: " + (LocalDateTime.now().get(ChronoField.MILLI_OF_DAY) - startTime));
+    println("Spring get: " + (LocalDateTime.now().get(ChronoField.MILLI_OF_DAY) - startTime));
 
     startTime = LocalDateTime.now().get(ChronoField.MILLI_OF_DAY);
     for (int i = 0; i < 1000000; i++) {
@@ -89,7 +93,7 @@ public class BeanUtilsTest {
         e.printStackTrace();
       }
     }
-    System.out.println("Apache get: " + (LocalDateTime.now().get(ChronoField.MILLI_OF_DAY) - startTime));
+    println("Apache get: " + (LocalDateTime.now().get(ChronoField.MILLI_OF_DAY) - startTime));
   }
 
   @DisplayName("Spring 和 Apache setProperty 性能测试（Spring > Apache）")
@@ -108,7 +112,7 @@ public class BeanUtilsTest {
         e.printStackTrace();
       }
     }
-    System.out.println("Spring get: " + (LocalDateTime.now().get(ChronoField.MILLI_OF_DAY) - startTime));
+    println("Spring get: " + (LocalDateTime.now().get(ChronoField.MILLI_OF_DAY) - startTime));
 
     startTime = LocalDateTime.now().get(ChronoField.MILLI_OF_DAY);
     for (int i = 0; i < 1000000; i++) {
@@ -118,6 +122,29 @@ public class BeanUtilsTest {
         e.printStackTrace();
       }
     }
-    System.out.println("Apache get: " + (LocalDateTime.now().get(ChronoField.MILLI_OF_DAY) - startTime));
+    println("Apache get: " + (LocalDateTime.now().get(ChronoField.MILLI_OF_DAY) - startTime));
+  }
+
+  @NoArgsConstructor
+  @Data
+  public static class CopyPropertieTestBean {
+
+    private String name;
+    private List<TestBean> beanList;
+  }
+
+  @DisplayName("copyProperties：复制属性到新类型对象中")
+  @Test
+  void copyProperties() {
+    TestBean testBean = new TestBean();
+    testBean.setName("1");
+    List<TestBean> beanList = new ArrayList<>();
+    beanList.add(testBean);
+    testBean.setBeanList(beanList);
+    // 如果 targetClass 没有无参构造函数，IDEA 会有虚线提示
+    CopyPropertieTestBean testBean1 = BeanUtils.copyProperties(testBean, CopyPropertieTestBean.class);
+    println(testBean1.getName());
+    // 如果 List<T> 中的 T 不同的话，就不会复制
+    println(testBean1.getBeanList().get(0).getName());
   }
 }
