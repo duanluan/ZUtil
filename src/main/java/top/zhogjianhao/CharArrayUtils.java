@@ -63,12 +63,5 @@ public final class CharArrayUtils {
     public static void wipe(byte[] bytes) {
         Arrays.fill(bytes, (byte) 0);
     }
-
-    public static void main(String[] args) {
-        char[] rawChars = "TEST@123==XX".toCharArray();
-        byte[] bytes = toBytes(rawChars);
-        char[] chars = toChars(bytes);
-        System.out.println(chars);
-    }
 }
 
