@@ -182,23 +182,4 @@ public class BeanUtils extends org.springframework.beans.BeanUtils {
 
     return target;
   }
-
-  /**
-   * 将原类型中的属性赋值给指定类型中的属性
-   * 对于SpringBeanUtils copyProperties的代理
-   *
-   * @param source
-   * @param target
-   * @return
-   */
-  public static void beanCopy(Object source, Object target) {
-    if (Objects.isNull(source) || Objects.isNull(target)) {
-      return;
-    }
-    try {
-      org.springframework.beans.BeanUtils.copyProperties(source, target);
-    } catch (Exception e) {
-      log.error("BeanUtils beanCopy error!", e);
-    }
-  }
 }
