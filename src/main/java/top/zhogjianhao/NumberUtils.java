@@ -4,8 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * 数字工具类
- *
- * @author duanluan
  */
 @Slf4j
 public class NumberUtils extends org.apache.commons.lang3.math.NumberUtils {

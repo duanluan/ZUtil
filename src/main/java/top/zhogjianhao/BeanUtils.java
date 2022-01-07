@@ -17,8 +17,6 @@ import java.util.function.Function;
 
 /**
  * Bean 工具类
- *
- * @author duanluan
  */
 @Slf4j
 public class BeanUtils extends org.springframework.beans.BeanUtils {

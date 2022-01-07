@@ -7,8 +7,6 @@ import java.util.Arrays;
 
 /**
  * 字符数组工具
- *
- * @author wjy
  */
 public final class CharArrayUtils {
 
@@ -64,4 +62,3 @@ public final class CharArrayUtils {
         Arrays.fill(bytes, (byte) 0);
     }
 }
-
