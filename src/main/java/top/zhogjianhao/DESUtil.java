@@ -12,8 +12,6 @@ import java.util.Base64;
 
 /**
  * 加密工具类
- *
- * @author wjy
  */
 public class DESUtil {
 

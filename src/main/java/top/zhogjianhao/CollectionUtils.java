@@ -9,8 +9,6 @@ import java.util.*;
 
 /**
  * 集合工具类
- *
- * @author duanluan
  */
 @Slf4j
 public class CollectionUtils {

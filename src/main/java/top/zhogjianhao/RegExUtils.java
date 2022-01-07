@@ -11,8 +11,6 @@ import java.util.regex.Pattern;
 
 /**
  * 正则匹配工具类
- *
- * @author duanluan
  */
 @Slf4j
 public class RegExUtils extends org.apache.commons.lang3.RegExUtils {

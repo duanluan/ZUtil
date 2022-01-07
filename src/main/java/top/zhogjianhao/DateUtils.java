@@ -16,8 +16,6 @@ import java.util.stream.Stream;
 
 /**
  * 时间工具类
- *
- * @author duanluan
  */
 @Slf4j
 public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
