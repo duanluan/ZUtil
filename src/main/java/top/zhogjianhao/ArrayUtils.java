@@ -6,7 +6,6 @@ import top.zhogjianhao.charset.StandardCharsets;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
-import java.util.Arrays;
 
 /**
  * 字符数组工具
@@ -76,23 +75,5 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    */
   public static char[] toChars(byte[] bytes) {
     return new String(bytes).toCharArray();
-  }
-
-  /**
-   * 擦除字符数组
-   *
-   * @param chars 字符数组
-   */
-  public static void wipe(char[] chars) {
-    Arrays.fill(chars, ' ');
-  }
-
-  /**
-   * 擦除字节数组
-   *
-   * @param bytes 字节数组
-   */
-  public static void wipe(byte[] bytes) {
-    Arrays.fill(bytes, (byte) 0);
   }
 }
