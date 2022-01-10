@@ -8,7 +8,7 @@ import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 
 /**
- * 字符数组工具
+ * 数组工具类
  */
 @Slf4j
 public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
@@ -20,7 +20,7 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param charsets 字符集
    * @return 指定字符集的字节数组
    */
-  public static byte[] toBytes(char[] chars, @NonNull Charset charsets) {
+  public static byte[] toBytes(@NonNull char[] chars, @NonNull Charset charsets) {
     return new String(chars).getBytes(charsets);
   }
 
@@ -31,7 +31,7 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param charsetName 字符集
    * @return 指定字符集的字节数组
    */
-  public static byte[] toBytes(char[] chars, @NonNull String charsetName) throws UnsupportedEncodingException {
+  public static byte[] toBytes(@NonNull char[] chars, @NonNull String charsetName) throws UnsupportedEncodingException {
     return new String(chars).getBytes(charsetName);
   }
 
@@ -41,7 +41,7 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param chars 字符数组
    * @return UTF-8 字符集的字节数组
    */
-  public static byte[] toBytes(char[] chars) {
+  public static byte[] toBytes(@NonNull char[] chars) {
     return new String(chars).getBytes(StandardCharsets.UTF_8);
   }
 
@@ -52,7 +52,7 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param charsets 字符集
    * @return 指定字符集的字符数组
    */
-  public static char[] toChars(byte[] bytes, @NonNull Charset charsets) {
+  public static char[] toChars(@NonNull byte[] bytes, @NonNull Charset charsets) {
     return new String(bytes, charsets).toCharArray();
   }
 
@@ -63,7 +63,7 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param charsetName 字符集
    * @return 指定字符集的字符数组
    */
-  public static char[] toChars(byte[] bytes, @NonNull String charsetName) throws UnsupportedEncodingException {
+  public static char[] toChars(@NonNull byte[] bytes, @NonNull String charsetName) throws UnsupportedEncodingException {
     return new String(bytes, charsetName).toCharArray();
   }
 
@@ -73,7 +73,7 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param bytes 字节数组
    * @return UTF-8 字符集的字符数组
    */
-  public static char[] toChars(byte[] bytes) {
+  public static char[] toChars(@NonNull byte[] bytes) {
     return new String(bytes).toCharArray();
   }
 }
