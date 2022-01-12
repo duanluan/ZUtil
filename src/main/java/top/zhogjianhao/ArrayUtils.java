@@ -407,4 +407,186 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
   public static long[] fill(@NonNull final long[] array, final int fromIndex, final int toIndex, final Object val) {
     return (long[]) fill((Object) array, fromIndex, toIndex, val);
   }
+
+  /**
+   * 不确定类型是否包含
+   *
+   * @param array 数组
+   * @param val   包含内容
+   * @return 是否包含
+   */
+  private static boolean containsObject(@NonNull Object array, Object val) {
+    if (array instanceof int[]) {
+      return contains((int[]) array, ((int[]) val)[0]);
+    } else if (array instanceof long[]) {
+      return contains((long[]) array, ((long[]) val)[0]);
+    } else if (array instanceof double[]) {
+      return contains((double[]) array, ((double[]) val)[0]);
+    } else if (array instanceof float[]) {
+      return contains((float[]) array, ((float[]) val)[0]);
+    } else if (array instanceof byte[]) {
+      return contains((byte[]) array, ((byte[]) val)[0]);
+    } else if (array instanceof char[]) {
+      return contains((char[]) array, ((char[]) val)[0]);
+    } else if (array instanceof boolean[]) {
+      return contains((boolean[]) array, ((boolean[]) val)[0]);
+    } else if (array instanceof short[]) {
+      return contains((short[]) array, ((short[]) val)[0]);
+    } else {
+      return contains((Object[]) array, ((Object[]) val)[0]);
+    }
+  }
+
+  /**
+   * 删除所有匹配项
+   *
+   * @param array 数组
+   * @param vals  需要删除的内容
+   * @return 数组
+   */
+  private static Object removeAllElements(@NonNull Object array, @NonNull Object... vals) {
+    Object result;
+    if (array instanceof int[]) {
+      result = ((int[]) array).clone();
+    } else if (array instanceof long[]) {
+      result = ((long[]) array).clone();
+    } else if (array instanceof double[]) {
+      result = ((double[]) array).clone();
+    } else if (array instanceof float[]) {
+      result = ((float[]) array).clone();
+    } else if (array instanceof byte[]) {
+      result = ((byte[]) array).clone();
+    } else if (array instanceof char[]) {
+      result = ((char[]) array).clone();
+    } else if (array instanceof boolean[]) {
+      result = ((boolean[]) array).clone();
+    } else if (array instanceof short[]) {
+      result = ((short[]) array).clone();
+    } else {
+      result = ((Object[]) array).clone();
+    }
+    for (Object val : vals) {
+      while (containsObject(result, val)) {
+        if (result instanceof int[]) {
+          result = removeElement((int[]) result, ((int[]) val)[0]);
+        } else if (array instanceof long[]) {
+          result = removeElement((long[]) result, ((long[]) val)[0]);
+        } else if (array instanceof double[]) {
+          result = removeElement((double[]) result, ((double[]) val)[0]);
+        } else if (array instanceof float[]) {
+          result = removeElement((float[]) result, ((float[]) val)[0]);
+        } else if (array instanceof byte[]) {
+          result = removeElement((byte[]) result, ((byte[]) val)[0]);
+        } else if (array instanceof char[]) {
+          result = removeElement((char[]) result, ((char[]) val)[0]);
+        } else if (array instanceof boolean[]) {
+          result = removeElement((boolean[]) result, ((boolean[]) val)[0]);
+        } else if (array instanceof short[]) {
+          result = removeElement((short[]) result, ((short[]) val)[0]);
+        } else {
+          result = removeElement((Object[]) result, ((Object[]) val)[0]);
+        }
+      }
+    }
+    return result;
+  }
+
+  /**
+   * 删除所有匹配项
+   *
+   * @param array 数组
+   * @param vals  需要删除的内容
+   * @return 数组
+   */
+  public static <T> T[] removeAllElements(@NonNull T[] array, @NonNull T... vals) {
+    return (T[]) removeAllElements((Object) array, (Object) vals);
+  }
+
+  /**
+   * 删除所有匹配项
+   *
+   * @param array 数组
+   * @param vals  需要删除的内容
+   * @return 数组
+   */
+  public static boolean[] removeAllElements(@NonNull boolean[] array, @NonNull boolean... vals) {
+    return (boolean[]) removeAllElements(array, (Object) vals);
+  }
+
+  /**
+   * 删除所有匹配项
+   *
+   * @param array 数组
+   * @param vals  需要删除的内容
+   * @return 数组
+   */
+  public static byte[] removeAllElements(@NonNull byte[] array, @NonNull byte... vals) {
+    return (byte[]) removeAllElements(array, (Object) vals);
+  }
+
+  /**
+   * 删除所有匹配项
+   *
+   * @param array 数组
+   * @param vals  需要删除的内容
+   * @return 数组
+   */
+  public static char[] removeAllElements(@NonNull char[] array, @NonNull char... vals) {
+    return (char[]) removeAllElements(array, (Object) vals);
+  }
+
+  /**
+   * 删除所有匹配项
+   *
+   * @param array 数组
+   * @param vals  需要删除的内容
+   * @return 数组
+   */
+  public static double[] removeAllElements(@NonNull double[] array, @NonNull double... vals) {
+    return (double[]) removeAllElements(array, (Object) vals);
+  }
+
+  /**
+   * 删除所有匹配项
+   *
+   * @param array 数组
+   * @param vals  需要删除的内容
+   * @return 数组
+   */
+  public static float[] removeAllElements(@NonNull float[] array, @NonNull float... vals) {
+    return (float[]) removeAllElements(array, (Object) vals);
+  }
+
+  /**
+   * 删除所有匹配项
+   *
+   * @param array 数组
+   * @param vals  需要删除的内容
+   * @return 数组
+   */
+  public static short[] removeAllElements(@NonNull short[] array, @NonNull short... vals) {
+    return (short[]) removeAllElements(array, (Object) vals);
+  }
+
+  /**
+   * 删除所有匹配项
+   *
+   * @param array 数组
+   * @param vals  需要删除的内容
+   * @return 数组
+   */
+  public static int[] removeAllElements(@NonNull int[] array, @NonNull int... vals) {
+    return (int[]) removeAllElements(array, (Object) vals);
+  }
+
+  /**
+   * 删除所有匹配项
+   *
+   * @param array 数组
+   * @param vals  需要删除的内容
+   * @return 数组
+   */
+  public static long[] removeAllElements(@NonNull long[] array, @NonNull long... vals) {
+    return (long[]) removeAllElements(array, (Object) vals);
+  }
 }
