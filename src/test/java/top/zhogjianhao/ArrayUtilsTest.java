@@ -164,4 +164,15 @@ public class ArrayUtilsTest {
     ints1 = ArrayUtils.fill(ints1, 3, ints1.length, 1);
     println("填充元素且超出原数组下标，最后一个元素：：" + ints1[ints1.length - 1] + "，数组长度：" + ints1.length);
   }
+
+  @DisplayName("removeAllElements：删除所有匹配元素")
+  @Test
+  void removeAllElements() {
+    int[] ints = {1, 2, 0, 0, 0};
+    ints = ArrayUtils.removeAllElements(ints, 0);
+    println("删除数组中的 0，数组长度：" + ints.length);
+    Integer[] ints1 = {1, 2, 0, 0, 0};
+    ints1 = ArrayUtils.removeAllElements(ints1, 0);
+    println("删除数组中的 0，数组长度：" + ints1.length);
+  }
 }
