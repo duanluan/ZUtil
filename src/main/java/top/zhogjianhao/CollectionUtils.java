@@ -199,6 +199,7 @@ public class CollectionUtils {
    * @param length     位数
    * @return 数组
    */
+  @Deprecated
   public static boolean moveForward(@NonNull Object arr, int arrLength, int startIndex, int length) {
     if (!(arr instanceof Object[] || arr instanceof int[] || arr instanceof long[] || arr instanceof double[] || arr instanceof float[] || arr instanceof boolean[] || arr instanceof short[] || arr instanceof byte[] || arr instanceof char[])) {
       return false;
@@ -218,6 +219,7 @@ public class CollectionUtils {
    * @param lastElementValue 最后一个元素的值
    * @return 数组
    */
+  @Deprecated
   public static boolean remove(@NonNull Object[] arr, int index, Object lastElementValue) {
     if (index < 0) {
       return false;
@@ -234,6 +236,7 @@ public class CollectionUtils {
    * @param index 下标
    * @return 数组
    */
+  @Deprecated
   public static boolean remove(@NonNull Object[] arr, int index) {
     return remove(arr, index, null);
   }
@@ -247,6 +250,7 @@ public class CollectionUtils {
    * @param lastElementValue 最后一个元素的值
    * @return 数组
    */
+  @Deprecated
   public static <T> boolean remove(@NonNull T arr, int index, Object lastElementValue) {
     if (arr instanceof int[]) {
       moveForward(arr, ((int[]) arr).length, index, 1);
@@ -300,6 +304,7 @@ public class CollectionUtils {
    * @param index 下标
    * @return 数组
    */
+  @Deprecated
   public static <T> boolean remove(@NonNull T arr, int index) {
     return remove(arr, index, null);
   }

@@ -105,4 +105,52 @@ public class ArrayUtilsTest {
       println(c);
     }
   }
+
+  @DisplayName("fori 手动往前移元素和 System.arraycopy 的性能")
+  @Test
+  void removeAndArraycopy() {
+    Integer[] testInts = new Integer[1000000];
+    for (int i = 0; i < testInts.length; i++) {
+      testInts[i] = i + 1;
+    }
+
+    Integer[] ints = testInts;
+    long currentTimeMillis = System.currentTimeMillis();
+    for (int i = 3; i < ints.length - 1; i++) {
+      ints[i] = ints[i + 1];
+    }
+    println("fori：" + (System.currentTimeMillis() - currentTimeMillis));
+    println(ints[3]);
+
+    ints = testInts;
+    for (int i = 0; i < ints.length; i++) {
+      ints[i] = i + 1;
+    }
+    currentTimeMillis = System.currentTimeMillis();
+    if (ints.length - 1 - 3 >= 0) {
+      System.arraycopy(ints, 3 + 1, ints, 3, ints.length - 1 - 3);
+    }
+    println("System.arraycopy：" + (System.currentTimeMillis() - currentTimeMillis));
+    println(ints[3]);
+  }
+
+  @DisplayName("remove：删除元素")
+  @Test
+  void remove() {
+    int[] ints = {1, 2, 3, 4, 5};
+    ints = ArrayUtils.remove(ints, 3, 9);
+    println("删除下标为 3 的元素后下标为 3 的元素：" + ints[3]);
+    println("删除下标为 3 的元素后，最后一个元素（给默认值）：" + ints[ints.length - 1] + "，数组长度：" + ints.length);
+    ints = new int[]{1, 2, 3, 4, 5};
+    ints = ArrayUtils.remove(ints, 3);
+    println("删除下标为 3 的元素后，最后一个元素（无默认值）：" + ints[ints.length - 1] + "，数组长度：" + ints.length);
+    println("——————————————————");
+    Integer[] ints1 = {1, 2, 3, 4, 5};
+    ints1 = ArrayUtils.remove(ints1, 3, 9);
+    println("删除下标为 3 的元素后下标为 3 的元素：" + ints1[3]);
+    println("删除下标为 3 的元素后，最后一个元素（给默认值）：" + ints1[ints1.length - 1] + "，数组长度：" + ints1.length);
+    ints1 = new Integer[]{1, 2, 3, 4, 5};
+    ints1 = ArrayUtils.remove(ints1, 3);
+    println("删除下标为 3 的元素后，最后一个元素（无默认值）：" + ints1[ints1.length - 1] + "，数组长度：" + ints1.length);
+  }
 }
