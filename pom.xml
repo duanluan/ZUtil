@@ -92,6 +92,12 @@
       <artifactId>spring-beans</artifactId>
       <version>5.3.14</version>
     </dependency>
+    <!-- 加密算法 -->
+    <dependency>
+      <groupId>org.bouncycastle</groupId>
+      <artifactId>bcprov-jdk15on</artifactId>
+      <version>1.70</version>
+    </dependency>
 
     <dependency>
       <groupId>org.junit.jupiter</groupId>
