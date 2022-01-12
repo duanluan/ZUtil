@@ -153,4 +153,15 @@ public class ArrayUtilsTest {
     ints1 = ArrayUtils.remove(ints1, 3);
     println("删除下标为 3 的元素后，最后一个元素（无默认值）：" + ints1[ints1.length - 1] + "，数组长度：" + ints1.length);
   }
+
+  @DisplayName("fill：填充元素")
+  @Test
+  void fill() {
+    int[] ints = {1, 2, 3, 4, 5};
+    ints = ArrayUtils.fill(ints, 3, ints.length, 1);
+    println("填充元素且超出原数组下标，最后一个元素：：" + ints[ints.length - 1] + "，数组长度：" + ints.length);
+    Integer[] ints1 = {1, 2, 3, 4, 5};
+    ints1 = ArrayUtils.fill(ints1, 3, ints1.length, 1);
+    println("填充元素且超出原数组下标，最后一个元素：：" + ints1[ints1.length - 1] + "，数组长度：" + ints1.length);
+  }
 }
