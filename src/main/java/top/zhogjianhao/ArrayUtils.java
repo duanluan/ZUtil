@@ -264,7 +264,7 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
     // 此处不减 1，因为 Arrays.fill 的 toIndex 要 +1 才能填充完最后一个元素
     if (toIndex > arrayLen) {
       // 根据结束下标创建结果数组
-      result = Array.newInstance(array.getClass().getComponentType(), toIndex + 1);
+      result = Array.newInstance(array.getClass().getComponentType(), toIndex);
       // 将内容 copy 到结果数组
       System.arraycopy(array, 0, result, 0, arrayLen);
     }
