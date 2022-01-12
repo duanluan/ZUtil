@@ -106,7 +106,7 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
   /**
    * 删除指定下标的元素
    *
-   * @param array              数组
+   * @param array            数组
    * @param index            下标
    * @param lastElementValue 最后一个元素的值
    * @return 数组
@@ -129,44 +129,117 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
       ((byte[]) result)[((byte[]) result).length - 1] = (byte) lastElementValue;
     } else if (array instanceof char[]) {
       ((char[]) result)[((char[]) result).length - 1] = (char) lastElementValue;
-    }else {
+    } else {
       ((Object[]) result)[((Object[]) result).length - 1] = lastElementValue;
     }
     return result;
   }
 
+  /**
+   * 删除指定下标的元素
+   *
+   * @param array            数组
+   * @param index            下标
+   * @param lastElementValue 最后一个元素的值
+   * @param <T>              数组类型
+   * @return 数组
+   */
   public static <T> T[] remove(@NonNull final T[] array, final int index, @NonNull final Object lastElementValue) {
     return (T[]) remove((Object) array, index, lastElementValue);
   }
 
+  /**
+   * 删除指定下标的元素
+   *
+   * @param array            数组
+   * @param index            下标
+   * @param lastElementValue 最后一个元素的值
+   * @return 数组
+   */
   public static boolean[] remove(@NonNull final boolean[] array, final int index, @NonNull final Object lastElementValue) {
     return (boolean[]) remove((Object) array, index, lastElementValue);
   }
 
+  /**
+   * 删除指定下标的元素
+   *
+   * @param array            数组
+   * @param index            下标
+   * @param lastElementValue 最后一个元素的值
+   * @return 数组
+   */
   public static byte[] remove(@NonNull final byte[] array, final int index, @NonNull final Object lastElementValue) {
     return (byte[]) remove((Object) array, index, lastElementValue);
   }
 
+  /**
+   * 删除指定下标的元素
+   *
+   * @param array            数组
+   * @param index            下标
+   * @param lastElementValue 最后一个元素的值
+   * @return 数组
+   */
   public static char[] remove(@NonNull final char[] array, final int index, @NonNull final Object lastElementValue) {
     return (char[]) remove((Object) array, index, lastElementValue);
   }
 
+  /**
+   * 删除指定下标的元素
+   *
+   * @param array            数组
+   * @param index            下标
+   * @param lastElementValue 最后一个元素的值
+   * @return 数组
+   */
   public static double[] remove(@NonNull final double[] array, final int index, @NonNull final Object lastElementValue) {
     return (double[]) remove((Object) array, index, lastElementValue);
   }
 
+  /**
+   * 删除指定下标的元素
+   *
+   * @param array            数组
+   * @param index            下标
+   * @param lastElementValue 最后一个元素的值
+   * @return 数组
+   */
   public static float[] remove(@NonNull final float[] array, final int index, @NonNull final Object lastElementValue) {
     return (float[]) remove((Object) array, index, lastElementValue);
   }
 
+  /**
+   * 删除指定下标的元素
+   *
+   * @param array            数组
+   * @param index            下标
+   * @param lastElementValue 最后一个元素的值
+   * @return 数组
+   */
   public static short[] remove(@NonNull final short[] array, final int index, @NonNull final Object lastElementValue) {
     return (short[]) remove((Object) array, index, lastElementValue);
   }
 
+  /**
+   * 删除指定下标的元素
+   *
+   * @param array            数组
+   * @param index            下标
+   * @param lastElementValue 最后一个元素的值
+   * @return 数组
+   */
   public static int[] remove(@NonNull final int[] array, final int index, @NonNull final Object lastElementValue) {
     return (int[]) remove((Object) array, index, lastElementValue);
   }
 
+  /**
+   * 删除指定下标的元素
+   *
+   * @param array            数组
+   * @param index            下标
+   * @param lastElementValue 最后一个元素的值
+   * @return 数组
+   */
   public static long[] remove(@NonNull final long[] array, final int index, @NonNull final Object lastElementValue) {
     return (long[]) remove((Object) array, index, lastElementValue);
   }
