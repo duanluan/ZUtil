@@ -1,6 +1,6 @@
 # ZUtil
 
-Java 工具类，包括但不限于时间、正则、字符串、数字、集合、Bean、随机数。
+Java 工具类，包括但不限于时间、正则、字符串、数字、集合、数组、Bean、随机数、加解密。
 
 工具类使用请查看 [test](src/test/java/top/zhogjianhao)。
 
