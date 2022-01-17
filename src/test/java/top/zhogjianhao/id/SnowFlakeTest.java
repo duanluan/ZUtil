@@ -11,8 +11,9 @@ public class SnowFlakeTest {
   void testSimple() {
     SnowFlake snowFlake = new SnowFlake(SnowFlake.builder());
     snowFlake = SnowFlake.builder().dataCenterBit(4).machineBit(5).build();
-    System.out.println(snowFlake.next());
     snowFlake = new SnowFlake(3, 5);
-    snowFlake.next();
+    for (int i = 0; i < 1000000; i++) {
+      System.out.println(snowFlake.next());;
+    }
   }
 }
