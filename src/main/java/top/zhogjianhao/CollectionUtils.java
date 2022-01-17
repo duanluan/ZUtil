@@ -4,7 +4,6 @@ package top.zhogjianhao;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
-import java.lang.reflect.Constructor;
 import java.util.*;
 
 /**
@@ -309,37 +308,38 @@ public class CollectionUtils {
     return remove(arr, index, null);
   }
 
-  /**
-   * List<Object[]> 转换指定实体集合 List<Class>
-   * @param list
-   * @param clazz
-   * @param <T>
-   * @return
-   */
-  public static <T> List<T> castEntity(List<Object[]> list, Class<T> clazz) {
-    List<T> returnList = new ArrayList<T>();
-    try {
-      if (CollectionUtils.isEmpty(list)) {
-        return returnList;
-      }
-      Object[] co = list.get(0);
-      Class[] c2 = new Class[co.length];
-      //确定构造方法
-      for (int i = 0; i < co.length; i++) {
-        if (co[i] != null) {
-          c2[i] = co[i].getClass();
-        } else {
-          c2[i] = String.class;
-        }
-      }
-      for (Object[] o : list) {
-        Constructor<T> constructor = clazz.getConstructor(c2);
-        returnList.add(constructor.newInstance(o));
-      }
-      return returnList;
-    }catch (Exception e){
-      log.error("CollectionUtils.castEntity error!",e);
-    }
-    return returnList;
-  }
+  // /**
+  //  * Object[] List 转换指定实体集合 List<Class>
+  //  *
+  //  * @param list
+  //  * @param clazz
+  //  * @param <T>
+  //  * @return
+  //  */
+  // public static <T> List<T> to(List<Object[]> list, Class<T> clazz) {
+  //   List<T> returnList = new ArrayList<T>();
+  //   try {
+  //     if (CollectionUtils.isEmpty(list)) {
+  //       return returnList;
+  //     }
+  //     Object[] co = list.get(0);
+  //     Class[] c2 = new Class[co.length];
+  //     //确定构造方法
+  //     for (int i = 0; i < co.length; i++) {
+  //       if (co[i] != null) {
+  //         c2[i] = co[i].getClass();
+  //       } else {
+  //         c2[i] = String.class;
+  //       }
+  //     }
+  //     for (Object[] o : list) {
+  //       Constructor<T> constructor = clazz.getConstructor(c2);
+  //       returnList.add(constructor.newInstance(o));
+  //     }
+  //     return returnList;
+  //   } catch (Exception e) {
+  //     log.error("CollectionUtils.castEntity error!", e);
+  //   }
+  //   return returnList;
+  // }
 }

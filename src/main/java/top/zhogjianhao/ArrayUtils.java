@@ -32,6 +32,7 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param chars       字符数组
    * @param charsetName 字符集
    * @return 指定字符集的字节数组
+   * @throws UnsupportedEncodingException 字符编码不支持
    */
   public static byte[] toBytes(@NonNull char[] chars, @NonNull String charsetName) throws UnsupportedEncodingException {
     return new String(chars).getBytes(charsetName);
@@ -64,6 +65,7 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param bytes       字节数组
    * @param charsetName 字符集
    * @return 指定字符集的字符数组
+   * @throws UnsupportedEncodingException 字符编码不支持
    */
   public static char[] toChars(@NonNull byte[] bytes, @NonNull String charsetName) throws UnsupportedEncodingException {
     return new String(bytes, charsetName).toCharArray();
@@ -496,6 +498,7 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    *
    * @param array 数组
    * @param vals  需要删除的内容
+   * @param <T>   数组类型
    * @return 数组
    */
   public static <T> T[] removeAllElements(@NonNull T[] array, @NonNull T... vals) {

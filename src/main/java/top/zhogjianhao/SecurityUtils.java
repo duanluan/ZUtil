@@ -66,7 +66,10 @@ public class SecurityUtils {
    * @param encrypting 是否为加密
    * @param padding    填充类型
    * @return 加解密的字符串
-   * @throws InvalidCipherTextException 异常
+   * @throws InvalidCipherTextException 意想不到的异常
+   * @throws InvalidKeyException        invalid Keys (invalid encoding, wrong length, uninitialized, etc)
+   * @throws NoSuchAlgorithmException   a particular cryptographic algorithm is requested but is not available in the environment
+   * @throws InvalidKeySpecException    invalid key specifications
    */
   public static String desEcb(@NonNull final String key, @NonNull final String in, final boolean encrypting, final BlockCipherPadding padding) throws InvalidCipherTextException, InvalidKeyException, NoSuchAlgorithmException, InvalidKeySpecException {
     byte[] keys = ArrayUtils.toBytes(key.toCharArray());
@@ -95,7 +98,7 @@ public class SecurityUtils {
    * @param encrypting 是否为加密
    * @param padding    填充类型
    * @return 加解密的字节数组
-   * @throws InvalidCipherTextException 异常
+   * @throws InvalidCipherTextException 意想不到的异常
    */
   public static byte[] desCbc(@NonNull final byte[] key, final @NonNull byte[] icv, final @NonNull byte[] in, final boolean encrypting, final BlockCipherPadding padding) throws InvalidCipherTextException {
     if (key.length != 8) {
@@ -133,7 +136,10 @@ public class SecurityUtils {
    * @param encrypting 是否为加密
    * @param padding    填充类型
    * @return 加解密的字符串
-   * @throws InvalidCipherTextException 异常
+   * @throws InvalidCipherTextException 意想不到的异常
+   * @throws InvalidKeyException        invalid Keys (invalid encoding, wrong length, uninitialized, etc)
+   * @throws NoSuchAlgorithmException   a particular cryptographic algorithm is requested but is not available in the environment
+   * @throws InvalidKeySpecException    invalid key specifications
    */
   public static String desCbc(@NonNull final String key, @NonNull final String icv, @NonNull final String in, final boolean encrypting, final BlockCipherPadding padding) throws InvalidCipherTextException, InvalidKeyException, NoSuchAlgorithmException, InvalidKeySpecException {
     byte[] keys = ArrayUtils.toBytes(key.toCharArray());
