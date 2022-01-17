@@ -8,6 +8,7 @@ import org.bouncycastle.crypto.modes.CBCBlockCipher;
 import org.bouncycastle.crypto.paddings.BlockCipherPadding;
 import org.bouncycastle.crypto.paddings.PaddedBufferedBlockCipher;
 import org.bouncycastle.crypto.params.KeyParameter;
+import org.bouncycastle.crypto.params.ParametersWithIV;
 import org.bouncycastle.pqc.math.linearalgebra.ByteUtils;
 
 import javax.crypto.SecretKeyFactory;
@@ -115,7 +116,7 @@ public class SecurityUtils {
     // 创建 DES 算法（默认 CBC 模式）的 BufferedBlockCipher
     BufferedBlockCipher cipher = new PaddedBufferedBlockCipher(new CBCBlockCipher(new DESEngine()), padding);
     // 根据密钥初始化
-    cipher.init(encrypting, new KeyParameter(key));
+    cipher.init(encrypting, new ParametersWithIV(new KeyParameter(key), icv));
     // 创建输出数组
     byte[] out = new byte[cipher.getOutputSize(in.length)];
     // 处理数据
@@ -132,6 +133,7 @@ public class SecurityUtils {
    * DES 算法 CBC 模式加解密
    *
    * @param key        密钥
+   * @param icv        向量
    * @param in         数据
    * @param encrypting 是否为加密
    * @param padding    填充类型
@@ -146,7 +148,7 @@ public class SecurityUtils {
     if (keys.length < 8) {
       throw new IllegalArgumentException("Key: should be greater than 8 bytes");
     }
-    byte[] icvs = ArrayUtils.toBytes(key.toCharArray());
+    byte[] icvs = ArrayUtils.toBytes(icv.toCharArray());
     if (icvs.length < 8) {
       throw new IllegalArgumentException("Icv: should be greater than 8 bytes");
     }
