@@ -7,16 +7,24 @@ import lombok.extern.slf4j.Slf4j;
  * Twitter 雪花算法
  * <p>
  * 二进制：0 - 41 位时间戳 - 5 位数据中心 ID - 5 位机器 ID - 12 位序列号
+ * <p>
+ * https://github.com/beyondfengyu/SnowFlake
  */
+@Deprecated
 @Slf4j
 public class SnowFlake {
 
   /**
-   * 默认数据中心或机器二进制位数
+   * 开始时间戳
+   */
+  private final static long START_TIME_MILLIS = 1640966400000L;
+
+  /**
+   * 默认数据中心 ID 或机器 ID 二进制位数
    */
   private static final long DEFAULT_DATA_CENTER_OR_MACHINE_BIT = 5L;
   /**
-   * 最大数据中心或机器二进制位数
+   * 最大数据中心 ID 或机器 ID 二进制位数
    */
   private static final long MAX_DATA_CENTER_AND_MACHINE_BIT = 10L;
   /**
@@ -29,11 +37,24 @@ public class SnowFlake {
   private static final long SEQUENCE_MAX_NUMBER = getMaxNumberByBit(SEQUENCE_BIT);
 
   /**
-   * 数据中心二进制位数
+   * 机器 ID 左移 = 序列号二进制位数
+   */
+  private static long MACHINE_LEFT = SEQUENCE_BIT;
+  /**
+   * 数据中心 ID 左移 = 机器 ID 左移 + 机器 ID 二进制位数
+   */
+  private static final long DATA_CENTER_LEFT = MACHINE_LEFT + DEFAULT_DATA_CENTER_OR_MACHINE_BIT;
+  /**
+   * 时间戳左移 = 数据中心 ID 左移 + 数据中心 ID 二进制位数
+   */
+  private static final long TIME_MILLIS_LEFT = DATA_CENTER_LEFT + DEFAULT_DATA_CENTER_OR_MACHINE_BIT;
+
+  /**
+   * 数据中心 ID 二进制位数
    */
   private long dataCenterBit = DEFAULT_DATA_CENTER_OR_MACHINE_BIT;
   /**
-   * 机器二进制位数
+   * 机器 ID 二进制位数
    */
   private long machineBit = DEFAULT_DATA_CENTER_OR_MACHINE_BIT;
   /**
@@ -67,7 +88,7 @@ public class SnowFlake {
   /**
    * 雪花算法类 Builder
    * <p>
-   * 默认数据中心二进制位数和机器二进制位数为 5
+   * 默认数据中心 ID 二进制位数和机器 ID 二进制位数为 5
    */
   public static class SnowFlakeBuilder {
     private Long dataCenterBit;
@@ -86,9 +107,9 @@ public class SnowFlake {
     }
 
     /**
-     * 设置数据中心二进制位数，和机器二进制位数同时只需设置一个即可
+     * 设置数据中心 ID 二进制位数，和机器 ID 二进制位数同时只需设置一个即可
      *
-     * @param dataCenterBit 数据中心二进制位数
+     * @param dataCenterBit 数据中心 ID 二进制位数
      * @return 雪花算法类 Builder
      */
     public SnowFlakeBuilder dataCenterBit(long dataCenterBit) {
@@ -101,9 +122,9 @@ public class SnowFlake {
     }
 
     /**
-     * 设置机器二进制位数，和数据中心二进制位数同时只需设置一个即可
+     * 设置机器 ID 二进制位数，和数据中心 ID 二进制位数同时只需设置一个即可
      *
-     * @param machineBit 机器二进制位数
+     * @param machineBit 机器 ID 二进制位数
      * @return 雪花算法类 Builder
      */
     public SnowFlakeBuilder machineBit(long machineBit) {
@@ -116,12 +137,12 @@ public class SnowFlake {
     }
 
     public SnowFlakeBuilder dataCenterId(long dataCenterId) {
-      this.dataCenterId = getMaxNumberByBit(this.dataCenterBit);
+      this.dataCenterId = dataCenterId;
       return this;
     }
 
     public SnowFlakeBuilder machineId(long machineId) {
-      this.machineId = getMaxNumberByBit(machineBit);
+      this.machineId = machineId;
       return this;
     }
 
@@ -168,13 +189,35 @@ public class SnowFlake {
     if (currentTimeMillis < lastTimeMillis) {
       throw new RuntimeException("The clock was moved forward and refused to generate ID.");
     }
-    // 当前时间 == 最后时间
+    // 当前毫秒 == 最后毫秒，即同一毫秒内
     if (currentTimeMillis == lastTimeMillis) {
-      // 相同时间，序列号自增
+      // 同一毫秒，序列号自增 & 序列号最大值
       sequence = (sequence + 1) & SEQUENCE_MAX_NUMBER;
+      // 如果同一毫秒序列号达到最大（上面 & 了序列号最大值，所以此处最大值为 0）
+      if (sequence == 0L) {
+        long l = System.currentTimeMillis();
+        while (l <= lastTimeMillis) {
+          currentTimeMillis = System.currentTimeMillis();
+        }
+      }
+    } else {
+      // 不同毫秒内序列号置 0
+      sequence = 0;
     }
     lastTimeMillis = currentTimeMillis;
 
-    return dataCenterBit;
+    long dataCenterLeft = DATA_CENTER_LEFT;
+    // 如果机器 ID 二进制位数非默认
+    if (this.machineBit != DEFAULT_DATA_CENTER_OR_MACHINE_BIT) {
+      dataCenterLeft = MACHINE_LEFT + this.machineBit;
+    }
+    long timeMillisLeft = TIME_MILLIS_LEFT;
+    // 如果数据中心 ID 二进制位数非默认
+    if (this.dataCenterBit != DEFAULT_DATA_CENTER_OR_MACHINE_BIT) {
+      timeMillisLeft = dataCenterLeft + this.dataCenterBit;
+    }
+
+    // 时间戳 | 数据中心 ID | 机器 ID | 序列号
+    return (currentTimeMillis - START_TIME_MILLIS) << dataCenterLeft | this.dataCenterId << dataCenterLeft | this.machineId << MACHINE_LEFT | sequence;
   }
 }
