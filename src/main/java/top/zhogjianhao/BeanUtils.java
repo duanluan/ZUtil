@@ -145,12 +145,12 @@ public class BeanUtils extends org.springframework.beans.BeanUtils {
   }
 
   /**
-   * 将原类型转为指定类型返回
+   * 复制属性到新类型对象中
    *
-   * @param source
-   * @param targetCls
-   * @param <T>
-   * @return
+   * @param source      对象
+   * @param targetClass 目标类
+   * @param <T>         指定类型
+   * @return 指定类型的新对象
    */
   public static <T> T copyProperties(@NonNull Object source, @NonNull Class<T> targetClass) {
     // 判断目标类是否存在无参构造函数
@@ -162,9 +162,8 @@ public class BeanUtils extends org.springframework.beans.BeanUtils {
         break;
       }
     }
-
-    if (!hasConstructor) {
-      throw new RuntimeException("unsupport class:" + targetCls.getName() + "! must has a no args constructor!");
+    if (!hasNoArgsConstructor) {
+      throw new IllegalArgumentException("targetClass: " + targetClass.getName() + " must have no args constructor");
     }
 
     T target = null;
