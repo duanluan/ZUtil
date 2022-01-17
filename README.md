@@ -15,4 +15,4 @@ Java 工具类，包括但不限于时间、正则、字符串、数字、集合
 
 # Deprecated
 
-* v1.1.4：CollectionUtils 的 moveForward、remove 方法，移到 ArrayUtils 中并重构优化
+* v1.2.0：CollectionUtils 的 moveForward、remove 方法，移到 ArrayUtils 中并重构优化
