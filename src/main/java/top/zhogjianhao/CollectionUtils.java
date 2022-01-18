@@ -1,10 +1,14 @@
 package top.zhogjianhao;
 
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.util.*;
 
 /**
@@ -341,5 +345,109 @@ public class CollectionUtils {
       log.error("CollectionUtils.castEntity error!",e);
     }
     return returnList;
+  }
+
+  /**
+   * 复制List
+   * @param source
+   * @param target
+   */
+  public static void copyList(List source, List target){
+    source.forEach(o -> {
+      try {
+        Object c = o.getClass().newInstance();
+        BeanUtils.copyProperties(o, c);
+        target.add(c);
+      } catch (InstantiationException | IllegalAccessException e) {
+        e.printStackTrace();
+      }
+    });
+  }
+
+  /**
+   * 转换List
+   * @param source
+   * @param clazz
+   */
+  public static List copyListProperties(List source, Class clazz){
+    List target = new ArrayList();
+    source.forEach(o -> {
+      try {
+        target.add( JSONObject.parseObject(JSONObject.toJSONString(o),clazz));
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    });
+    return target;
+  }
+
+  /**
+   * 转换List泛型
+   * @param source 源列表
+   * @param clazz 目标列表
+   */
+  public static <T> List<T> convertList(List source, Class<T> clazz){
+    List<T> res = new ArrayList<>();
+    source.forEach(o -> res.add(CollectionUtils.copyPropertiesThird(o, clazz)));
+    return res;
+  }
+
+
+
+  /**
+   * 源对象和目标对象的浅拷贝
+   * 注意点：目标对象与源对象中的属性名称必须一致，否则无法拷贝
+   *
+   * @param sourceObj 源对象
+   * @param clazz     目标对象的Class对象
+   * @param <T>
+   * @return          目标对象
+   */
+  public static <T> T copyPropertiesThird(Object sourceObj,  Class<T> clazz) {
+    if (Objects.isNull(sourceObj) || Objects.isNull(clazz)) {
+      return null;
+    }
+    T c = null;
+    try {
+      c = clazz.newInstance();
+      BeanUtils.copyProperties(sourceObj, c);
+    } catch (InstantiationException | IllegalAccessException e) {
+      log.error("KsBeanUtil -> copyPropertiesThird error ", e);
+    }
+    return c;
+  }
+
+  /**
+   * 获取类所有属性（包含父类属性）
+   * @param cls 类
+   * @param fields 属性List
+   * @return 所有fields
+   */
+  public static List<Field> getBeanFields(Class cls, List<Field> fields){
+    fields.addAll(Arrays.asList(cls.getDeclaredFields()));
+    if(Objects.nonNull(cls.getSuperclass())){
+      fields = getBeanFields(cls.getSuperclass() , fields);
+    }
+    return fields;
+  }
+
+  /**
+   * 将List<T>转换为List<Map<String, Object>>
+   *
+   * @param objList
+   * @return
+   */
+  public static <T> List<Map<String, Object>> objectsToMaps(List<T> objList) {
+    List<Map<String, Object>> list = new ArrayList<>();
+    if (objList != null && objList.size() > 0) {
+      Map<String, Object> map = null;
+      T bean = null;
+      for (int i = 0, size = objList.size(); i < size; i++) {
+        bean = objList.get(i);
+        map = (Map<String, Object>) JSON.toJSON(bean);
+        list.add(map);
+      }
+    }
+    return list;
   }
 }

@@ -143,37 +143,4 @@ public class BeanUtils extends org.springframework.beans.BeanUtils {
   public static <T> String getColumnName(FieldFunction<T, ?> fn) {
     return StringUtils.toUnderscore(getFieldName(fn));
   }
-
-  /**
-   * 将原类型转为指定类型返回
-   *
-   * @param source
-   * @param targetCls
-   * @param <T>
-   * @return
-   */
-  public static <T> T copyProperties(@NonNull Object source, @NonNull Class<T> targetClass) {
-    // 判断目标类是否存在无参构造函数
-    boolean hasNoArgsConstructor = false;
-    Constructor<?>[] constructors = targetClass.getConstructors();
-    for (Constructor<?> constructor : constructors) {
-      if (constructor.getParameterCount() == 0) {
-        hasNoArgsConstructor = true;
-        break;
-      }
-    }
-
-    if (!hasConstructor) {
-      throw new RuntimeException("unsupport class:" + targetCls.getName() + "! must has a no args constructor!");
-    }
-
-    T target = null;
-    try {
-      target = targetClass.newInstance();
-      org.springframework.beans.BeanUtils.copyProperties(source, target);
-    } catch (InstantiationException | IllegalAccessException e) {
-      log.error(e.getMessage(), e);
-    }
-    return target;
-  }
 }
