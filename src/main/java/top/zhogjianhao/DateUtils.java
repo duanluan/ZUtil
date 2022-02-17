@@ -40,9 +40,9 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
   public static final String PATTERN_HH_MM = "HH:mm";
 
   /**
-   * 最小年份：java.time.temporal.ChronoField#EPOCH_DAY
+   * Date 对象最小年份
    */
-  public static final int MIN_YEAR = (int) (Year.MIN_VALUE * 365.25);
+  public static final int MIN_DATE_YEAR = 1970;
 
   /**
    * 默认内容类型，比如月份是中文还是英文
@@ -141,8 +141,8 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    */
   public static DateTimeFormatter getDefaultFormatter(@NonNull String pattern, Locale locale, ZoneId atZoneId) {
     Map<TemporalField, Long> fieldValueMap = new HashMap<>();
-    fieldValueMap.put(ChronoField.YEAR_OF_ERA, (long) MIN_YEAR);
-    fieldValueMap.put(ChronoField.YEAR, (long) MIN_YEAR);
+    fieldValueMap.put(ChronoField.YEAR_OF_ERA, (long) 1);
+    fieldValueMap.put(ChronoField.YEAR, (long) Year.MIN_VALUE);
     fieldValueMap.put(ChronoField.MONTH_OF_YEAR, 1L);
     fieldValueMap.put(ChronoField.DAY_OF_MONTH, 1L);
     fieldValueMap.put(ChronoField.HOUR_OF_DAY, 0L);
@@ -370,7 +370,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     } else if (temporal instanceof LocalDate) {
       return toDate(((LocalDate) temporal).atStartOfDay(), zoneId);
     } else if (temporal instanceof LocalTime) {
-      return toDate(((LocalTime) temporal).atDate(LocalDate.of(MIN_YEAR, 1, 1)), zoneId);
+      return toDate(((LocalTime) temporal).atDate(LocalDate.of(MIN_DATE_YEAR, 1, 1)), zoneId);
     } else if (temporal instanceof ZonedDateTime) {
       final ZonedDateTime[] zonedDateTime = {(ZonedDateTime) temporal};
       if (zoneId != null) {
@@ -1041,7 +1041,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     } else if (temporal instanceof LocalDate) {
       return (T) ((LocalDate) temporal).atStartOfDay().atZone(oldZoneId).withZoneSameInstant(newZoneId).toLocalDate();
     } else if (temporal instanceof LocalTime) {
-      return (T) ((LocalTime) temporal).atDate(LocalDate.of(MIN_YEAR, 1, 1)).atZone(oldZoneId).withZoneSameInstant(newZoneId).toLocalTime();
+      return (T) ((LocalTime) temporal).atDate(LocalDate.of(Year.MIN_VALUE, 1, 1)).atZone(oldZoneId).withZoneSameInstant(newZoneId).toLocalTime();
     }
     return null;
   }
