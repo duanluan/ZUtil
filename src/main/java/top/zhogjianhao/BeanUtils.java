@@ -11,7 +11,9 @@ import java.lang.invoke.SerializedLambda;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -174,5 +176,41 @@ public class BeanUtils extends org.springframework.beans.BeanUtils {
       log.error(e.getMessage(), e);
     }
     return target;
+  }
+
+  /**
+   * 复制属性到新类型对象列表中
+   *
+   * @param sourceList  对象列表
+   * @param targetClass 目标类
+   * @param <T>         目标类型
+   * @return 指定类型的对象列表
+   */
+  public static <T> List<T> copyProperties(List<?> sourceList, Class<T> targetClass) {
+    // 判断目标类是否存在无参构造函数
+    boolean hasNoArgsConstructor = false;
+    Constructor<?>[] constructors = targetClass.getConstructors();
+    for (Constructor<?> constructor : constructors) {
+      if (constructor.getParameterCount() == 0) {
+        hasNoArgsConstructor = true;
+        break;
+      }
+    }
+    if (!hasNoArgsConstructor) {
+      throw new IllegalArgumentException("targetClass: " + targetClass.getName() + " must have no args constructor");
+    }
+
+    List<T> targetList = new ArrayList<>();
+    for (Object source : sourceList) {
+      T target = null;
+      try {
+        target = targetClass.newInstance();
+        org.springframework.beans.BeanUtils.copyProperties(source, target);
+      } catch (InstantiationException | IllegalAccessException e) {
+        log.error(e.getMessage(), e);
+      }
+      targetList.add(target);
+    }
+    return targetList;
   }
 }

@@ -43,10 +43,22 @@ public class BeanUtilsTest {
     List<TestBean> beanList = new ArrayList<>();
     beanList.add(testBean);
     testBean.setBeanList(beanList);
-    // 如果 targetClass 没有无参构造函数，IDEA 会有虚线提示
+
     CopyPropertieTestBean testBean1 = BeanUtils.copyProperties(testBean, CopyPropertieTestBean.class);
     println(testBean1.getName());
     // 如果 List<T> 中的 T 不同的话，就不会复制
     println(testBean1.getBeanList().get(0).getName());
+  }
+
+  @DisplayName("copyPropertiesByList：复制属性到新类型对象列表中")
+  @Test
+  void copyPropertiesByList() {
+    TestBean testBean = new TestBean();
+    testBean.setName("1");
+    List<TestBean> beanList = new ArrayList<>();
+    beanList.add(testBean);
+
+    List<CopyPropertieTestBean> beanList1 = BeanUtils.copyProperties(beanList, CopyPropertieTestBean.class);
+    println(beanList1.get(0).getName());
   }
 }
