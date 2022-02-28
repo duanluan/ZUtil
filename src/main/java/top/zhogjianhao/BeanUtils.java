@@ -117,7 +117,7 @@ public class BeanUtils extends org.springframework.beans.BeanUtils {
       Method method = fn.getClass().getDeclaredMethod("writeReplace");
       method.setAccessible(true);
       // 利用 jdk 的 SerializedLambda 解析方法引用
-      java.lang.invoke.SerializedLambda serializedLambda = (SerializedLambda) method.invoke(fn);
+      SerializedLambda serializedLambda = (SerializedLambda) method.invoke(fn);
       String implMethodName = serializedLambda.getImplMethodName();
       if (implMethodName.startsWith(FIELD_METHOD_PREFIX_GET)) {
         implMethodName = implMethodName.substring(3);
