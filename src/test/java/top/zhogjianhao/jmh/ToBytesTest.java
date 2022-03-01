@@ -54,3 +54,41 @@ public class ToBytesTest {
     return StandardCharsets.UTF_8.encode(cb).array();
   }
 }
+
+// Benchmark                                                    Mode     Cnt    Score    Error   Units
+// ToBytesTest.charBufferAllocate                              thrpt       5   10.256 ±  0.266  ops/us
+// ToBytesTest.charBufferWrap                                  thrpt       5   11.447 ±  1.610  ops/us
+// ToBytesTest.string                                          thrpt       5   26.405 ±  0.710  ops/us
+// ToBytesTest.charBufferAllocate                               avgt       5    0.095 ±  0.003   us/op
+// ToBytesTest.charBufferWrap                                   avgt       5    0.086 ±  0.002   us/op
+// ToBytesTest.string                                           avgt       5    0.038 ±  0.001   us/op
+// ToBytesTest.charBufferAllocate                             sample  120409    0.129 ±  0.026   us/op
+// ToBytesTest.charBufferAllocate:charBufferAllocate·p0.00    sample            0.100            us/op
+// ToBytesTest.charBufferAllocate:charBufferAllocate·p0.50    sample            0.100            us/op
+// ToBytesTest.charBufferAllocate:charBufferAllocate·p0.90    sample            0.200            us/op
+// ToBytesTest.charBufferAllocate:charBufferAllocate·p0.95    sample            0.200            us/op
+// ToBytesTest.charBufferAllocate:charBufferAllocate·p0.99    sample            0.200            us/op
+// ToBytesTest.charBufferAllocate:charBufferAllocate·p0.999   sample            1.459            us/op
+// ToBytesTest.charBufferAllocate:charBufferAllocate·p0.9999  sample           10.135            us/op
+// ToBytesTest.charBufferAllocate:charBufferAllocate·p1.00    sample          945.152            us/op
+// ToBytesTest.charBufferWrap                                 sample  108019    0.118 ±  0.006   us/op
+// ToBytesTest.charBufferWrap:charBufferWrap·p0.00            sample              ≈ 0            us/op
+// ToBytesTest.charBufferWrap:charBufferWrap·p0.50            sample            0.100            us/op
+// ToBytesTest.charBufferWrap:charBufferWrap·p0.90            sample            0.100            us/op
+// ToBytesTest.charBufferWrap:charBufferWrap·p0.95            sample            0.200            us/op
+// ToBytesTest.charBufferWrap:charBufferWrap·p0.99            sample            0.200            us/op
+// ToBytesTest.charBufferWrap:charBufferWrap·p0.999           sample            3.100            us/op
+// ToBytesTest.charBufferWrap:charBufferWrap·p0.9999          sample           30.099            us/op
+// ToBytesTest.charBufferWrap:charBufferWrap·p1.00            sample           97.664            us/op
+// ToBytesTest.string                                         sample  116972    0.076 ±  0.009   us/op
+// ToBytesTest.string:string·p0.00                            sample              ≈ 0            us/op
+// ToBytesTest.string:string·p0.50                            sample            0.100            us/op
+// ToBytesTest.string:string·p0.90                            sample            0.100            us/op
+// ToBytesTest.string:string·p0.95                            sample            0.100            us/op
+// ToBytesTest.string:string·p0.99                            sample            0.100            us/op
+// ToBytesTest.string:string·p0.999                           sample            0.800            us/op
+// ToBytesTest.string:string·p0.9999                          sample           18.180            us/op
+// ToBytesTest.string:string·p1.00                            sample          200.448            us/op
+// ToBytesTest.charBufferAllocate                                 ss       5   45.340 ± 56.662   us/op
+// ToBytesTest.charBufferWrap                                     ss       5   31.060 ± 29.005   us/op
+// ToBytesTest.string                                             ss       5   20.980 ± 32.452   us/op

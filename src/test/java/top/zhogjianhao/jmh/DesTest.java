@@ -72,3 +72,29 @@ public class DesTest {
     return ByteUtils.toHexString(bytes);
   }
 }
+
+// Benchmark                                    Mode     Cnt     Score      Error   Units
+// DesTest.bouncyCastle                        thrpt       5     0.570 ±    0.008  ops/us
+// DesTest.jdk                                 thrpt       5     0.001 ±    0.001  ops/us
+// DesTest.bouncyCastle                         avgt       5     1.834 ±    0.035   us/op
+// DesTest.jdk                                  avgt       5   795.029 ±  459.099   us/op
+// DesTest.bouncyCastle                       sample  169977     1.875 ±    0.006   us/op
+// DesTest.bouncyCastle:bouncyCastle·p0.00    sample             1.700              us/op
+// DesTest.bouncyCastle:bouncyCastle·p0.50    sample             1.800              us/op
+// DesTest.bouncyCastle:bouncyCastle·p0.90    sample             1.900              us/op
+// DesTest.bouncyCastle:bouncyCastle·p0.95    sample             1.900              us/op
+// DesTest.bouncyCastle:bouncyCastle·p0.99    sample             2.800              us/op
+// DesTest.bouncyCastle:bouncyCastle·p0.999   sample             8.192              us/op
+// DesTest.bouncyCastle:bouncyCastle·p0.9999  sample            28.385              us/op
+// DesTest.bouncyCastle:bouncyCastle·p1.00    sample           170.752              us/op
+// DesTest.jdk                                sample    6071   827.406 ±    9.084   us/op
+// DesTest.jdk:jdk·p0.00                      sample           567.296              us/op
+// DesTest.jdk:jdk·p0.50                      sample           812.032              us/op
+// DesTest.jdk:jdk·p0.90                      sample          1062.912              us/op
+// DesTest.jdk:jdk·p0.95                      sample          1146.880              us/op
+// DesTest.jdk:jdk·p0.99                      sample          1550.909              us/op
+// DesTest.jdk:jdk·p0.999                     sample          2385.904              us/op
+// DesTest.jdk:jdk·p0.9999                    sample          3375.104              us/op
+// DesTest.jdk:jdk·p1.00                      sample          3375.104              us/op
+// DesTest.bouncyCastle                           ss       5    70.560 ±   12.627   us/op
+// DesTest.jdk                                    ss       5  2709.700 ± 1149.087   us/op

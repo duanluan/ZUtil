@@ -53,3 +53,29 @@ public class RemoveItemByArrayTest {
     return ints1;
   }
 }
+
+// Benchmark                                            Mode     Cnt    Score   Error   Units
+// RemoveItemByArrayTest.arraycopy                     thrpt       5    6.186 ± 0.097  ops/us
+// RemoveItemByArrayTest.move                          thrpt       5    1.999 ± 0.058  ops/us
+// RemoveItemByArrayTest.arraycopy                      avgt       5    0.162 ± 0.002   us/op
+// RemoveItemByArrayTest.move                           avgt       5    0.497 ± 0.011   us/op
+// RemoveItemByArrayTest.arraycopy                    sample  118324    0.201 ± 0.002   us/op
+// RemoveItemByArrayTest.arraycopy:arraycopy·p0.00    sample            0.100           us/op
+// RemoveItemByArrayTest.arraycopy:arraycopy·p0.50    sample            0.200           us/op
+// RemoveItemByArrayTest.arraycopy:arraycopy·p0.90    sample            0.200           us/op
+// RemoveItemByArrayTest.arraycopy:arraycopy·p0.95    sample            0.200           us/op
+// RemoveItemByArrayTest.arraycopy:arraycopy·p0.99    sample            0.300           us/op
+// RemoveItemByArrayTest.arraycopy:arraycopy·p0.999   sample            0.700           us/op
+// RemoveItemByArrayTest.arraycopy:arraycopy·p0.9999  sample            6.600           us/op
+// RemoveItemByArrayTest.arraycopy:arraycopy·p1.00    sample           40.448           us/op
+// RemoveItemByArrayTest.move                         sample  157123    0.538 ± 0.004   us/op
+// RemoveItemByArrayTest.move:move·p0.00              sample            0.500           us/op
+// RemoveItemByArrayTest.move:move·p0.50              sample            0.500           us/op
+// RemoveItemByArrayTest.move:move·p0.90              sample            0.600           us/op
+// RemoveItemByArrayTest.move:move·p0.95              sample            0.600           us/op
+// RemoveItemByArrayTest.move:move·p0.99              sample            1.000           us/op
+// RemoveItemByArrayTest.move:move·p0.999             sample            2.088           us/op
+// RemoveItemByArrayTest.move:move·p0.9999            sample           14.230           us/op
+// RemoveItemByArrayTest.move:move·p1.00              sample          115.840           us/op
+// RemoveItemByArrayTest.arraycopy                        ss       5    2.780 ± 2.268   us/op
+// RemoveItemByArrayTest.move                             ss       5   22.400 ± 5.480   us/op
