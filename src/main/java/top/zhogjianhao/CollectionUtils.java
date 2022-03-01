@@ -307,39 +307,4 @@ public class CollectionUtils {
   public static <T> boolean remove(@NonNull T arr, int index) {
     return remove(arr, index, null);
   }
-
-  // /**
-  //  * Object[] List 转换指定实体集合 List<Class>
-  //  *
-  //  * @param list
-  //  * @param clazz
-  //  * @param <T>
-  //  * @return
-  //  */
-  // public static <T> List<T> to(List<Object[]> list, Class<T> clazz) {
-  //   List<T> returnList = new ArrayList<T>();
-  //   try {
-  //     if (CollectionUtils.isEmpty(list)) {
-  //       return returnList;
-  //     }
-  //     Object[] co = list.get(0);
-  //     Class[] c2 = new Class[co.length];
-  //     //确定构造方法
-  //     for (int i = 0; i < co.length; i++) {
-  //       if (co[i] != null) {
-  //         c2[i] = co[i].getClass();
-  //       } else {
-  //         c2[i] = String.class;
-  //       }
-  //     }
-  //     for (Object[] o : list) {
-  //       Constructor<T> constructor = clazz.getConstructor(c2);
-  //       returnList.add(constructor.newInstance(o));
-  //     }
-  //     return returnList;
-  //   } catch (Exception e) {
-  //     log.error("CollectionUtils.castEntity error!", e);
-  //   }
-  //   return returnList;
-  // }
 }
