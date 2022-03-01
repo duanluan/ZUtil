@@ -11,10 +11,7 @@ import java.lang.invoke.SerializedLambda;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 
 /**
@@ -39,6 +36,83 @@ public class BeanUtils extends org.springframework.beans.BeanUtils {
       map.put(key.toString(), beanMap.get(key));
     }
     return map;
+  }
+
+  /**
+   * Bean List 转 Map List
+   *
+   * @param sourceList Bean List
+   * @param <T>        Bean 类型
+   * @return Map List
+   */
+  public static <T> List<Map<String, Object>> toMap(List<T> sourceList) {
+    List<Map<String, Object>> result = new ArrayList<>();
+    if (CollectionUtils.isEmpty(sourceList)) {
+      return result;
+    }
+    for (T t : sourceList) {
+      result.add(toMap(t));
+    }
+    return result;
+  }
+
+  /**
+   * 深层 Bean 转 Map
+   *
+   * @param obj Bean 对象
+   * @return Map
+   */
+  public static Map<String, Object> deepToMap(Object obj) {
+    Map<String, Object> result = new HashMap<>();
+    BeanMap beanMap = BeanMap.create(obj);
+    for (Object keyObj : beanMap.keySet()) {
+      String key = keyObj.toString();
+      Object value = beanMap.get(key);
+      // 非基础类型
+      if (value != null && !(value instanceof String) && !(value instanceof Integer) && !(value instanceof Long) && !(value instanceof Double) && !(value instanceof Boolean) && !(value instanceof Float) && !(value instanceof Byte) && !(value instanceof Character) && !(value instanceof Short)) {
+        // 可循环
+        Collection collection = null;
+        if (value.getClass().isArray()) {
+          collection = Arrays.asList(value);
+        } else if (value instanceof List) {
+          collection = (List) value;
+        } else if (value instanceof Set) {
+          collection = (Set) value;
+        } else if (value instanceof Vector) {
+          collection = (Vector) value;
+        }
+        if (collection != null) {
+          List<Map<String, Object>> list = new ArrayList<>();
+          for (Object item : collection) {
+            list.add(deepToMap(item));
+          }
+          result.put(key, list);
+        } else {
+          result.put(key, deepToMap(value));
+        }
+      } else {
+        result.put(key, value);
+      }
+    }
+    return result;
+  }
+
+  /**
+   * 深层 Bean List 转 Map List
+   *
+   * @param sourceList Bean List
+   * @param <T>        Bean 类型
+   * @return Map List
+   */
+  public static <T> List<Map<String, Object>> deepToMap(List<T> sourceList) {
+    List<Map<String, Object>> result = new ArrayList<>();
+    if (CollectionUtils.isEmpty(sourceList)) {
+      return result;
+    }
+    for (T t : sourceList) {
+      result.add(deepToMap(t));
+    }
+    return result;
   }
 
   /**
