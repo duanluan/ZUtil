@@ -21,7 +21,7 @@ Java 工具类，包括但不限于时间、正则、字符串、数字、集合
 <dependency>
   <groupId>top.zhogjianhao</groupId>
   <artifactId>ZUtil</artifactId>
-  <version>1.2.2</version>
+  <version>1.2.3</version>
 </dependency>
 ```
 
@@ -29,9 +29,9 @@ Java 工具类，包括但不限于时间、正则、字符串、数字、集合
 
 ```groovy
 // groovy
-implementation 'top.zhogjianhao:ZUtil:1.2.2'
+implementation 'top.zhogjianhao:ZUtil:1.2.3'
 // kotlin
-implementation("top.zhogjianhao:ZUtil:1.2.2")
+implementation("top.zhogjianhao:ZUtil:1.2.3")
 ```
 
 # Deprecated
