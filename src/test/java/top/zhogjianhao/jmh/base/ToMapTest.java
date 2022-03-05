@@ -1,4 +1,4 @@
-package top.zhogjianhao.jmh;
+package top.zhogjianhao.jmh.base;
 
 import com.alibaba.fastjson.JSONObject;
 import org.junit.jupiter.api.Test;

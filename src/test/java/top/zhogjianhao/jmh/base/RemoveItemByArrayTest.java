@@ -1,4 +1,4 @@
-package top.zhogjianhao.jmh;
+package top.zhogjianhao.jmh.base;
 
 import org.junit.jupiter.api.Test;
 import org.openjdk.jmh.annotations.*;

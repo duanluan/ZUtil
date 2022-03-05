@@ -1,9 +1,12 @@
-package top.zhogjianhao;
+package top.zhogjianhao.date;
 
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.text.WordUtils;
+import top.zhogjianhao.CollectionUtils;
+import top.zhogjianhao.RegExUtils;
+import top.zhogjianhao.StringUtils;
 
 import java.text.ParseException;
 import java.time.*;
@@ -14,30 +17,13 @@ import java.time.temporal.*;
 import java.util.*;
 import java.util.stream.Stream;
 
+import static top.zhogjianhao.date.DatePattern.*;
+
 /**
  * 时间工具类
  */
 @Slf4j
 public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
-
-  public static final String PATTERN_UUUU_MM_DD_HH_MM_SS = "uuuu-MM-dd HH:mm:ss";
-  public static final String PATTERN_UUUUMMDDHHMMSS = "uuuuMMddHHmmss";
-  public static final String PATTERN_UUUU_MM_DD_HH_MM = "uuuu-MM-dd HH:mm";
-  public static final String PATTERN_UUUU_MM_DD = "uuuu-MM-dd";
-  public static final String PATTERN_UUUU_MM = "uuuu-MM";
-
-  public static final String PATTERN_YYYY_MM_DD_HH_MM_SS = "yyyy-MM-dd HH:mm:ss";
-  public static final String PATTERN_YYYYMMDDHHMMSS = "yyyyMMddHHmmss";
-  public static final String PATTERN_YYYY_MM_DD_HH_MM = "yyyy-MM-dd HH:mm";
-  public static final String PATTERN_YYYY_MM_DD = "yyyy-MM-dd";
-  public static final String PATTERN_YYYY_MM = "yyyy-MM";
-
-  public static final String PATTERN_MM_DD_HH_MM_SS = "MM-dd HH:mm:ss";
-  public static final String PATTERN_MMDDHHMMSS = "MMddHHmmss";
-  public static final String PATTERN_MM_DD_HH_MM = "MM-dd HH:mm";
-  public static final String PATTERN_MM_DD = "MM-dd";
-  public static final String PATTERN_HH_MM_SS = "HH:mm:ss";
-  public static final String PATTERN_HH_MM = "HH:mm";
 
   /**
    * Date 对象最小年份
@@ -75,19 +61,19 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
   /**
    * Date 默认格式
    */
-  public static String defaultDatePattern = PATTERN_YYYY_MM_DD_HH_MM_SS;
+  public static String defaultDatePattern = YYYY_MM_DD_HH_MM_SS;
   /**
    * LocalDate 默认格式
    */
-  public static String defaultLocalDatePattern = PATTERN_UUUU_MM_DD;
+  public static String defaultLocalDatePattern = UUUU_MM_DD;
   /**
    * LocalDateTime 默认格式
    */
-  public static String defaultLocalDateTimePattern = PATTERN_YYYY_MM_DD_HH_MM_SS;
+  public static String defaultLocalDateTimePattern = YYYY_MM_DD_HH_MM_SS;
   /**
    * LocalTime 默认格式
    */
-  public static String defaultLocalTimePattern = PATTERN_HH_MM_SS;
+  public static String defaultLocalTimePattern = HH_MM_SS;
 
   /**
    * 获取时间格式化构造器，并给不同时间级别赋默认值
@@ -452,12 +438,12 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
   /**
    * 解析为指定时区的 LocalDateTime 对象，根据被解析字符串的长度判断格式
    * <p>
-   * 19：DateUtils#PATTERN_UUUU_MM_DD_HH_MM_SS<br>
-   * 16：DateUtils#PATTERN_UUUU_MM_DD_HH_MM<br>
-   * 10：DateUtils#PATTERN_UUUU_MM_DD<br>
-   * 7：DateUtils#PATTERN_UUUU_MM<br>
-   * 8：DateUtils#PATTERN_HH_MM_SS<br>
-   * 5：DateUtils#PATTERN_HH_MM
+   * 19：PATTERN_UUUU_MM_DD_HH_MM_SS<br>
+   * 16：PATTERN_UUUU_MM_DD_HH_MM<br>
+   * 10：PATTERN_UUUU_MM_DD<br>
+   * 7：PATTERN_UUUU_MM<br>
+   * 8：PATTERN_HH_MM_SS<br>
+   * 5：PATTERN_HH_MM
    *
    * @param source 字符串
    * @param zoneId 时区
@@ -468,22 +454,22 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     if (source.contains("-") || source.contains(":")) {
       switch (source.length()) {
         case 19:
-          pattern = PATTERN_UUUU_MM_DD_HH_MM_SS;
+          pattern = UUUU_MM_DD_HH_MM_SS;
           break;
         case 16:
-          pattern = PATTERN_UUUU_MM_DD_HH_MM;
+          pattern = UUUU_MM_DD_HH_MM;
           break;
         case 10:
-          pattern = PATTERN_UUUU_MM_DD;
+          pattern = UUUU_MM_DD;
           break;
         case 7:
-          pattern = PATTERN_UUUU_MM;
+          pattern = UUUU_MM;
           break;
         case 8:
-          pattern = PATTERN_HH_MM_SS;
+          pattern = HH_MM_SS;
           break;
         case 5:
-          pattern = PATTERN_HH_MM;
+          pattern = HH_MM;
           break;
         default:
       }
@@ -509,12 +495,12 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
   /**
    * 解析为 LocalDateTime 对象，根据被解析字符串的长度判断格式
    * <p>
-   * 19：DateUtils#PATTERN_UUUU_MM_DD_HH_MM_SS<br>
-   * 16：DateUtils#PATTERN_UUUU_MM_DD_HH_MM<br>
-   * 10：DateUtils#PATTERN_UUUU_MM_DD<br>
-   * 7：DateUtils#PATTERN_UUUU_MM<br>
-   * 8：DateUtils#PATTERN_HH_MM_SS<br>
-   * 5：DateUtils#PATTERN_HH_MM
+   * 19：PATTERN_UUUU_MM_DD_HH_MM_SS<br>
+   * 16：PATTERN_UUUU_MM_DD_HH_MM<br>
+   * 10：PATTERN_UUUU_MM_DD<br>
+   * 7：PATTERN_UUUU_MM<br>
+   * 8：PATTERN_HH_MM_SS<br>
+   * 5：PATTERN_HH_MM
    *
    * @param source 字符串
    * @return LocalDateTime 对象
@@ -578,10 +564,10 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * <p>
    * 需要注意的是 LocalDate 不存在时区概念，此处是将 time 补足为 LocalTime.MIN 后再转换为 LocalDate
    * <p>
-   * 10：DateUtils#PATTERN_UUUU_MM_DD<br>
-   * 7：DateUtils#PATTERN_UUUU_MM<br>
-   * 8：DateUtils#PATTERN_HH_MM_SS<br>
-   * 5：DateUtils#PATTERN_HH_MM
+   * 10：PATTERN_UUUU_MM_DD<br>
+   * 7：PATTERN_UUUU_MM<br>
+   * 8：PATTERN_HH_MM_SS<br>
+   * 5：PATTERN_HH_MM
    *
    * @param source 字符串
    * @param zoneId 时区
@@ -592,16 +578,16 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     if (source.contains("-") || source.contains(":")) {
       switch (source.length()) {
         case 10:
-          pattern = PATTERN_UUUU_MM_DD;
+          pattern = UUUU_MM_DD;
           break;
         case 7:
-          pattern = PATTERN_UUUU_MM;
+          pattern = UUUU_MM;
           break;
         case 8:
-          pattern = PATTERN_HH_MM_SS;
+          pattern = HH_MM_SS;
           break;
         case 5:
-          pattern = PATTERN_HH_MM;
+          pattern = HH_MM;
           break;
         default:
       }
@@ -627,10 +613,10 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
   /**
    * 解析为 LocalDate 对象，根据被解析字符串的长度判断格式
    * <p>
-   * 10：DateUtils#PATTERN_UUUU_MM_DD<br>
-   * 7：DateUtils#PATTERN_UUUU_MM<br>
-   * 8：DateUtils#PATTERN_HH_MM_SS<br>
-   * 5：DateUtils#PATTERN_HH_MM
+   * 10：PATTERN_UUUU_MM_DD<br>
+   * 7：PATTERN_UUUU_MM<br>
+   * 8：PATTERN_HH_MM_SS<br>
+   * 5：PATTERN_HH_MM
    *
    * @param source 字符串
    * @return LocalDate 对象
@@ -694,8 +680,8 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * <p>
    * 需要注意的是 LocalTime 不存在时区概念，此处是将 date 补足为 LocalDate.now() 后再转换为 LocalTime
    * <p>
-   * 8：DateUtils#PATTERN_HH_MM_SS<br>
-   * 5：DateUtils#PATTERN_HH_MM
+   * 8：PATTERN_HH_MM_SS<br>
+   * 5：PATTERN_HH_MM
    *
    * @param source 字符串
    * @param zoneId 时区
@@ -708,10 +694,10 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
       if (srcLen == 8 || srcLen == 5) {
         switch (srcLen) {
           case 8:
-            pattern = PATTERN_HH_MM_SS;
+            pattern = HH_MM_SS;
             break;
           case 5:
-            pattern = PATTERN_HH_MM;
+            pattern = HH_MM;
             break;
           default:
         }
@@ -735,8 +721,8 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
   /**
    * 解析为 LocalTime，根据被解析字符串的长度判断格式
    * <p>
-   * 8：DateUtils#PATTERN_HH_MM_SS
-   * <br>5：DateUtils#PATTERN_HH_MM
+   * 8：PATTERN_HH_MM_SS
+   * <br>5：PATTERN_HH_MM
    *
    * @param source 被解析的字符串
    * @return LocalTime 对象
@@ -1091,7 +1077,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * @return 格式为 uuuu-MM-dd HH:mm:ss 的当前时间字符串
    */
   public static String now() {
-    return format(LocalDateTime.now());
+    return FORMAT_YYYY_MM_DD_HH_MM_SS.format(new Date());
   }
 
   /**

@@ -3,6 +3,8 @@ package top.zhogjianhao;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import top.zhogjianhao.date.DatePattern;
+import top.zhogjianhao.date.DateUtils;
 
 import java.time.*;
 import java.time.format.DateTimeFormatter;
@@ -143,7 +145,7 @@ public class DateUtilsTest {
   @Test
   void getDefaultFormatter() {
     // 格式中不含年
-    DateTimeFormatter dateTimeFormatter = new DateTimeFormatterBuilder().appendPattern(DateUtils.PATTERN_MM_DD).toFormatter();
+    DateTimeFormatter dateTimeFormatter = new DateTimeFormatterBuilder().appendPattern(DatePattern.MM_DD).toFormatter();
     // 获取年报错：Unsupported field: Year
     try {
       dateTimeFormatter.parse("08-08").get(ChronoField.YEAR);
@@ -152,11 +154,11 @@ public class DateUtilsTest {
     }
 
     // 使用 getDefaultFormatter() 时会赋默认值
-    dateTimeFormatter = DateUtils.getDefaultFormatter(DateUtils.PATTERN_MM_DD, Locale.ENGLISH, ZoneId.systemDefault());
+    dateTimeFormatter = DateUtils.getDefaultFormatter(DatePattern.MM_DD, Locale.ENGLISH, ZoneId.systemDefault());
     println(dateTimeFormatter.parse("08-08").get(ChronoField.YEAR));
 
     // 如果格式中已存在年，说明被转换的内容中已存在年，则不会赋默认值
-    dateTimeFormatter = DateUtils.getDefaultFormatter(DateUtils.PATTERN_UUUU_MM_DD, Locale.ENGLISH, ZoneId.systemDefault());
+    dateTimeFormatter = DateUtils.getDefaultFormatter(DatePattern.UUUU_MM_DD, Locale.ENGLISH, ZoneId.systemDefault());
     println(dateTimeFormatter.parse("2021-08-08").get(ChronoField.YEAR));
   }
 
@@ -165,28 +167,28 @@ public class DateUtilsTest {
   void format() {
     ZoneOffset zoneOffset = ZoneOffset.ofHours(-18);
 
-    println("ZonedDateTime 指定时区和格式" + DateUtils.format(nowZonedDateTime, zoneOffset, DateUtils.PATTERN_UUUU_MM_DD_HH_MM_SS));
-    println("ZonedDateTime 指定格式：" + DateUtils.format(nowZonedDateTime, DateUtils.PATTERN_UUUU_MM_DD_HH_MM_SS));
+    println("ZonedDateTime 指定时区和格式" + DateUtils.format(nowZonedDateTime, zoneOffset, DatePattern.UUUU_MM_DD_HH_MM_SS));
+    println("ZonedDateTime 指定格式：" + DateUtils.format(nowZonedDateTime, DatePattern.UUUU_MM_DD_HH_MM_SS));
     println("ZonedDateTime 指定时区：" + DateUtils.format(nowZonedDateTime, zoneOffset));
     println("ZonedDateTime：" + DateUtils.format(nowZonedDateTime));
 
-    println("LocalDateTime 指定时区和格式：" + DateUtils.format(nowLocalDateTime, zoneOffset, DateUtils.PATTERN_UUUU_MM_DD_HH_MM_SS));
-    println("LocalDateTime 指定格式：" + DateUtils.format(nowLocalDateTime, DateUtils.PATTERN_UUUU_MM_DD_HH_MM_SS));
+    println("LocalDateTime 指定时区和格式：" + DateUtils.format(nowLocalDateTime, zoneOffset, DatePattern.UUUU_MM_DD_HH_MM_SS));
+    println("LocalDateTime 指定格式：" + DateUtils.format(nowLocalDateTime, DatePattern.UUUU_MM_DD_HH_MM_SS));
     println("LocalDateTime 指定时区：" + DateUtils.format(nowLocalDateTime, zoneOffset));
     println("LocalDateTime：" + DateUtils.format(nowLocalDateTime));
 
-    println("LocalDate 指定时区和格式：" + DateUtils.format(nowLocalDate, zoneOffset, DateUtils.PATTERN_UUUU_MM_DD));
-    println("LocalDate 指定格式：" + DateUtils.format(nowLocalDate, DateUtils.PATTERN_UUUU_MM_DD));
+    println("LocalDate 指定时区和格式：" + DateUtils.format(nowLocalDate, zoneOffset, DatePattern.UUUU_MM_DD));
+    println("LocalDate 指定格式：" + DateUtils.format(nowLocalDate, DatePattern.UUUU_MM_DD));
     println("LocalDate 指定时区：" + DateUtils.format(nowLocalDate, zoneOffset));
     println("LocalDate：" + DateUtils.format(nowLocalDate));
 
-    println("LocalTime 指定时区和格式：" + DateUtils.format(nowLocalTime, zoneOffset, DateUtils.PATTERN_HH_MM_SS));
-    println("LocalTime 指定格式：" + DateUtils.format(nowLocalTime, DateUtils.PATTERN_HH_MM_SS));
+    println("LocalTime 指定时区和格式：" + DateUtils.format(nowLocalTime, zoneOffset, DatePattern.HH_MM_SS));
+    println("LocalTime 指定格式：" + DateUtils.format(nowLocalTime, DatePattern.HH_MM_SS));
     println("LocalTime 指定时区：" + DateUtils.format(nowLocalTime, zoneOffset));
     println("LocalTime：" + DateUtils.format(nowLocalTime));
 
-    println("Date 指定时区和格式：" + DateUtils.format(nowDate, zoneOffset, DateUtils.PATTERN_YYYY_MM_DD_HH_MM_SS));
-    println("Date 指定格式：" + DateUtils.format(nowDate, DateUtils.PATTERN_YYYY_MM_DD_HH_MM_SS));
+    println("Date 指定时区和格式：" + DateUtils.format(nowDate, zoneOffset, DatePattern.YYYY_MM_DD_HH_MM_SS));
+    println("Date 指定格式：" + DateUtils.format(nowDate, DatePattern.YYYY_MM_DD_HH_MM_SS));
     println("Date 指定时区：" + DateUtils.format(nowDate, zoneOffset));
     println("Date：" + DateUtils.format(nowDate));
   }
@@ -329,9 +331,9 @@ public class DateUtilsTest {
     println("昨天开始时间：" + DateUtils.todayMinTime(-1L));
     println("今天开始时间：" + DateUtils.todayMinTime());
 
-    println("指定时区和格式的昨天开始时间字符串：" + DateUtils.todayMinTimeStr(zoneOffset, DateUtils.PATTERN_UUUU_MM_DD_HH_MM, -1L));
-    println("指定时区和格式的今天开始时间字符串：" + DateUtils.todayMinTimeStr(zoneOffset, DateUtils.PATTERN_UUUU_MM_DD_HH_MM_SS));
-    println("指定格式的今天开始时间字符串：" + DateUtils.todayMinTimeStr(DateUtils.PATTERN_UUUU_MM_DD_HH_MM_SS));
+    println("指定时区和格式的昨天开始时间字符串：" + DateUtils.todayMinTimeStr(zoneOffset, DatePattern.UUUU_MM_DD_HH_MM, -1L));
+    println("指定时区和格式的今天开始时间字符串：" + DateUtils.todayMinTimeStr(zoneOffset, DatePattern.UUUU_MM_DD_HH_MM_SS));
+    println("指定格式的今天开始时间字符串：" + DateUtils.todayMinTimeStr(DatePattern.UUUU_MM_DD_HH_MM_SS));
     println("今天开始时间字符串：" + DateUtils.todayMinTimeStr());
 
     println("——————————————————");
@@ -341,9 +343,9 @@ public class DateUtilsTest {
     println("昨天结束时间：" + DateUtils.todayMaxTime(-1L));
     println("今天结束时间：" + DateUtils.todayMaxTime());
 
-    println("指定时区和格式的昨天结束时间字符串：" + DateUtils.todayMaxTimeStr(zoneOffset, DateUtils.PATTERN_UUUU_MM_DD_HH_MM, -1L));
-    println("指定时区和格式的今天结束时间字符串：" + DateUtils.todayMaxTimeStr(zoneOffset, DateUtils.PATTERN_UUUU_MM_DD_HH_MM_SS));
-    println("指定格式的今天结束时间字符串：" + DateUtils.todayMaxTimeStr(DateUtils.PATTERN_UUUU_MM_DD_HH_MM_SS));
+    println("指定时区和格式的昨天结束时间字符串：" + DateUtils.todayMaxTimeStr(zoneOffset, DatePattern.UUUU_MM_DD_HH_MM, -1L));
+    println("指定时区和格式的今天结束时间字符串：" + DateUtils.todayMaxTimeStr(zoneOffset, DatePattern.UUUU_MM_DD_HH_MM_SS));
+    println("指定格式的今天结束时间字符串：" + DateUtils.todayMaxTimeStr(DatePattern.UUUU_MM_DD_HH_MM_SS));
     println("今天结束时间字符串：" + DateUtils.todayMaxTimeStr());
   }
 
