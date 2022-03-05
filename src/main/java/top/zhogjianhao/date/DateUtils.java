@@ -1097,7 +1097,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * @return 指定格式的当前时间字符串
    */
   public static String now(@NonNull String pattern) {
-    return format(LocalDateTime.now(), pattern);
+    return FastDateFormat.getInstance(pattern).format(new Date());
   }
 
   /**
@@ -1107,7 +1107,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * @return 指定时区的当前时间字符串
    */
   public static String now(@NonNull ZoneId zoneId) {
-    return format(ZonedDateTime.now(zoneId).toLocalDateTime());
+    return DateTimeFormatter.ofPattern(DateUtils.defaultLocalDateTimePattern).format(ZonedDateTime.now(zoneId));
   }
 
   /**
@@ -1118,7 +1118,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * @return 指定时区和格式的当前时间字符串
    */
   public static String now(@NonNull ZoneId zoneId, @NonNull String pattern) {
-    return format(LocalDateTime.now(), zoneId, pattern);
+    return DateTimeFormatter.ofPattern(pattern).format(ZonedDateTime.now(zoneId));
   }
 
   /**
