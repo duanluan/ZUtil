@@ -304,6 +304,12 @@ public class DateUtilsTest {
 
   @DisplayName("now：当前时间字符串")
   @Test
+  void today() {
+    println("当天时间字符串：" + DateUtils.today());
+  }
+
+  @DisplayName("now：当前时间字符串")
+  @Test
   void now() {
     println("当前时间字符串：" + DateUtils.now());
     println("指定格式的当前时间字符串：" + DateUtils.now(customPattern));
@@ -321,9 +327,9 @@ public class DateUtilsTest {
     println("2020 年 2 月最后一天：" + DateUtils.max(localDateTime, ChronoField.DAY_OF_MONTH));
   }
 
-  @DisplayName("today：获取今天开始或结束时间")
+  @DisplayName("todayTime：获取今天开始或结束时间")
   @Test
-  void today() {
+  void todayTime() {
     ZoneOffset zoneOffset = ZoneOffset.ofHours(-15);
 
     println("指定时区的昨天开始时间：" + DateUtils.todayMinTime(zoneOffset, -1L));

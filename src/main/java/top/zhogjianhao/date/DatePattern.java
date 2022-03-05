@@ -26,5 +26,6 @@ public class DatePattern {
   public static final String HH_MM_SS = "HH:mm:ss";
   public static final String HH_MM = "HH:mm";
 
+  public static final FastDateFormat FORMAT_YYYY_MM_DD = FastDateFormat.getInstance(YYYY_MM_DD);
   public static final FastDateFormat FORMAT_YYYY_MM_DD_HH_MM_SS = FastDateFormat.getInstance(YYYY_MM_DD_HH_MM_SS);
 }

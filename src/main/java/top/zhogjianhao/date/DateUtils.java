@@ -3,6 +3,7 @@ package top.zhogjianhao.date;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.lang3.time.FastDateFormat;
 import org.apache.commons.text.WordUtils;
 import top.zhogjianhao.CollectionUtils;
 import top.zhogjianhao.RegExUtils;
@@ -1072,9 +1073,18 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
   }
 
   /**
+   * 获取当天时间字符串
+   *
+   * @return 格式为 yyyy-MM-dd 的当天时间字符串
+   */
+  public static String today() {
+    return FORMAT_YYYY_MM_DD.format(new Date());
+  }
+
+  /**
    * 获取当前时间字符串
    *
-   * @return 格式为 uuuu-MM-dd HH:mm:ss 的当前时间字符串
+   * @return 格式为 yyyy-MM-dd HH:mm:ss 的当前时间字符串
    */
   public static String now() {
     return FORMAT_YYYY_MM_DD_HH_MM_SS.format(new Date());
