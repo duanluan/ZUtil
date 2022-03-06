@@ -129,7 +129,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
   public static DateTimeFormatter getDefaultFormatter(@NonNull String pattern, Locale locale, ZoneId atZoneId) {
     Map<TemporalField, Long> fieldValueMap = new HashMap<>();
     fieldValueMap.put(ChronoField.YEAR_OF_ERA, (long) 1);
-    fieldValueMap.put(ChronoField.YEAR, (long) Year.MIN_VALUE);
+    fieldValueMap.put(ChronoField.YEAR, 0L);
     fieldValueMap.put(ChronoField.MONTH_OF_YEAR, 1L);
     fieldValueMap.put(ChronoField.DAY_OF_MONTH, 1L);
     fieldValueMap.put(ChronoField.HOUR_OF_DAY, 0L);
@@ -1028,7 +1028,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     } else if (temporal instanceof LocalDate) {
       return (T) ((LocalDate) temporal).atStartOfDay().atZone(oldZoneId).withZoneSameInstant(newZoneId).toLocalDate();
     } else if (temporal instanceof LocalTime) {
-      return (T) ((LocalTime) temporal).atDate(LocalDate.of(Year.MIN_VALUE, 1, 1)).atZone(oldZoneId).withZoneSameInstant(newZoneId).toLocalTime();
+      return (T) ((LocalTime) temporal).atDate(LocalDate.of(0, 1, 1)).atZone(oldZoneId).withZoneSameInstant(newZoneId).toLocalTime();
     }
     return null;
   }
