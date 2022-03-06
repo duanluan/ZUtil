@@ -439,12 +439,12 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
   /**
    * 解析为指定时区的 LocalDateTime 对象，根据被解析字符串的长度判断格式
    * <p>
-   * 19：PATTERN_UUUU_MM_DD_HH_MM_SS<br>
-   * 16：PATTERN_UUUU_MM_DD_HH_MM<br>
-   * 10：PATTERN_UUUU_MM_DD<br>
-   * 7：PATTERN_UUUU_MM<br>
-   * 8：PATTERN_HH_MM_SS<br>
-   * 5：PATTERN_HH_MM
+   * 19：UUUU_MM_DD_HH_MM_SS、UUUU_MM_DD_SLASH_HH_MM_SS、UUUU_MM_DD_DOT_HH_MM_SS<br>
+   * 16：UUUU_MM_DD_HH_MM、UUUU_MM_DD_SLASH_HH_MM、UUUU_MM_DD_DOT_HH_MM<br>
+   * 10：UUUU_MM_DD、UUUU_MM_DD_SLASH、UUUU_MM_DD_DOT<br>
+   * 7：UUUU_MM、UUUU_MM_SLASH、UUUU_MM_DOT<br>
+   * 8：HH_MM_SS<br>
+   * 5：HH_MM
    *
    * @param source 字符串
    * @param zoneId 时区
@@ -452,19 +452,39 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    */
   public static LocalDateTime parseLocalDateTime(@NonNull String source, ZoneId zoneId) {
     String pattern = null;
-    if (source.contains("-") || source.contains(":")) {
+    if (source.contains("-") || source.contains("/") || source.contains(".") || source.contains(":")) {
       switch (source.length()) {
         case 19:
           pattern = UUUU_MM_DD_HH_MM_SS;
+          if (source.contains("/")) {
+            pattern = UUUU_MM_DD_SLASH_HH_MM_SS;
+          } else if (source.contains(".")) {
+            pattern = UUUU_MM_DD_DOT_HH_MM_SS;
+          }
           break;
         case 16:
           pattern = UUUU_MM_DD_HH_MM;
+          if (source.contains("/")) {
+            pattern = UUUU_MM_DD_SLASH_HH_MM;
+          } else if (source.contains(".")) {
+            pattern = UUUU_MM_DD_DOT_HH_MM;
+          }
           break;
         case 10:
           pattern = UUUU_MM_DD;
+          if (source.contains("/")) {
+            pattern = UUUU_MM_DD_SLASH;
+          } else if (source.contains(".")) {
+            pattern = UUUU_MM_DD_DOT;
+          }
           break;
         case 7:
           pattern = UUUU_MM;
+          if (source.contains("/")) {
+            pattern = UUUU_MM_SLASH;
+          } else if (source.contains(".")) {
+            pattern = UUUU_MM_DOT;
+          }
           break;
         case 8:
           pattern = HH_MM_SS;
@@ -496,12 +516,12 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
   /**
    * 解析为 LocalDateTime 对象，根据被解析字符串的长度判断格式
    * <p>
-   * 19：PATTERN_UUUU_MM_DD_HH_MM_SS<br>
-   * 16：PATTERN_UUUU_MM_DD_HH_MM<br>
-   * 10：PATTERN_UUUU_MM_DD<br>
-   * 7：PATTERN_UUUU_MM<br>
-   * 8：PATTERN_HH_MM_SS<br>
-   * 5：PATTERN_HH_MM
+   * 19：UUUU_MM_DD_HH_MM_SS、UUUU_MM_DD_SLASH_HH_MM_SS、UUUU_MM_DD_DOT_HH_MM_SS<br>
+   * 16：UUUU_MM_DD_HH_MM、UUUU_MM_DD_SLASH_HH_MM、UUUU_MM_DD_DOT_HH_MM<br>
+   * 10：UUUU_MM_DD、UUUU_MM_DD_SLASH、UUUU_MM_DD_DOT<br>
+   * 7：UUUU_MM、UUUU_MM_SLASH、UUUU_MM_DOT<br>
+   * 8：HH_MM_SS<br>
+   * 5：HH_MM
    *
    * @param source 字符串
    * @return LocalDateTime 对象
@@ -565,10 +585,10 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * <p>
    * 需要注意的是 LocalDate 不存在时区概念，此处是将 time 补足为 LocalTime.MIN 后再转换为 LocalDate
    * <p>
-   * 10：PATTERN_UUUU_MM_DD<br>
-   * 7：PATTERN_UUUU_MM<br>
-   * 8：PATTERN_HH_MM_SS<br>
-   * 5：PATTERN_HH_MM
+   * 10：UUUU_MM_DD、UUUU_MM_DD_SLASH、UUUU_MM_DD_DOT<br>
+   * 7：UUUU_MM、UUUU_MM_SLASH、UUUU_MM_DOT<br>
+   * 8：HH_MM_SS<br>
+   * 5：HH_MM
    *
    * @param source 字符串
    * @param zoneId 时区
@@ -576,13 +596,23 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    */
   public static LocalDate parseLocalDate(@NonNull String source, ZoneId zoneId) {
     String pattern = null;
-    if (source.contains("-") || source.contains(":")) {
+    if (source.contains("-") || source.contains("/") || source.contains(".") || source.contains(":")) {
       switch (source.length()) {
         case 10:
           pattern = UUUU_MM_DD;
+          if (source.contains("/")) {
+            pattern = UUUU_MM_DD_SLASH;
+          } else if (source.contains(".")) {
+            pattern = UUUU_MM_DD_DOT;
+          }
           break;
         case 7:
           pattern = UUUU_MM;
+          if (source.contains("/")) {
+            pattern = UUUU_MM_SLASH;
+          } else if (source.contains(".")) {
+            pattern = UUUU_MM_DOT;
+          }
           break;
         case 8:
           pattern = HH_MM_SS;
@@ -614,10 +644,10 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
   /**
    * 解析为 LocalDate 对象，根据被解析字符串的长度判断格式
    * <p>
-   * 10：PATTERN_UUUU_MM_DD<br>
-   * 7：PATTERN_UUUU_MM<br>
-   * 8：PATTERN_HH_MM_SS<br>
-   * 5：PATTERN_HH_MM
+   * 10：UUUU_MM_DD、UUUU_MM_DD_SLASH、UUUU_MM_DD_DOT<br>
+   * 7：UUUU_MM、UUUU_MM_SLASH、UUUU_MM_DOT<br>
+   * 8：HH_MM_SS<br>
+   * 5：HH_MM
    *
    * @param source 字符串
    * @return LocalDate 对象
@@ -681,8 +711,8 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * <p>
    * 需要注意的是 LocalTime 不存在时区概念，此处是将 date 补足为 LocalDate.now() 后再转换为 LocalTime
    * <p>
-   * 8：PATTERN_HH_MM_SS<br>
-   * 5：PATTERN_HH_MM
+   * 8：HH_MM_SS<br>
+   * 5：HH_MM
    *
    * @param source 字符串
    * @param zoneId 时区
@@ -722,8 +752,8 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
   /**
    * 解析为 LocalTime，根据被解析字符串的长度判断格式
    * <p>
-   * 8：PATTERN_HH_MM_SS
-   * <br>5：PATTERN_HH_MM
+   * 8：HH_MM_SS
+   * <br>5：HH_MM
    *
    * @param source 被解析的字符串
    * @return LocalTime 对象
