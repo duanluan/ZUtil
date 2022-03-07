@@ -3,6 +3,7 @@ package top.zhogjianhao.date;
 import org.apache.commons.lang3.time.FastDateFormat;
 
 import java.time.format.DateTimeFormatter;
+import java.time.format.ResolverStyle;
 
 /**
  * 时间格式
@@ -52,8 +53,14 @@ public class DatePattern {
 
   public static final FastDateFormat FORMAT_YYYY_MM_DD_HH_MM_SS = FastDateFormat.getInstance(YYYY_MM_DD_HH_MM_SS);
   public static final FastDateFormat FORMAT_YYYY_MM_DD = FastDateFormat.getInstance(YYYY_MM_DD);
+  public static final FastDateFormat FORMAT_HH_MM_SS = FastDateFormat.getInstance(HH_MM_SS);
 
-  public static final DateTimeFormatter FORMATTER_YYYY_MM_DD_HH_MM_SS = DateTimeFormatter.ofPattern(YYYY_MM_DD_HH_MM_SS);
-  public static final DateTimeFormatter FORMATTER_YYYY_MM_DD = DateTimeFormatter.ofPattern(YYYY_MM_DD);
-  public static final DateTimeFormatter FORMATTER_HH_MM_SS = DateTimeFormatter.ofPattern(HH_MM_SS);
+  /**
+   * 默认解析模式：严格模式（https://rumenz.com/java-topic/java/date-time/resolverstyle-strict-date-parsing/index.html）
+   */
+  public static final ResolverStyle DEFAULT_RESOLVER_STYLE = ResolverStyle.STRICT;
+
+  public static final DateTimeFormatter FORMATTER_YYYY_MM_DD_HH_MM_SS = DateTimeFormatter.ofPattern(YYYY_MM_DD_HH_MM_SS).withResolverStyle(DEFAULT_RESOLVER_STYLE);
+  public static final DateTimeFormatter FORMATTER_YYYY_MM_DD = DateTimeFormatter.ofPattern(YYYY_MM_DD).withResolverStyle(DEFAULT_RESOLVER_STYLE);
+  public static final DateTimeFormatter FORMATTER_HH_MM_SS = DateTimeFormatter.ofPattern(HH_MM_SS).withResolverStyle(DEFAULT_RESOLVER_STYLE);
 }

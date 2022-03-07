@@ -13,7 +13,6 @@ import java.text.ParseException;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
-import java.time.format.ResolverStyle;
 import java.time.temporal.*;
 import java.util.*;
 import java.util.stream.Stream;
@@ -43,10 +42,6 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * 系统时区偏移
    */
   public static final ZoneOffset SYSTEM_ZONE_OFFSET = OffsetDateTime.now(SYSTEM_ZONE_ID).getOffset();
-  /**
-   * 默认解析模式：严格模式（https://rumenz.com/java-topic/java/date-time/resolverstyle-strict-date-parsing/index.html）
-   */
-  public static final ResolverStyle DEFAULT_RESOLVER_STYLE = ResolverStyle.STRICT;
 
   // static {
   //   // 内容类型为英文
@@ -59,10 +54,6 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
   //   DEFAULT_RESOLVER_STYLE = ResolverStyle.STRICT;
   // }
 
-  /**
-   * Date 默认格式
-   */
-  public static String defaultDatePattern = YYYY_MM_DD_HH_MM_SS;
   /**
    * LocalDate 默认格式
    */
@@ -208,11 +199,12 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    */
   public static String format(@NonNull Temporal temporal, ZoneId zoneId, @NonNull String pattern) {
     DateTimeFormatter dateTimeFormatter;
-    if (pattern.equals(defaultLocalDateTimePattern)) {
+    // 使用已存在的格式转换器
+    if (defaultLocalDateTimePattern.equals(pattern)) {
       dateTimeFormatter = FORMATTER_YYYY_MM_DD_HH_MM_SS;
-    } else if (pattern.equals(defaultLocalDatePattern)) {
+    } else if (defaultLocalDatePattern.equals(pattern)) {
       dateTimeFormatter = FORMATTER_YYYY_MM_DD;
-    } else if (pattern.equals(defaultLocalTimePattern)) {
+    } else if (defaultLocalTimePattern.equals(pattern)) {
       dateTimeFormatter = FORMATTER_HH_MM_SS;
     } else {
       dateTimeFormatter = getDefaultFormatter(pattern);
@@ -300,11 +292,27 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     if (StringUtils.isBlank(pattern)) {
       return null;
     }
-    ZonedDateTime zonedDateTime = date.toInstant().atZone(SYSTEM_ZONE_ID);
     if (zoneId != null) {
+      ZonedDateTime zonedDateTime = date.toInstant().atZone(SYSTEM_ZONE_ID);
       zonedDateTime = zonedDateTime.withZoneSameInstant(zoneId);
+      return format(zonedDateTime.toLocalDateTime(), pattern);
+    } else {
+      FastDateFormat format = null;
+      // 使用已存在的格式转换器
+      if (defaultLocalDateTimePattern.equals(pattern)) {
+        format = FORMAT_YYYY_MM_DD_HH_MM_SS;
+      } else if (defaultLocalDatePattern.equals(pattern)) {
+        format = FORMAT_YYYY_MM_DD;
+      } else if (defaultLocalTimePattern.equals(pattern)) {
+        format = FORMAT_HH_MM_SS;
+      }
+      if (format != null) {
+        return format.format(date);
+      } else {
+        ZonedDateTime zonedDateTime = date.toInstant().atZone(SYSTEM_ZONE_ID);
+        return format(zonedDateTime.toLocalDateTime(), pattern);
+      }
     }
-    return format(zonedDateTime.toLocalDateTime(), pattern);
   }
 
   /**
@@ -315,7 +323,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * @return 指定时区的字符串
    */
   public static String format(@NonNull Date date, @NonNull ZoneId zoneId) {
-    return format(date, zoneId, defaultDatePattern);
+    return format(date, zoneId, defaultLocalDateTimePattern);
   }
 
   /**
@@ -333,13 +341,13 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
   }
 
   /**
-   * 格式化为 DateUtils#defaultDatePattern 的字符串
+   * 格式化为 DateUtils#defaultLocalDateTimePattern 的字符串
    *
    * @param date 时间对象
-   * @return DateUtils#defaultDatePattern 格式的字符串
+   * @return DateUtils#defaultLocalDateTimePattern 格式的字符串
    */
   public static String format(@NonNull Date date) {
-    return format(date, defaultDatePattern);
+    return format(date, defaultLocalDateTimePattern);
   }
 
   /**
@@ -876,13 +884,13 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * @return 指定时区的时间对象
    */
   public static <T> T parse(long timeStamp, ZoneId zoneId, @NonNull Class<T> clazz) {
-    if (clazz.equals(LocalDateTime.class)) {
+    if (LocalDateTime.class.equals(clazz)) {
       return (T) parseLocalDateTime(timeStamp, zoneId);
-    } else if (clazz.equals(LocalDate.class)) {
+    } else if (LocalDate.class.equals(clazz)) {
       return (T) parseLocalDate(timeStamp, zoneId);
-    } else if (clazz.equals(LocalTime.class)) {
+    } else if (LocalTime.class.equals(clazz)) {
       return (T) parseLocalTime(timeStamp, zoneId);
-    } else if (clazz.equals(Date.class)) {
+    } else if (Date.class.equals(clazz)) {
       return (T) parseDate(timeStamp, zoneId);
     }
     return null;
@@ -911,13 +919,13 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * @return 指定时区的时间对象
    */
   public static <T> T parse(@NonNull String source, ZoneId zoneId, @NonNull Class<T> clazz, @NonNull String... patterns) {
-    if (clazz.equals(LocalDateTime.class)) {
+    if (LocalDateTime.class.equals(clazz)) {
       return (T) parseLocalDateTime(source, zoneId, patterns);
-    } else if (clazz.equals(LocalDate.class)) {
+    } else if (LocalDate.class.equals(clazz)) {
       return (T) parseLocalDate(source, zoneId, patterns);
-    } else if (clazz.equals(LocalTime.class)) {
+    } else if (LocalTime.class.equals(clazz)) {
       return (T) parseLocalTime(source, zoneId, patterns);
-    } else if (clazz.equals(Date.class)) {
+    } else if (Date.class.equals(clazz)) {
       return (T) parseDate(source, zoneId, patterns);
     }
     return null;
@@ -933,13 +941,13 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * @return 指定时区的时间对象
    */
   public static <T> T parse(@NonNull String source, @NonNull ZoneId zoneId, @NonNull Class<T> clazz) {
-    if (clazz.equals(LocalDateTime.class)) {
+    if (LocalDateTime.class.equals(clazz)) {
       return (T) parseLocalDateTime(source, zoneId);
-    } else if (clazz.equals(LocalDate.class)) {
+    } else if (LocalDate.class.equals(clazz)) {
       return (T) parseLocalDate(source, zoneId);
-    } else if (clazz.equals(LocalTime.class)) {
+    } else if (LocalTime.class.equals(clazz)) {
       return (T) parseLocalTime(source, zoneId);
-    } else if (clazz.equals(Date.class)) {
+    } else if (Date.class.equals(clazz)) {
       return (T) parseDate(source, zoneId);
     }
     return null;
@@ -967,13 +975,13 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * @return 时间对象
    */
   public static <T> T parse(@NonNull String source, @NonNull Class<T> clazz) {
-    if (clazz.equals(LocalDateTime.class)) {
+    if (LocalDateTime.class.equals(clazz)) {
       return (T) parseLocalDateTime(source);
-    } else if (clazz.equals(LocalDate.class)) {
+    } else if (LocalDate.class.equals(clazz)) {
       return (T) parseLocalDate(source);
-    } else if (clazz.equals(LocalTime.class)) {
+    } else if (LocalTime.class.equals(clazz)) {
       return (T) parseLocalTime(source);
-    } else if (clazz.equals(Date.class)) {
+    } else if (Date.class.equals(clazz)) {
       return (T) parseDate(source);
     }
     return null;
