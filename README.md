@@ -23,7 +23,7 @@ QQ 交流群：[273743748](https://jq.qq.com/?_wv=1027&k=yZfCzQ8f)，微信群�
 <dependency>
   <groupId>top.zhogjianhao</groupId>
   <artifactId>ZUtil</artifactId>
-  <version>1.2.3</version>
+  <version>1.2.4</version>
 </dependency>
 ```
 
@@ -31,11 +31,12 @@ QQ 交流群：[273743748](https://jq.qq.com/?_wv=1027&k=yZfCzQ8f)，微信群�
 
 ```groovy
 // groovy
-implementation 'top.zhogjianhao:ZUtil:1.2.3'
+implementation 'top.zhogjianhao:ZUtil:1.2.4'
 // kotlin
-implementation("top.zhogjianhao:ZUtil:1.2.3")
+implementation("top.zhogjianhao:ZUtil:1.2.4")
 ```
 
 # Deprecated
 
+* v1.3.4：top.zhogjianhao.DateUtils 变更为 top.zhogjianhao.date.DateUtils
 * v1.2.0：CollectionUtils 的 moveForward、remove 方法，移到 ArrayUtils 中并重构优化
