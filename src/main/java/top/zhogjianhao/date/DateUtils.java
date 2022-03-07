@@ -1167,7 +1167,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
   }
 
   /**
-   * 指定级别的最小时间
+   * 指定多个时间级别的最小时间
    *
    * @param temporal       时间对象
    * @param temporalFields 多个最小时间的级别
@@ -1185,7 +1185,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
   }
 
   /**
-   * 指定级别的最大时间
+   * 指定多个时间级别的最大时间
    *
    * @param temporal       时间对象
    * @param temporalFields 多个最大时间的级别
@@ -1220,6 +1220,36 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
       temporal = temporal.with(temporalField, newValue);
     }
     return (T) temporal;
+  }
+
+  /**
+   * 指定多个时间级别的最小时间
+   *
+   * @param temporal       时间对象
+   * @param temporalFields 多个最小时间的级别
+   * @return 时间对象
+   */
+  public static Date minDate(@NonNull Temporal temporal, @NonNull TemporalField... temporalFields) {
+    Temporal temporal1 = min(temporal, temporalFields);
+    if (temporal1 == null) {
+      return null;
+    }
+    return toDate(temporal1);
+  }
+
+  /**
+   * 指定多个时间级别的最大时间
+   *
+   * @param temporal       时间对象
+   * @param temporalFields 多个最大时间的级别
+   * @return 时间对象
+   */
+  public static Date maxDate(@NonNull Temporal temporal, @NonNull TemporalField... temporalFields) {
+    Temporal temporal1 = max(temporal, temporalFields);
+    if (temporal1 == null) {
+      return null;
+    }
+    return toDate(temporal1);
   }
 
   /**
