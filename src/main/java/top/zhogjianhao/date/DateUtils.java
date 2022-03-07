@@ -455,32 +455,36 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     if (source.contains("-") || source.contains("/") || source.contains(".") || source.contains(":")) {
       switch (source.length()) {
         case 19:
-          pattern = UUUU_MM_DD_HH_MM_SS;
-          if (source.contains("/")) {
+          if (source.contains("-")) {
+            pattern = UUUU_MM_DD_HH_MM_SS;
+          } else if (source.contains("/")) {
             pattern = UUUU_MM_DD_SLASH_HH_MM_SS;
           } else if (source.contains(".")) {
             pattern = UUUU_MM_DD_DOT_HH_MM_SS;
           }
           break;
         case 16:
-          pattern = UUUU_MM_DD_HH_MM;
-          if (source.contains("/")) {
+          if (source.contains("-")) {
+            pattern = UUUU_MM_DD_HH_MM;
+          } else if (source.contains("/")) {
             pattern = UUUU_MM_DD_SLASH_HH_MM;
           } else if (source.contains(".")) {
             pattern = UUUU_MM_DD_DOT_HH_MM;
           }
           break;
         case 10:
-          pattern = UUUU_MM_DD;
-          if (source.contains("/")) {
+          if (source.contains("-")) {
+            pattern = UUUU_MM_DD;
+          } else if (source.contains("/")) {
             pattern = UUUU_MM_DD_SLASH;
           } else if (source.contains(".")) {
             pattern = UUUU_MM_DD_DOT;
           }
           break;
         case 7:
-          pattern = UUUU_MM;
-          if (source.contains("/")) {
+          if (source.contains("-")) {
+            pattern = UUUU_MM;
+          } else if (source.contains("/")) {
             pattern = UUUU_MM_SLASH;
           } else if (source.contains(".")) {
             pattern = UUUU_MM_DOT;
@@ -599,16 +603,18 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     if (source.contains("-") || source.contains("/") || source.contains(".") || source.contains(":")) {
       switch (source.length()) {
         case 10:
-          pattern = UUUU_MM_DD;
-          if (source.contains("/")) {
+          if (source.contains("-")) {
+            pattern = UUUU_MM_DD;
+          } else if (source.contains("/")) {
             pattern = UUUU_MM_DD_SLASH;
           } else if (source.contains(".")) {
             pattern = UUUU_MM_DD_DOT;
           }
           break;
         case 7:
-          pattern = UUUU_MM;
-          if (source.contains("/")) {
+          if (source.contains("-")) {
+            pattern = UUUU_MM;
+          } else if (source.contains("/")) {
             pattern = UUUU_MM_SLASH;
           } else if (source.contains(".")) {
             pattern = UUUU_MM_DOT;
@@ -720,7 +726,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    */
   public static LocalTime parseLocalTime(@NonNull String source, ZoneId zoneId) {
     String pattern = null;
-    if (source.contains("-") || source.contains(":")) {
+    if (source.contains(":")) {
       int srcLen = source.length();
       if (srcLen == 8 || srcLen == 5) {
         switch (srcLen) {
