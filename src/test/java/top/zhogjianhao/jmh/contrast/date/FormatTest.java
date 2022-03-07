@@ -41,28 +41,28 @@ public class FormatTest {
   }
 }
 
-// Benchmark                                           Mode     Cnt    Score     Error   Units
-// FormatTest.formatByHutool                          thrpt       5    3.811 ±   0.085  ops/us
-// FormatTest.formatByZUtil                           thrpt       5    3.711 ±   0.214  ops/us
-// FormatTest.formatByHutool                           avgt       5    0.265 ±   0.006   us/op
-// FormatTest.formatByZUtil                            avgt       5    0.269 ±   0.012   us/op
-// FormatTest.formatByHutool                         sample  144092    0.305 ±   0.009   us/op
-// FormatTest.formatByHutool:formatByHutool·p0.00    sample            0.200             us/op
-// FormatTest.formatByHutool:formatByHutool·p0.50    sample            0.300             us/op
-// FormatTest.formatByHutool:formatByHutool·p0.90    sample            0.300             us/op
-// FormatTest.formatByHutool:formatByHutool·p0.95    sample            0.300             us/op
-// FormatTest.formatByHutool:formatByHutool·p0.99    sample            0.500             us/op
-// FormatTest.formatByHutool:formatByHutool·p0.999   sample            3.291             us/op
-// FormatTest.formatByHutool:formatByHutool·p0.9999  sample           17.369             us/op
-// FormatTest.formatByHutool:formatByHutool·p1.00    sample          177.152             us/op
-// FormatTest.formatByZUtil                          sample  139900    0.321 ±   0.019   us/op
-// FormatTest.formatByZUtil:formatByZUtil·p0.00      sample            0.200             us/op
-// FormatTest.formatByZUtil:formatByZUtil·p0.50      sample            0.300             us/op
-// FormatTest.formatByZUtil:formatByZUtil·p0.90      sample            0.300             us/op
-// FormatTest.formatByZUtil:formatByZUtil·p0.95      sample            0.400             us/op
-// FormatTest.formatByZUtil:formatByZUtil·p0.99      sample            0.700             us/op
-// FormatTest.formatByZUtil:formatByZUtil·p0.999     sample            4.696             us/op
-// FormatTest.formatByZUtil:formatByZUtil·p0.9999    sample           28.803             us/op
-// FormatTest.formatByZUtil:formatByZUtil·p1.00      sample          756.736             us/op
-// FormatTest.formatByHutool                             ss       5   91.380 ± 412.393   us/op
-// FormatTest.formatByZUtil                              ss       5   38.180 ±  25.211   us/op
+// Benchmark                                           Mode     Cnt     Score    Error   Units
+// FormatTest.formatByHutool                          thrpt       5     3.841 ±  0.151  ops/us
+// FormatTest.formatByZUtil                           thrpt       5     3.869 ±  0.276  ops/us
+// FormatTest.formatByHutool                           avgt       5     0.267 ±  0.011   us/op
+// FormatTest.formatByZUtil                            avgt       5     0.267 ±  0.013   us/op
+// FormatTest.formatByHutool                         sample  135253     0.336 ±  0.037   us/op
+// FormatTest.formatByHutool:formatByHutool·p0.00    sample             0.199            us/op
+// FormatTest.formatByHutool:formatByHutool·p0.50    sample             0.300            us/op
+// FormatTest.formatByHutool:formatByHutool·p0.90    sample             0.399            us/op
+// FormatTest.formatByHutool:formatByHutool·p0.95    sample             0.400            us/op
+// FormatTest.formatByHutool:formatByHutool·p0.99    sample             0.600            us/op
+// FormatTest.formatByHutool:formatByHutool·p0.999   sample             7.496            us/op
+// FormatTest.formatByHutool:formatByHutool·p0.9999  sample            18.025            us/op
+// FormatTest.formatByHutool:formatByHutool·p1.00    sample          1515.520            us/op
+// FormatTest.formatByZUtil                          sample  140264     0.314 ±  0.007   us/op
+// FormatTest.formatByZUtil:formatByZUtil·p0.00      sample             0.199            us/op
+// FormatTest.formatByZUtil:formatByZUtil·p0.50      sample             0.300            us/op
+// FormatTest.formatByZUtil:formatByZUtil·p0.90      sample             0.301            us/op
+// FormatTest.formatByZUtil:formatByZUtil·p0.95      sample             0.400            us/op
+// FormatTest.formatByZUtil:formatByZUtil·p0.99      sample             0.599            us/op
+// FormatTest.formatByZUtil:formatByZUtil·p0.999     sample             5.800            us/op
+// FormatTest.formatByZUtil:formatByZUtil·p0.9999    sample            32.094            us/op
+// FormatTest.formatByZUtil:formatByZUtil·p1.00      sample           163.840            us/op
+// FormatTest.formatByHutool                             ss       5    54.380 ± 33.128   us/op
+// FormatTest.formatByZUtil                              ss       5    50.200 ± 67.260   us/op
