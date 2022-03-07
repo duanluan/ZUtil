@@ -207,7 +207,16 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * @return 指定时区和格式的字符串
    */
   public static String format(@NonNull Temporal temporal, ZoneId zoneId, @NonNull String pattern) {
-    DateTimeFormatter dateTimeFormatter = getDefaultFormatter(pattern);
+    DateTimeFormatter dateTimeFormatter;
+    if (pattern.equals(defaultLocalDateTimePattern)) {
+      dateTimeFormatter = FORMATTER_YYYY_MM_DD_HH_MM_SS;
+    } else if (pattern.equals(defaultLocalDatePattern)) {
+      dateTimeFormatter = FORMATTER_YYYY_MM_DD;
+    } else if (pattern.equals(defaultLocalTimePattern)) {
+      dateTimeFormatter = FORMATTER_HH_MM_SS;
+    } else {
+      dateTimeFormatter = getDefaultFormatter(pattern);
+    }
     if (zoneId != null) {
       // 因为 LocalDate 和 LocalTime 不存在时区信息，所以先根据当前时间补全为 LocalDateTime
       LocalDateTime localDateTime = null;
