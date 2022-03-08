@@ -23,7 +23,7 @@ QQ 交流群：[273743748](https://jq.qq.com/?_wv=1027&k=yZfCzQ8f)，微信群�
 <dependency>
   <groupId>top.zhogjianhao</groupId>
   <artifactId>ZUtil</artifactId>
-  <version>1.2.4</version>
+  <version>1.2.5</version>
 </dependency>
 ```
 
@@ -31,9 +31,9 @@ QQ 交流群：[273743748](https://jq.qq.com/?_wv=1027&k=yZfCzQ8f)，微信群�
 
 ```groovy
 // groovy
-implementation 'top.zhogjianhao:ZUtil:1.2.4'
+implementation 'top.zhogjianhao:ZUtil:1.2.5'
 // kotlin
-implementation("top.zhogjianhao:ZUtil:1.2.4")
+implementation("top.zhogjianhao:ZUtil:1.2.5")
 ```
 
 # Deprecated
