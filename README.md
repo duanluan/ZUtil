@@ -4,11 +4,9 @@ Java 工具类，包括但不限于时间、正则、字符串、数字、集合
 
 QQ 交流群：[273743748](https://jq.qq.com/?_wv=1027&k=yZfCzQ8f)，微信群加入 Q 群后艾特群主。
 
-工具类使用请查看 [test](src/test/java/top/zhogjianhao)。
+工具类使用请查看 [test](src/test/java/top/zhogjianhao)，和 Hutool 的性能对比测试请查看 [jmh.contrast](src/test/java/top/zhogjianhao/jmh/contrast)。
 
 请使用最新版，无重大 bug 已经测试通过的方法的形参不会再更改。
-
-所有性能测试全部由循环计时替换为 JMH。
 
 # 资源
 
@@ -38,5 +36,5 @@ implementation("top.zhogjianhao:ZUtil:1.2.5")
 
 # Deprecated
 
-* v1.3.4：top.zhogjianhao.DateUtils 变更为 top.zhogjianhao.date.DateUtils
+* v1.2.4：top.zhogjianhao.DateUtils 变更为 top.zhogjianhao.date.DateUtils
 * v1.2.0：CollectionUtils 的 moveForward、remove 方法，移到 ArrayUtils 中并重构优化
