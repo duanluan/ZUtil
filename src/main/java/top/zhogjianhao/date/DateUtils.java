@@ -406,6 +406,55 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
   }
 
   /**
+   * 转换为 LocalDateTime 对象
+   *
+   * @param date 时间对象
+   * @return LocalDateTime 对象
+   */
+  public static LocalDateTime toLocalDateTime(@NonNull Date date) {
+    return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+  }
+
+  /**
+   * 转换为 LocalDate 对象
+   *
+   * @param date 时间对象
+   * @return LocalDate 对象
+   */
+  public static LocalDate toLocalDate(@NonNull Date date) {
+    return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+  }
+
+  /**
+   * 转换为 LocalTime 对象
+   *
+   * @param date 时间对象
+   * @return LocalTime 对象
+   */
+  public static LocalTime toLocalTime(@NonNull Date date) {
+    return date.toInstant().atZone(ZoneId.systemDefault()).toLocalTime();
+  }
+
+  /**
+   * 转换为 Temporal（LocalDateTime、LocalDate、LocalTime）对象
+   *
+   * @param date  时间对象
+   * @param clazz 时间类
+   * @param <T>   时间类
+   * @return Temporal 对象
+   */
+  public static <T extends Temporal> T toTemporal(@NonNull Date date, @NonNull Class<T> clazz) {
+    if (LocalDateTime.class.equals(clazz)) {
+      return (T) toLocalDateTime(date);
+    } else if (LocalDate.class.equals(clazz)) {
+      return (T) toLocalDate(date);
+    } else if (LocalTime.class.equals(clazz)) {
+      return (T) toLocalTime(date);
+    }
+    return null;
+  }
+
+  /**
    * 解析为指定时区的 LocalDateTime 对象
    *
    * @param timeStamp 时间戳
@@ -1468,6 +1517,66 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    */
   public static <T extends Temporal> T plusOrMinus(@NonNull T temporal, long augendOrMinuend) {
     return plusOrMinus(temporal, augendOrMinuend, ChronoUnit.MILLIS);
+  }
+
+  /**
+   * 毫秒转换为指定时间类型
+   *
+   * @param milli      毫秒
+   * @param chronoUnit 时间类型，当它大于周时，返回的是平均时间
+   * @return 指定时间类型的时间
+   */
+  public static long toChronoUnit(long milli, @NonNull ChronoUnit chronoUnit) {
+    if (ChronoUnit.MILLIS.equals(chronoUnit)) {
+      return milli;
+    }
+    return milli / (chronoUnit.getDuration().getSeconds() * 1000);
+  }
+
+  /**
+   * 时间差
+   *
+   * @param startInclusive 开始时间
+   * @param endExclusive   结束时间
+   * @return 时间量
+   */
+  public static Duration between(@NonNull Temporal startInclusive, @NonNull Temporal endExclusive) {
+    return Duration.between(startInclusive, endExclusive);
+  }
+
+  /**
+   * 时间差
+   *
+   * @param startInclusive 开始时间
+   * @param endExclusive   结束时间
+   * @param chronoUnit     时间周期
+   * @return 指定时间周期的时间差
+   */
+  public static long between(@NonNull Temporal startInclusive, @NonNull Temporal endExclusive, @NonNull ChronoUnit chronoUnit) {
+    return chronoUnit.between(startInclusive, endExclusive);
+  }
+
+  /**
+   * 时间差
+   *
+   * @param startInclusive 开始时间
+   * @param endExclusive   结束时间
+   * @return 时间量
+   */
+  public static Duration between(@NonNull Date startInclusive, @NonNull Date endExclusive) {
+    return between(toLocalDateTime(startInclusive), toLocalDateTime(endExclusive));
+  }
+
+  /**
+   * 时间差
+   *
+   * @param startInclusive 开始时间
+   * @param endExclusive   结束时间
+   * @param chronoUnit     时间周期
+   * @return 指定时间周期的时间差
+   */
+  public static long between(@NonNull Date startInclusive, @NonNull Date endExclusive, @NonNull ChronoUnit chronoUnit) {
+    return toChronoUnit(startInclusive.getTime() - endExclusive.getTime(), chronoUnit);
   }
 
   // region 交集差集并集
