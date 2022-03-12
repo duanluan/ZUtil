@@ -94,7 +94,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
         fieldValueMap.remove(maybeExistTemporalField);
       }
       maybeExistTemporalField = ChronoField.DAY_OF_MONTH;
-      if ((lowercasePattern.contains("d") || pattern.contains("F")) && fieldValueMap.containsKey(maybeExistTemporalField)) {
+      if ((pattern.contains("d")) && fieldValueMap.containsKey(maybeExistTemporalField)) {
         fieldValueMap.remove(maybeExistTemporalField);
       }
       maybeExistTemporalField = ChronoField.HOUR_OF_DAY;
@@ -119,7 +119,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    */
   public static DateTimeFormatter getDefaultFormatter(@NonNull String pattern, Locale locale, ZoneId atZoneId) {
     Map<TemporalField, Long> fieldValueMap = new HashMap<>();
-    fieldValueMap.put(ChronoField.YEAR_OF_ERA, (long) 1);
+    fieldValueMap.put(ChronoField.YEAR_OF_ERA, 1L);
     fieldValueMap.put(ChronoField.YEAR, 0L);
     fieldValueMap.put(ChronoField.MONTH_OF_YEAR, 1L);
     fieldValueMap.put(ChronoField.DAY_OF_MONTH, 1L);
