@@ -191,6 +191,11 @@ public class DateUtilsTest {
     println("Date 指定格式：" + DateUtils.format(nowDate, DatePattern.YYYY_MM_DD_HH_MM_SS));
     println("Date 指定时区：" + DateUtils.format(nowDate, zoneOffset));
     println("Date：" + DateUtils.format(nowDate));
+
+    println("Long 指定时区和格式：" + DateUtils.format(currentTimeMillis, zoneOffset, DatePattern.YYYY_MM_DD_HH_MM_SS));
+    println("Long 指定格式：" + DateUtils.format(currentTimeMillis, DatePattern.YYYY_MM_DD_HH_MM_SS));
+    println("Long 指定时区：" + DateUtils.format(currentTimeMillis, zoneOffset));
+    println("Long：" + DateUtils.format(currentTimeMillis));
   }
 
   @DisplayName("toDate：转换为 Date 对象")

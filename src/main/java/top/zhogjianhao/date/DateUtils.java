@@ -75,6 +75,9 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * @return 时间格式构造器
    */
   public static DateTimeFormatterBuilder getFormatterBuilder(@NonNull String pattern, Map<TemporalField, Long> fieldValueMap) {
+    if (StringUtils.isBlank(pattern)) {
+      return null;
+    }
     // 根据格式创建时间格式化构造器
     DateTimeFormatterBuilder formatterBuilder = new DateTimeFormatterBuilder().appendPattern(pattern);
     String lowercasePattern = pattern.toLowerCase();
@@ -118,6 +121,9 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * @return 时间格式器
    */
   public static DateTimeFormatter getDefaultFormatter(@NonNull String pattern, Locale locale, ZoneId atZoneId) {
+    if (StringUtils.isBlank(pattern)) {
+      return null;
+    }
     Map<TemporalField, Long> fieldValueMap = new HashMap<>();
     fieldValueMap.put(ChronoField.YEAR_OF_ERA, 1L);
     fieldValueMap.put(ChronoField.YEAR, 0L);
@@ -178,6 +184,9 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * @return 转换后的字符串
    */
   private static String convertByPattern(@NonNull String source, @NonNull String pattern) {
+    if (StringUtils.isBlank(pattern)) {
+      return null;
+    }
     // 如果格式为英文月份，转换字符串为首字母大写
     int mmmIndex = pattern.indexOf("MMM");
     if (mmmIndex != -1) {
@@ -198,6 +207,9 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * @return 指定时区和格式的字符串
    */
   public static String format(@NonNull Temporal temporal, ZoneId zoneId, @NonNull String pattern) {
+    if (StringUtils.isBlank(pattern)) {
+      return null;
+    }
     DateTimeFormatter dateTimeFormatter;
     // 使用已存在的格式转换器
     if (defaultLocalDateTimePattern.equals(pattern)) {
@@ -334,9 +346,6 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * @return 指定格式的字符串
    */
   public static String format(@NonNull Date date, @NonNull String pattern) {
-    if (StringUtils.isBlank(pattern)) {
-      return null;
-    }
     return format(date, null, pattern);
   }
 
@@ -348,6 +357,50 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    */
   public static String format(@NonNull Date date) {
     return format(date, defaultLocalDateTimePattern);
+  }
+
+  /**
+   * 格式化为指定时区和格式的字符串
+   *
+   * @param timeStamp 时间戳
+   * @param zoneId    时区
+   * @param pattern   格式
+   * @return 指定时区和格式的字符串
+   */
+  public static String format(long timeStamp, ZoneId zoneId, @NonNull String pattern) {
+    return format(new Date(timeStamp), zoneId, pattern);
+  }
+
+  /**
+   * 格式化为 DateUtils#defaultLocalDateTimePattern 的字符串
+   *
+   * @param timeStamp 时间戳
+   * @param zoneId    时区
+   * @return 指定时区的字符串
+   */
+  public static String format(long timeStamp, @NonNull ZoneId zoneId) {
+    return format(timeStamp, zoneId, defaultLocalDateTimePattern);
+  }
+
+  /**
+   * 格式化为指定时区和格式的字符串
+   *
+   * @param timeStamp 时间戳
+   * @param pattern   格式
+   * @return 指定时区和格式的字符串
+   */
+  public static String format(long timeStamp, @NonNull String pattern) {
+    return format(timeStamp, null, pattern);
+  }
+
+  /**
+   * 格式化为 DateUtils#defaultLocalDateTimePattern 的字符串
+   *
+   * @param timeStamp 时间戳
+   * @return DateUtils#defaultLocalDateTimePattern 格式的字符串
+   */
+  public static String format(long timeStamp) {
+    return format(timeStamp, defaultLocalDateTimePattern);
   }
 
   /**
@@ -1888,6 +1941,9 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * @return 日期范围内的所有日期
    */
   public static List<String> getByRange(@NonNull LocalDateTime startTime, @NonNull LocalDateTime endTime, @NonNull String pattern) {
+    if (StringUtils.isBlank(pattern)) {
+      return null;
+    }
     List<String> result = new ArrayList<>();
     long distance = ChronoUnit.DAYS.between(startTime, endTime);
     if (distance >= 1) {
@@ -1906,6 +1962,9 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * @return 所有指定星期的天集合
    */
   public static List<String> getByRangeAndWeeks(@NonNull LocalDateTime startTime, @NonNull LocalDateTime endTime, @NonNull String weeks, @NonNull String pattern) {
+    if (StringUtils.isBlank(pattern)) {
+      return null;
+    }
     List<String> result = new ArrayList<>();
     // 设置一周的开始为周一
     TemporalField field = WeekFields.of(DayOfWeek.of(1), 1).dayOfWeek();
