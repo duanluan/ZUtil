@@ -4,6 +4,7 @@ import org.apache.commons.lang3.time.FastDateFormat;
 
 import java.time.format.DateTimeFormatter;
 import java.time.format.ResolverStyle;
+import java.util.Locale;
 
 /**
  * 时间格式
@@ -54,6 +55,15 @@ public class DatePattern {
   public static final FastDateFormat FORMAT_YYYY_MM_DD_HH_MM_SS = FastDateFormat.getInstance(YYYY_MM_DD_HH_MM_SS);
   public static final FastDateFormat FORMAT_YYYY_MM_DD = FastDateFormat.getInstance(YYYY_MM_DD);
   public static final FastDateFormat FORMAT_HH_MM_SS = FastDateFormat.getInstance(HH_MM_SS);
+  public static final FastDateFormat FORMAT_MM_US = FastDateFormat.getInstance("MM", Locale.US);
+  public static final FastDateFormat FORMAT_MMM_US = FastDateFormat.getInstance("MMM", Locale.US);
+  public static final FastDateFormat FORMAT_MMMM_US = FastDateFormat.getInstance("MMMM", Locale.US);
+  public static final FastDateFormat FORMAT_MM_ZH_CN = FastDateFormat.getInstance("MM", Locale.SIMPLIFIED_CHINESE);
+  public static final FastDateFormat FORMAT_MMM_ZH_CN = FastDateFormat.getInstance("MMM", Locale.SIMPLIFIED_CHINESE);
+  public static final FastDateFormat FORMAT_MMMM_ZH_CN = FastDateFormat.getInstance("MMMM", Locale.SIMPLIFIED_CHINESE);
+  public static final FastDateFormat FORMAT_MM_ZH_TW = FastDateFormat.getInstance("MM", Locale.TRADITIONAL_CHINESE);
+  public static final FastDateFormat FORMAT_MMM_ZH_TW = FastDateFormat.getInstance("MMM", Locale.TRADITIONAL_CHINESE);
+  public static final FastDateFormat FORMAT_MMMM_ZH_TW = FastDateFormat.getInstance("MMMM", Locale.TRADITIONAL_CHINESE);
 
   /**
    * 默认解析模式：严格模式（https://rumenz.com/java-topic/java/date-time/resolverstyle-strict-date-parsing/index.html）

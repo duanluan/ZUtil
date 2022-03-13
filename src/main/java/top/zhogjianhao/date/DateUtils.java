@@ -76,7 +76,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    */
   public static DateTimeFormatterBuilder getFormatterBuilder(@NonNull String pattern, Map<TemporalField, Long> fieldValueMap) {
     if (StringUtils.isBlank(pattern)) {
-      return null;
+      throw new IllegalArgumentException("Pattern: Can not be blank");
     }
     // 根据格式创建时间格式化构造器
     DateTimeFormatterBuilder formatterBuilder = new DateTimeFormatterBuilder().appendPattern(pattern);
@@ -122,7 +122,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    */
   public static DateTimeFormatter getDefaultFormatter(@NonNull String pattern, Locale locale, ZoneId atZoneId) {
     if (StringUtils.isBlank(pattern)) {
-      return null;
+      throw new IllegalArgumentException("Pattern: Can not be blank");
     }
     Map<TemporalField, Long> fieldValueMap = new HashMap<>();
     fieldValueMap.put(ChronoField.YEAR_OF_ERA, 1L);
@@ -185,7 +185,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    */
   private static String convertByPattern(@NonNull String source, @NonNull String pattern) {
     if (StringUtils.isBlank(pattern)) {
-      return null;
+      throw new IllegalArgumentException("Pattern: Can not be blank");
     }
     // 如果格式为英文月份，转换字符串为首字母大写
     int mmmIndex = pattern.indexOf("MMM");
@@ -199,6 +199,102 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
   }
 
   /**
+   * 转换数字月到短文本月
+   *
+   * @param monthNumber 数字月
+   * @param locale      区域
+   * @return 短文本月
+   */
+  public static String convertMonthShortText(@NonNull String monthNumber, @NonNull Locale locale) {
+    if (StringUtils.isBlank(monthNumber)) {
+      throw new IllegalArgumentException("MonthNumber: Can not be all blank");
+    }
+    int monthNumberLen = monthNumber.length();
+    if (monthNumberLen != 1 && monthNumberLen != 2) {
+      throw new IllegalArgumentException("MonthNumber: Length should be 1 or 2");
+    }
+    try {
+      FastDateFormat formatMmm;
+      FastDateFormat formatMm;
+      if (Locale.US.equals(locale)) {
+        formatMmm = FORMAT_MMM_US;
+        formatMm = FORMAT_MM_US;
+      } else if (Locale.SIMPLIFIED_CHINESE.equals(locale)) {
+        formatMmm = FORMAT_MMM_ZH_CN;
+        formatMm = FORMAT_MM_ZH_CN;
+      } else if (Locale.TRADITIONAL_CHINESE.equals(locale)) {
+        formatMmm = FORMAT_MMM_ZH_TW;
+        formatMm = FORMAT_MM_ZH_TW;
+      } else {
+        formatMmm = FastDateFormat.getInstance("MMM", locale);
+        formatMm = FastDateFormat.getInstance("MM", locale);
+      }
+      return formatMmm.format(formatMm.parse(monthNumber));
+    } catch (ParseException e) {
+      log.warn(e.getMessage());
+      return null;
+    }
+  }
+
+  /**
+   * 转换数字月到英文短文本月
+   *
+   * @param monthNumber 数字月
+   * @return 英文短文本月
+   */
+  public static String convertMonthShortText(@NonNull String monthNumber) {
+    return convertMonthShortText(monthNumber, Locale.US);
+  }
+
+  /**
+   * 转换数字月到文本月
+   *
+   * @param monthNumber 数字月
+   * @param locale      区域
+   * @return 文本月
+   */
+  public static String convertMonthText(@NonNull String monthNumber, @NonNull Locale locale) {
+    if (StringUtils.isBlank(monthNumber)) {
+      throw new IllegalArgumentException("MonthNumber: Can not be all blank");
+    }
+    int monthNumberLen = monthNumber.length();
+    if (monthNumberLen != 1 && monthNumberLen != 2) {
+      throw new IllegalArgumentException("MonthNumber: Length should be 1 or 2");
+    }
+    try {
+      FastDateFormat formatMmm;
+      FastDateFormat formatMm;
+      if (Locale.US.equals(locale)) {
+        formatMmm = FORMAT_MMMM_US;
+        formatMm = FORMAT_MM_US;
+      } else if (Locale.SIMPLIFIED_CHINESE.equals(locale)) {
+        formatMmm = FORMAT_MMMM_ZH_CN;
+        formatMm = FORMAT_MM_ZH_CN;
+      } else if (Locale.TRADITIONAL_CHINESE.equals(locale)) {
+        formatMmm = FORMAT_MMMM_ZH_TW;
+        formatMm = FORMAT_MM_ZH_TW;
+      } else {
+        formatMmm = FastDateFormat.getInstance("MMMM", locale);
+        formatMm = FastDateFormat.getInstance("MM", locale);
+      }
+      return formatMmm.format(formatMm.parse(monthNumber));
+    } catch (ParseException e) {
+      log.warn(e.getMessage());
+      return null;
+    }
+  }
+
+  /**
+   * 转换数字月到英文文本月
+   *
+   * @param monthNumber 数字月
+   * @return 英文文本月
+   */
+  public static String convertMonthText(@NonNull String monthNumber) {
+    return convertMonthText(monthNumber, Locale.US);
+  }
+
+  /**
    * 格式化为指定时区和格式的字符串
    *
    * @param temporal 时间对象
@@ -208,7 +304,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    */
   public static String format(@NonNull Temporal temporal, ZoneId zoneId, @NonNull String pattern) {
     if (StringUtils.isBlank(pattern)) {
-      return null;
+      throw new IllegalArgumentException("Pattern: Can not be blank");
     }
     DateTimeFormatter dateTimeFormatter;
     // 使用已存在的格式转换器
@@ -302,7 +398,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    */
   public static String format(@NonNull Date date, ZoneId zoneId, @NonNull String pattern) {
     if (StringUtils.isBlank(pattern)) {
-      return null;
+      throw new IllegalArgumentException("Pattern: Can not be blank");
     }
     if (zoneId != null) {
       ZonedDateTime zonedDateTime = date.toInstant().atZone(SYSTEM_ZONE_ID);
@@ -542,7 +638,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    */
   public static LocalDateTime parseLocalDateTime(@NonNull String source, ZoneId zoneId, @NonNull String... patterns) {
     if (StringUtils.isAllBlank(patterns)) {
-      return null;
+      throw new IllegalArgumentException("Patterns: Can not be all blank");
     }
     for (String pattern : patterns) {
       source = convertByPattern(source, pattern);
@@ -690,7 +786,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    */
   public static LocalDate parseLocalDate(@NonNull String source, ZoneId zoneId, @NonNull String... patterns) {
     if (StringUtils.isAllBlank(patterns)) {
-      return null;
+      throw new IllegalArgumentException("Patterns: Can not be all blank");
     }
     for (String pattern : patterns) {
       source = convertByPattern(source, pattern);
@@ -952,7 +1048,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    */
   public static Date parseDate(@NonNull String source, @NonNull String... patterns) {
     if (StringUtils.isAllBlank(patterns)) {
-      return null;
+      throw new IllegalArgumentException("Patterns: Can not be all blank");
     }
     try {
       return org.apache.commons.lang3.time.DateUtils.parseDate(source, patterns);
@@ -1942,7 +2038,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    */
   public static List<String> getByRange(@NonNull LocalDateTime startTime, @NonNull LocalDateTime endTime, @NonNull String pattern) {
     if (StringUtils.isBlank(pattern)) {
-      return null;
+      throw new IllegalArgumentException("Pattern: Can not be blank");
     }
     List<String> result = new ArrayList<>();
     long distance = ChronoUnit.DAYS.between(startTime, endTime);
@@ -1963,7 +2059,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    */
   public static List<String> getByRangeAndWeeks(@NonNull LocalDateTime startTime, @NonNull LocalDateTime endTime, @NonNull String weeks, @NonNull String pattern) {
     if (StringUtils.isBlank(pattern)) {
-      return null;
+      throw new IllegalArgumentException("Pattern: Can not be blank");
     }
     List<String> result = new ArrayList<>();
     // 设置一周的开始为周一

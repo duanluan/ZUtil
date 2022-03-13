@@ -162,6 +162,15 @@ public class DateUtilsTest {
     println(dateTimeFormatter.parse("2021-08-08").get(ChronoField.YEAR));
   }
 
+  @DisplayName("convertMonthText：转换数字月到文本月")
+  @Test
+  void convertMonthText() {
+    println(DateUtils.convertMonthShortText("03",Locale.SIMPLIFIED_CHINESE));
+    println(DateUtils.convertMonthShortText("3"));
+    println(DateUtils.convertMonthText("03",Locale.SIMPLIFIED_CHINESE));
+    println(DateUtils.convertMonthText("3"));
+  }
+
   @DisplayName("format：格式化为字符串")
   @Test
   void format() {
