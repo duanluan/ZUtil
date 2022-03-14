@@ -211,6 +211,7 @@ public class DateUtilsTest {
   @Test
   void formatCountdown() {
     println(DateUtils.formatCountdown(Math.abs(DateUtils.between(nowLocalDateTime, DateUtils.parseLocalDateTime(nowLocalDateTime.toInstant(ZoneOffset.ofHours(8)).toEpochMilli() - 691200000), ChronoUnit.MILLIS)), "W周dd天HH时mm分ss秒SSS毫秒"));
+    println(DateUtils.formatCountdown(Math.abs(DateUtils.between(nowLocalDateTime, DateUtils.parseLocalDateTime(nowLocalDateTime.toInstant(ZoneOffset.ofHours(8)).toEpochMilli() - 691200000), ChronoUnit.MILLIS)), false, null, "天", "小时", "分", "秒", "毫秒"));
   }
 
   @DisplayName("toDate：转换为 Date 对象")

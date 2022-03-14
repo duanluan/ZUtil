@@ -507,170 +507,174 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * @return 指定格式的倒计时字符串
    */
   public static String formatCountdown(long timeStamp, @NonNull String pattern) {
-    if (timeStamp <= 0 || StringUtils.isBlank(pattern)) {
-      throw new IllegalArgumentException("Pattern: Can not be blank");
+    if (timeStamp <= 0) {
+      throw new IllegalArgumentException("TimeStamp: should be greater than 0");
+    }
+    if (StringUtils.isBlank(pattern)) {
+      throw new IllegalArgumentException("Pattern: should not be blank");
     }
     String lowerCasePattern = pattern.toLowerCase();
-    // // 如果格式中包含年
-    // if (lowerCasePattern.contains("y") || lowerCasePattern.contains("u")) {
-    //   // 根据年对应的秒数计算出年
-    //   long yearMillis = ChronoUnit.YEARS.getDuration().getSeconds() * 1000;
-    //   long year = timeStamp / yearMillis;
-    //   // 总秒数减去计算出的年的秒数
-    //   if (year > 0) {
-    //     timeStamp -= year * yearMillis;
-    //   }
-    //
-    //   String yearStrLen4 = String.format("%04d", year);
-    //   // 1 位且前后都不是 y：2022
-    //   pattern = pattern.replaceAll("(?<![YU])[YU](?![YU])", yearStrLen4);
-    //   if (pattern.contains("y") || pattern.contains("u")) {
-    //     pattern = pattern.replaceAll("(?<![yu])[yu](?![yu])", yearStrLen4);
-    //   }
-    //   if (pattern.contains("y") || pattern.contains("u") || pattern.contains("Y") || pattern.contains("U")) {
-    //     String yearStrLen2 = yearStrLen4.substring(2);
-    //     // 2 位且前后都不是 y：22
-    //     if (pattern.contains("Y") || pattern.contains("U")) {
-    //       pattern = pattern.replaceAll("(?<![YU])[YU]{2}(?![YU])", yearStrLen2);
-    //     }
-    //     if (pattern.contains("y") || pattern.contains("u")) {
-    //       pattern = pattern.replaceAll("(?<![yu])[yu]{2}(?![yu])", yearStrLen2);
-    //     }
-    //   }
-    //   if (pattern.contains("Y") || pattern.contains("U")) {
-    //     // 后 4 位：2022
-    //     pattern = pattern.replaceAll("[YU]{4}(?![YU])", yearStrLen4);
-    //   }
-    //   if (pattern.contains("y") || pattern.contains("u")) {
-    //     pattern = pattern.replaceAll("[yu]{4}(?![yu])", yearStrLen4);
-    //   }
-    //   if (pattern.contains("y") || pattern.contains("u") || pattern.contains("Y") || pattern.contains("U")) {
-    //     // 剩余的替换为 0
-    //     pattern = pattern.replaceAll("[YyUu]", "0");
-    //   }
-    // }
-    // if (pattern.contains("M") || pattern.contains("L")) {
-    //   long monthMillis = ChronoUnit.MONTHS.getDuration().getSeconds() * 1000;
-    //   long month = timeStamp / monthMillis;
-    //   if (month > 0) {
-    //     timeStamp -= month * monthMillis;
-    //   }
-    //
-    //   String monthStr = String.valueOf(month);
-    //   // 1 位且前后都不是 M：3
-    //   pattern = pattern.replaceAll("(?<![ML])[ML](?![ML])", monthStr);
-    //   if (pattern.contains("M") || pattern.contains("L")) {
-    //     // 2 位且前后都不是 M：03
-    //     pattern = pattern.replaceAll("(?<![ML])[ML]{2}(?![ML])", String.format("%02d", month));
-    //   }
-    //   if (pattern.contains("M") || pattern.contains("L")) {
-    //     // 3 位且前后都不是 M：Mar
-    //     pattern = pattern.replaceAll("(?<![ML])[ML]{3}(?![ML])", convertMonthShortText(monthStr));
-    //   }
-    //   if (pattern.contains("M") || pattern.contains("L")) {
-    //     // 4 位且前后都不是 M：March
-    //     pattern = pattern.replaceAll("(?<![ML])[ML]{4}(?![ML])", convertMonthText(monthStr));
-    //   }
-    // }
+
     if (pattern.contains("W")) {
-      long weekMillis = ChronoUnit.WEEKS.getDuration().getSeconds() * 1000;
-      long week = timeStamp / weekMillis;
+      long week = timeStamp / DateDuration.WEEK_MILLIS;
       if (week > 0) {
-        timeStamp -= week * weekMillis;
+        timeStamp -= week * DateDuration.WEEK_MILLIS;
       }
 
       // 1 位且前后都不是 W：1
-      pattern = pattern.replaceAll("(?<![W])W(?![W])", String.valueOf(week));
+      pattern = DatePatternRegex.PATTERN_WEEK_OF_MONTH.matcher(pattern).replaceAll(String.valueOf(week));
       if (pattern.contains("W")) {
         // 2 位且前后都不是 W：01
-        pattern = pattern.replaceAll("(?<![W])[W]{2}(?![W])", String.format("%02d", week));
+        pattern = DatePatternRegex.PATTERN_WEEK_OF_MONTH2.matcher(pattern).replaceAll(String.format("%02d", week));
       }
     }
     if (lowerCasePattern.contains("d")) {
-      long dayOfMonthMillis = ChronoUnit.DAYS.getDuration().getSeconds() * 1000;
-      long dayOfMonth = timeStamp / dayOfMonthMillis;
+      long dayOfMonth = timeStamp / DateDuration.DAY_OF_MONTH_MILLIS;
       if (dayOfMonth > 0) {
-        timeStamp -= dayOfMonth * dayOfMonthMillis;
+        timeStamp -= dayOfMonth * DateDuration.DAY_OF_MONTH_MILLIS;
       }
 
-      pattern = pattern.replaceAll("(?<![d])d(?![d])", String.valueOf(dayOfMonth));
+      pattern = DatePatternRegex.PATTERN_DAY_OF_MONTH.matcher(pattern).replaceAll(String.valueOf(dayOfMonth));
       if (pattern.contains("d")) {
-        pattern = pattern.replaceAll("(?<![d])[d]{2}(?![d])", String.format("%02d", dayOfMonth));
+        pattern = DatePatternRegex.PATTERN_DAY_OF_MONTH2.matcher(pattern).replaceAll(String.format("%02d", dayOfMonth));
       }
     }
     if (lowerCasePattern.contains("h") || lowerCasePattern.contains("k")) {
-      long hourMillis = ChronoUnit.HOURS.getDuration().getSeconds() * 1000;
-      long hour = timeStamp / hourMillis;
+      long hour = timeStamp / DateDuration.HOUR_MILLIS;
       if (hour > 0) {
-        timeStamp -= hour * hourMillis;
+        timeStamp -= hour * DateDuration.HOUR_MILLIS;
       }
 
       if (pattern.contains("H")) {
-        pattern = pattern.replaceAll("(?<![H])H(?![H])", String.valueOf(hour));
+        pattern = DatePatternRegex.PATTERN_HOUR_OF_DAY.matcher(pattern).replaceAll(String.valueOf(hour));
       }
       if (pattern.contains("H")) {
-        pattern = pattern.replaceAll("(?<![H])[H]{2}(?![H])", String.format("%02d", hour));
+        pattern = DatePatternRegex.PATTERN_HOUR_OF_DAY2.matcher(pattern).replaceAll(String.format("%02d", hour));
       }
       if (pattern.contains("h")) {
         // h 为 (H+1)/2
-        pattern = pattern.replaceAll("(?<![h])h(?![H])", String.valueOf((hour + 1) / 2));
+        pattern = DatePatternRegex.PATTERN_CLOCK_HOUR_OF_AM_PM12.matcher(pattern).replaceAll(String.valueOf((hour + 1) / 2));
       }
       if (pattern.contains("h")) {
-        pattern = pattern.replaceAll("(?<![h])[h]{2}(?![h])", String.format("%02d", (hour + 1) / 2));
+        pattern = DatePatternRegex.PATTERN_CLOCK_HOUR_OF_AM_PM12_2.matcher(pattern).replaceAll(String.format("%02d", (hour + 1) / 2));
       }
       if (pattern.contains("K")) {
         // K 为 H/2
-        pattern = pattern.replaceAll("(?<![K])K(?![K])", String.valueOf(hour / 2));
+        pattern = DatePatternRegex.PATTERN_HOUR_OF_AM_PM.matcher(pattern).replaceAll(String.valueOf(hour / 2));
       }
       if (pattern.contains("K")) {
-        pattern = pattern.replaceAll("(?<![K])[K]{2}(?![K])", String.format("%02d", hour / 2));
+        pattern = DatePatternRegex.PATTERN_HOUR_OF_AM_PM2.matcher(pattern).replaceAll(String.format("%02d", hour / 2));
       }
       if (pattern.contains("k")) {
         // k 为 H+1
-        pattern = pattern.replaceAll("(?<![k])k(?![k])", String.valueOf(hour + 1));
+        pattern = DatePatternRegex.PATTERN_CLOCK_HOUR_OF_AM_PM24.matcher(pattern).replaceAll(String.valueOf(hour + 1));
       }
       if (pattern.contains("k")) {
-        pattern = pattern.replaceAll("(?<![k])[k]{2}(?![k])", String.format("%02d", hour + 1));
+        pattern = DatePatternRegex.PATTERN_CLOCK_HOUR_OF_AM_PM24_2.matcher(pattern).replaceAll(String.format("%02d", hour + 1));
       }
     }
     if (pattern.contains("m")) {
-      long minuteMillis = ChronoUnit.MINUTES.getDuration().getSeconds() * 1000;
-      long minute = timeStamp / minuteMillis;
+      long minute = timeStamp / DateDuration.MINUTE_MILLIS;
       if (minute > 0) {
-        timeStamp -= minute * minuteMillis;
+        timeStamp -= minute * DateDuration.MINUTE_MILLIS;
       }
 
       if (pattern.contains("m")) {
-        // 1 位且前后都不是 m：1
-        pattern = pattern.replaceAll("(?<![m])m(?![m])", String.valueOf(minute));
+        pattern = DatePatternRegex.PATTERN_MINUTE_OF_HOUR.matcher(pattern).replaceAll(String.valueOf(minute));
       }
       if (pattern.contains("m")) {
-        // 2 位且前后都不是 m：01
-        pattern = pattern.replaceAll("(?<![m])[m]{2}(?![m])", String.format("%02d", minute));
+        pattern = DatePatternRegex.PATTERN_MINUTE_OF_HOUR2.matcher(pattern).replaceAll(String.format("%02d", minute));
       }
     }
     if (pattern.contains("s")) {
-      long secondMillis = ChronoUnit.MINUTES.getDuration().getSeconds() * 1000;
-      long second = timeStamp / secondMillis;
+      long second = timeStamp / DateDuration.SECOND_MILLIS;
       if (second > 0) {
-        timeStamp -= second * secondMillis;
+        timeStamp -= second * DateDuration.SECOND_MILLIS;
       }
 
       if (pattern.contains("s")) {
-        pattern = pattern.replaceAll("(?<![s])s(?![s])", String.valueOf(second));
+        pattern = DatePatternRegex.PATTERN_SECOND_OF_MINUTE.matcher(pattern).replaceAll(String.valueOf(second));
       }
       if (pattern.contains("s")) {
-        pattern = pattern.replaceAll("(?<![s])[s]{2}(?![s])", String.format("%02d", second));
+        pattern = DatePatternRegex.PATTERN_SECOND_OF_MINUTE2.matcher(pattern).replaceAll(String.format("%02d", second));
       }
     }
     if (pattern.contains("S")) {
-      long millis = timeStamp / 1000;
-
+      long millis = timeStamp / DateDuration.MILLIS;
       if (pattern.contains("S")) {
-        pattern = pattern.replaceAll("(?<![S])[S]{3}(?![S])", String.format("%02d", millis));
+        pattern = DatePatternRegex.PATTERN_FRACTION_OF_SECOND3.matcher(pattern).replaceAll(String.format("%03d", millis));
       }
     }
     return pattern;
+  }
+
+  /**
+   * 格式化倒计时字符串
+   *
+   * @param timeStamp        时间戳
+   * @param isIgnoreZero     是否忽略为 0 的时间级别
+   * @param weekSuffix       周后缀
+   * @param dayOfMonthSuffix 天后缀
+   * @param hourSuffix       小时后缀
+   * @param minuteSuffix     分钟后缀
+   * @param secondSuffix     秒后缀
+   * @param millisSuffix     毫秒后缀
+   * @return 指定格式的倒计时字符串
+   */
+  public static String formatCountdown(long timeStamp, boolean isIgnoreZero, String weekSuffix, String dayOfMonthSuffix, String hourSuffix, String minuteSuffix, String secondSuffix, String millisSuffix) {
+    String result = "";
+    if (weekSuffix != null) {
+      long week = timeStamp / DateDuration.WEEK_MILLIS;
+      if (week > 0) {
+        timeStamp -= week * DateDuration.WEEK_MILLIS;
+      }
+      if (week > 0 || !isIgnoreZero) {
+        result += week + weekSuffix;
+      }
+    }
+    if (dayOfMonthSuffix != null) {
+      long dayOfMonth = timeStamp / DateDuration.DAY_OF_MONTH_MILLIS;
+      if (dayOfMonth > 0) {
+        timeStamp -= dayOfMonth * DateDuration.DAY_OF_MONTH_MILLIS;
+      }
+      if (dayOfMonth > 0 || !isIgnoreZero) {
+        result += dayOfMonth + dayOfMonthSuffix;
+      }
+    }
+    if (hourSuffix != null) {
+      long hour = timeStamp / DateDuration.HOUR_MILLIS;
+      if (hour > 0) {
+        timeStamp -= hour * DateDuration.HOUR_MILLIS;
+      }
+      if (hour > 0 || !isIgnoreZero) {
+        result += hour + hourSuffix;
+      }
+    }
+    if (minuteSuffix != null) {
+      long minute = timeStamp / DateDuration.MINUTE_MILLIS;
+      if (minute > 0) {
+        timeStamp -= minute * DateDuration.MINUTE_MILLIS;
+      }
+      if (minute > 0 || !isIgnoreZero) {
+        result += minute + minuteSuffix;
+      }
+    }
+    if (secondSuffix != null) {
+      long second = timeStamp / DateDuration.SECOND_MILLIS;
+      if (second > 0) {
+        timeStamp -= second * DateDuration.SECOND_MILLIS;
+      }
+      if (second > 0 || !isIgnoreZero) {
+        result += second + secondSuffix;
+      }
+    }
+    if (millisSuffix != null) {
+      long millis = timeStamp / DateDuration.MILLIS;
+      if (millis > 0 || !isIgnoreZero) {
+        result += millis + millisSuffix;
+      }
+    }
+    return result;
   }
 
   /**
@@ -1900,6 +1904,48 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    */
   public static long between(@NonNull Date startInclusive, @NonNull Date endExclusive, @NonNull ChronoUnit chronoUnit) {
     return toChronoUnit(startInclusive.getTime() - endExclusive.getTime(), chronoUnit);
+  }
+
+  /**
+   * 格式化时间差
+   *
+   * @param startInclusive 开始时间
+   * @param endExclusive   结束时间
+   * @param pattern        格式
+   * @return 时间差倒计时
+   */
+  public static String formatBetween(@NonNull Temporal startInclusive, @NonNull Temporal endExclusive, @NonNull String pattern) {
+    return formatCountdown(Math.abs(between(startInclusive, endExclusive, ChronoUnit.MILLIS)), pattern);
+  }
+
+  /**
+   * 格式化时间差
+   *
+   * @param startInclusive 开始时间
+   * @param endExclusive   结束时间
+   * @param pattern        格式
+   * @return 时间差倒计时
+   */
+  public static String formatBetween(@NonNull Date startInclusive, @NonNull Date endExclusive, @NonNull String pattern) {
+    return formatCountdown(Math.abs(between(startInclusive, endExclusive, ChronoUnit.MILLIS)), pattern);
+  }
+
+  /**
+   * 格式化时间差
+   *
+   * @param startInclusive   开始时间
+   * @param endExclusive     结束时间
+   * @param isIgnoreZero     是否忽略为 0 的时间级别
+   * @param weekSuffix       周后缀
+   * @param dayOfMonthSuffix 天后缀
+   * @param hourSuffix       小时后缀
+   * @param minuteSuffix     分钟后缀
+   * @param secondSuffix     秒后缀
+   * @param millisSuffix     毫秒后缀
+   * @return 时间差倒计时
+   */
+  public static String formatBetween(@NonNull Date startInclusive, @NonNull Date endExclusive, boolean isIgnoreZero, String weekSuffix, String dayOfMonthSuffix, String hourSuffix, String minuteSuffix, String secondSuffix, String millisSuffix) {
+    return formatCountdown(Math.abs(between(startInclusive, endExclusive, ChronoUnit.MILLIS)), isIgnoreZero, weekSuffix, dayOfMonthSuffix, hourSuffix, minuteSuffix, secondSuffix, millisSuffix);
   }
 
   // region 交集差集并集
