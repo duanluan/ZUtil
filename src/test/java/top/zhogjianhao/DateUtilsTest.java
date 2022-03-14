@@ -165,9 +165,9 @@ public class DateUtilsTest {
   @DisplayName("convertMonthText：转换数字月到文本月")
   @Test
   void convertMonthText() {
-    println(DateUtils.convertMonthShortText("03",Locale.SIMPLIFIED_CHINESE));
+    println(DateUtils.convertMonthShortText("03", Locale.SIMPLIFIED_CHINESE));
     println(DateUtils.convertMonthShortText("3"));
-    println(DateUtils.convertMonthText("03",Locale.SIMPLIFIED_CHINESE));
+    println(DateUtils.convertMonthText("03", Locale.SIMPLIFIED_CHINESE));
     println(DateUtils.convertMonthText("3"));
   }
 
@@ -205,6 +205,12 @@ public class DateUtilsTest {
     println("Long 指定格式：" + DateUtils.format(currentTimeMillis, DatePattern.YYYY_MM_DD_HH_MM_SS));
     println("Long 指定时区：" + DateUtils.format(currentTimeMillis, zoneOffset));
     println("Long：" + DateUtils.format(currentTimeMillis));
+  }
+
+  @DisplayName("formatCountdown：格式化为倒计时字符串")
+  @Test
+  void formatCountdown() {
+    println(DateUtils.formatCountdown(Math.abs(DateUtils.between(nowLocalDateTime, DateUtils.parseLocalDateTime(nowLocalDateTime.toInstant(ZoneOffset.ofHours(8)).toEpochMilli() - 691200000), ChronoUnit.MILLIS)), "W周dd天HH时mm分ss秒SSS毫秒"));
   }
 
   @DisplayName("toDate：转换为 Date 对象")
