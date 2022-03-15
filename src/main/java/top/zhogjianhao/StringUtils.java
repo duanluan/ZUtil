@@ -13,7 +13,7 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
    * @param source 需要转换的内容
    * @return 转换后的内容
    */
-  public static String toUnderscore(@NonNull String source) {
+  public static String toUnderscore(@NonNull final String source) {
     if (isBlank(source)) {
       return null;
     }
@@ -39,7 +39,7 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
    * @param n      重复次数
    * @return 重复 n 遍的字符串
    */
-  public static String nCopies(@NonNull String source, long n) {
+  public static String nCopies(@NonNull final String source, final long n) {
     if (isBlank(source) || n < 1) {
       return null;
     }
