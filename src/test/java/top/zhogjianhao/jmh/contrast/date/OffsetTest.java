@@ -32,11 +32,11 @@ public class OffsetTest {
   }
 
   private static final LocalDateTime nowDateTime = LocalDateTime.now();
-  private static final Date nowDate= DateUtils.toDate(nowDateTime);
+  private static final Date nowDate = DateUtils.toDate(nowDateTime);
 
   @Benchmark
   public Date offsetByHutool() {
-    return DateUtil.offset(nowDate, DateField.DAY_OF_MONTH,2).toJdkDate();
+    return DateUtil.offset(nowDate, DateField.DAY_OF_MONTH, 2).toJdkDate();
   }
 
   @Benchmark

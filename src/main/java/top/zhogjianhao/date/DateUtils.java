@@ -1363,83 +1363,6 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     return null;
   }
 
-  // /**
-  //  * 转换时区
-  //  *
-  //  * @param localDateTime LocalDateTime 对象
-  //  * @param oldZoneId     旧时区
-  //  * @param newZoneId     新时区
-  //  * @return 转换时区后的 LocalDateTime 对象
-  //  */
-  // public static LocalDateTime withZoneInstant(@NonNull LocalDateTime localDateTime, @NonNull ZoneId oldZoneId, @NonNull ZoneId newZoneId) {
-  //   return localDateTime.atZone(oldZoneId).withZoneSameInstant(newZoneId).toLocalDateTime();
-  // }
-  //
-  // /**
-  //  * 转换时区
-  //  *
-  //  * @param localDateTime LocalDateTime 对象
-  //  * @param newZoneId     新时区
-  //  * @return 转换时区后的 LocalDateTime 对象
-  //  */
-  // public static LocalDateTime withZoneInstant(@NonNull LocalDateTime localDateTime, @NonNull ZoneId newZoneId) {
-  //   return withZoneInstant(localDateTime, SYSTEM_ZONE_ID, newZoneId);
-  // }
-  //
-  // /**
-  //  * 转换时区
-  //  * <p>
-  //  * 需要注意的是 LocalDate 不存在时区概念，此处是将 time 补足为 LocalTime.MIN 后再转换为 LocalDate
-  //  *
-  //  * @param localDate LocalDate 对象
-  //  * @param oldZoneId 旧时区
-  //  * @param newZoneId 新时区
-  //  * @return 转换时区后的 LocalDate 对象
-  //  */
-  // public static LocalDate withZoneInstant(@NonNull LocalDate localDate, @NonNull ZoneId oldZoneId, @NonNull ZoneId newZoneId) {
-  //   return localDate.atStartOfDay().atZone(oldZoneId).withZoneSameInstant(newZoneId).toLocalDate();
-  // }
-  //
-  // /**
-  //  * 转换时区
-  //  * <p>
-  //  * 需要注意的是 LocalDate 不存在时区概念，此处是将 time 补足为 LocalTime.MIN 后再转换为 LocalDate
-  //  *
-  //  * @param localDate LocalDate 对象
-  //  * @param newZoneId 新时区
-  //  * @return 转换时区后的 LocalDate 对象
-  //  */
-  // public static LocalDate withZoneInstant(@NonNull LocalDate localDate, @NonNull ZoneId newZoneId) {
-  //   return withZoneInstant(localDate, SYSTEM_ZONE_ID, newZoneId);
-  // }
-  //
-  // /**
-  //  * 转换时区
-  //  * <p>
-  //  * 需要注意的是 LocalTime 不存在时区概念，此处是将 date 补足为 LocalDate.now() 后再转换为 LocalTime
-  //  *
-  //  * @param localTime LocalTime 对象
-  //  * @param oldZoneId 旧时区
-  //  * @param newZoneId 新时区
-  //  * @return 转换时区后的 LocalTime 对象
-  //  */
-  // public static LocalTime withZoneInstant(@NonNull LocalTime localTime, @NonNull ZoneId oldZoneId, @NonNull ZoneId newZoneId) {
-  //   return localTime.atDate(LocalDate.of(MIN_YEAR, 1, 1)).atZone(oldZoneId).withZoneSameInstant(newZoneId).toLocalTime();
-  // }
-  //
-  // /**
-  //  * 转换时区
-  //  * <p>
-  //  * 需要注意的是 LocalTime 不存在时区概念，此处是将 date 补足为 LocalDate.now() 后再转换为 LocalTime
-  //  *
-  //  * @param localTime LocalTime 对象
-  //  * @param newZoneId 新时区
-  //  * @return 转换时区后的 LocalTime 对象
-  //  */
-  // public static LocalTime withZoneInstant(@NonNull LocalTime localTime, @NonNull ZoneId newZoneId) {
-  //   return withZoneInstant(localTime, SYSTEM_ZONE_ID, newZoneId);
-  // }
-
   /**
    * 从旧时区转换到新时区
    * <p>
@@ -1455,8 +1378,10 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     if (temporal instanceof LocalDateTime) {
       return (T) ((LocalDateTime) temporal).atZone(oldZoneId).withZoneSameInstant(newZoneId).toLocalDateTime();
     } else if (temporal instanceof LocalDate) {
+      // LocalDate 不存在时区概念，此处是将 time 补足为 startOfDay 后再转换为 LocalDate
       return (T) ((LocalDate) temporal).atStartOfDay().atZone(oldZoneId).withZoneSameInstant(newZoneId).toLocalDate();
     } else if (temporal instanceof LocalTime) {
+      // LocalTime 不存在时区概念，此处是将 date 补足为 00-01-01 后再转换为 LocalTime
       return (T) ((LocalTime) temporal).atDate(LocalDate.of(0, 1, 1)).atZone(oldZoneId).withZoneSameInstant(newZoneId).toLocalTime();
     }
     return null;
