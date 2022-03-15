@@ -358,7 +358,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
       pattern = defaultLocalDatePattern;
     } else if (temporal instanceof LocalTime) {
       pattern = defaultLocalTimePattern;
-    }  else {
+    } else {
       throw new IllegalArgumentException("Temporal: should be ZonedDateTime, LocalDateTime, LocalDate, or LocalTime");
     }
     return format(temporal, zoneId, pattern);
@@ -1873,6 +1873,44 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    */
   public static String formatBetween(@NonNull Date startInclusive, @NonNull Date endExclusive, boolean isIgnoreZero, String weekSuffix, String dayOfMonthSuffix, String hourSuffix, String minuteSuffix, String secondSuffix, String millisSuffix) {
     return formatCountdown(Math.abs(between(startInclusive, endExclusive, ChronoUnit.MILLIS)), isIgnoreZero, weekSuffix, dayOfMonthSuffix, hourSuffix, minuteSuffix, secondSuffix, millisSuffix);
+  }
+
+  /**
+   * 是否为闰年
+   *
+   * @param temporal 时间对象
+   * @return 是否为闰年
+   */
+  public static boolean isLeapYear(@NonNull Temporal temporal) {
+    if (temporal instanceof LocalDateTime) {
+      return ((LocalDateTime) temporal).toLocalDate().isLeapYear();
+    } else if (temporal instanceof LocalDate) {
+      return ((LocalDate) temporal).isLeapYear();
+    } else if (temporal instanceof ZonedDateTime) {
+      return ((ZonedDateTime) temporal).toLocalDate().isLeapYear();
+    } else {
+      throw new IllegalArgumentException("Temporal: should be ZonedDateTime, LocalDateTime, LocalDate, or LocalTime");
+    }
+  }
+
+  /**
+   * 是否为闰年
+   *
+   * @param date 时间对象
+   * @return 是否为闰年
+   */
+  public static boolean isLeapYear(@NonNull Date date) {
+    return toLocalDate(date).isLeapYear();
+  }
+
+  /**
+   * 是否为闰年
+   *
+   * @param isoYear 年
+   * @return 是否为闰年
+   */
+  public static boolean isLeapYear(@NonNull int isoYear) {
+    return Year.of(isoYear).isLeap();
   }
 
   // region 交集差集并集

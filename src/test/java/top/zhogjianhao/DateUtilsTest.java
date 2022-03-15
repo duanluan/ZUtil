@@ -395,4 +395,14 @@ public class DateUtilsTest {
     differenceSetsByIntersection = DateUtils.getDifferenceSetsByIntersection(DateUtils.todayMinTime(), nowLocalDateTime, nowLocalDateTime, DateUtils.todayMaxTime(), 2, 1, ChronoUnit.SECONDS);
     println("交集的差集（x2 + 1 秒，避免有交集）：[" + differenceSetsByIntersection[0][0] + ", " + differenceSetsByIntersection[0][1] + "], [" + differenceSetsByIntersection[1][0] + ", " + differenceSetsByIntersection[1][1] + "]");
   }
+
+  @DisplayName("是否为闰年")
+  @Test
+  void isLeapYear() {
+    println("LocalDateTime：" + DateUtils.isLeapYear(LocalDateTime.now().withYear(2020)));
+    println("LocalDate：" + DateUtils.isLeapYear(LocalDate.now().withYear(2004)));
+    println("ZonedDateTime：" + DateUtils.isLeapYear(ZonedDateTime.now().withYear(2000)));
+    println("Date：" + DateUtils.isLeapYear(new Date(1577808000000L)));
+    println("Year：" + DateUtils.isLeapYear(1900));
+  }
 }
