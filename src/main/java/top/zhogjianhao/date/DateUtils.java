@@ -76,7 +76,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    */
   public static DateTimeFormatterBuilder getFormatterBuilder(@NonNull String pattern, Map<TemporalField, Long> fieldValueMap) {
     if (StringUtils.isBlank(pattern)) {
-      throw new IllegalArgumentException("Pattern: Can not be blank");
+      throw new IllegalArgumentException("Pattern: should not be blank");
     }
     // 根据格式创建时间格式化构造器
     DateTimeFormatterBuilder formatterBuilder = new DateTimeFormatterBuilder().appendPattern(pattern);
@@ -122,7 +122,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    */
   public static DateTimeFormatter getDefaultFormatter(@NonNull String pattern, Locale locale, ZoneId atZoneId) {
     if (StringUtils.isBlank(pattern)) {
-      throw new IllegalArgumentException("Pattern: Can not be blank");
+      throw new IllegalArgumentException("Pattern: should not be blank");
     }
     Map<TemporalField, Long> fieldValueMap = new HashMap<>();
     fieldValueMap.put(ChronoField.YEAR_OF_ERA, 1L);
@@ -185,7 +185,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    */
   private static String convertByPattern(@NonNull String source, @NonNull String pattern) {
     if (StringUtils.isBlank(pattern)) {
-      throw new IllegalArgumentException("Pattern: Can not be blank");
+      throw new IllegalArgumentException("Pattern: should not be blank");
     }
     // 如果格式为英文月份，转换字符串为首字母大写
     int mmmIndex = pattern.indexOf("MMM");
@@ -207,7 +207,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    */
   public static String convertMonthShortText(@NonNull String monthNumber, @NonNull Locale locale) {
     if (StringUtils.isBlank(monthNumber)) {
-      throw new IllegalArgumentException("MonthNumber: Can not be all blank");
+      throw new IllegalArgumentException("MonthNumber: should not be all blank");
     }
     int monthNumberLen = monthNumber.length();
     if (monthNumberLen != 1 && monthNumberLen != 2) {
@@ -255,7 +255,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    */
   public static String convertMonthText(@NonNull String monthNumber, @NonNull Locale locale) {
     if (StringUtils.isBlank(monthNumber)) {
-      throw new IllegalArgumentException("MonthNumber: Can not be all blank");
+      throw new IllegalArgumentException("MonthNumber: should not be all blank");
     }
     int monthNumberLen = monthNumber.length();
     if (monthNumberLen != 1 && monthNumberLen != 2) {
@@ -304,7 +304,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    */
   public static String format(@NonNull Temporal temporal, ZoneId zoneId, @NonNull String pattern) {
     if (StringUtils.isBlank(pattern)) {
-      throw new IllegalArgumentException("Pattern: Can not be blank");
+      throw new IllegalArgumentException("Pattern: should not be blank");
     }
     DateTimeFormatter dateTimeFormatter;
     // 使用已存在的格式转换器
@@ -318,20 +318,21 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
       dateTimeFormatter = getDefaultFormatter(pattern);
     }
     if (zoneId != null) {
-      // 因为 LocalDate 和 LocalTime 不存在时区信息，所以先根据当前时间补全为 LocalDateTime
-      LocalDateTime localDateTime = null;
-      if (temporal instanceof LocalDateTime) {
-        localDateTime = ((LocalDateTime) temporal);
-      } else if (temporal instanceof LocalDate) {
-        localDateTime = ((LocalDate) temporal).atTime(LocalTime.now());
-      } else if (temporal instanceof LocalTime) {
-        localDateTime = ((LocalTime) temporal).atDate(LocalDate.now());
-      }
-      if (localDateTime != null) {
+      if (temporal instanceof LocalDateTime || temporal instanceof LocalDate || temporal instanceof LocalTime) {
+        // 因为 LocalDate 和 LocalTime 不存在时区信息，所以先根据当前时间补全为 LocalDateTime
+        LocalDateTime localDateTime;
+        if (temporal instanceof LocalDateTime) {
+          localDateTime = ((LocalDateTime) temporal);
+        } else if (temporal instanceof LocalDate) {
+          localDateTime = ((LocalDate) temporal).atTime(LocalTime.now());
+        } else {
+          localDateTime = ((LocalTime) temporal).atDate(LocalDate.now());
+        }
         return localDateTime.atZone(SYSTEM_ZONE_ID).withZoneSameInstant(zoneId).format(dateTimeFormatter);
-      }
-      if (temporal instanceof ZonedDateTime) {
+      } else if (temporal instanceof ZonedDateTime) {
         return ((ZonedDateTime) temporal).withZoneSameInstant(zoneId).format(dateTimeFormatter);
+      } else {
+        throw new IllegalArgumentException("Temporal: should be ZonedDateTime, LocalDateTime, LocalDate, or LocalTime");
       }
     }
     return dateTimeFormatter.format(temporal);
@@ -357,8 +358,8 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
       pattern = defaultLocalDatePattern;
     } else if (temporal instanceof LocalTime) {
       pattern = defaultLocalTimePattern;
-    } else {
-      pattern = defaultLocalDateTimePattern;
+    }  else {
+      throw new IllegalArgumentException("Temporal: should be ZonedDateTime, LocalDateTime, LocalDate, or LocalTime");
     }
     return format(temporal, zoneId, pattern);
   }
@@ -398,7 +399,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    */
   public static String format(@NonNull Date date, ZoneId zoneId, @NonNull String pattern) {
     if (StringUtils.isBlank(pattern)) {
-      throw new IllegalArgumentException("Pattern: Can not be blank");
+      throw new IllegalArgumentException("Pattern: should not be blank");
     }
     if (zoneId != null) {
       ZonedDateTime zonedDateTime = date.toInstant().atZone(SYSTEM_ZONE_ID);
@@ -718,8 +719,9 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
         });
       }
       return Date.from(zonedDateTime[0].toInstant());
+    } else {
+      throw new IllegalArgumentException("Temporal: should be ZonedDateTime, LocalDateTime, LocalDate, or LocalTime");
     }
-    return null;
   }
 
   /**
@@ -816,7 +818,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    */
   public static LocalDateTime parseLocalDateTime(@NonNull String source, ZoneId zoneId, @NonNull String... patterns) {
     if (StringUtils.isAllBlank(patterns)) {
-      throw new IllegalArgumentException("Patterns: Can not be all blank");
+      throw new IllegalArgumentException("Patterns: should not be all blank");
     }
     for (String pattern : patterns) {
       source = convertByPattern(source, pattern);
@@ -964,7 +966,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    */
   public static LocalDate parseLocalDate(@NonNull String source, ZoneId zoneId, @NonNull String... patterns) {
     if (StringUtils.isAllBlank(patterns)) {
-      throw new IllegalArgumentException("Patterns: Can not be all blank");
+      throw new IllegalArgumentException("Patterns: should not be all blank");
     }
     for (String pattern : patterns) {
       source = convertByPattern(source, pattern);
@@ -1226,7 +1228,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    */
   public static Date parseDate(@NonNull String source, @NonNull String... patterns) {
     if (StringUtils.isAllBlank(patterns)) {
-      throw new IllegalArgumentException("Patterns: Can not be all blank");
+      throw new IllegalArgumentException("Patterns: should not be all blank");
     }
     try {
       return org.apache.commons.lang3.time.DateUtils.parseDate(source, patterns);
@@ -2183,7 +2185,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    */
   public static List<String> getByRange(@NonNull LocalDateTime startTime, @NonNull LocalDateTime endTime, @NonNull String pattern) {
     if (StringUtils.isBlank(pattern)) {
-      throw new IllegalArgumentException("Pattern: Can not be blank");
+      throw new IllegalArgumentException("Pattern: should not be blank");
     }
     List<String> result = new ArrayList<>();
     long distance = ChronoUnit.DAYS.between(startTime, endTime);
@@ -2204,7 +2206,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    */
   public static List<String> getByRangeAndWeeks(@NonNull LocalDateTime startTime, @NonNull LocalDateTime endTime, @NonNull String weeks, @NonNull String pattern) {
     if (StringUtils.isBlank(pattern)) {
-      throw new IllegalArgumentException("Pattern: Can not be blank");
+      throw new IllegalArgumentException("Pattern: should not be blank");
     }
     List<String> result = new ArrayList<>();
     // 设置一周的开始为周一
