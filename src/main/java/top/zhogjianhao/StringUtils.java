@@ -8,6 +8,34 @@ import lombok.NonNull;
 public class StringUtils extends org.apache.commons.lang3.StringUtils {
 
   /**
+   * 删除开头，忽略大小写
+   *
+   * @param str    被删除的字符串
+   * @param remove 需要删除的开头字符串
+   * @return 删除后的字符串
+   */
+  public static String removeStartIgnoreCase(final String str, final String remove) {
+    if (str.toLowerCase().startsWith(remove.toLowerCase())) {
+      return substring(str, remove.length());
+    }
+    return str;
+  }
+
+  /**
+   * 删除结尾，忽略大小写
+   *
+   * @param str    被删除的字符串
+   * @param remove 需要删除的结尾字符串
+   * @return 删除后的字符串
+   */
+  public static String removeEndIgnoreCase(final String str, final String remove) {
+    if (str.toLowerCase().endsWith(remove.toLowerCase())) {
+      return substring(str, 0, str.length() - remove.length());
+    }
+    return str;
+  }
+
+  /**
    * 转换为下划线命名
    *
    * @param source 需要转换的内容
