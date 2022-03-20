@@ -47,6 +47,35 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
     return str;
   }
 
+  private static final String FORMAT_REPLACE_STR = "{}";
+
+  /**
+   * 格式化：将多个字符串依次替换字符串的 {}
+   *
+   * @param str  被格式化的字符串
+   * @param vals 需要替换的多个字符串
+   * @return 格式化后的字符串
+   */
+  public static String format(@NonNull final String str, @NonNull final String... vals) {
+    if (StringUtils.isBlank(str)) {
+      throw new IllegalArgumentException("Str: should not be blank");
+    }
+    if (StringUtils.isAllBlank(vals)) {
+      throw new IllegalArgumentException("Vals: should not be all blank");
+    }
+    StringBuilder result = new StringBuilder();
+    int index;
+    int i = 0;
+    int fromIndex = 0;
+    while ((index = str.indexOf(FORMAT_REPLACE_STR, fromIndex)) != -1) {
+      String val = vals[i];
+      result.append(substring(str, fromIndex, index)).append(val);
+      fromIndex = index + 2;
+      i++;
+    }
+    return result.toString();
+  }
+
   /**
    * 转换为下划线命名
    *
