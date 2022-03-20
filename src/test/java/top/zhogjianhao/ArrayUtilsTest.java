@@ -94,8 +94,8 @@ public class ArrayUtilsTest {
   @DisplayName("indexOf：查找数组中指定的字符串")
   @Test
   void indexOf() {
-    char[] chars = "aaa{}".toCharArray();
-    println(ArrayUtils.indexOf(chars, "{}", 2));
+    char[] chars = "{aaa{}".toCharArray();
+    println(ArrayUtils.indexOf(chars, "a{}", 2));
     println(ArrayUtils.indexOf(chars, "{}"));
   }
 
