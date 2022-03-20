@@ -101,7 +101,7 @@ public class SecurityUtils {
    * @return 加解密的字节数组
    * @throws InvalidCipherTextException 意想不到的异常
    */
-  public static byte[] desCbc(@NonNull final byte[] key, final @NonNull byte[] icv, final @NonNull byte[] in, final boolean encrypting, final BlockCipherPadding padding) throws InvalidCipherTextException {
+  public static byte[] desCbc(@NonNull final byte[] key, @NonNull final byte[] icv, @NonNull final byte[] in, final boolean encrypting, final BlockCipherPadding padding) throws InvalidCipherTextException {
     if (key.length != 8) {
       throw new IllegalArgumentException("Key: should be 8 bytes");
     }

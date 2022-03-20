@@ -14,7 +14,13 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
    * @param remove 需要删除的开头字符串
    * @return 删除后的字符串
    */
-  public static String removeStartIgnoreCase(final String str, final String remove) {
+  public static String removeStartIgnoreCase(@NonNull final String str, @NonNull final String remove) {
+    if (StringUtils.isBlank(str)) {
+      throw new IllegalArgumentException("Str: should not be blank");
+    }
+    if (StringUtils.isBlank(remove)) {
+      throw new IllegalArgumentException("Remove: should not be blank");
+    }
     if (str.toLowerCase().startsWith(remove.toLowerCase())) {
       return substring(str, remove.length());
     }
@@ -28,7 +34,13 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
    * @param remove 需要删除的结尾字符串
    * @return 删除后的字符串
    */
-  public static String removeEndIgnoreCase(final String str, final String remove) {
+  public static String removeEndIgnoreCase(@NonNull final String str, @NonNull final String remove) {
+    if (StringUtils.isBlank(str)) {
+      throw new IllegalArgumentException("Str: should not be blank");
+    }
+    if (StringUtils.isBlank(remove)) {
+      throw new IllegalArgumentException("Remove: should not be blank");
+    }
     if (str.toLowerCase().endsWith(remove.toLowerCase())) {
       return substring(str, 0, str.length() - remove.length());
     }
@@ -53,7 +65,7 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
         if (Character.isUpperCase(source.charAt(i)) && !source.startsWith(String.valueOf(source.charAt(i)))) {
           // 在大写字母前插入下划线
           sb.insert(i + temp, "_");
-          temp += 1;
+          temp++;
         }
       }
     }
