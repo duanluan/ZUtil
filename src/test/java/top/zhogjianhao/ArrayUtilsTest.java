@@ -90,4 +90,18 @@ public class ArrayUtilsTest {
     ints1 = ArrayUtils.removeAllElements(ints1, 0);
     println("删除数组中的 0，数组长度：" + ints1.length);
   }
+
+  @DisplayName("indexOf：查找数组中指定的字符串")
+  @Test
+  void indexOf() {
+    char[] chars = "aaa{}".toCharArray();
+    println(ArrayUtils.indexOf(chars, "{}", 2));
+    println(ArrayUtils.indexOf(chars, "{}"));
+  }
+
+  @DisplayName("allLength：所有元素的长度总和")
+  @Test
+  void allLength() {
+    println(ArrayUtils.allLength("12", "123"));
+  }
 }

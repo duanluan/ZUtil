@@ -22,7 +22,7 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param charsets 字符集
    * @return 指定字符集的字节数组
    */
-  public static byte[] toBytes(@NonNull char[] chars, @NonNull Charset charsets) {
+  public static byte[] toBytes(@NonNull final char[] chars, @NonNull final Charset charsets) {
     return new String(chars).getBytes(charsets);
   }
 
@@ -34,7 +34,7 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @return 指定字符集的字节数组
    * @throws UnsupportedEncodingException 字符编码不支持
    */
-  public static byte[] toBytes(@NonNull char[] chars, @NonNull String charsetName) throws UnsupportedEncodingException {
+  public static byte[] toBytes(@NonNull final char[] chars, @NonNull final String charsetName) throws UnsupportedEncodingException {
     return new String(chars).getBytes(charsetName);
   }
 
@@ -44,7 +44,7 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param chars 字符数组
    * @return UTF-8 字符集的字节数组
    */
-  public static byte[] toBytes(@NonNull char[] chars) {
+  public static byte[] toBytes(@NonNull final char[] chars) {
     return new String(chars).getBytes(StandardCharsets.UTF_8);
   }
 
@@ -55,7 +55,7 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param charsets 字符集
    * @return 指定字符集的字符数组
    */
-  public static char[] toChars(@NonNull byte[] bytes, @NonNull Charset charsets) {
+  public static char[] toChars(@NonNull final byte[] bytes, @NonNull final Charset charsets) {
     return new String(bytes, charsets).toCharArray();
   }
 
@@ -67,7 +67,7 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @return 指定字符集的字符数组
    * @throws UnsupportedEncodingException 字符编码不支持
    */
-  public static char[] toChars(@NonNull byte[] bytes, @NonNull String charsetName) throws UnsupportedEncodingException {
+  public static char[] toChars(@NonNull final byte[] bytes, @NonNull final String charsetName) throws UnsupportedEncodingException {
     return new String(bytes, charsetName).toCharArray();
   }
 
@@ -77,7 +77,7 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param bytes 字节数组
    * @return UTF-8 字符集的字符数组
    */
-  public static char[] toChars(@NonNull byte[] bytes) {
+  public static char[] toChars(@NonNull final byte[] bytes) {
     return new String(bytes).toCharArray();
   }
 
@@ -417,7 +417,7 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param val   包含内容
    * @return 是否包含
    */
-  private static boolean containsObject(@NonNull Object array, Object val) {
+  private static boolean containsObject(@NonNull final Object array, final Object val) {
     if (array instanceof int[]) {
       return contains((int[]) array, ((int[]) val)[0]);
     } else if (array instanceof long[]) {
@@ -446,7 +446,7 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param vals  需要删除的内容
    * @return 数组
    */
-  private static Object removeAllElements(@NonNull Object array, @NonNull Object... vals) {
+  private static Object removeAllElements(@NonNull final Object array, @NonNull final Object... vals) {
     Object result;
     if (array instanceof int[]) {
       result = ((int[]) array).clone();
@@ -501,7 +501,7 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param <T>   数组类型
    * @return 数组
    */
-  public static <T> T[] removeAllElements(@NonNull T[] array, @NonNull T... vals) {
+  public static <T> T[] removeAllElements(@NonNull final T[] array, @NonNull final T... vals) {
     return (T[]) removeAllElements((Object) array, (Object) vals);
   }
 
@@ -512,7 +512,7 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param vals  需要删除的内容
    * @return 数组
    */
-  public static boolean[] removeAllElements(@NonNull boolean[] array, @NonNull boolean... vals) {
+  public static boolean[] removeAllElements(@NonNull final boolean[] array, @NonNull final boolean... vals) {
     return (boolean[]) removeAllElements(array, (Object) vals);
   }
 
@@ -523,7 +523,7 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param vals  需要删除的内容
    * @return 数组
    */
-  public static byte[] removeAllElements(@NonNull byte[] array, @NonNull byte... vals) {
+  public static byte[] removeAllElements(@NonNull final byte[] array, @NonNull final byte... vals) {
     return (byte[]) removeAllElements(array, (Object) vals);
   }
 
@@ -534,7 +534,7 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param vals  需要删除的内容
    * @return 数组
    */
-  public static char[] removeAllElements(@NonNull char[] array, @NonNull char... vals) {
+  public static char[] removeAllElements(@NonNull final char[] array, @NonNull final char... vals) {
     return (char[]) removeAllElements(array, (Object) vals);
   }
 
@@ -545,7 +545,7 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param vals  需要删除的内容
    * @return 数组
    */
-  public static double[] removeAllElements(@NonNull double[] array, @NonNull double... vals) {
+  public static double[] removeAllElements(@NonNull final double[] array, @NonNull final double... vals) {
     return (double[]) removeAllElements(array, (Object) vals);
   }
 
@@ -556,7 +556,7 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param vals  需要删除的内容
    * @return 数组
    */
-  public static float[] removeAllElements(@NonNull float[] array, @NonNull float... vals) {
+  public static float[] removeAllElements(@NonNull float[] array, @NonNull final float... vals) {
     return (float[]) removeAllElements(array, (Object) vals);
   }
 
@@ -567,7 +567,7 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param vals  需要删除的内容
    * @return 数组
    */
-  public static short[] removeAllElements(@NonNull short[] array, @NonNull short... vals) {
+  public static short[] removeAllElements(@NonNull final short[] array, @NonNull final short... vals) {
     return (short[]) removeAllElements(array, (Object) vals);
   }
 
@@ -578,7 +578,7 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param vals  需要删除的内容
    * @return 数组
    */
-  public static int[] removeAllElements(@NonNull int[] array, @NonNull int... vals) {
+  public static int[] removeAllElements(@NonNull final int[] array, @NonNull final int... vals) {
     return (int[]) removeAllElements(array, (Object) vals);
   }
 
@@ -589,7 +589,67 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param vals  需要删除的内容
    * @return 数组
    */
-  public static long[] removeAllElements(@NonNull long[] array, @NonNull long... vals) {
+  public static long[] removeAllElements(@NonNull final long[] array, @NonNull final long... vals) {
     return (long[]) removeAllElements(array, (Object) vals);
+  }
+
+  /**
+   * 从指定索引开始查找数组中指定的字符串
+   *
+   * @param chars       字符数组
+   * @param valueToFind 要查找的字符串
+   * @param startIndex  开始查找的索引
+   * @return 要查找的字符串在数组中的开始位置
+   */
+  public static int indexOf(@NonNull final char[] chars, final @NonNull String valueToFind, int startIndex) {
+    if (ArrayUtils.isEmpty(chars)) {
+      throw new IllegalArgumentException("Chars: should not be empty");
+    }
+    if (StringUtils.isBlank(valueToFind)) {
+      throw new IllegalArgumentException("ValueToFind: should not be blank");
+    }
+    if (startIndex < 0) {
+      throw new IllegalArgumentException("StartIndex: should be greater than or equal to 0");
+    }
+    char[] vals = valueToFind.toCharArray();
+    for (int i = 0; i < vals.length; i++) {
+      int index = indexOf(chars, vals[i], startIndex);
+      if (index == -1) {
+        return -1;
+      }
+      if (i == vals.length - 1) {
+        return index - valueToFind.length() + 1;
+      }
+      startIndex += 1;
+    }
+    return -1;
+  }
+
+  /**
+   * 查找数组中指定的字符串
+   *
+   * @param chars       字符数组
+   * @param valueToFind 要查找的字符串
+   * @return 要查找的字符串在数组中的开始位置
+   */
+  public static int indexOf(@NonNull final char[] chars, final @NonNull String valueToFind) {
+    return indexOf(chars, valueToFind, 0);
+  }
+
+  /**
+   * 所有元素的长度总和
+   *
+   * @param strs 字符串数组
+   * @return 所有元素的长度总和
+   */
+  public static int allLength(@NonNull final String... strs) {
+    if (StringUtils.isAllBlank(strs)) {
+      throw new IllegalArgumentException("Strs: should not be all blank");
+    }
+    int result = 0;
+    for (String str : strs) {
+      result += str.length();
+    }
+    return result;
   }
 }
