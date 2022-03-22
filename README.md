@@ -34,6 +34,10 @@ implementation 'top.zhogjianhao:ZUtil:1.3.1'
 implementation("top.zhogjianhao:ZUtil:1.3.1")
 ```
 
+# Stargazers over time
+
+[![Stargazers over time](https://starchart.cc/duanluan/ZUtil.svg)](https://starchart.cc/duanluan/ZUtil)
+
 # Deprecated
 
 * v1.2.4：top.zhogjianhao.DateUtils 变更为 top.zhogjianhao.date.DateUtils
