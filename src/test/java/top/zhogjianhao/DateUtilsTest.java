@@ -338,14 +338,15 @@ public class DateUtilsTest {
     println("指定时区和格式的当前时间字符串：" + DateUtils.now(ZoneOffset.ofHours(10), customPattern));
   }
 
-  @DisplayName("min：指定级别的最小时间")
+  @DisplayName("minMax：指定级别的最小/最大时间")
   @Test
-  void min() {
+  void minMax() {
     println("今天开始时间：" + DateUtils.min(nowLocalDateTime, ChronoField.HOUR_OF_DAY, ChronoField.MINUTE_OF_HOUR, ChronoField.SECOND_OF_MINUTE, ChronoField.NANO_OF_SECOND));
     println("今天开始时间 1：" + DateUtils.min(nowLocalDateTime, ChronoField.NANO_OF_DAY));
     println("——————————————————");
     LocalDateTime localDateTime = nowLocalDateTime.withYear(2020).withMonth(2);
     println("2020 年 2 月最后一天：" + DateUtils.max(localDateTime, ChronoField.DAY_OF_MONTH));
+    println("当天对应月的最后一天结束时间：" + DateUtils.max(LocalDateTime.now(), ChronoField.DAY_OF_MONTH, ChronoField.NANO_OF_DAY));
   }
 
   @DisplayName("todayTime：获取今天开始或结束时间")

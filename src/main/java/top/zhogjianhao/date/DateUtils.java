@@ -1508,27 +1508,15 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
       return null;
     }
     for (TemporalField temporalField : temporalFields) {
-      long newValue;
-      ValueRange valueRange = temporalField.range();
-      // 最大值大小不固定，因为月的天最大可能 28 ~ 31 天
-      if (!(temporal instanceof LocalTime) && (temporalField.equals(ChronoField.YEAR_OF_ERA)
-        || temporalField.equals(ChronoField.ALIGNED_WEEK_OF_MONTH)
-        || temporalField.equals(ChronoField.DAY_OF_YEAR)
-        || temporalField.equals(ChronoField.DAY_OF_MONTH))) {
-        // 获取今天的 2 月份是否只有 28 天
-        int dayOfMonth = temporal.with(ChronoField.MONTH_OF_YEAR, 2).with(TemporalAdjusters.lastDayOfMonth()).get(ChronoField.DAY_OF_MONTH);
-        if (dayOfMonth == 28) {
-          newValue = valueRange.getSmallestMaximum();
-        } else if (temporalField.equals(ChronoField.DAY_OF_MONTH)) {
-          newValue = dayOfMonth;
-        } else {
-          newValue = valueRange.getMaximum();
-        }
+      if (ChronoField.DAY_OF_MONTH.equals(temporalField)) {
+        temporal = temporal.with(TemporalAdjusters.lastDayOfMonth());
+      } else if (ChronoField.DAY_OF_YEAR.equals(temporalField)) {
+        temporal = temporal.with(TemporalAdjusters.lastDayOfYear());
       } else {
-        newValue = valueRange.getMaximum();
+        ValueRange valueRange = temporalField.range();
+        long newValue = valueRange.getMaximum();
+        temporal = temporal.with(temporalField, newValue);
       }
-
-      temporal = temporal.with(temporalField, newValue);
     }
     return (T) temporal;
   }
