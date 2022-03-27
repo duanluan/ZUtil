@@ -21,7 +21,7 @@ QQ 交流群：[273743748](https://jq.qq.com/?_wv=1027&k=yZfCzQ8f)，微信群�
 <dependency>
   <groupId>top.zhogjianhao</groupId>
   <artifactId>ZUtil</artifactId>
-  <version>1.3.2</version>
+  <version>1.3.3</version>
 </dependency>
 ```
 
@@ -29,9 +29,9 @@ QQ 交流群：[273743748](https://jq.qq.com/?_wv=1027&k=yZfCzQ8f)，微信群�
 
 ```groovy
 // groovy
-implementation 'top.zhogjianhao:ZUtil:1.3.2'
+implementation 'top.zhogjianhao:ZUtil:1.3.3'
 // kotlin
-implementation("top.zhogjianhao:ZUtil:1.3.2")
+implementation("top.zhogjianhao:ZUtil:1.3.3")
 ```
 
 # Stargazers over time
