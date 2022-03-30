@@ -1864,6 +1864,24 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
   }
 
   /**
+   * 格式化时间差
+   *
+   * @param startInclusive   开始时间
+   * @param endExclusive     结束时间
+   * @param isIgnoreZero     是否忽略为 0 的时间级别
+   * @param weekSuffix       周后缀
+   * @param dayOfMonthSuffix 天后缀
+   * @param hourSuffix       小时后缀
+   * @param minuteSuffix     分钟后缀
+   * @param secondSuffix     秒后缀
+   * @param millisSuffix     毫秒后缀
+   * @return 时间差倒计时
+   */
+  public static String formatBetween(@NonNull Temporal startInclusive, @NonNull Temporal endExclusive, boolean isIgnoreZero, String weekSuffix, String dayOfMonthSuffix, String hourSuffix, String minuteSuffix, String secondSuffix, String millisSuffix) {
+    return formatCountdown(Math.abs(between(startInclusive, endExclusive, ChronoUnit.MILLIS)), isIgnoreZero, weekSuffix, dayOfMonthSuffix, hourSuffix, minuteSuffix, secondSuffix, millisSuffix);
+  }
+
+  /**
    * 是否为闰年
    *
    * @param temporal 时间对象
