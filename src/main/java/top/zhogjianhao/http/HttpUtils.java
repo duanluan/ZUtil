@@ -432,8 +432,9 @@ public class HttpUtils extends com.ejlchina.okhttps.HttpUtils {
   /**
    * 同步 POST
    *
-   * @param url    请求地址
-   * @param params 参数
+   * @param url         请求地址
+   * @param contentType 内容类型
+   * @param params      参数
    * @return 响应体
    */
   public static HttpResult.Body post(@NonNull final String url, @NonNull final String contentType, @NonNull final Map<String, Object> params) {
