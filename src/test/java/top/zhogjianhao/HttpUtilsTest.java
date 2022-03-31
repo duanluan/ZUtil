@@ -1,8 +1,5 @@
 package top.zhogjianhao;
 
-import cn.hutool.http.HttpRequest;
-import cn.hutool.http.HttpUtil;
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.ejlchina.okhttps.HttpResult;
 import lombok.extern.slf4j.Slf4j;
@@ -76,7 +73,7 @@ public class HttpUtilsTest {
 
   @DisplayName("sync：同步请求")
   @Test
-  void sync() {
+  void sync() throws InterruptedException {
     String baseUrl = "http://localhost:3000/posts";
     // 新增
     Map<String, Object> paramMap = new HashMap<>();
@@ -85,39 +82,22 @@ public class HttpUtilsTest {
     paramMap.put("content", "some content");
     HttpUtils.post(baseUrl, ContentTypeConstant.JSON, paramMap);
     HttpUtils.post(baseUrl, paramMap);
+    // 太快啦！等等 json-server
+    Thread.sleep(500);
     // 更新
     paramMap = new HashMap<>();
     paramMap.put("content", "new content");
     HttpUtils.patch(baseUrl + "/1", paramMap);
     HttpUtils.put(baseUrl + "/2", paramMap);
+    // 太快啦！等等 json-server
+    Thread.sleep(500);
     // 删除
     HttpUtils.delete(baseUrl + "/3");
+    // 太快啦！等等 json-server
+    Thread.sleep(500);
     // 查询
     paramMap = new HashMap<>();
     paramMap.put("userId", 1);
     println(HttpUtils.get(baseUrl, paramMap, JSONArray.class).toJSONString());
-  }
-
-  @DisplayName("sync：同步请求")
-  @Test
-  void sync1() {
-    String baseUrl = "http://localhost:3000/posts";
-    Map<String, Object> paramMap = new HashMap<>();
-    paramMap.put("userId", 1);
-    paramMap.put("title", "title2");
-    paramMap.put("content", "some content");
-    HttpUtil.createPost(baseUrl).contentType(ContentTypeConstant.JSON).body(JSON.toJSONString(paramMap)).execute();
-    HttpUtil.post(baseUrl, paramMap);
-    // 更新
-    paramMap = new HashMap<>();
-    paramMap.put("content", "new content");
-    HttpRequest.patch(baseUrl + "/1").form(paramMap).execute();
-    HttpRequest.put(baseUrl + "/2").form(paramMap).execute();
-    // 删除
-    HttpRequest.delete(baseUrl + "/3").execute();
-    // 查询
-    paramMap = new HashMap<>();
-    paramMap.put("userId", 1);
-    println(HttpUtil.get(baseUrl, paramMap));
   }
 }
