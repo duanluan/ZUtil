@@ -5,10 +5,6 @@
       "userId": 1,
       "title": "title1",
       "content": "new content"
-    },
-    {
-      "content": "new content",
-      "id": 2
     }
   ],
   "comments": [
