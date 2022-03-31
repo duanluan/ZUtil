@@ -137,10 +137,10 @@ public class HttpUtils extends com.ejlchina.okhttps.HttpUtils {
     if (MapUtils.isNotEmpty(headers)) {
       task.addHeader(headers);
     }
-    // // 替换 OkHttp 默认的 Accept
-    // if (MapUtils.isEmpty(headers) || headers.get(HeaderConstant.USER_AGENT) == null) {
-    //   task.addHeader(HeaderConstant.USER_AGENT, HeaderConstant.USER_AGENT_X);
-    // }
+    // 替换 OkHttp 默认的 Accept
+    if (MapUtils.isEmpty(headers) || headers.get(HeaderConstant.USER_AGENT) == null) {
+      task.addHeader(HeaderConstant.USER_AGENT, HeaderConstant.USER_AGENT_X);
+    }
     // 请求
     HttpResult result = task.request(requestMethod);
     if (result.getState() != HttpResult.State.RESPONSED) {
