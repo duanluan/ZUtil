@@ -1915,7 +1915,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * @param isoYear 年
    * @return 是否为闰年
    */
-  public static boolean isLeapYear(@NonNull int isoYear) {
+  public static boolean isLeapYear(int isoYear) {
     return Year.of(isoYear).isLeap();
   }
 
