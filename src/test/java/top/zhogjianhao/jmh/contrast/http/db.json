@@ -1,0 +1,21 @@
+{
+  "posts": [
+    {
+      "id": 1,
+      "userId": 1,
+      "title": "title1",
+      "content": "new content"
+    },
+    {
+      "content": "new content",
+      "id": 2
+    }
+  ],
+  "comments": [
+    {
+      "id": 1,
+      "postId": 1,
+      "body": "some comment"
+    }
+  ]
+}
