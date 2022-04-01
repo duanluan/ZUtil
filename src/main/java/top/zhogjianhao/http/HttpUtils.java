@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.ejlchina.okhttps.HttpResult;
-import com.ejlchina.okhttps.OkHttps;
 import com.ejlchina.okhttps.SHttpTask;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -107,23 +106,7 @@ public class HttpUtils extends com.ejlchina.okhttps.HttpUtils {
     SHttpTask task = sync(url);
     // 添加内容类型
     if (StringUtils.isNotBlank(contentType)) {
-      String bodyType = null;
-      switch (contentType) {
-        case ContentTypeConstant.X_WWW_FORM_URLENCODED:
-          bodyType = OkHttps.FORM;
-          break;
-        case ContentTypeConstant.FORM_DATA:
-          bodyType = OkHttps.FORM_DATA;
-          break;
-        case ContentTypeConstant.JSON:
-          bodyType = OkHttps.JSON;
-          break;
-        case ContentTypeConstant.XML_APPLICATION:
-          bodyType = OkHttps.XML;
-          break;
-        default:
-      }
-      task.bodyType(bodyType);
+      task.bodyType(contentType);
     }
     // 添加参数
     if (MapUtils.isNotEmpty(params)) {
