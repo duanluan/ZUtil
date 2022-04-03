@@ -18,7 +18,7 @@ public class CollectionUtils {
    * @param coll 集合
    * @return 是否为 null 或没有元素
    */
-  public static boolean isEmpty(Collection<?> coll) {
+  public static boolean isEmpty(@NonNull final Collection<?> coll) {
     return org.apache.commons.collections4.CollectionUtils.isEmpty(coll);
   }
 
@@ -28,7 +28,7 @@ public class CollectionUtils {
    * @param coll 集合
    * @return 是否不为 null 且有元素
    */
-  public static boolean isNotEmpty(Collection<?> coll) {
+  public static boolean isNotEmpty(@NonNull final Collection<?> coll) {
     return org.apache.commons.collections4.CollectionUtils.isNotEmpty(coll);
   }
 
@@ -46,7 +46,7 @@ public class CollectionUtils {
    * @param obj 对象
    * @return 是否为 null 或没有元素
    */
-  public static boolean sizeIsEmpty(Object obj) {
+  public static boolean sizeIsEmpty(@NonNull final Object obj) {
     return org.apache.commons.collections4.CollectionUtils.sizeIsEmpty(obj);
   }
 
@@ -56,7 +56,7 @@ public class CollectionUtils {
    * @param obj 对象
    * @return 是否不为 null 且有元素
    */
-  public static boolean sizeIsNotEmpty(Object obj) {
+  public static boolean sizeIsNotEmpty(@NonNull final Object obj) {
     return !sizeIsEmpty(obj);
   }
 
@@ -74,7 +74,7 @@ public class CollectionUtils {
    * @param obj 对象
    * @return 是否所有元素都为 null
    */
-  public static boolean isAllEmpty(Object obj) {
+  public static boolean isAllEmpty(@NonNull final Object obj) {
     if (sizeIsEmpty(obj)) {
       return true;
     }
@@ -90,8 +90,7 @@ public class CollectionUtils {
       }
       return true;
     } else if (obj instanceof Map) {
-      Map obj1 = (Map) obj;
-      return isAllEmpty(obj1.values());
+      return isAllEmpty(((Map) obj).values());
     } else if (obj instanceof Object[]) {
       Object[] obj1 = (Object[]) obj;
       return Arrays.stream(obj1).noneMatch(Objects::nonNull);
@@ -121,7 +120,7 @@ public class CollectionUtils {
    * @param obj 对象
    * @return 是否任意元素不为 null
    */
-  public static boolean isNotAllEmpty(Object obj) {
+  public static boolean isNotAllEmpty(@NonNull final Object obj) {
     return !isAllEmpty(obj);
   }
 
@@ -139,7 +138,7 @@ public class CollectionUtils {
    * @param obj 对象
    * @return 是否任意元素为 null
    */
-  public static boolean isAnyEmpty(Object obj) {
+  public static boolean isAnyEmpty(@NonNull final Object obj) {
     if (sizeIsEmpty(obj)) {
       return true;
     }
@@ -185,7 +184,7 @@ public class CollectionUtils {
    * @param obj 对象
    * @return 是否任意元素为 null
    */
-  public static boolean isNotAnyEmpty(Object obj) {
+  public static boolean isNotAnyEmpty(@NonNull final Object obj) {
     return !isAnyEmpty(obj);
   }
 
@@ -199,7 +198,7 @@ public class CollectionUtils {
    * @return 数组
    */
   @Deprecated
-  public static boolean moveForward(@NonNull Object arr, int arrLength, int startIndex, int length) {
+  public static boolean moveForward(@NonNull Object arr, final int arrLength, final int startIndex, final int length) {
     if (!(arr instanceof Object[] || arr instanceof int[] || arr instanceof long[] || arr instanceof double[] || arr instanceof float[] || arr instanceof boolean[] || arr instanceof short[] || arr instanceof byte[] || arr instanceof char[])) {
       return false;
     }
@@ -219,7 +218,7 @@ public class CollectionUtils {
    * @return 数组
    */
   @Deprecated
-  public static boolean remove(@NonNull Object[] arr, int index, Object lastElementValue) {
+  public static boolean remove(@NonNull Object[] arr, final int index, @NonNull final Object lastElementValue) {
     if (index < 0) {
       return false;
     }
@@ -236,7 +235,7 @@ public class CollectionUtils {
    * @return 数组
    */
   @Deprecated
-  public static boolean remove(@NonNull Object[] arr, int index) {
+  public static boolean remove(@NonNull Object[] arr, final int index) {
     return remove(arr, index, null);
   }
 
@@ -250,7 +249,7 @@ public class CollectionUtils {
    * @return 数组
    */
   @Deprecated
-  public static <T> boolean remove(@NonNull T arr, int index, Object lastElementValue) {
+  public static <T> boolean remove(@NonNull T arr, final int index, @NonNull final Object lastElementValue) {
     if (arr instanceof int[]) {
       moveForward(arr, ((int[]) arr).length, index, 1);
       if (lastElementValue != null) {
@@ -304,7 +303,7 @@ public class CollectionUtils {
    * @return 数组
    */
   @Deprecated
-  public static <T> boolean remove(@NonNull T arr, int index) {
+  public static <T> boolean remove(@NonNull T arr, final int index) {
     return remove(arr, index, null);
   }
 }
