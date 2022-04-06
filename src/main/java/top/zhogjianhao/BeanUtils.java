@@ -32,8 +32,8 @@ public class BeanUtils extends org.springframework.beans.BeanUtils {
   public static Map<String, Object> toMap(Object obj) {
     Map<String, Object> map = new HashMap<>();
     BeanMap beanMap = BeanMap.create(obj);
-    for (Object key : beanMap.keySet()) {
-      map.put(key.toString(), beanMap.get(key));
+    for (Map.Entry<String, Object> entry : (Set<Map.Entry<String, Object>>) beanMap.entrySet()) {
+      map.put(entry.getKey(), entry.getValue());
     }
     return map;
   }
