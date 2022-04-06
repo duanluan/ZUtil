@@ -65,9 +65,9 @@ public class BeanUtils extends org.springframework.beans.BeanUtils {
   public static Map<String, Object> deepToMap(Object obj) {
     Map<String, Object> result = new HashMap<>();
     BeanMap beanMap = BeanMap.create(obj);
-    for (Object keyObj : beanMap.keySet()) {
-      String key = keyObj.toString();
-      Object value = beanMap.get(key);
+    for (Map.Entry<String, Object> entry : (Set<Map.Entry<String, Object>>) beanMap.entrySet()) {
+      String key = entry.getKey();
+      Object value = entry.getValue();
       // 非基础类型
       if (value != null && !(value instanceof String) && !(value instanceof Integer) && !(value instanceof Long) && !(value instanceof Double) && !(value instanceof Boolean) && !(value instanceof Float) && !(value instanceof Byte) && !(value instanceof Character) && !(value instanceof Short)) {
         // 可循环
