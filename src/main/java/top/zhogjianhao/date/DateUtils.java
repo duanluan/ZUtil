@@ -106,8 +106,8 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
       }
     }
 
-    for (TemporalField temporalField : fieldValueMap.keySet()) {
-      formatterBuilder.parseDefaulting(temporalField, fieldValueMap.get(temporalField));
+    for (Map.Entry<TemporalField, Long> entry : fieldValueMap.entrySet()) {
+      formatterBuilder.parseDefaulting(entry.getKey(), entry.getValue());
     }
     return formatterBuilder;
   }
