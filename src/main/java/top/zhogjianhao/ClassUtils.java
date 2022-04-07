@@ -48,7 +48,15 @@ public class ClassUtils extends org.apache.commons.lang3.ClassUtils {
       throw new IllegalArgumentException("Objects: length should be greater than 0");
     }
     for (Object object : objects) {
-      if (!isBasic(object.getClass())) {
+      if (!((object instanceof Integer) ||
+        object instanceof Long ||
+        object instanceof Double ||
+        object instanceof Float ||
+        object instanceof Boolean ||
+        object instanceof Byte ||
+        object instanceof Character ||
+        object instanceof Short
+      )) {
         return false;
       }
     }
