@@ -88,7 +88,11 @@ public class CollectionUtilsTest {
     println("忽略 null 和空元素和元素为 null：" + CollectionUtils.isAllEquals(false, CollectionUtils::isAllEmpty, list, list1.iterator(), null, list2, list3, map));
     Vector<Integer> vector = new Vector<>();
     vector.add(1);
-    println("忽略值类型、忽略 null 和空元素和元素为 null：" + CollectionUtils.isAllEquals(true, CollectionUtils::isAllEmpty, list, list1.iterator(), list2, list3, map, vector));
+    List<Float> list4 = new ArrayList<>();
+    list4.add(1.0f);
+    List<BigDecimal> list5 = new ArrayList<>();
+    list5.add(new BigDecimal("1.0"));
+    println("忽略值类型、忽略 null 和空元素和元素为 null：" + CollectionUtils.isAllEquals(true, CollectionUtils::isAllEmpty, list, list1.iterator(), list2, list3, list4, list5, map, vector));
   }
 
   public static void main(String[] args) {
