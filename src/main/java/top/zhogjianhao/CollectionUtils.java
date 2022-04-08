@@ -4,7 +4,10 @@ package top.zhogjianhao;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.*;
+import java.util.function.Function;
 
 /**
  * 集合工具类
@@ -13,27 +16,39 @@ import java.util.*;
 public class CollectionUtils {
 
   /**
-   * 是否为 null 或没有元素
+   * 是否 每个集合都 (为 null || 没有元素)
    *
-   * @param coll 集合
-   * @return 是否为 null 或没有元素
+   * @param colls 多个集合
+   * @return 是否 每个集合都 (为 null || 没有元素)
    */
-  public static boolean isEmpty(@NonNull final Collection<?> coll) {
-    return org.apache.commons.collections4.CollectionUtils.isEmpty(coll);
+  public static boolean isEmpty(final Collection<?>... colls) {
+    if (colls == null) {
+      return true;
+    }
+    if (colls.length == 0) {
+      throw new IllegalArgumentException("Colls: length should be greater than 0");
+    }
+    for (Collection<?> coll : colls) {
+      // 如果 某个集合 (不为 null && 有元素)
+      if (org.apache.commons.collections4.CollectionUtils.isNotEmpty(coll)) {
+        return false;
+      }
+    }
+    return true;
   }
 
   /**
-   * 是否不为 null 且有元素
+   * 是否 每个集合都 (不为 null && 有元素)
    *
-   * @param coll 集合
-   * @return 是否不为 null 且有元素
+   * @param colls 多个集合
+   * @return 是否 每个集合都 (不为 null && 有元素)
    */
-  public static boolean isNotEmpty(@NonNull final Collection<?> coll) {
-    return org.apache.commons.collections4.CollectionUtils.isNotEmpty(coll);
+  public static boolean isNotEmpty(final Collection<?>... colls) {
+    return !isEmpty(colls);
   }
 
   /**
-   * 是否为 null 或没有元素
+   * 是否 每个对象都 (为 null || 没有元素)
    *
    * <ul>
    * <li>Collection - via collection isEmpty
@@ -43,25 +58,37 @@ public class CollectionUtils {
    * <li>Enumeration - via hasMoreElements
    * </ul>
    *
-   * @param obj 对象
-   * @return 是否为 null 或没有元素
+   * @param objects 多个对象
+   * @return 是否 每个对象都 (为 null || 没有元素)
    */
-  public static boolean sizeIsEmpty(@NonNull final Object obj) {
-    return org.apache.commons.collections4.CollectionUtils.sizeIsEmpty(obj);
+  public static boolean sizeIsEmpty(final Object... objects) {
+    if (objects == null) {
+      return true;
+    }
+    if (objects.length == 0) {
+      throw new IllegalArgumentException("Objects: length should be greater than 0");
+    }
+    for (Object object : objects) {
+      // 如果 某个对象 (不为 null && 有元素)
+      if (!org.apache.commons.collections4.CollectionUtils.sizeIsEmpty(object)) {
+        return false;
+      }
+    }
+    return true;
   }
 
   /**
-   * 是否不为 null 且有元素
+   * 是否 每个对象都 (不为 null && 有元素)
    *
-   * @param obj 对象
-   * @return 是否不为 null 且有元素
+   * @param objects 多个对象
+   * @return 是否 每个对象都 (不为 null && 有元素)
    */
-  public static boolean sizeIsNotEmpty(@NonNull final Object obj) {
-    return !sizeIsEmpty(obj);
+  public static boolean sizeIsNotEmpty(@NonNull final Object... objects) {
+    return !sizeIsEmpty(objects);
   }
 
   /**
-   * 是否所有元素都为 null
+   * 是否 每个对象的 (所有元素都为 null || 没有元素)
    *
    * <ul>
    * <li>Collection - removeIf null, size() == 0
@@ -71,61 +98,72 @@ public class CollectionUtils {
    * <li>Enumeration - 同 Iterator
    * </ul>
    *
-   * @param obj 对象
-   * @return 是否所有元素都为 null
+   * @param objects 多个对象
+   * @return 是否 每个对象的 (所有元素都为 null || 没有元素)
    */
-  public static boolean isAllEmpty(@NonNull final Object obj) {
-    if (sizeIsEmpty(obj)) {
+  public static boolean isAllEmpty(final Object... objects) {
+    if (objects == null) {
       return true;
     }
-    if (obj instanceof Collection) {
-      Collection obj1 = (Collection) obj;
-      obj1.removeIf(Objects::isNull);
-      return obj1.size() == 0;
-    } else if (obj instanceof Iterable) {
-      for (Object o : (Iterable) obj) {
-        if (o != null) {
-          return false;
-        }
-      }
-      return true;
-    } else if (obj instanceof Map) {
-      return isAllEmpty(((Map) obj).values());
-    } else if (obj instanceof Object[]) {
-      Object[] obj1 = (Object[]) obj;
-      return Arrays.stream(obj1).noneMatch(Objects::nonNull);
-    } else if (obj instanceof Iterator) {
-      Iterator obj1 = (Iterator) obj;
-      while (obj1.hasNext()) {
-        if (obj1.next() != null) {
-          return false;
-        }
-      }
-      return true;
-    } else if (obj instanceof Enumeration) {
-      Enumeration obj1 = (Enumeration) obj;
-      while (obj1.hasMoreElements()) {
-        if (obj1.nextElement() != null) {
-          return false;
-        }
-      }
-      return true;
+    if (objects.length == 0) {
+      throw new IllegalArgumentException("Objects: length should be greater than 0");
     }
-    return false;
+    for (Object object : objects) {
+      if (object == null) {
+        continue;
+      }
+      if (object instanceof Collection) {
+        Collection<?> obj1 = (Collection<?>) object;
+        obj1.removeIf(Objects::isNull);
+        if (obj1.size() != 0) {
+          return false;
+        }
+      } else if (object instanceof Iterable<?>) {
+        for (Object o : (Iterable<?>) object) {
+          if (o != null) {
+            return false;
+          }
+        }
+      } else if (object instanceof Map<?, ?>) {
+        if (!isAllEmpty(((Map<?, ?>) object).values())) {
+          return false;
+        }
+      } else if (object instanceof Object[]) {
+        Object[] obj1 = (Object[]) object;
+        if (Arrays.stream(obj1).anyMatch(Objects::nonNull)) {
+          return false;
+        }
+      } else if (object instanceof Iterator<?>) {
+        Iterator<?> obj1 = (Iterator<?>) object;
+        while (obj1.hasNext()) {
+          if (obj1.next() != null) {
+            return false;
+          }
+        }
+      } else if (object instanceof Enumeration<?>) {
+        Enumeration<?> obj1 = (Enumeration<?>) object;
+        while (obj1.hasMoreElements()) {
+          if (obj1.nextElement() != null) {
+            return false;
+          }
+        }
+      }
+    }
+    return true;
   }
 
   /**
-   * 是否任意元素不为 null
+   * 是否 每个对象的 (所有元素都不为 null && 有元素)
    *
-   * @param obj 对象
-   * @return 是否任意元素不为 null
+   * @param objects 多个对象
+   * @return 是否 每个对象的 (所有元素都不为 null && 有元素)
    */
-  public static boolean isNotAllEmpty(@NonNull final Object obj) {
-    return !isAllEmpty(obj);
+  public static boolean isNotAllEmpty(@NonNull final Object... objects) {
+    return !isAllEmpty(objects);
   }
 
   /**
-   * 是否任意元素为 null
+   * 是否 任意对象 (为 null || 没有元素 || 任意元素为 null)
    *
    * <ul>
    * <li>Collection - contains null
@@ -135,57 +173,189 @@ public class CollectionUtils {
    * <li>Enumeration - 同 Iterator
    * </ul>
    *
-   * @param obj 对象
-   * @return 是否任意元素为 null
+   * @param objects 多个对象
+   * @return 是否 任意对象 (为 null || 没有元素 || 任意元素为 null)
    */
-  public static boolean isAnyEmpty(@NonNull final Object obj) {
-    if (sizeIsEmpty(obj)) {
+  public static boolean isAnyEmpty(final Object... objects) {
+    if (objects == null) {
       return true;
     }
-    if (obj instanceof Collection) {
-      Collection obj1 = (Collection) obj;
-      return obj1.contains(null);
-    } else if (obj instanceof Iterable) {
-      for (Object o : (Iterable) obj) {
-        if (o == null) {
+    if (objects.length == 0) {
+      throw new IllegalArgumentException("Objects: length should be greater than 0");
+    }
+    for (Object object : objects) {
+      if (sizeIsEmpty(object)) {
+        return true;
+      }
+      if (object instanceof Collection<?>) {
+        Collection<?> obj1 = (Collection<?>) object;
+        if (obj1.contains(null)) {
           return true;
         }
-      }
-      return false;
-    } else if (obj instanceof Map) {
-      Map obj1 = (Map) obj;
-      return obj1.containsValue(null);
-    } else if (obj instanceof Object[]) {
-      Object[] obj1 = (Object[]) obj;
-      return Arrays.stream(obj1).anyMatch(Objects::isNull);
-    } else if (obj instanceof Iterator) {
-      Iterator obj1 = (Iterator) obj;
-      while (obj1.hasNext()) {
-        if (obj1.next() == null) {
+      } else if (object instanceof Iterable<?>) {
+        for (Object o : (Iterable<?>) object) {
+          if (o == null) {
+            return true;
+          }
+        }
+      } else if (object instanceof Map<?, ?>) {
+        if (((Map<?, ?>) object).containsValue(null)) {
           return true;
         }
-      }
-      return false;
-    } else if (obj instanceof Enumeration) {
-      Enumeration obj1 = (Enumeration) obj;
-      while (obj1.hasMoreElements()) {
-        if (obj1.nextElement() == null) {
+      } else if (object instanceof Object[]) {
+        Object[] obj1 = (Object[]) object;
+        if (Arrays.stream(obj1).anyMatch(Objects::isNull)) {
           return true;
         }
+      } else if (object instanceof Iterator<?>) {
+        Iterator<?> obj1 = (Iterator<?>) object;
+        while (obj1.hasNext()) {
+          if (obj1.next() == null) {
+            return true;
+          }
+        }
+      } else if (object instanceof Enumeration<?>) {
+        Enumeration<?> obj1 = (Enumeration<?>) object;
+        while (obj1.hasMoreElements()) {
+          if (obj1.nextElement() == null) {
+            return true;
+          }
+        }
       }
-      return false;
     }
     return false;
   }
 
   /**
-   * 是否任意元素为 null
+   * 是否 每个对象 (不为 null && 有元素 && 每个元素都不为 null)
    *
-   * @param obj 对象
-   * @return 是否任意元素为 null
+   * @param objects 多个对象
+   * @return 是否 每个对象 (不为 null && 有元素 && 每个元素都不为 null)
    */
-  public static boolean isNotAnyEmpty(@NonNull final Object obj) {
-    return !isAnyEmpty(obj);
+  public static boolean isNotAnyEmpty(final Object... objects) {
+    return !isAnyEmpty(objects);
+  }
+
+  /**
+   * 基础类型和 BigDecimal、BigInteger 会被转换为 String，且小数点后无效的 0 会被去除
+   *
+   * @param object 元素
+   * @return 字符串
+   */
+  private static Object toStringByBasic(Object object, boolean isByValue) {
+    if (isByValue && (ClassUtils.isBasic(object) || object instanceof BigDecimal || object instanceof BigInteger)) {
+      if (object instanceof Float || object instanceof Double || object instanceof BigDecimal) {
+        object = new BigDecimal(object.toString()).stripTrailingZeros().toPlainString();
+      } else {
+        object = object.toString();
+      }
+    }
+    return object;
+  }
+
+  /**
+   * 是否 每个对象的每个元素都相等
+   *
+   * @param isByValue        是否根据值来判断是否相等，基础类型和 BigDecimal、BigInteger 会被转换为 String，且小数点后无效的 0 会被去除
+   * @param continueFunction 对象何时不参与判断
+   * @param objects          多个对象
+   * @return 是否 每个对象的每个元素都相等
+   */
+  public static boolean isAllEquals(boolean isByValue, Function<Object, Boolean> continueFunction, final Object... objects) {
+    if (objects == null) {
+      return true;
+    }
+    if (objects.length == 0) {
+      throw new IllegalArgumentException("Objects: length should be greater than 0");
+    }
+    Object prevObj = null;
+    for (Object object : objects) {
+      // 对象 (为 null || 没有元素) 时不参与判断
+      if (continueFunction.apply(object)) {
+        continue;
+      }
+      if (object instanceof Collection<?> || object instanceof Map<?, ?> || object instanceof Iterator<?>) {
+        Iterator<?> iterator;
+        if (object instanceof Collection<?>) {
+          iterator = ((Collection<?>) object).iterator();
+        } else if (object instanceof Map<?, ?>) {
+          iterator = (((Map<?, ?>) object).values()).iterator();
+        } else {
+          iterator = (Iterator<?>) object;
+        }
+        int i = 0;
+        while (iterator.hasNext()) {
+          // 基础类型转为 String
+          Object nextObj = toStringByBasic(iterator.next(), isByValue);
+          // 首次判断前跳过第一次循环
+          if (prevObj == null && i == 0) {
+            prevObj = nextObj;
+            i = 1;
+            continue;
+          }
+          if (!Objects.equals(prevObj, nextObj)) {
+            return false;
+          }
+          prevObj = nextObj;
+        }
+      } else if (object instanceof Iterable<?>) {
+        int i = 0;
+        for (Object o : (Iterable<?>) object) {
+          Object obj1 = toStringByBasic(o, isByValue);
+          if (prevObj == null && i == 0) {
+            prevObj = obj1;
+            i = 1;
+            continue;
+          }
+          if (!Objects.equals(prevObj, obj1)) {
+            return false;
+          }
+          prevObj = obj1;
+        }
+      } else if (object instanceof Object[]) {
+        Object[] objects1 = (Object[]) object;
+        for (int i = 0; i < objects1.length; i++) {
+          Object obj1 = toStringByBasic(objects1[i], isByValue);
+          if (prevObj == null && i == 0) {
+            prevObj = obj1;
+            i = 1;
+            continue;
+          }
+          if (!Objects.equals(prevObj, obj1)) {
+            return false;
+          }
+          prevObj = obj1;
+        }
+      } else if (object instanceof Enumeration<?>) {
+        Enumeration<?> enumeration = (Enumeration<?>) object;
+        int i = 0;
+        while (enumeration.hasMoreElements()) {
+          Object nextObj = toStringByBasic(enumeration.nextElement(), isByValue);
+          if (prevObj == null && i == 0) {
+            prevObj = nextObj;
+            i = 1;
+            continue;
+          }
+          if (!Objects.equals(prevObj, nextObj)) {
+            return false;
+          }
+          prevObj = nextObj;
+        }
+      }
+    }
+    return true;
+  }
+
+  /**
+   * 是否不满足 每个对象的每个元素都相等
+   *
+   * @param isByValue        是否根据值来判断是否相等，基础类型和 BigDecimal、BigInteger 会被转换为 String，且小数点后无效的 0 会被去除
+   * @param continueFunction 对象何时不参与判断
+   * @param objects          多个对象
+   * @return 是否不满足 每个对象的每个元素都相等
+   */
+  public static boolean isNotAllEquals(boolean isByValue, Function<Object, Boolean> continueFunction, final Object... objects) {
+    return !isAllEquals(isByValue, continueFunction, objects);
   }
 
   /**
