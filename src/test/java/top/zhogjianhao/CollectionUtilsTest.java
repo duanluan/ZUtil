@@ -94,11 +94,4 @@ public class CollectionUtilsTest {
     list5.add(new BigDecimal("1.0"));
     println("忽略值类型、忽略 null 和空元素和元素为 null：" + CollectionUtils.isAllEquals(true, CollectionUtils::isAllEmpty, list, list1.iterator(), list2, list3, list4, list5, map, vector));
   }
-
-  public static void main(String[] args) {
-    System.out.println(new BigDecimal(String.valueOf(-1.0)).stripTrailingZeros().toPlainString());
-    int a = 1;
-    System.out.println("int");
-    System.out.println(new BigDecimal("1.1").toString());
-  }
 }
