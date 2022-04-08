@@ -26,12 +26,12 @@ public class BeanUtils extends org.springframework.beans.BeanUtils {
   /**
    * Bean 转 Map
    *
-   * @param obj Bean 对象
+   * @param object Bean 对象
    * @return Map
    */
-  public static Map<String, Object> toMap(Object obj) {
+  public static Map<String, Object> toMap(Object object) {
     Map<String, Object> map = new HashMap<>();
-    BeanMap beanMap = BeanMap.create(obj);
+    BeanMap beanMap = BeanMap.create(object);
     for (Map.Entry<String, Object> entry : (Set<Map.Entry<String, Object>>) beanMap.entrySet()) {
       map.put(entry.getKey(), entry.getValue());
     }
@@ -59,12 +59,12 @@ public class BeanUtils extends org.springframework.beans.BeanUtils {
   /**
    * 深层 Bean 转 Map
    *
-   * @param obj Bean 对象
+   * @param object Bean 对象
    * @return Map
    */
-  public static Map<String, Object> deepToMap(Object obj) {
+  public static Map<String, Object> deepToMap(Object object) {
     Map<String, Object> result = new HashMap<>();
-    BeanMap beanMap = BeanMap.create(obj);
+    BeanMap beanMap = BeanMap.create(object);
     for (Map.Entry<String, Object> entry : (Set<Map.Entry<String, Object>>) beanMap.entrySet()) {
       String key = entry.getKey();
       Object value = entry.getValue();
@@ -142,9 +142,9 @@ public class BeanUtils extends org.springframework.beans.BeanUtils {
    * @return 属性值字符串
    */
   public static String getPropertyStr(Object bean, String name) {
-    Object obj = getProperty(bean, name);
-    if (obj != null) {
-      return obj.toString();
+    Object object = getProperty(bean, name);
+    if (object != null) {
+      return object.toString();
     }
     return null;
   }
