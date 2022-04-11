@@ -19,7 +19,6 @@ public class BeanUtilsTest {
   @NoArgsConstructor
   @Data
   public static class TestBean {
-
     private String name;
     private List<TestBean> beanList;
 
@@ -31,7 +30,6 @@ public class BeanUtilsTest {
   @NoArgsConstructor
   @Data
   public static class CopyPropertieTestBean {
-
     private String name;
     private List<TestBean> beanList;
   }
@@ -75,7 +73,7 @@ public class BeanUtilsTest {
 
   @DisplayName("toMapList：Bean List 转 Map List")
   @Test
-  void toMapList(){
+  void toMapList() {
     TestBean testBean = new TestBean();
     testBean.setName("1");
     List<TestBean> beanList = new ArrayList<>();
@@ -96,7 +94,7 @@ public class BeanUtilsTest {
     testBean1.setBeanList(beanList);
 
     Map<String, Object> map = BeanUtils.deepToMap(testBean1);
-    println(((List<Map<String, Object>>)map.get("beanList")).get(0).get("name"));
+    println(((List<Map<String, Object>>) map.get("beanList")).get(0).get("name"));
   }
 
   @DisplayName("deepToMapList：深层 Bean List 转 Map List")
@@ -112,6 +110,6 @@ public class BeanUtilsTest {
     beanList1.add(testBean1);
 
     List<Map<String, Object>> mapList = BeanUtils.deepToMap(beanList1);
-    println(((List<Map<String, Object>>)mapList.get(0).get("beanList")).get(0).get("name"));
+    println(((List<Map<String, Object>>) mapList.get(0).get("beanList")).get(0).get("name"));
   }
 }
