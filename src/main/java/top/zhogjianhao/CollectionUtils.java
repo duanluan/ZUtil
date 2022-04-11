@@ -3,6 +3,7 @@ package top.zhogjianhao;
 
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.IteratorUtils;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -89,6 +90,8 @@ public class CollectionUtils {
 
   /**
    * 是否 每个对象的 (所有元素都为 null || 没有元素)
+   * <p>
+   * 注意：会遍历 Iterator，后续使用需重新创建，但是和 {@link CollectionUtils#isAllEquals(boolean, Function, Object...)}、{@link CollectionUtils#isAllEqualsSameIndex(boolean, Function, Object...)} 使用时却无须担心，因为其内部会在调用此方法前就将 Iterator 转换为 List
    *
    * <ul>
    * <li>Collection - removeIf null, size() == 0
@@ -164,6 +167,8 @@ public class CollectionUtils {
 
   /**
    * 是否 任意对象 (为 null || 没有元素 || 任意元素为 null)
+   * <p>
+   * 注意：会遍历 Iterator，后续使用需重新创建，但是和 {@link CollectionUtils#isAllEquals(boolean, Function, Object...)}、{@link CollectionUtils#isAllEqualsSameIndex(boolean, Function, Object...)} 使用时却无须担心，因为其内部会在调用此方法前就将 Iterator 转换为 List
    *
    * <ul>
    * <li>Collection - contains null
@@ -270,18 +275,20 @@ public class CollectionUtils {
     }
     Object prevObj = null;
     for (Object object : objects) {
-      // 对象 (为 null || 没有元素) 时不参与判断
-      if (continueFunction.apply(object)) {
+      // continueFunction 中可能已经使用了 Iterator，所以在调用前转换为 List
+      if (object instanceof Iterator<?>) {
+        object = IteratorUtils.toList((Iterator<?>) object);
+      }
+      // 对象指定条件时不参与判断
+      if (continueFunction != null && continueFunction.apply(object)) {
         continue;
       }
-      if (object instanceof Collection<?> || object instanceof Map<?, ?> || object instanceof Iterator<?>) {
+      if (object instanceof Collection<?> || object instanceof Map<?, ?>) {
         Iterator<?> iterator;
         if (object instanceof Collection<?>) {
           iterator = ((Collection<?>) object).iterator();
-        } else if (object instanceof Map<?, ?>) {
-          iterator = (((Map<?, ?>) object).values()).iterator();
         } else {
-          iterator = (Iterator<?>) object;
+          iterator = (((Map<?, ?>) object).values()).iterator();
         }
         int i = 0;
         while (iterator.hasNext()) {
@@ -301,30 +308,30 @@ public class CollectionUtils {
       } else if (object instanceof Iterable<?>) {
         int i = 0;
         for (Object o : (Iterable<?>) object) {
-          Object obj1 = toStringByBasic(o, isByValue);
+          Object nextObj = toStringByBasic(o, isByValue);
           if (prevObj == null && i == 0) {
-            prevObj = obj1;
+            prevObj = nextObj;
             i = 1;
             continue;
           }
-          if (!Objects.equals(prevObj, obj1)) {
+          if (!Objects.equals(prevObj, nextObj)) {
             return false;
           }
-          prevObj = obj1;
+          prevObj = nextObj;
         }
       } else if (object instanceof Object[]) {
         Object[] objects1 = (Object[]) object;
         for (int i = 0; i < objects1.length; i++) {
-          Object obj1 = toStringByBasic(objects1[i], isByValue);
+          Object nextObj = toStringByBasic(objects1[i], isByValue);
           if (prevObj == null && i == 0) {
-            prevObj = obj1;
+            prevObj = nextObj;
             i = 1;
             continue;
           }
-          if (!Objects.equals(prevObj, obj1)) {
+          if (!Objects.equals(prevObj, nextObj)) {
             return false;
           }
-          prevObj = obj1;
+          prevObj = nextObj;
         }
       } else if (object instanceof Enumeration<?>) {
         Enumeration<?> enumeration = (Enumeration<?>) object;
@@ -356,6 +363,144 @@ public class CollectionUtils {
    */
   public static boolean isNotAllEquals(boolean isByValue, Function<Object, Boolean> continueFunction, final Object... objects) {
     return !isAllEquals(isByValue, continueFunction, objects);
+  }
+
+  /**
+   * 是否 每个对象的同一位置的元素都相等
+   *
+   * @param isByValue        是否根据值来判断是否相等，基础类型和 BigDecimal、BigInteger 会被转换为 String，且小数点后无效的 0 会被去除
+   * @param continueFunction 对象何时不参与判断
+   * @param objects          多个对象
+   * @return 是否 每个对象的同一位置的元素都相等
+   */
+  public static boolean isAllEqualsSameIndex(boolean isByValue, Function<Object, Boolean> continueFunction, final Object... objects) {
+    if (objects == null) {
+      return true;
+    }
+    if (objects.length < 2) {
+      throw new IllegalArgumentException("Objects: length should be greater than 1");
+    }
+
+    Integer objectSize = null;
+    for (Object object : objects) {
+      // continueFunction 中可能已经使用了 Iterator，所以在调用前转换为 List
+      if (object instanceof Iterator<?>) {
+        object = IteratorUtils.toList((Iterator<?>) object);
+      }
+      // 对象指定条件时不参与判断
+      if (continueFunction != null && continueFunction.apply(object)) {
+        continue;
+      }
+      int size = -1;
+      if (object instanceof Collection<?>) {
+        size = ((Collection<?>) object).size();
+      } else if (object instanceof Map<?, ?>) {
+        size = ((Map<?, ?>) object).values().size();
+      } else if (object instanceof Iterable<?>) {
+        int i = 0;
+        for (Object o : (Iterable<?>) object) {
+          i++;
+        }
+        size = i;
+      } else if (object instanceof Object[]) {
+        size = ((Object[]) object).length;
+      } else if (object instanceof Enumeration<?>) {
+        Enumeration<?> enumeration = (Enumeration<?>) object;
+        int i = 0;
+        for (; enumeration.hasMoreElements(); i++) {
+          enumeration.nextElement();
+        }
+        size = i;
+      }
+      // 元素长度不一致时退出
+      if (objectSize != null && !objectSize.equals(size)) {
+        return false;
+      }
+      objectSize = size;
+    }
+
+    List<Object> prevList = new LinkedList<>();
+    for (Object object : objects) {
+      if (object instanceof Collection<?> || object instanceof Map<?, ?>) {
+        Iterator<?> iterator;
+        if (object instanceof Collection<?>) {
+          iterator = ((Collection<?>) object).iterator();
+        } else {
+          iterator = (((Map<?, ?>) object).values()).iterator();
+        }
+        int i = 0;
+        for (; iterator.hasNext(); i++) {
+          // 基础类型转为 String
+          Object nextObj = toStringByBasic(iterator.next(), isByValue);
+          if (prevList.size() < i + 1) {
+            prevList.add(nextObj);
+            i = 1;
+            continue;
+          }
+          if (!Objects.equals(prevList.get(i), nextObj)) {
+            return false;
+          }
+          prevList.set(i, nextObj);
+        }
+      } else if (object instanceof Iterable<?>) {
+        int i = 0;
+        for (Object o : (Iterable<?>) object) {
+          Object nextObj = toStringByBasic(o, isByValue);
+          if (prevList.size() < i + 1) {
+            prevList.add(nextObj);
+            i = 1;
+            continue;
+          }
+          if (!Objects.equals(prevList.get(i), nextObj)) {
+            return false;
+          }
+          prevList.set(i, nextObj);
+          i++;
+        }
+      } else if (object instanceof Object[]) {
+        Object[] objects1 = (Object[]) object;
+        for (int i = 0; i < objects1.length; i++) {
+          Object nextObj = toStringByBasic(objects1[i], isByValue);
+          if (prevList.size() < i + 1) {
+            prevList.add(nextObj);
+            i = 1;
+            continue;
+          }
+          if (!Objects.equals(prevList.get(i), nextObj)) {
+            return false;
+          }
+          prevList.set(i, nextObj);
+        }
+      } else if (object instanceof Enumeration<?>) {
+        Enumeration<?> enumeration = (Enumeration<?>) object;
+        int i = 0;
+        for (; enumeration.hasMoreElements(); i++) {
+          Object nextObj = toStringByBasic(enumeration.nextElement(), isByValue);
+          if (prevList.size() < i + 1) {
+            prevList.add(nextObj);
+            i = 1;
+            continue;
+          }
+          if (!Objects.equals(prevList.get(i), nextObj)) {
+            return false;
+          }
+          prevList.set(i, nextObj);
+        }
+      }
+    }
+    return true;
+  }
+
+  /**
+   * 是否不满足 每个对象的同一位置的元素都相等
+   *
+   * @param isByValue        是否根据值来判断是否相等，基础类型和 BigDecimal、BigInteger 会被转换为 String，且小数点后无效的 0 会被去除
+   * @param continueFunction 对象何时不参与判断
+   * @param objects          多个对象
+   * @return 是否不满足 每个对象的同一位置的元素都相等
+   */
+  public static boolean isNotAllEqualsSameIndex(boolean isByValue, Function<Object, Boolean> continueFunction, final Object... objects) {
+    return !isAllEqualsSameIndex(isByValue, continueFunction, objects);
   }
 
   /**

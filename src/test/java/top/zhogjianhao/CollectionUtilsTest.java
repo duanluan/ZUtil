@@ -5,6 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.*;
 
 @Slf4j
@@ -93,5 +94,34 @@ public class CollectionUtilsTest {
     List<BigDecimal> list5 = new ArrayList<>();
     list5.add(new BigDecimal("1.0"));
     println("忽略值类型、忽略 null 和空元素和元素为 null：" + CollectionUtils.isAllEquals(true, CollectionUtils::isAllEmpty, list, list1.iterator(), list2, list3, list4, list5, map, vector));
+  }
+
+  @DisplayName("是否 每个对象的同一位置的元素都相等")
+  @Test
+  void isAllEqualsSameIndex() {
+    List<String> list = new ArrayList<>();
+    list.add("1");
+    list.add("2");
+    List<String> list1 = new ArrayList<>();
+    list1.add("1");
+    list1.add("2");
+    List<String> list2 = new ArrayList<>();
+    Map<String, Object> map = new HashMap<>();
+    map.put("1", "1");
+    map.put("2", "2");
+    println("忽略 null 和空元素：" + CollectionUtils.isAllEqualsSameIndex(false, CollectionUtils::sizeIsEmpty, list, list1.iterator(), null, map));
+    List<String> list3 = new ArrayList<>();
+    list3.add(null);
+    println("忽略 null 和空元素和元素为 null：" + CollectionUtils.isAllEqualsSameIndex(false, CollectionUtils::isAllEmpty, list, list1.iterator(), null, list2, list3, map));
+    Vector<Integer> vector = new Vector<>();
+    vector.add(1);
+    vector.add(2);
+    List<Object> list4 = new ArrayList<>();
+    list4.add(1.0f);
+    list4.add(2.0);
+    List<Number> list5 = new ArrayList<>();
+    list5.add(new BigDecimal("1.0"));
+    list5.add(new BigInteger("2"));
+    println("忽略值类型、忽略 null 和空元素和元素为 null：" + CollectionUtils.isAllEqualsSameIndex(true, CollectionUtils::isAllEmpty, list, list1.iterator(), list2, list3, list4, list5, map, vector));
   }
 }
