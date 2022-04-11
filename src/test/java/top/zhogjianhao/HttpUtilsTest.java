@@ -80,7 +80,7 @@ public class HttpUtilsTest {
     paramMap.put("userId", 1);
     paramMap.put("title", "title2");
     paramMap.put("content", "some content");
-    HttpUtils.post(baseUrl, ContentTypeConstant.JSON, paramMap);
+    HttpUtils.post(baseUrl, ContentTypeConstant.X_WWW_FORM_URLENCODED, paramMap);
     HttpUtils.post(baseUrl, paramMap);
     // 太快啦！等等 json-server
     Thread.sleep(500);
@@ -88,6 +88,8 @@ public class HttpUtilsTest {
     paramMap = new HashMap<>();
     paramMap.put("content", "new content");
     HttpUtils.patch(baseUrl + "/1", paramMap);
+    // 太快啦！等等 json-server
+    Thread.sleep(500);
     HttpUtils.put(baseUrl + "/2", paramMap);
     // 太快啦！等等 json-server
     Thread.sleep(500);
