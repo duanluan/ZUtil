@@ -17,12 +17,32 @@ import java.util.function.Function;
 public class CollectionUtils {
 
   /**
+   * 是否 集合为 null || 没有元素
+   *
+   * @param coll 集合
+   * @return 是否 集合为 null || 没有元素
+   */
+  public static boolean isEmpty(final Collection<?> coll) {
+    return !org.apache.commons.collections4.CollectionUtils.isNotEmpty(coll);
+  }
+
+  /**
+   * 是否 集合不为 null && 有元素
+   *
+   * @param coll 集合
+   * @return 是否 集合不为 null && 有元素
+   */
+  public static boolean isNotEmpty(final Collection<?> coll) {
+    return !isEmpty(coll);
+  }
+
+  /**
    * 是否 每个集合都 (为 null || 没有元素)
    *
    * @param colls 多个集合
    * @return 是否 每个集合都 (为 null || 没有元素)
    */
-  public static boolean isEmpty(final Collection<?>... colls) {
+  public static boolean isEmptys(final Collection<?>... colls) {
     if (colls == null) {
       return true;
     }
@@ -31,7 +51,7 @@ public class CollectionUtils {
     }
     for (Collection<?> coll : colls) {
       // 如果 某个集合 (不为 null && 有元素)
-      if (org.apache.commons.collections4.CollectionUtils.isNotEmpty(coll)) {
+      if (isEmpty(coll)) {
         return false;
       }
     }
@@ -44,8 +64,36 @@ public class CollectionUtils {
    * @param colls 多个集合
    * @return 是否 每个集合都 (不为 null && 有元素)
    */
-  public static boolean isNotEmpty(final Collection<?>... colls) {
-    return !isEmpty(colls);
+  public static boolean isNotEmptys(final Collection<?>... colls) {
+    return !isEmptys(colls);
+  }
+
+  /**
+   * 是否 对象为 null || 没有元素
+   *
+   * <ul>
+   * <li>Collection - via collection isEmpty
+   * <li>Map - via map isEmpty
+   * <li>Array - using array size
+   * <li>Iterator - via hasNext
+   * <li>Enumeration - via hasMoreElements
+   * </ul>
+   *
+   * @param object 对象
+   * @return 是否 对象为 null || 没有元素
+   */
+  public static boolean sizeIsEmpty(final Object object) {
+    return org.apache.commons.collections4.CollectionUtils.sizeIsEmpty(object);
+  }
+
+  /**
+   * 是否 对象不为 null && 有元素
+   *
+   * @param object 对象
+   * @return 是否 对象不为 null && 有元素
+   */
+  public static boolean sizeIsNotEmpty(@NonNull final Object object) {
+    return !sizeIsEmpty(object);
   }
 
   /**
@@ -62,7 +110,7 @@ public class CollectionUtils {
    * @param objects 多个对象
    * @return 是否 每个对象都 (为 null || 没有元素)
    */
-  public static boolean sizeIsEmpty(final Object... objects) {
+  public static boolean sizeIsEmptys(final Object... objects) {
     if (objects == null) {
       return true;
     }
@@ -71,7 +119,7 @@ public class CollectionUtils {
     }
     for (Object object : objects) {
       // 如果 某个对象 (不为 null && 有元素)
-      if (!org.apache.commons.collections4.CollectionUtils.sizeIsEmpty(object)) {
+      if (sizeIsEmpty(object)) {
         return false;
       }
     }
@@ -84,8 +132,71 @@ public class CollectionUtils {
    * @param objects 多个对象
    * @return 是否 每个对象都 (不为 null && 有元素)
    */
-  public static boolean sizeIsNotEmpty(@NonNull final Object... objects) {
-    return !sizeIsEmpty(objects);
+  public static boolean sizeIsNotEmptys(@NonNull final Object... objects) {
+    return !sizeIsEmptys(objects);
+  }
+
+  /**
+   * 是否 对象所有元素都为 null || 没有元素
+   * <p>
+   * 注意：会遍历 Iterator，后续使用需重新创建，但是和 {@link CollectionUtils#isAllEquals(boolean, Function, Object...)}、{@link CollectionUtils#isAllEqualsSameIndex(boolean, Function, Object...)} 使用时却无须担心，因为其内部会在调用此方法前就将 Iterator 转换为 List
+   *
+   * <ul>
+   * <li>Collection - removeIf null, size() == 0
+   * <li>Map - self(values())
+   * <li>Array - noneMatch nonNull
+   * <li>Iterator - !(next() != null)
+   * <li>Enumeration - 同 Iterator
+   * </ul>
+   *
+   * @param object 对象
+   * @return 是否 对象所有元素都为 null || 没有元素)
+   */
+  public static boolean isAllEmpty(final Object object) {
+    if (object == null) {
+      return true;
+    }
+    if (object instanceof Collection) {
+      Collection<?> obj1 = (Collection<?>) object;
+      obj1.removeIf(Objects::isNull);
+      return obj1.size() == 0;
+    } else if (object instanceof Iterable<?>) {
+      for (Object o : (Iterable<?>) object) {
+        if (o != null) {
+          return false;
+        }
+      }
+    } else if (object instanceof Map<?, ?>) {
+      return isAllEmptys(((Map<?, ?>) object).values());
+    } else if (object instanceof Object[]) {
+      Object[] obj1 = (Object[]) object;
+      return Arrays.stream(obj1).noneMatch(Objects::nonNull);
+    } else if (object instanceof Iterator<?>) {
+      Iterator<?> obj1 = (Iterator<?>) object;
+      while (obj1.hasNext()) {
+        if (obj1.next() != null) {
+          return false;
+        }
+      }
+    } else if (object instanceof Enumeration<?>) {
+      Enumeration<?> obj1 = (Enumeration<?>) object;
+      while (obj1.hasMoreElements()) {
+        if (obj1.nextElement() != null) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  /**
+   * 是否 对象所有元素都不为 null && 有元素
+   *
+   * @param object 对象
+   * @return 是否 对象元素都不为 null && 有元素
+   */
+  public static boolean isNotAllEmpty(@NonNull final Object object) {
+    return !isAllEmptys(object);
   }
 
   /**
@@ -104,7 +215,7 @@ public class CollectionUtils {
    * @param objects 多个对象
    * @return 是否 每个对象的 (所有元素都为 null || 没有元素)
    */
-  public static boolean isAllEmpty(final Object... objects) {
+  public static boolean isAllEmptys(final Object... objects) {
     if (objects == null) {
       return true;
     }
@@ -112,44 +223,8 @@ public class CollectionUtils {
       throw new IllegalArgumentException("Objects: length should be greater than 0");
     }
     for (Object object : objects) {
-      if (object == null) {
-        continue;
-      }
-      if (object instanceof Collection) {
-        Collection<?> obj1 = (Collection<?>) object;
-        obj1.removeIf(Objects::isNull);
-        if (obj1.size() != 0) {
-          return false;
-        }
-      } else if (object instanceof Iterable<?>) {
-        for (Object o : (Iterable<?>) object) {
-          if (o != null) {
-            return false;
-          }
-        }
-      } else if (object instanceof Map<?, ?>) {
-        if (!isAllEmpty(((Map<?, ?>) object).values())) {
-          return false;
-        }
-      } else if (object instanceof Object[]) {
-        Object[] obj1 = (Object[]) object;
-        if (Arrays.stream(obj1).anyMatch(Objects::nonNull)) {
-          return false;
-        }
-      } else if (object instanceof Iterator<?>) {
-        Iterator<?> obj1 = (Iterator<?>) object;
-        while (obj1.hasNext()) {
-          if (obj1.next() != null) {
-            return false;
-          }
-        }
-      } else if (object instanceof Enumeration<?>) {
-        Enumeration<?> obj1 = (Enumeration<?>) object;
-        while (obj1.hasMoreElements()) {
-          if (obj1.nextElement() != null) {
-            return false;
-          }
-        }
+      if (!isAllEmpty(object)) {
+        return false;
       }
     }
     return true;
@@ -161,8 +236,70 @@ public class CollectionUtils {
    * @param objects 多个对象
    * @return 是否 每个对象的 (所有元素都不为 null && 有元素)
    */
-  public static boolean isNotAllEmpty(@NonNull final Object... objects) {
-    return !isAllEmpty(objects);
+  public static boolean isNotAllEmptys(@NonNull final Object... objects) {
+    return !isAllEmptys(objects);
+  }
+
+  /**
+   * 是否 任意对象为 null || 没有元素 || 任意元素为 null
+   * <p>
+   * 注意：会遍历 Iterator，后续使用需重新创建，但是和 {@link CollectionUtils#isAllEquals(boolean, Function, Object...)}、{@link CollectionUtils#isAllEqualsSameIndex(boolean, Function, Object...)} 使用时却无须担心，因为其内部会在调用此方法前就将 Iterator 转换为 List
+   *
+   * <ul>
+   * <li>Collection - contains null
+   * <li>Map - containsValue null
+   * <li>Array - anyMatch null
+   * <li>Iterator - next() == null
+   * <li>Enumeration - 同 Iterator
+   * </ul>
+   *
+   * @param object 对象
+   * @return 是否 任意对象为 null || 没有元素 || 任意元素为 null
+   */
+  public static boolean isAnyEmpty(final Object object) {
+    if (sizeIsEmpty(object)) {
+      return true;
+    }
+    if (object instanceof Collection<?>) {
+      Collection<?> obj1 = (Collection<?>) object;
+      return obj1.contains(null);
+    } else if (object instanceof Iterable<?>) {
+      for (Object o : (Iterable<?>) object) {
+        if (o == null) {
+          return true;
+        }
+      }
+    } else if (object instanceof Map<?, ?>) {
+      return ((Map<?, ?>) object).containsValue(null);
+    } else if (object instanceof Object[]) {
+      Object[] obj1 = (Object[]) object;
+      return Arrays.stream(obj1).anyMatch(Objects::isNull);
+    } else if (object instanceof Iterator<?>) {
+      Iterator<?> obj1 = (Iterator<?>) object;
+      while (obj1.hasNext()) {
+        if (obj1.next() == null) {
+          return true;
+        }
+      }
+    } else if (object instanceof Enumeration<?>) {
+      Enumeration<?> obj1 = (Enumeration<?>) object;
+      while (obj1.hasMoreElements()) {
+        if (obj1.nextElement() == null) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  /**
+   * 是否 对象不为 null && 有元素 && 每个元素都不为 null
+   *
+   * @param object 对象
+   * @return 是否 对象不为 null && 有元素 && 每个元素都不为 null
+   */
+  public static boolean isNotAnyEmpty(final Object object) {
+    return !isAnyEmpty(object);
   }
 
   /**
@@ -181,7 +318,7 @@ public class CollectionUtils {
    * @param objects 多个对象
    * @return 是否 任意对象 (为 null || 没有元素 || 任意元素为 null)
    */
-  public static boolean isAnyEmpty(final Object... objects) {
+  public static boolean isAnyEmptys(final Object... objects) {
     if (objects == null) {
       return true;
     }
@@ -189,43 +326,8 @@ public class CollectionUtils {
       throw new IllegalArgumentException("Objects: length should be greater than 0");
     }
     for (Object object : objects) {
-      if (sizeIsEmpty(object)) {
+      if(isAnyEmpty(object)) {
         return true;
-      }
-      if (object instanceof Collection<?>) {
-        Collection<?> obj1 = (Collection<?>) object;
-        if (obj1.contains(null)) {
-          return true;
-        }
-      } else if (object instanceof Iterable<?>) {
-        for (Object o : (Iterable<?>) object) {
-          if (o == null) {
-            return true;
-          }
-        }
-      } else if (object instanceof Map<?, ?>) {
-        if (((Map<?, ?>) object).containsValue(null)) {
-          return true;
-        }
-      } else if (object instanceof Object[]) {
-        Object[] obj1 = (Object[]) object;
-        if (Arrays.stream(obj1).anyMatch(Objects::isNull)) {
-          return true;
-        }
-      } else if (object instanceof Iterator<?>) {
-        Iterator<?> obj1 = (Iterator<?>) object;
-        while (obj1.hasNext()) {
-          if (obj1.next() == null) {
-            return true;
-          }
-        }
-      } else if (object instanceof Enumeration<?>) {
-        Enumeration<?> obj1 = (Enumeration<?>) object;
-        while (obj1.hasMoreElements()) {
-          if (obj1.nextElement() == null) {
-            return true;
-          }
-        }
       }
     }
     return false;
@@ -237,8 +339,8 @@ public class CollectionUtils {
    * @param objects 多个对象
    * @return 是否 每个对象 (不为 null && 有元素 && 每个元素都不为 null)
    */
-  public static boolean isNotAnyEmpty(final Object... objects) {
-    return !isAnyEmpty(objects);
+  public static boolean isNotAnyEmptys(final Object... objects) {
+    return !isAnyEmptys(objects);
   }
 
   /**
