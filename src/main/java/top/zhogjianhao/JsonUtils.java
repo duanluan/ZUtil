@@ -7,8 +7,6 @@ import com.alibaba.fastjson.parser.ParserConfig;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import lombok.NonNull;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -25,11 +23,12 @@ public class JsonUtils {
    * @return JSON 字符串
    */
   public static String toJson(@NonNull final Object object, @NonNull final SerializerFeature... features) {
-    // 设置序列化特性
-    List<SerializerFeature> featureList = new ArrayList<>(Arrays.asList(features));
-    // 序列化值为 null 的字段
-    featureList.add(0, SerializerFeature.WriteMapNullValue);
-    return JSON.toJSONString(object, featureList.toArray(new SerializerFeature[0]));
+    // 设置输出特性
+    if (CollectionUtils.sizeIsNotEmpty(features)) {
+      // 输出值为 null 的字段
+      return JSON.toJSONString(ArrayUtils.addFirst(features, SerializerFeature.WriteMapNullValue));
+    }
+    return JSON.toJSONString(object);
   }
 
   /**
