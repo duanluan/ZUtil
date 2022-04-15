@@ -17,7 +17,8 @@ public class JsonUtils {
   /**
    * 对象转 JSON 字符串
    *
-   * @param object 对象
+   * @param object   对象
+   * @param features 序列化特性
    * @return JSON 字符串
    */
   public static String toJson(@NonNull final Object object, @NonNull final SerializerFeature... features) {
@@ -32,9 +33,10 @@ public class JsonUtils {
   /**
    * JSON 字符串转对象
    *
-   * @param json  JSON 字符串
-   * @param clazz 对象类型
-   * @param <T>   对象类型
+   * @param json     JSON 字符串
+   * @param clazz    对象类型
+   * @param features 反序列化特性
+   * @param <T>      对象类型
    * @return 对象
    */
   public static <T> T parseObject(@NonNull final String json, @NonNull final Class<T> clazz, @NonNull final Feature... features) {
@@ -46,7 +48,7 @@ public class JsonUtils {
    *
    * @param json         JSON 字符串
    * @param clazz        集合元素类型
-   * @param parserConfig 配置
+   * @param parserConfig 反序列化配置
    * @param <T>          集合元素类型
    * @return 集合
    */
