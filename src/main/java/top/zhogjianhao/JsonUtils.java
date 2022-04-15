@@ -15,9 +15,7 @@ import java.util.List;
 public class JsonUtils {
 
   /**
-   * 转 JSON 字符串
-   * <p>
-   * src/test/java/top/zhogjianhao/jmh/base/json/ToJsonTest.java
+   * 对象转 JSON 字符串
    *
    * @param object 对象
    * @return JSON 字符串
@@ -28,13 +26,11 @@ public class JsonUtils {
       // 输出值为 null 的字段
       return JSON.toJSONString(ArrayUtils.addFirst(features, SerializerFeature.WriteMapNullValue));
     }
-    return JSON.toJSONString(object);
+    return JSON.toJSONString(object, SerializerFeature.WriteMapNullValue);
   }
 
   /**
-   * 转对象
-   * <p>
-   * src/test/java/top/zhogjianhao/jmh/base/json/ToMapTest.java
+   * JSON 字符串转对象
    *
    * @param json  JSON 字符串
    * @param clazz 对象类型
@@ -46,9 +42,7 @@ public class JsonUtils {
   }
 
   /**
-   * 转集合
-   * <p>
-   * src/test/java/top/zhogjianhao/jmh/base/json/ToListTest.java
+   * JSON 字符串转集合
    *
    * @param json         JSON 字符串
    * @param clazz        集合元素类型
