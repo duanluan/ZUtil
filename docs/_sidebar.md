@@ -1,2 +1,3 @@
 - [入门](zh-cn/introduction.md)
+- [JSON](zh-cn/json.md)
 - [不兼容变更](zh-cn/incompatible-changes.md)
