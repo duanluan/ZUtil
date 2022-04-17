@@ -17,30 +17,30 @@ import java.util.function.Function;
 public class CollectionUtils {
 
   /**
-   * 是否 集合为 null || 没有元素
+   * 是否 集合为 null 或 没有元素
    *
    * @param coll 集合
-   * @return 是否 集合为 null || 没有元素
+   * @return 是否 集合为 null 或 没有元素
    */
   public static boolean isEmpty(final Collection<?> coll) {
     return !org.apache.commons.collections4.CollectionUtils.isNotEmpty(coll);
   }
 
   /**
-   * 是否 集合不为 null && 有元素
+   * 是否 集合不为 null 且 有元素
    *
    * @param coll 集合
-   * @return 是否 集合不为 null && 有元素
+   * @return 是否 集合不为 null 且 有元素
    */
   public static boolean isNotEmpty(final Collection<?> coll) {
     return !isEmpty(coll);
   }
 
   /**
-   * 是否 每个集合都 (为 null || 没有元素)
+   * 是否 每个集合都 (为 null 或 没有元素)
    *
    * @param colls 多个集合
-   * @return 是否 每个集合都 (为 null || 没有元素)
+   * @return 是否 每个集合都 (为 null 或 没有元素)
    */
   public static boolean isEmptys(final Collection<?>... colls) {
     if (colls == null) {
@@ -50,7 +50,7 @@ public class CollectionUtils {
       throw new IllegalArgumentException("Colls: length should be greater than 0");
     }
     for (Collection<?> coll : colls) {
-      // 如果 某个集合 (不为 null && 有元素)
+      // 如果 某个集合 (不为 null 且 有元素)
       if (isEmpty(coll)) {
         return false;
       }
@@ -59,17 +59,17 @@ public class CollectionUtils {
   }
 
   /**
-   * 是否 每个集合都 (不为 null && 有元素)
+   * 是否 每个集合都 (不为 null 且 有元素)
    *
    * @param colls 多个集合
-   * @return 是否 每个集合都 (不为 null && 有元素)
+   * @return 是否 每个集合都 (不为 null 且 有元素)
    */
   public static boolean isNotEmptys(final Collection<?>... colls) {
     return !isEmptys(colls);
   }
 
   /**
-   * 是否 对象为 null || 没有元素
+   * 是否 对象为 null 或 没有元素
    *
    * <ul>
    * <li>Collection - via collection isEmpty
@@ -80,24 +80,24 @@ public class CollectionUtils {
    * </ul>
    *
    * @param object 对象
-   * @return 是否 对象为 null || 没有元素
+   * @return 是否 对象为 null 或 没有元素
    */
   public static boolean sizeIsEmpty(final Object object) {
     return org.apache.commons.collections4.CollectionUtils.sizeIsEmpty(object);
   }
 
   /**
-   * 是否 对象不为 null && 有元素
+   * 是否 对象不为 null 且 有元素
    *
    * @param object 对象
-   * @return 是否 对象不为 null && 有元素
+   * @return 是否 对象不为 null 且 有元素
    */
   public static boolean sizeIsNotEmpty(@NonNull final Object object) {
     return !sizeIsEmpty(object);
   }
 
   /**
-   * 是否 每个对象都 (为 null || 没有元素)
+   * 是否 每个对象都 (为 null 或 没有元素)
    *
    * <ul>
    * <li>Collection - via collection isEmpty
@@ -108,7 +108,7 @@ public class CollectionUtils {
    * </ul>
    *
    * @param objects 多个对象
-   * @return 是否 每个对象都 (为 null || 没有元素)
+   * @return 是否 每个对象都 (为 null 或 没有元素)
    */
   public static boolean sizeIsEmptys(final Object... objects) {
     if (objects == null) {
@@ -118,7 +118,7 @@ public class CollectionUtils {
       throw new IllegalArgumentException("Objects: length should be greater than 0");
     }
     for (Object object : objects) {
-      // 如果 某个对象 (不为 null && 有元素)
+      // 如果 某个对象 (不为 null 且 有元素)
       if (sizeIsEmpty(object)) {
         return false;
       }
@@ -127,17 +127,17 @@ public class CollectionUtils {
   }
 
   /**
-   * 是否 每个对象都 (不为 null && 有元素)
+   * 是否 每个对象都 (不为 null 且 有元素)
    *
    * @param objects 多个对象
-   * @return 是否 每个对象都 (不为 null && 有元素)
+   * @return 是否 每个对象都 (不为 null 且 有元素)
    */
   public static boolean sizeIsNotEmptys(@NonNull final Object... objects) {
     return !sizeIsEmptys(objects);
   }
 
   /**
-   * 是否 对象所有元素都为 null || 没有元素
+   * 是否 对象所有元素都为 null 或 没有元素
    * <p>
    * 注意：会遍历 Iterator，后续使用需重新创建，但是和 {@link CollectionUtils#isAllEquals(boolean, Function, Object...)}、{@link CollectionUtils#isAllEqualsSameIndex(boolean, Function, Object...)} 使用时却无须担心，因为其内部会在调用此方法前就将 Iterator 转换为 List
    *
@@ -150,7 +150,7 @@ public class CollectionUtils {
    * </ul>
    *
    * @param object 对象
-   * @return 是否 对象所有元素都为 null || 没有元素)
+   * @return 是否 对象所有元素都为 null 或 没有元素)
    */
   public static boolean isAllEmpty(final Object object) {
     if (object == null) {
@@ -190,17 +190,17 @@ public class CollectionUtils {
   }
 
   /**
-   * 是否 对象所有元素都不为 null && 有元素
+   * 是否 对象所有元素都不为 null 且 有元素
    *
    * @param object 对象
-   * @return 是否 对象元素都不为 null && 有元素
+   * @return 是否 对象元素都不为 null 且 有元素
    */
   public static boolean isNotAllEmpty(@NonNull final Object object) {
     return !isAllEmptys(object);
   }
 
   /**
-   * 是否 每个对象的 (所有元素都为 null || 没有元素)
+   * 是否 每个对象的 (所有元素都为 null 或 没有元素)
    * <p>
    * 注意：会遍历 Iterator，后续使用需重新创建，但是和 {@link CollectionUtils#isAllEquals(boolean, Function, Object...)}、{@link CollectionUtils#isAllEqualsSameIndex(boolean, Function, Object...)} 使用时却无须担心，因为其内部会在调用此方法前就将 Iterator 转换为 List
    *
@@ -213,7 +213,7 @@ public class CollectionUtils {
    * </ul>
    *
    * @param objects 多个对象
-   * @return 是否 每个对象的 (所有元素都为 null || 没有元素)
+   * @return 是否 每个对象的 (所有元素都为 null 或 没有元素)
    */
   public static boolean isAllEmptys(final Object... objects) {
     if (objects == null) {
@@ -231,17 +231,17 @@ public class CollectionUtils {
   }
 
   /**
-   * 是否 每个对象的 (所有元素都不为 null && 有元素)
+   * 是否 每个对象的 (所有元素都不为 null 且 有元素)
    *
    * @param objects 多个对象
-   * @return 是否 每个对象的 (所有元素都不为 null && 有元素)
+   * @return 是否 每个对象的 (所有元素都不为 null 且 有元素)
    */
   public static boolean isNotAllEmptys(@NonNull final Object... objects) {
     return !isAllEmptys(objects);
   }
 
   /**
-   * 是否 任意对象为 null || 没有元素 || 任意元素为 null
+   * 是否 任意对象为 null 或 没有元素 或 任意元素为 null
    * <p>
    * 注意：会遍历 Iterator，后续使用需重新创建，但是和 {@link CollectionUtils#isAllEquals(boolean, Function, Object...)}、{@link CollectionUtils#isAllEqualsSameIndex(boolean, Function, Object...)} 使用时却无须担心，因为其内部会在调用此方法前就将 Iterator 转换为 List
    *
@@ -254,7 +254,7 @@ public class CollectionUtils {
    * </ul>
    *
    * @param object 对象
-   * @return 是否 任意对象为 null || 没有元素 || 任意元素为 null
+   * @return 是否 任意对象为 null 或 没有元素 或 任意元素为 null
    */
   public static boolean isAnyEmpty(final Object object) {
     if (sizeIsEmpty(object)) {
@@ -293,17 +293,17 @@ public class CollectionUtils {
   }
 
   /**
-   * 是否 对象不为 null && 有元素 && 每个元素都不为 null
+   * 是否 对象不为 null 且 有元素 且 每个元素都不为 null
    *
    * @param object 对象
-   * @return 是否 对象不为 null && 有元素 && 每个元素都不为 null
+   * @return 是否 对象不为 null 且 有元素 且 每个元素都不为 null
    */
   public static boolean isNotAnyEmpty(final Object object) {
     return !isAnyEmpty(object);
   }
 
   /**
-   * 是否 任意对象 (为 null || 没有元素 || 任意元素为 null)
+   * 是否 任意对象 (为 null 或 没有元素 或 任意元素为 null)
    * <p>
    * 注意：会遍历 Iterator，后续使用需重新创建，但是和 {@link CollectionUtils#isAllEquals(boolean, Function, Object...)}、{@link CollectionUtils#isAllEqualsSameIndex(boolean, Function, Object...)} 使用时却无须担心，因为其内部会在调用此方法前就将 Iterator 转换为 List
    *
@@ -316,7 +316,7 @@ public class CollectionUtils {
    * </ul>
    *
    * @param objects 多个对象
-   * @return 是否 任意对象 (为 null || 没有元素 || 任意元素为 null)
+   * @return 是否 任意对象 (为 null 或 没有元素 或 任意元素为 null)
    */
   public static boolean isAnyEmptys(final Object... objects) {
     if (objects == null) {
@@ -334,10 +334,10 @@ public class CollectionUtils {
   }
 
   /**
-   * 是否 每个对象 (不为 null && 有元素 && 每个元素都不为 null)
+   * 是否 每个对象 (不为 null 且 有元素 且 每个元素都不为 null)
    *
    * @param objects 多个对象
-   * @return 是否 每个对象 (不为 null && 有元素 && 每个元素都不为 null)
+   * @return 是否 每个对象 (不为 null 且 有元素 且 每个元素都不为 null)
    */
   public static boolean isNotAnyEmptys(final Object... objects) {
     return !isAnyEmptys(objects);

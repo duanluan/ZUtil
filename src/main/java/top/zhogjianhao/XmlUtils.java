@@ -383,7 +383,9 @@ public class XmlUtils {
    *
    * @param element  此节点下的所有子节点
    * @param isTrim   是否去除空格
+   * @param clazz    对象类型
    * @param features 反序列化特性
+   * @param <T>      对象类型
    * @return 对象
    */
   public static <T> T parseObject(@NonNull final Element element, boolean isTrim, @NonNull final Class<T> clazz, final Feature... features) {
@@ -395,7 +397,9 @@ public class XmlUtils {
    *
    * @param element      此节点下的所有子节点
    * @param isTrim       是否去除空格
+   * @param clazz        对象类型
    * @param parserConfig 反序列化配置
+   * @param <T>          对象类型
    * @return 集合
    */
   public static <T> List<T> parseArray(@NonNull final Element element, boolean isTrim, @NonNull final Class<T> clazz, final ParserConfig parserConfig) {
@@ -407,6 +411,8 @@ public class XmlUtils {
    *
    * @param element 此节点下的所有子节点
    * @param isTrim  是否去除空格
+   * @param clazz   对象类型
+   * @param <T>     对象类型
    * @return 集合
    */
   public static <T> List<T> parseArray(@NonNull final Element element, boolean isTrim, @NonNull final Class<T> clazz) {
