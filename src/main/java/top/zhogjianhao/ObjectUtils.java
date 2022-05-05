@@ -44,8 +44,11 @@ public class ObjectUtils extends org.apache.commons.lang3.ObjectUtils {
       if (isContinueNull && object == null) {
         continue;
       }
-      if (!toStringByBasic(object, isByValue).equals(objects)) {
+      if (!toStringByBasic(object, isByValue).equals(toStringByBasic(objects[i - 1], isByValue))) {
         return false;
+      }
+      if (i == objects.length - 2) {
+        return true;
       }
     }
     return true;
