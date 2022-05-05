@@ -154,20 +154,44 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
     Object result = moveForward(array, index, 1);
     // 给数组最后一个元素赋值
     if (array instanceof int[]) {
+      if (!(lastElementValue instanceof Integer)) {
+        throw new IllegalArgumentException("LastElementValue: should be an Integer");
+      }
       ((int[]) result)[((int[]) result).length - 1] = (int) lastElementValue;
     } else if (array instanceof long[]) {
+      if (!(lastElementValue instanceof Long)) {
+        throw new IllegalArgumentException("LastElementValue: should be a Long");
+      }
       ((long[]) result)[((long[]) result).length - 1] = (long) lastElementValue;
     } else if (array instanceof double[]) {
+      if (!(lastElementValue instanceof Double)) {
+        throw new IllegalArgumentException("LastElementValue: should be a Double");
+      }
       ((double[]) result)[((double[]) result).length - 1] = (double) lastElementValue;
     } else if (array instanceof float[]) {
+      if (!(lastElementValue instanceof Float)) {
+        throw new IllegalArgumentException("LastElementValue: should be a Float");
+      }
       ((float[]) result)[((float[]) result).length - 1] = (float) lastElementValue;
     } else if (array instanceof byte[]) {
+      if (!(lastElementValue instanceof Byte)) {
+        throw new IllegalArgumentException("LastElementValue: should be a Byte");
+      }
       ((byte[]) result)[((byte[]) result).length - 1] = (byte) lastElementValue;
     } else if (array instanceof char[]) {
+      if (!(lastElementValue instanceof Character)) {
+        throw new IllegalArgumentException("LastElementValue: should be a Character");
+      }
       ((char[]) result)[((char[]) result).length - 1] = (char) lastElementValue;
     } else if (array instanceof boolean[]) {
+      if (!(lastElementValue instanceof Boolean)) {
+        throw new IllegalArgumentException("LastElementValue: should be a Boolean");
+      }
       ((boolean[]) result)[((boolean[]) result).length - 1] = (boolean) lastElementValue;
     } else if (array instanceof short[]) {
+      if (!(lastElementValue instanceof Short)) {
+        throw new IllegalArgumentException("LastElementValue: should be a Short");
+      }
       ((short[]) result)[((short[]) result).length - 1] = (short) lastElementValue;
     } else {
       ((Object[]) result)[((Object[]) result).length - 1] = lastElementValue;
@@ -184,7 +208,7 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param <T>              数组类型
    * @return 数组
    */
-  public static <T> T[] remove(@NonNull final T[] array, final int index, @NonNull final Object lastElementValue) {
+  public static <T> T[] remove(@NonNull final T[] array, final int index, @NonNull final T lastElementValue) {
     return (T[]) remove((Object) array, index, lastElementValue);
   }
 
@@ -196,7 +220,7 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param lastElementValue 最后一个元素的值
    * @return 数组
    */
-  public static boolean[] remove(@NonNull final boolean[] array, final int index, @NonNull final Object lastElementValue) {
+  public static boolean[] remove(@NonNull final boolean[] array, final int index, final boolean lastElementValue) {
     return (boolean[]) remove((Object) array, index, lastElementValue);
   }
 
@@ -208,7 +232,7 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param lastElementValue 最后一个元素的值
    * @return 数组
    */
-  public static byte[] remove(@NonNull final byte[] array, final int index, @NonNull final Object lastElementValue) {
+  public static byte[] remove(@NonNull final byte[] array, final int index, final byte lastElementValue) {
     return (byte[]) remove((Object) array, index, lastElementValue);
   }
 
@@ -220,7 +244,7 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param lastElementValue 最后一个元素的值
    * @return 数组
    */
-  public static char[] remove(@NonNull final char[] array, final int index, @NonNull final Object lastElementValue) {
+  public static char[] remove(@NonNull final char[] array, final int index, final char lastElementValue) {
     return (char[]) remove((Object) array, index, lastElementValue);
   }
 
@@ -232,7 +256,7 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param lastElementValue 最后一个元素的值
    * @return 数组
    */
-  public static double[] remove(@NonNull final double[] array, final int index, @NonNull final Object lastElementValue) {
+  public static double[] remove(@NonNull final double[] array, final int index, final double lastElementValue) {
     return (double[]) remove((Object) array, index, lastElementValue);
   }
 
@@ -244,7 +268,7 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param lastElementValue 最后一个元素的值
    * @return 数组
    */
-  public static float[] remove(@NonNull final float[] array, final int index, @NonNull final Object lastElementValue) {
+  public static float[] remove(@NonNull final float[] array, final int index, final float lastElementValue) {
     return (float[]) remove((Object) array, index, lastElementValue);
   }
 
@@ -256,7 +280,7 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param lastElementValue 最后一个元素的值
    * @return 数组
    */
-  public static short[] remove(@NonNull final short[] array, final int index, @NonNull final Object lastElementValue) {
+  public static short[] remove(@NonNull final short[] array, final int index, final short lastElementValue) {
     return (short[]) remove((Object) array, index, lastElementValue);
   }
 
@@ -268,7 +292,7 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param lastElementValue 最后一个元素的值
    * @return 数组
    */
-  public static int[] remove(@NonNull final int[] array, final int index, @NonNull final Object lastElementValue) {
+  public static int[] remove(@NonNull final int[] array, final int index, final int lastElementValue) {
     return (int[]) remove((Object) array, index, lastElementValue);
   }
 
@@ -280,7 +304,7 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param lastElementValue 最后一个元素的值
    * @return 数组
    */
-  public static long[] remove(@NonNull final long[] array, final int index, @NonNull final Object lastElementValue) {
+  public static long[] remove(@NonNull final long[] array, final int index, final long lastElementValue) {
     return (long[]) remove((Object) array, index, lastElementValue);
   }
 
@@ -293,7 +317,11 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param val       填充值
    * @return 数组
    */
-  private static Object fill(@NonNull final Object array, final int fromIndex, final int toIndex, final Object val) {
+  private static Object fill(@NonNull final Object array, final int fromIndex, final int toIndex, final Object value) {
+    // 不是数组
+    if (!(array instanceof Object[] || array instanceof int[] || array instanceof long[] || array instanceof double[] || array instanceof float[] || array instanceof boolean[] || array instanceof short[] || array instanceof byte[] || array instanceof char[])) {
+      throw new IllegalArgumentException("Array: should be an array");
+    }
     int arrayLen = getLength(array);
     Object result = array;
     // 此处不减 1，因为 Arrays.fill 的 toIndex 要 +1 才能填充完最后一个元素
@@ -304,23 +332,47 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
       System.arraycopy(array, 0, result, 0, arrayLen);
     }
     if (result instanceof int[]) {
-      Arrays.fill((int[]) result, fromIndex, toIndex, (int) val);
+      if (!(value instanceof Integer)) {
+        throw new IllegalArgumentException("Value: should be Integer");
+      }
+      Arrays.fill((int[]) result, fromIndex, toIndex, (int) value);
     } else if (result instanceof long[]) {
-      Arrays.fill((long[]) result, fromIndex, toIndex, (long) val);
+      if (!(value instanceof Long)) {
+        throw new IllegalArgumentException("Value: should be Long");
+      }
+      Arrays.fill((long[]) result, fromIndex, toIndex, (long) value);
     } else if (result instanceof double[]) {
-      Arrays.fill((double[]) result, fromIndex, toIndex, (double) val);
+      if (!(value instanceof Double)) {
+        throw new IllegalArgumentException("Value: should be Double");
+      }
+      Arrays.fill((double[]) result, fromIndex, toIndex, (double) value);
     } else if (result instanceof float[]) {
-      Arrays.fill((float[]) result, fromIndex, toIndex, (float) val);
+      if (!(value instanceof Float)) {
+        throw new IllegalArgumentException("Value: should be Float");
+      }
+      Arrays.fill((float[]) result, fromIndex, toIndex, (float) value);
     } else if (result instanceof byte[]) {
-      Arrays.fill((byte[]) result, fromIndex, toIndex, (byte) val);
+      if (!(value instanceof Byte)) {
+        throw new IllegalArgumentException("Value: should be Byte");
+      }
+      Arrays.fill((byte[]) result, fromIndex, toIndex, (byte) value);
     } else if (result instanceof char[]) {
-      Arrays.fill((char[]) result, fromIndex, toIndex, (char) val);
+      if (!(value instanceof Character)) {
+        throw new IllegalArgumentException("Value: should be Character");
+      }
+      Arrays.fill((char[]) result, fromIndex, toIndex, (char) value);
     } else if (result instanceof boolean[]) {
-      Arrays.fill((boolean[]) result, fromIndex, toIndex, (boolean) val);
+      if (!(value instanceof Boolean)) {
+        throw new IllegalArgumentException("Value: should be Boolean");
+      }
+      Arrays.fill((boolean[]) result, fromIndex, toIndex, (boolean) value);
     } else if (result instanceof short[]) {
-      Arrays.fill((short[]) result, fromIndex, toIndex, (short) val);
+      if (!(value instanceof Short)) {
+        throw new IllegalArgumentException("Value: should be Short");
+      }
+      Arrays.fill((short[]) result, fromIndex, toIndex, (short) value);
     } else {
-      Arrays.fill((Object[]) result, fromIndex, toIndex, val);
+      Arrays.fill((Object[]) result, fromIndex, toIndex, value);
     }
     return result;
   }
@@ -335,7 +387,7 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param <T>       数组类型
    * @return 数组
    */
-  public static <T> T[] fill(@NonNull final T[] array, final int fromIndex, final int toIndex, final Object val) {
+  public static <T> T[] fill(@NonNull final T[] array, final int fromIndex, final int toIndex, final T val) {
     return (T[]) fill((Object) array, fromIndex, toIndex, val);
   }
 
@@ -348,7 +400,7 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param val       填充值
    * @return 数组
    */
-  public static boolean[] fill(@NonNull final boolean[] array, final int fromIndex, final int toIndex, final Object val) {
+  public static boolean[] fill(@NonNull final boolean[] array, final int fromIndex, final int toIndex, final boolean val) {
     return (boolean[]) fill((Object) array, fromIndex, toIndex, val);
   }
 
@@ -361,7 +413,7 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param val       填充值
    * @return 数组
    */
-  public static byte[] fill(@NonNull final byte[] array, final int fromIndex, final int toIndex, final Object val) {
+  public static byte[] fill(@NonNull final byte[] array, final int fromIndex, final int toIndex, final byte val) {
     return (byte[]) fill((Object) array, fromIndex, toIndex, val);
   }
 
@@ -374,7 +426,7 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param val       填充值
    * @return 数组
    */
-  public static char[] fill(@NonNull final char[] array, final int fromIndex, final int toIndex, final Object val) {
+  public static char[] fill(@NonNull final char[] array, final int fromIndex, final int toIndex, final char val) {
     return (char[]) fill((Object) array, fromIndex, toIndex, val);
   }
 
@@ -387,7 +439,7 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param val       填充值
    * @return 数组
    */
-  public static double[] fill(@NonNull final double[] array, final int fromIndex, final int toIndex, final Object val) {
+  public static double[] fill(@NonNull final double[] array, final int fromIndex, final int toIndex, final double val) {
     return (double[]) fill((Object) array, fromIndex, toIndex, val);
   }
 
@@ -400,7 +452,7 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param val       填充值
    * @return 数组
    */
-  public static float[] fill(@NonNull final float[] array, final int fromIndex, final int toIndex, final Object val) {
+  public static float[] fill(@NonNull final float[] array, final int fromIndex, final int toIndex, final float val) {
     return (float[]) fill((Object) array, fromIndex, toIndex, val);
   }
 
@@ -413,7 +465,7 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param val       填充值
    * @return 数组
    */
-  public static short[] fill(@NonNull final short[] array, final int fromIndex, final int toIndex, final Object val) {
+  public static short[] fill(@NonNull final short[] array, final int fromIndex, final int toIndex, final short val) {
     return (short[]) fill((Object) array, fromIndex, toIndex, val);
   }
 
@@ -426,7 +478,7 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param val       填充值
    * @return 数组
    */
-  public static int[] fill(@NonNull final int[] array, final int fromIndex, final int toIndex, final Object val) {
+  public static int[] fill(@NonNull final int[] array, final int fromIndex, final int toIndex, final int val) {
     return (int[]) fill((Object) array, fromIndex, toIndex, val);
   }
 
@@ -439,7 +491,7 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param val       填充值
    * @return 数组
    */
-  public static long[] fill(@NonNull final long[] array, final int fromIndex, final int toIndex, final Object val) {
+  public static long[] fill(@NonNull final long[] array, final int fromIndex, final int toIndex, final long val) {
     return (long[]) fill((Object) array, fromIndex, toIndex, val);
   }
 
