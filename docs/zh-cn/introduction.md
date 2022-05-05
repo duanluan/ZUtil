@@ -14,7 +14,7 @@
 <dependency>
   <groupId>top.zhogjianhao</groupId>
   <artifactId>ZUtil</artifactId>
-  <version>1.5.0</version>
+  <version>1.5.1</version>
 </dependency>
 ```
 
@@ -22,9 +22,9 @@
 
 ```groovy
 // groovy
-implementation 'top.zhogjianhao:ZUtil:1.5.0'
+implementation 'top.zhogjianhao:ZUtil:1.5.1'
 // kotlin
-implementation("top.zhogjianhao:ZUtil:1.5.0")
+implementation("top.zhogjianhao:ZUtil:1.5.1")
 ```
 ## 资源
 
