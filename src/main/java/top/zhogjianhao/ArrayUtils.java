@@ -681,14 +681,14 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
   /**
    * 从指定索引开始查找数组中指定的字符串
    *
-   * @param chars       字符数组
+   * @param array       字符数组
    * @param valueToFind 要查找的字符串
    * @param startIndex  开始查找的索引
    * @return 要查找的字符串在数组中的开始位置
    */
-  public static int indexOf(@NonNull final char[] chars, @NonNull final String valueToFind, int startIndex) {
-    if (ArrayUtils.isEmpty(chars)) {
-      throw new IllegalArgumentException("Chars: should not be empty");
+  public static int indexOf(@NonNull final char[] array, @NonNull final String valueToFind, int startIndex) {
+    if (ArrayUtils.isEmpty(array)) {
+      throw new IllegalArgumentException("Array: should not be empty");
     }
     if (StringUtils.isBlank(valueToFind)) {
       throw new IllegalArgumentException("ValueToFind: should not be blank");
@@ -696,122 +696,43 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
     if (startIndex < 0) {
       throw new IllegalArgumentException("StartIndex: should be greater than or equal to 0");
     }
-    char[] valChars = valueToFind.toCharArray();
-    if (valChars.length == 2) {
-      int charsLastElementIndex = chars.length - 1;
+    // 查找字符串长度为 2 时使用以下写法更快
+    if (valueToFind.length() == 2) {
+      int charsLastElementIndex = array.length - 1;
+      char[] valChars = valueToFind.toCharArray();
       char lChar = valChars[0];
       char rChar = valChars[1];
       int index = -1;
-      int lCharIndex = 0;
-      while (true) {
-        lCharIndex = ArrayUtils.indexOf(chars, lChar, lCharIndex);
-        if (lCharIndex == -1 || lCharIndex == charsLastElementIndex) {
-          break;
-        }
-        int rCharIndex = ArrayUtils.indexOf(chars, rChar, lCharIndex + 1);
-        if (rCharIndex == -1) {
-          break;
-        }
-        if (rCharIndex == lCharIndex + 1) {
-          index = lCharIndex;
-          break;
-        } else {
-          lCharIndex++;
-        }
+
+      int lCharIndex = ArrayUtils.indexOf(array, lChar, startIndex);
+      // 如果找不到左边字符
+      if (lCharIndex == -1) {
+        return -1;
+      } else if (lCharIndex == charsLastElementIndex) {
+        return -1;
       }
-      return index;
-    } else {
-      for (int i = 0; i < valChars.length; i++) {
-        int index = indexOf(chars, valChars[i], startIndex);
-        if (index == -1) {
-          return -1;
-        }
-        if (i == valChars.length - 1) {
-          return index - valueToFind.length() + 1;
-        }
-        startIndex++;
+      int rCharIndex = ArrayUtils.indexOf(array, rChar, lCharIndex + 1);
+      // 如果找不到右边字符 则 -1
+      if (rCharIndex == -1) {
+        return -1;
+      }
+      // 如果右边字符下标为左边字符下标 +1，则返回左边字符下标
+      else if (rCharIndex == lCharIndex + 1) {
+        return lCharIndex;
       }
     }
-    return -1;
+    return new String(array).indexOf(valueToFind, startIndex);
   }
 
   /**
    * 查找数组中指定的字符串
    *
-   * @param chars       字符数组
+   * @param array       字符数组
    * @param valueToFind 要查找的字符串
    * @return 要查找的字符串在数组中的开始位置
    */
-  public static int indexOf(@NonNull final char[] chars, @NonNull final String valueToFind) {
-    return indexOf(chars, valueToFind, 0);
-  }
-
-  /**
-   * 从指定索引开始查找数组中指定的字符串
-   *
-   * @param strs        字符串数组
-   * @param valueToFind 要查找的字符串
-   * @param startIndex  开始查找的索引
-   * @return 要查找的字符串在数组中的开始位置
-   */
-  public static int indexOf(@NonNull final String[] strs, @NonNull final String valueToFind, int startIndex) {
-    if (ArrayUtils.isEmpty(strs)) {
-      throw new IllegalArgumentException("Chars: should not be empty");
-    }
-    if (StringUtils.isBlank(valueToFind)) {
-      throw new IllegalArgumentException("ValueToFind: should not be blank");
-    }
-    if (startIndex < 0) {
-      throw new IllegalArgumentException("StartIndex: should be greater than or equal to 0");
-    }
-    char[] valChars = valueToFind.toCharArray();
-    if (valChars.length == 2) {
-      int charsLastElementIndex = strs.length - 1;
-      char lChar = valChars[0];
-      char rChar = valChars[1];
-      int index = -1;
-      int lCharIndex = 0;
-      while (true) {
-        lCharIndex = indexOf(strs, lChar, lCharIndex);
-        if (lCharIndex == -1 || lCharIndex == charsLastElementIndex) {
-          break;
-        }
-        int rCharIndex = indexOf(strs, rChar, lCharIndex + 1);
-        if (rCharIndex == -1) {
-          break;
-        }
-        if (rCharIndex == lCharIndex + 1) {
-          index = lCharIndex;
-          break;
-        } else {
-          lCharIndex++;
-        }
-      }
-      return index;
-    } else {
-      for (int i = 0; i < valChars.length; i++) {
-        int index = indexOf(strs, valChars[i], startIndex);
-        if (index == -1) {
-          return -1;
-        }
-        if (i == valChars.length - 1) {
-          return index - valueToFind.length() + 1;
-        }
-        startIndex++;
-      }
-    }
-    return -1;
-  }
-
-  /**
-   * 查找数组中指定的字符串
-   *
-   * @param strs        字符串数组
-   * @param valueToFind 要查找的字符串
-   * @return 要查找的字符串在数组中的开始位置
-   */
-  public static int indexOf(@NonNull final String[] strs, @NonNull final String valueToFind) {
-    return indexOf(strs, valueToFind, 0);
+  public static int indexOf(@NonNull final char[] array, @NonNull final String valueToFind) {
+    return indexOf(array, valueToFind, 0);
   }
 
   /**
