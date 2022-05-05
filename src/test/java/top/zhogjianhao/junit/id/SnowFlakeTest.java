@@ -1,7 +1,8 @@
-package top.zhogjianhao.id;
+package top.zhogjianhao.junit.id;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import top.zhogjianhao.id.SnowFlake;
 
 @DisplayName("雪花算法测试")
 public class SnowFlakeTest {
@@ -12,8 +13,8 @@ public class SnowFlakeTest {
     SnowFlake snowFlake = new SnowFlake(SnowFlake.builder());
     snowFlake = SnowFlake.builder().dataCenterBit(4).machineBit(5).build();
     snowFlake = new SnowFlake(3, 5);
-    for (int i = 0; i < 1000000; i++) {
+    // for (int i = 0; i < 1000000; i++) {
       System.out.println(snowFlake.next());;
-    }
+    // }
   }
 }

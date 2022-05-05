@@ -2,7 +2,7 @@ package top.zhogjianhao.jmh.base;
 
 import org.junit.jupiter.api.Test;
 import org.openjdk.jmh.annotations.*;
-import top.zhogjianhao.BeanUtilsTest;
+import top.zhogjianhao.junit.BeanUtilsTest;
 
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;

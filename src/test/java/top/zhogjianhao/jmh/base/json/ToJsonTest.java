@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import org.junit.jupiter.api.Test;
 import org.openjdk.jmh.annotations.*;
-import top.zhogjianhao.BeanUtilsTest;
+import top.zhogjianhao.junit.BeanUtilsTest;
 
 import java.util.ArrayList;
 import java.util.List;

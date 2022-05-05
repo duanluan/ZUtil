@@ -1,10 +1,11 @@
-package top.zhogjianhao;
+package top.zhogjianhao.junit;
 
 import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.crypto.InvalidCipherTextException;
 import org.bouncycastle.crypto.paddings.PKCS7Padding;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import top.zhogjianhao.SecurityUtils;
 
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;

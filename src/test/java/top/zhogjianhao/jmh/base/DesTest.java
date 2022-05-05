@@ -7,7 +7,7 @@ import org.bouncycastle.pqc.math.linearalgebra.ByteUtils;
 import org.junit.jupiter.api.Test;
 import org.openjdk.jmh.annotations.*;
 import top.zhogjianhao.ArrayUtils;
-import top.zhogjianhao.BeanUtilsTest;
+import top.zhogjianhao.junit.BeanUtilsTest;
 import top.zhogjianhao.SecurityUtils;
 
 import javax.crypto.*;

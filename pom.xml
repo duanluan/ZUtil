@@ -41,7 +41,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
     <!-- 跳过运行测试，测试资源，测试代码编译 -->
-    <maven.test.skip>true</maven.test.skip>
+    <!--<maven.test.skip>true</maven.test.skip>-->
   </properties>
 
   <dependencies>
@@ -71,6 +71,12 @@
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-text</artifactId>
       <version>1.9</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.apache.commons</groupId>
+          <artifactId>commons-lang3</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
@@ -127,11 +133,25 @@
     </dependency>
 
 
-    <!-- JUnit 引擎（含 API） -->
+    <!-- JUnit：https://junit.org/junit5/docs/current/api/index.html -->
     <dependency>
       <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-engine</artifactId>
+      <artifactId>junit-jupiter</artifactId>
       <version>5.8.2</version>
+      <scope>test</scope>
+    </dependency>
+    <!-- JUnit 测试套件 -->
+    <dependency>
+      <groupId>org.junit.platform</groupId>
+      <artifactId>junit-platform-suite</artifactId>
+      <version>1.8.2</version>
+      <scope>test</scope>
+    </dependency>
+    <!-- Spring Test，此处主要用于调用 private 方法用于覆盖率测试 -->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-test</artifactId>
+      <version>5.3.19</version>
       <scope>test</scope>
     </dependency>
     <!-- JMH -->
@@ -247,10 +267,53 @@
         <artifactId>maven-release-plugin</artifactId>
         <version>2.5.3</version>
       </plugin>
+
+      <!-- 代码覆盖率 -->
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>0.8.8</version>
+        <configuration>
+          <!-- 配置 JaCoCo 运行时属性名，同时使用 maven-surefire-plugin 时需要配置此项，否则 surefire 会覆盖 jacoco 的参数，导致无法生成 jacoco.exec 而无法生成报告 -->
+          <propertyName>surefireArgLine</propertyName>
+        </configuration>
+        <executions>
+          <!-- 不配置无法生成 jacoco.exec -->
+          <execution>
+            <id>jacoco-initialize</id>
+            <goals>
+              <goal>prepare-agent</goal>
+            </goals>
+          </execution>
+          <!--<execution>-->
+          <!--  <id>jacoco-site</id>-->
+          <!--  <phase>package</phase>-->
+          <!--  <goals>-->
+          <!--    <goal>report</goal>-->
+          <!--  </goals>-->
+          <!--</execution>-->
+        </executions>
+      </plugin>
+      <!-- 配置 mvn test 命令 -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.22.2</version>
+        <configuration>
+          <!-- 跳过错误 -->
+          <testFailureIgnore>true</testFailureIgnore>
+          <!-- 配置 VM 参数 -->
+          <argLine>${surefireArgLine}</argLine>
+          <excludes>
+            <!-- 跳过 JMH 性能测试 -->
+            <exclude>**/jmh/**/*.java</exclude>
+          </excludes>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
 
-  <!-- 这里引入 Settings.xml 中设置的用户名、密码 -->
+  <!-- id 和 settings.xml 中设置用户名、密码的保持一致 -->
   <distributionManagement>
     <snapshotRepository>
       <id>ossrh</id>

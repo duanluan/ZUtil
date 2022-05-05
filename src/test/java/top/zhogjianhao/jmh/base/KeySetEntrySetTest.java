@@ -3,7 +3,7 @@ package top.zhogjianhao.jmh.base;
 import org.junit.jupiter.api.Test;
 import org.openjdk.jmh.annotations.*;
 import org.springframework.cglib.beans.BeanMap;
-import top.zhogjianhao.BeanUtilsTest;
+import top.zhogjianhao.junit.BeanUtilsTest;
 
 import java.util.HashMap;
 import java.util.Map;

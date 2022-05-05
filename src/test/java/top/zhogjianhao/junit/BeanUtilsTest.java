@@ -1,9 +1,10 @@
-package top.zhogjianhao;
+package top.zhogjianhao.junit;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import top.zhogjianhao.BeanUtils;
 
 import java.util.ArrayList;
 import java.util.List;

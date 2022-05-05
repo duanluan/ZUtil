@@ -1,8 +1,9 @@
-package top.zhogjianhao;
+package top.zhogjianhao.junit;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import top.zhogjianhao.ClassUtils;
 
 @Slf4j
 @DisplayName("Class 工具类测试")
