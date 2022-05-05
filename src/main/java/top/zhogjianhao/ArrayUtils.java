@@ -49,6 +49,39 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
   }
 
   /**
+   * 字节数组转换为指定字符集的字符串
+   *
+   * @param bytes    字节数组
+   * @param charsets 字符集
+   * @return 指定字符集的字符串
+   */
+  public static String toString(@NonNull final byte[] bytes, @NonNull final Charset charsets) {
+    return new String(bytes, charsets);
+  }
+
+  /**
+   * 字节数组转换为指定字符集的字符串
+   *
+   * @param bytes       字节数组
+   * @param charsetName 字符集
+   * @return 指定字符集的字符串
+   * @throws UnsupportedEncodingException 字符编码不支持
+   */
+  public static String toString(@NonNull final byte[] bytes, @NonNull final String charsetName) throws UnsupportedEncodingException {
+    return new String(bytes, charsetName);
+  }
+
+  /**
+   * 字节数组转换为 UTF-8 字符集的字符串
+   *
+   * @param bytes 字节数组
+   * @return UTF-8 字符集的字符串
+   */
+  public static String toString(@NonNull final byte[] bytes) {
+    return new String(bytes);
+  }
+
+  /**
    * 字节数组转换为指定字符集的字符数组
    *
    * @param bytes    字节数组
@@ -56,7 +89,7 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @return 指定字符集的字符数组
    */
   public static char[] toChars(@NonNull final byte[] bytes, @NonNull final Charset charsets) {
-    return new String(bytes, charsets).toCharArray();
+    return toString(bytes, charsets).toCharArray();
   }
 
   /**
@@ -68,7 +101,7 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @throws UnsupportedEncodingException 字符编码不支持
    */
   public static char[] toChars(@NonNull final byte[] bytes, @NonNull final String charsetName) throws UnsupportedEncodingException {
-    return new String(bytes, charsetName).toCharArray();
+    return toString(bytes, charsetName).toCharArray();
   }
 
   /**
@@ -78,7 +111,7 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @return UTF-8 字符集的字符数组
    */
   public static char[] toChars(@NonNull final byte[] bytes) {
-    return new String(bytes).toCharArray();
+    return toString(bytes).toCharArray();
   }
 
   /**
