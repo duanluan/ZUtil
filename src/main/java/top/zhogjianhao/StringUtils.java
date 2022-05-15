@@ -73,7 +73,7 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
       fromIndex = index + 2;
       i++;
     }
-    return result.toString();
+    return result + str.substring(fromIndex);
   }
 
   /**
