@@ -415,12 +415,10 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
       } else if (defaultLocalTimePattern.equals(pattern)) {
         format = FORMAT_HH_MM_SS;
       }
-      if (format != null) {
-        return format.format(date);
-      } else {
-        ZonedDateTime zonedDateTime = date.toInstant().atZone(SYSTEM_ZONE_ID);
-        return format(zonedDateTime.toLocalDateTime(), pattern);
+      if (format == null) {
+        format = FastDateFormat.getInstance(pattern);
       }
+      return format.format(date);
     }
   }
 
