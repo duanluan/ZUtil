@@ -1,6 +1,6 @@
 package top.zhogjianhao.junit;
 
-import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.alibaba.fastjson2.JSONWriter;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,9 +38,9 @@ public class XmlUtilsTest {
   @DisplayName("toJson：将 XML 转换为 JSON")
   @Test
   void toJson() {
-    println(XmlUtils.toJson(rootElement, true, SerializerFeature.WriteMapNullValue, SerializerFeature.MapSortField));
-    println(XmlUtils.toJson(rootElement.element("beans"), true, SerializerFeature.WriteMapNullValue));
-    println(XmlUtils.toJson(rootElement.element("beans").element("bean"), true, SerializerFeature.WriteMapNullValue));
+    println(XmlUtils.toJson(rootElement, true, JSONWriter.Feature.WriteMapNullValue));
+    println(XmlUtils.toJson(rootElement.element("beans"), true, JSONWriter.Feature.WriteMapNullValue));
+    println(XmlUtils.toJson(rootElement.element("beans").element("bean"), true, JSONWriter.Feature.WriteMapNullValue));
   }
 
   @DisplayName("parseObject：将 XML 转换为对象")

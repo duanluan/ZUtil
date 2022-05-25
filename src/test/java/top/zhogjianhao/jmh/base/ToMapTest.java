@@ -1,6 +1,6 @@
 package top.zhogjianhao.jmh.base;
 
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSON;
 import org.junit.jupiter.api.Test;
 import org.openjdk.jmh.annotations.*;
 import org.springframework.cglib.beans.BeanMap;
@@ -70,7 +70,7 @@ public class ToMapTest {
   @Benchmark
   public Map<String, Object> json() {
     // 强转后深层仍是 JSONObject、JSONArray 类型，可以继续强转
-    return (Map<String, Object>) JSONObject.toJSON(testBean);
+    return (Map<String, Object>) JSON.toJSON(testBean);
   }
 }
 

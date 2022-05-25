@@ -1,6 +1,6 @@
 package top.zhogjianhao.junit;
 
-import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson2.JSONArray;
 import com.ejlchina.okhttps.HttpResult;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;

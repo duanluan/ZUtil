@@ -1,8 +1,7 @@
 package top.zhogjianhao;
 
-import com.alibaba.fastjson.parser.Feature;
-import com.alibaba.fastjson.parser.ParserConfig;
-import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.alibaba.fastjson2.JSONReader;
+import com.alibaba.fastjson2.JSONWriter;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.dom4j.Document;
@@ -363,10 +362,10 @@ public class XmlUtils {
    *
    * @param element  节点
    * @param isTrim   是否去除空格
-   * @param features 序列化特性
+   * @param features 序列化行为
    * @return JSON 字符串
    */
-  public static String toJson(@NonNull final Element element, final boolean isTrim, final SerializerFeature... features) {
+  public static String toJson(@NonNull final Element element, final boolean isTrim, final JSONWriter.Feature... features) {
     Object object = toJsonRecursion(element, isTrim);
     // 如果转换后为 Map，且 Map 中 key 为传入的参数的 key，则将 value 转换为 JSON 字符串，保证一致性
     if (object instanceof Map) {
@@ -384,38 +383,25 @@ public class XmlUtils {
    * @param element  此节点下的所有子节点
    * @param isTrim   是否去除空格
    * @param clazz    对象类型
-   * @param features 反序列化特性
+   * @param features 反序列化行为
    * @param <T>      对象类型
    * @return 对象
    */
-  public static <T> T parseObject(@NonNull final Element element, boolean isTrim, @NonNull final Class<T> clazz, final Feature... features) {
+  public static <T> T parseObject(@NonNull final Element element, boolean isTrim, final Class<T> clazz, final JSONReader.Feature... features) {
     return JsonUtils.parseObject(toJson(element, isTrim), clazz, features);
   }
 
   /**
    * Element 转集合
    *
-   * @param element      此节点下的所有子节点
-   * @param isTrim       是否去除空格
-   * @param clazz        对象类型
-   * @param parserConfig 反序列化配置
-   * @param <T>          对象类型
+   * @param element  此节点下的所有子节点
+   * @param isTrim   是否去除空格
+   * @param clazz    对象类型
+   * @param features 反序列化行为
+   * @param <T>      对象类型
    * @return 集合
    */
-  public static <T> List<T> parseArray(@NonNull final Element element, boolean isTrim, @NonNull final Class<T> clazz, final ParserConfig parserConfig) {
-    return JsonUtils.parseArray(toJson(element, isTrim), clazz, parserConfig);
-  }
-
-  /**
-   * Element 转集合
-   *
-   * @param element 此节点下的所有子节点
-   * @param isTrim  是否去除空格
-   * @param clazz   对象类型
-   * @param <T>     对象类型
-   * @return 集合
-   */
-  public static <T> List<T> parseArray(@NonNull final Element element, boolean isTrim, @NonNull final Class<T> clazz) {
-    return JsonUtils.parseArray(toJson(element, isTrim), clazz);
+  public static <T> List<T> parseArray(@NonNull final Element element, boolean isTrim, final Class<T> clazz, final JSONReader.Feature... features) {
+    return JsonUtils.parseArray(toJson(element, isTrim), clazz, features);
   }
 }

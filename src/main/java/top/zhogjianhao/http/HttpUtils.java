@@ -1,8 +1,8 @@
 package top.zhogjianhao.http;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONArray;
+import com.alibaba.fastjson2.JSONObject;
 import com.ejlchina.okhttps.HttpResult;
 import com.ejlchina.okhttps.SHttpTask;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -16,6 +16,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
+import top.zhogjianhao.JsonUtils;
 import top.zhogjianhao.MapUtils;
 import top.zhogjianhao.StringUtils;
 import top.zhogjianhao.constant.CommonPatternConstant;
@@ -76,7 +77,7 @@ public class HttpUtils extends com.ejlchina.okhttps.HttpUtils {
     if (MapUtils.isEmpty(bodyParams)) {
       return 0;
     }
-    String s = JSON.toJSONString(bodyParams);
+    String s = JsonUtils.toJson(bodyParams);
     s = CommonPatternConstant.LEFT_CURLY_BRACE.matcher(s).replaceAll("%7B");
     s = CommonPatternConstant.DOUBLE_QUOTATION_MARK.matcher(s).replaceAll("%22");
     s = CommonPatternConstant.COLON.matcher(s).replaceAll("%3A");
@@ -153,9 +154,9 @@ public class HttpUtils extends com.ejlchina.okhttps.HttpUtils {
     else if (JSON.class.equals(resultClass)) {
       return (T) JSON.parseObject(body.toString());
     } else if (JSONObject.class.equals(resultClass)) {
-      return (T) JSONObject.parseObject(body.toString());
+      return (T) JSON.parseObject(body.toString());
     } else if (JSONArray.class.equals(resultClass)) {
-      return (T) JSONArray.parseArray(body.toString());
+      return (T) JSON.parseArray(body.toString());
     }
     // gson
     else if (JsonElement.class.equals(resultClass)) {
