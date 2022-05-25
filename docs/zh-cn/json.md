@@ -5,20 +5,21 @@
 ## 转 JSON 字符串
 
 ```java
-// 支持指定多个序列化特性
+// 支持指定多个序列化行为
 JsonUtils.toJson(object, JSONWriter.Feature.WriteMapNullValue);
 ```
 
 ## 转对象
 
 ```java
-// 支持指定多个反序列化特性
+// 支持指定多个反序列化行为
 JsonUtils.parseObject(json, SysUser.class, JSONReader.Feature.InitStringFieldAsEmpty)
 ```
 
 ## 转集合
 
 ```java
+// 支持指定多个反序列化行为
 JsonUtils.parseArray(json, SysUser.class, JSONReader.Feature.InitStringFieldAsEmpty);
 ```
 
