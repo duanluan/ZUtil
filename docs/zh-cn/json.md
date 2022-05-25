@@ -6,28 +6,33 @@
 
 ```java
 // 支持指定多个序列化特性
-JsonUtils.toJson(object, SerializerFeature.WriteMapNullValue, SerializerFeature.WriteNullListAsEmpty);
+JsonUtils.toJson(object, JSONWriter.Feature.WriteMapNullValue);
 ```
 
 ## 转对象
 
 ```java
 // 支持指定多个反序列化特性
-JsonUtils.parseObject(json, SysUser.class, Feature.AllowArbitraryCommas)
+JsonUtils.parseObject(json, SysUser.class, JSONReader.Feature.InitStringFieldAsEmpty)
 ```
 
 ## 转集合
 
 ```java
-// 支持自定义反序列化配置
-ParserConfig parserConfig = new ParserConfig();
-parserConfig.setAsmEnable(false);
-JsonUtils.parseArray(json, SysUser.class, parserConfig);
+JsonUtils.parseArray(json, SysUser.class, JSONReader.Feature.InitStringFieldAsEmpty);
 ```
 
 ## 序列化规则
 
-### SerializerFeature（FastJSON）
+### JSONWriter.Feature（FastJSON 2）
+
+略
+
+### JSONReader.Feature（FastJSON 2）
+
+略
+
+### SerializerFeature（FastJSON 1）
 
 |              SerializerFeature | 说明                                  |
 |-------------------------------:|-------------------------------------|
