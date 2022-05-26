@@ -2,7 +2,6 @@ package top.zhogjianhao.jmh.base.json;
 
 import cn.hutool.json.JSONUtil;
 import com.alibaba.fastjson2.JSON;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
@@ -47,11 +46,12 @@ public class ToJsonTest {
     testBean.setBeanList(beanList);
   }
 
+  private final static ObjectMapper objectMapper = new ObjectMapper();
+
   @Benchmark
   public String jackson() throws JsonProcessingException {
-    ObjectMapper objectMapper = new ObjectMapper();
-    // 忽略为 null 的属性
-    objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+    // // 忽略为 null 的属性
+    // objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
     return objectMapper.writeValueAsString(testBean);
   }
 
@@ -60,9 +60,11 @@ public class ToJsonTest {
     return JSON.toJSONString(testBean);
   }
 
+  private final static Gson gson = new Gson();
+
   @Benchmark
   public String gson() {
-    return new Gson().toJson(testBean);
+    return gson.toJson(testBean);
   }
 
   @Benchmark
@@ -71,52 +73,52 @@ public class ToJsonTest {
   }
 }
 
-// Benchmark                                           Mode     Cnt     Score     Error   Units
-// ToJsonTest.fastjson                          thrpt       5    14.950 ±   2.641  ops/us
-// ToJsonTest.gson                              thrpt       5     0.177 ±   0.025  ops/us
-// ToJsonTest.hutool                            thrpt       5     0.568 ±   0.058  ops/us
-// ToJsonTest.jackson                           thrpt       5     0.144 ±   0.005  ops/us
-// ToJsonTest.fastjson                           avgt       5     0.092 ±   0.035   us/op
-// ToJsonTest.gson                               avgt       5     6.987 ±   2.958   us/op
-// ToJsonTest.hutool                             avgt       5     1.741 ±   0.034   us/op
-// ToJsonTest.jackson                            avgt       5     7.394 ±   0.932   us/op
-// ToJsonTest.fastjson                         sample  137928     0.116 ±   0.032   us/op
+// Benchmark                               Mode     Cnt     Score     Error   Units
+// ToJsonTest.fastjson                    thrpt       5    11.957 ±   6.027  ops/us
+// ToJsonTest.gson                        thrpt       5     3.304 ±   0.089  ops/us
+// ToJsonTest.hutool                      thrpt       5     0.455 ±   0.017  ops/us
+// ToJsonTest.jackson                     thrpt       5     4.121 ±   0.130  ops/us
+// ToJsonTest.fastjson                     avgt       5     0.064 ±   0.002   us/op
+// ToJsonTest.gson                         avgt       5     0.301 ±   0.020   us/op
+// ToJsonTest.hutool                       avgt       5     1.879 ±   0.052   us/op
+// ToJsonTest.jackson                      avgt       5     0.247 ±   0.004   us/op
+// ToJsonTest.fastjson                   sample  144968     0.099 ±   0.003   us/op
 // ToJsonTest.fastjson:fastjson·p0.00    sample               ≈ 0             us/op
 // ToJsonTest.fastjson:fastjson·p0.50    sample             0.100             us/op
 // ToJsonTest.fastjson:fastjson·p0.90    sample             0.100             us/op
 // ToJsonTest.fastjson:fastjson·p0.95    sample             0.100             us/op
 // ToJsonTest.fastjson:fastjson·p0.99    sample             0.200             us/op
-// ToJsonTest.fastjson:fastjson·p0.999   sample             0.400             us/op
-// ToJsonTest.fastjson:fastjson·p0.9999  sample            23.036             us/op
-// ToJsonTest.fastjson:fastjson·p1.00    sample          1343.488             us/op
-// ToJsonTest.gson                             sample  109988     5.944 ±   0.145   us/op
-// ToJsonTest.gson:gson·p0.00            sample             4.896             us/op
-// ToJsonTest.gson:gson·p0.50            sample             5.696             us/op
-// ToJsonTest.gson:gson·p0.90            sample             5.896             us/op
-// ToJsonTest.gson:gson·p0.95            sample             6.000             us/op
-// ToJsonTest.gson:gson·p0.99            sample            11.003             us/op
-// ToJsonTest.gson:gson·p0.999           sample            49.792             us/op
-// ToJsonTest.gson:gson·p0.9999          sample           984.311             us/op
-// ToJsonTest.gson:gson·p1.00            sample          1667.072             us/op
-// ToJsonTest.hutool                           sample  185566     1.739 ±   0.041   us/op
-// ToJsonTest.hutool:hutool·p0.00        sample             1.500             us/op
-// ToJsonTest.hutool:hutool·p0.50        sample             1.700             us/op
-// ToJsonTest.hutool:hutool·p0.90        sample             1.800             us/op
-// ToJsonTest.hutool:hutool·p0.95        sample             1.900             us/op
-// ToJsonTest.hutool:hutool·p0.99        sample             2.500             us/op
-// ToJsonTest.hutool:hutool·p0.999       sample             8.938             us/op
-// ToJsonTest.hutool:hutool·p0.9999      sample            49.280             us/op
-// ToJsonTest.hutool:hutool·p1.00        sample          1851.392             us/op
-// ToJsonTest.jackson                          sample  170274     7.505 ±   0.081   us/op
-// ToJsonTest.jackson:jackson·p0.00      sample             6.496             us/op
-// ToJsonTest.jackson:jackson·p0.50      sample             7.000             us/op
-// ToJsonTest.jackson:jackson·p0.90      sample             7.600             us/op
-// ToJsonTest.jackson:jackson·p0.95      sample             9.200             us/op
-// ToJsonTest.jackson:jackson·p0.99      sample            15.488             us/op
-// ToJsonTest.jackson:jackson·p0.999     sample            52.765             us/op
-// ToJsonTest.jackson:jackson·p0.9999    sample           211.278             us/op
-// ToJsonTest.jackson:jackson·p1.00      sample          1644.544             us/op
-// ToJsonTest.fastjson                             ss       5    21.320 ±  20.476   us/op
-// ToJsonTest.gson                                 ss       5   280.760 ± 183.441   us/op
-// ToJsonTest.hutool                               ss       5   295.500 ± 616.499   us/op
-// ToJsonTest.jackson                              ss       5   663.360 ± 539.039   us/op
+// ToJsonTest.fastjson:fastjson·p0.999   sample             0.300             us/op
+// ToJsonTest.fastjson:fastjson·p0.9999  sample            10.848             us/op
+// ToJsonTest.fastjson:fastjson·p1.00    sample            94.208             us/op
+// ToJsonTest.gson                       sample  128539     0.345 ±   0.019   us/op
+// ToJsonTest.gson:gson·p0.00            sample             0.300             us/op
+// ToJsonTest.gson:gson·p0.50            sample             0.300             us/op
+// ToJsonTest.gson:gson·p0.90            sample             0.400             us/op
+// ToJsonTest.gson:gson·p0.95            sample             0.400             us/op
+// ToJsonTest.gson:gson·p0.99            sample             0.600             us/op
+// ToJsonTest.gson:gson·p0.999           sample             1.700             us/op
+// ToJsonTest.gson:gson·p0.9999          sample            33.139             us/op
+// ToJsonTest.gson:gson·p1.00            sample           693.248             us/op
+// ToJsonTest.hutool                     sample  140995     2.412 ±   0.094   us/op
+// ToJsonTest.hutool:hutool·p0.00        sample             1.900             us/op
+// ToJsonTest.hutool:hutool·p0.50        sample             2.100             us/op
+// ToJsonTest.hutool:hutool·p0.90        sample             2.700             us/op
+// ToJsonTest.hutool:hutool·p0.95        sample             2.900             us/op
+// ToJsonTest.hutool:hutool·p0.99        sample             4.600             us/op
+// ToJsonTest.hutool:hutool·p0.999       sample            40.002             us/op
+// ToJsonTest.hutool:hutool·p0.9999      sample           253.652             us/op
+// ToJsonTest.hutool:hutool·p1.00        sample          2054.144             us/op
+// ToJsonTest.jackson                    sample  156329     0.286 ±   0.005   us/op
+// ToJsonTest.jackson:jackson·p0.00      sample             0.200             us/op
+// ToJsonTest.jackson:jackson·p0.50      sample             0.300             us/op
+// ToJsonTest.jackson:jackson·p0.90      sample             0.300             us/op
+// ToJsonTest.jackson:jackson·p0.95      sample             0.300             us/op
+// ToJsonTest.jackson:jackson·p0.99      sample             0.600             us/op
+// ToJsonTest.jackson:jackson·p0.999     sample             1.100             us/op
+// ToJsonTest.jackson:jackson·p0.9999    sample            39.238             us/op
+// ToJsonTest.jackson:jackson·p1.00      sample            65.664             us/op
+// ToJsonTest.fastjson                       ss       5    59.080 ±  69.226   us/op
+// ToJsonTest.gson                           ss       5    41.700 ±  25.267   us/op
+// ToJsonTest.hutool                         ss       5   480.880 ± 988.628   us/op
+// ToJsonTest.jackson                        ss       5   175.380 ± 850.865   us/op
