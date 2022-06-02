@@ -1,3 +1,5 @@
+![](https://socialify.git.ci/duanluan/ZUtil/image?description=1&forks=1&issues=1&language=1&name=1&owner=1&pattern=Floating%20Cogs&stargazers=1&theme=Light)
+
 # ZUtil
 
 [![](https://img.shields.io/maven-central/v/top.zhogjianhao/ZUtil?style=flat-square)](https://search.maven.org/artifact/top.zhogjianhao/ZUtil)
