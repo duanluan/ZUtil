@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 /**
  * 公共正则匹配器
  */
-public class CommonPatternConstant {
+public class CommonPattern {
 
   /**
    * 左大括号
@@ -35,4 +35,12 @@ public class CommonPatternConstant {
    * 逗号
    */
   public static final Pattern COMMA = Pattern.compile(",");
+  /**
+   * 斜杠
+   */
+  public static final Pattern SLASH = Pattern.compile("/");
+  /**
+   * 反斜杠
+   */
+  public static final Pattern BACKSLASH = Pattern.compile("\\\\");
 }

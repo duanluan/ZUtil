@@ -19,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import top.zhogjianhao.JsonUtils;
 import top.zhogjianhao.MapUtils;
 import top.zhogjianhao.StringUtils;
-import top.zhogjianhao.constant.CommonPatternConstant;
+import top.zhogjianhao.constant.CommonPattern;
 
 import java.io.IOException;
 import java.util.Map;
@@ -78,13 +78,13 @@ public class HttpUtils extends com.ejlchina.okhttps.HttpUtils {
       return 0;
     }
     String s = JsonUtils.toJson(bodyParams);
-    s = CommonPatternConstant.LEFT_CURLY_BRACE.matcher(s).replaceAll("%7B");
-    s = CommonPatternConstant.DOUBLE_QUOTATION_MARK.matcher(s).replaceAll("%22");
-    s = CommonPatternConstant.COLON.matcher(s).replaceAll("%3A");
-    s = CommonPatternConstant.LEFT_SQUARE_BRACKET.matcher(s).replaceAll("%5B");
-    s = CommonPatternConstant.RIGHT_SQUARE_BRACKET.matcher(s).replaceAll("%5D");
-    s = CommonPatternConstant.COMMA.matcher(s).replaceAll("%2C");
-    s = CommonPatternConstant.RIGHT_CURLY_BRACE.matcher(s).replaceAll("%7D");
+    s = CommonPattern.LEFT_CURLY_BRACE.matcher(s).replaceAll("%7B");
+    s = CommonPattern.DOUBLE_QUOTATION_MARK.matcher(s).replaceAll("%22");
+    s = CommonPattern.COLON.matcher(s).replaceAll("%3A");
+    s = CommonPattern.LEFT_SQUARE_BRACKET.matcher(s).replaceAll("%5B");
+    s = CommonPattern.RIGHT_SQUARE_BRACKET.matcher(s).replaceAll("%5D");
+    s = CommonPattern.COMMA.matcher(s).replaceAll("%2C");
+    s = CommonPattern.RIGHT_CURLY_BRACE.matcher(s).replaceAll("%7D");
     return s.length();
   }
 
