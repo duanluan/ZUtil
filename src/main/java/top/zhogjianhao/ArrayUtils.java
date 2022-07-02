@@ -32,10 +32,13 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param chars       字符数组
    * @param charsetName 字符集
    * @return 指定字符集的字节数组
-   * @throws UnsupportedEncodingException 字符编码不支持
    */
-  public static byte[] toBytes(@NonNull final char[] chars, @NonNull final String charsetName) throws UnsupportedEncodingException {
-    return new String(chars).getBytes(charsetName);
+  public static byte[] toBytes(@NonNull final char[] chars, @NonNull final String charsetName) {
+    try {
+      return new String(chars).getBytes(charsetName);
+    } catch (UnsupportedEncodingException e) {
+      throw new RuntimeException(e);
+    }
   }
 
   /**
@@ -65,10 +68,13 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param bytes       字节数组
    * @param charsetName 字符集
    * @return 指定字符集的字符串
-   * @throws UnsupportedEncodingException 字符编码不支持
    */
-  public static String toString(@NonNull final byte[] bytes, @NonNull final String charsetName) throws UnsupportedEncodingException {
-    return new String(bytes, charsetName);
+  public static String toString(@NonNull final byte[] bytes, @NonNull final String charsetName) {
+    try {
+      return new String(bytes, charsetName);
+    } catch (UnsupportedEncodingException e) {
+      throw new RuntimeException(e);
+    }
   }
 
   /**
@@ -98,9 +104,8 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param bytes       字节数组
    * @param charsetName 字符集
    * @return 指定字符集的字符数组
-   * @throws UnsupportedEncodingException 字符编码不支持
    */
-  public static char[] toChars(@NonNull final byte[] bytes, @NonNull final String charsetName) throws UnsupportedEncodingException {
+  public static char[] toChars(@NonNull final byte[] bytes, @NonNull final String charsetName) {
     return toString(bytes, charsetName).toCharArray();
   }
 

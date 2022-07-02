@@ -21,7 +21,7 @@ import java.security.spec.InvalidKeySpecException;
 /**
  * 安全工具类
  * <p>
- * https://docs.oracle.com/en/java/javase/17/security/
+ * <a href="https://docs.oracle.com/en/java/javase/17/security/">Java Platform, Standard Edition Security Developer’s Guide, Release 17</a>
  */
 public class SecurityUtils {
 
@@ -33,9 +33,8 @@ public class SecurityUtils {
    * @param encrypting 是否为加密
    * @param padding    填充类型
    * @return 加解密的字节数组
-   * @throws InvalidCipherTextException 意想不到的异常
    */
-  public static byte[] desEcb(@NonNull final byte[] key, @NonNull final byte[] in, final boolean encrypting, final BlockCipherPadding padding) throws InvalidCipherTextException {
+  public static byte[] desEcb(@NonNull final byte[] key, @NonNull final byte[] in, final boolean encrypting, final BlockCipherPadding padding) {
     if (key.length != 8) {
       throw new IllegalArgumentException("Key: should be 8 bytes");
     }
@@ -52,7 +51,11 @@ public class SecurityUtils {
     byte[] out = new byte[cipher.getOutputSize(in.length)];
     // 处理数据
     int len = cipher.processBytes(in, 0, inLen, out, 0);
-    len += cipher.doFinal(out, len);
+    try {
+      len += cipher.doFinal(out, len);
+    } catch (InvalidCipherTextException e) {
+      throw new RuntimeException(e);
+    }
     // 移除填充的内容
     byte[] result = new byte[len];
     System.arraycopy(out, 0, result, 0, len);
@@ -67,20 +70,21 @@ public class SecurityUtils {
    * @param encrypting 是否为加密
    * @param padding    填充类型
    * @return 加解密的字符串
-   * @throws InvalidCipherTextException 意想不到的异常
-   * @throws InvalidKeyException        invalid Keys (invalid encoding, wrong length, uninitialized, etc)
-   * @throws NoSuchAlgorithmException   a particular cryptographic algorithm is requested but is not available in the environment
-   * @throws InvalidKeySpecException    invalid key specifications
    */
-  public static String desEcb(@NonNull final String key, @NonNull final String in, final boolean encrypting, final BlockCipherPadding padding) throws InvalidCipherTextException, InvalidKeyException, NoSuchAlgorithmException, InvalidKeySpecException {
+  public static String desEcb(@NonNull final String key, @NonNull final String in, final boolean encrypting, final BlockCipherPadding padding) {
     byte[] keys = ArrayUtils.toBytes(key.toCharArray());
     if (keys.length < 8) {
       throw new IllegalArgumentException("Key: should be greater than 8 bytes");
     }
-    // 取 key 的 [0]~[7]
-    DESKeySpec keySpec = new DESKeySpec(keys);
-    SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("DES");
-    SecretKeySpec secretKeySpec = new SecretKeySpec(keyFactory.generateSecret(keySpec).getEncoded(), "DES");
+    SecretKeySpec secretKeySpec = null;
+    try {
+      // 取 key 的 [0]~[7]
+      DESKeySpec keySpec = new DESKeySpec(keys);
+      SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("DES");
+      secretKeySpec = new SecretKeySpec(keyFactory.generateSecret(keySpec).getEncoded(), "DES");
+    } catch (InvalidKeyException | NoSuchAlgorithmException | InvalidKeySpecException e) {
+      throw new RuntimeException(e);
+    }
     keys = secretKeySpec.getEncoded();
 
     if (encrypting) {
@@ -99,9 +103,8 @@ public class SecurityUtils {
    * @param encrypting 是否为加密
    * @param padding    填充类型
    * @return 加解密的字节数组
-   * @throws InvalidCipherTextException 意想不到的异常
    */
-  public static byte[] desCbc(@NonNull final byte[] key, @NonNull final byte[] icv, @NonNull final byte[] in, final boolean encrypting, final BlockCipherPadding padding) throws InvalidCipherTextException {
+  public static byte[] desCbc(@NonNull final byte[] key, @NonNull final byte[] icv, @NonNull final byte[] in, final boolean encrypting, final BlockCipherPadding padding) {
     if (key.length != 8) {
       throw new IllegalArgumentException("Key: should be 8 bytes");
     }
@@ -121,7 +124,11 @@ public class SecurityUtils {
     byte[] out = new byte[cipher.getOutputSize(in.length)];
     // 处理数据
     int len = cipher.processBytes(in, 0, inLen, out, 0);
-    len += cipher.doFinal(out, len);
+    try {
+      len += cipher.doFinal(out, len);
+    } catch (InvalidCipherTextException e) {
+      throw new RuntimeException(e);
+    }
     // 移除填充的内容
     byte[] result = new byte[len];
     System.arraycopy(out, 0, result, 0, len);
@@ -138,12 +145,8 @@ public class SecurityUtils {
    * @param encrypting 是否为加密
    * @param padding    填充类型
    * @return 加解密的字符串
-   * @throws InvalidCipherTextException 意想不到的异常
-   * @throws InvalidKeyException        invalid Keys (invalid encoding, wrong length, uninitialized, etc)
-   * @throws NoSuchAlgorithmException   a particular cryptographic algorithm is requested but is not available in the environment
-   * @throws InvalidKeySpecException    invalid key specifications
    */
-  public static String desCbc(@NonNull final String key, @NonNull final String icv, @NonNull final String in, final boolean encrypting, final BlockCipherPadding padding) throws InvalidCipherTextException, InvalidKeyException, NoSuchAlgorithmException, InvalidKeySpecException {
+  public static String desCbc(@NonNull final String key, @NonNull final String icv, @NonNull final String in, final boolean encrypting, final BlockCipherPadding padding) {
     byte[] keys = ArrayUtils.toBytes(key.toCharArray());
     if (keys.length < 8) {
       throw new IllegalArgumentException("Key: should be greater than 8 bytes");
@@ -152,10 +155,15 @@ public class SecurityUtils {
     if (icvs.length < 8) {
       throw new IllegalArgumentException("Icv: should be greater than 8 bytes");
     }
-    // 取 key 的 [0]~[7]
-    DESKeySpec keySpec = new DESKeySpec(keys);
-    SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("DES");
-    SecretKeySpec secretKeySpec = new SecretKeySpec(keyFactory.generateSecret(keySpec).getEncoded(), "DES");
+    SecretKeySpec secretKeySpec = null;
+    try {
+      // 取 key 的 [0]~[7]
+      DESKeySpec keySpec = new DESKeySpec(keys);
+      SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("DES");
+      secretKeySpec = new SecretKeySpec(keyFactory.generateSecret(keySpec).getEncoded(), "DES");
+    } catch (InvalidKeyException | NoSuchAlgorithmException | InvalidKeySpecException e) {
+      throw new RuntimeException(e);
+    }
     keys = secretKeySpec.getEncoded();
 
     if (encrypting) {
