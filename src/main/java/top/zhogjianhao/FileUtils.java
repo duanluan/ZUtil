@@ -14,7 +14,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
   /**
    * 文件名后缀
    */
-  public static final Pattern FILE_SUFFIX = Pattern.compile("\\.[a-zA-Z\\d]*$");
+  public static final Pattern FILE_EXTENSION = Pattern.compile("\\.[a-zA-Z\\d]*$");
 
   /**
    * 获取工作目录路径
@@ -82,7 +82,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
     int lastFileSeparatorIndex = CommonPattern.BACKSLASH.matcher(filePath).replaceAll("/").lastIndexOf("/");
     if (lastFileSeparatorIndex == -1) {
       // 是否有后缀
-      if (FILE_SUFFIX.matcher(filePath).find()) {
+      if (FILE_EXTENSION.matcher(filePath).find()) {
         return new String[]{"", filePath};
       }
       return new String[]{filePath, ""};
