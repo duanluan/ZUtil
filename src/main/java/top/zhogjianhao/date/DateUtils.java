@@ -6,7 +6,7 @@ import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.time.FastDateFormat;
 import org.apache.commons.text.WordUtils;
 import top.zhogjianhao.CollectionUtils;
-import top.zhogjianhao.RegExUtils;
+import top.zhogjianhao.regex.RegExUtils;
 import top.zhogjianhao.StringUtils;
 
 import java.text.ParseException;

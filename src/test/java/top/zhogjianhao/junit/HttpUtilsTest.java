@@ -9,7 +9,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import top.zhogjianhao.RegExUtils;
+import top.zhogjianhao.regex.RegExUtils;
 import top.zhogjianhao.StringUtils;
 import top.zhogjianhao.http.ContentTypeConstant;
 import top.zhogjianhao.http.HttpUtils;

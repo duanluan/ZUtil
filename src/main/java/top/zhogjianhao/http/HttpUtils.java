@@ -78,13 +78,13 @@ public class HttpUtils extends com.ejlchina.okhttps.HttpUtils {
       return 0;
     }
     String s = JsonUtils.toJson(bodyParams);
-    s = CommonPattern.LEFT_CURLY_BRACE.matcher(s).replaceAll("%7B");
+    s = CommonPattern.LEFT_CURLY_BRACES.matcher(s).replaceAll("%7B");
     s = CommonPattern.DOUBLE_QUOTATION_MARK.matcher(s).replaceAll("%22");
     s = CommonPattern.COLON.matcher(s).replaceAll("%3A");
     s = CommonPattern.LEFT_SQUARE_BRACKET.matcher(s).replaceAll("%5B");
     s = CommonPattern.RIGHT_SQUARE_BRACKET.matcher(s).replaceAll("%5D");
     s = CommonPattern.COMMA.matcher(s).replaceAll("%2C");
-    s = CommonPattern.RIGHT_CURLY_BRACE.matcher(s).replaceAll("%7D");
+    s = CommonPattern.RIGHT_CURLY_BRACES.matcher(s).replaceAll("%7D");
     return s.length();
   }
 
