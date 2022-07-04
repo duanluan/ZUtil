@@ -40,7 +40,7 @@ public class FileUtilsTest {
     assertEquals("1.txt", FileUtils.getDirPathAndNameByPath("1.txt")[1]);
     assertEquals("C:", FileUtils.getDirPathAndNameByPath("C:")[0]);
     assertEquals("1.txt", FileUtils.getDirPathAndNameByPath("C:/1.txt")[1]);
-    assertEquals("C:", FileUtils.getDirPathByPath("C:/1.txt"));
+    assertEquals("C:/", FileUtils.getDirPathByPath("C:/1.txt"));
     assertEquals("1.txt", FileUtils.getNameByPath("C:/1.txt"));
   }
 }

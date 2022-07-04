@@ -3,6 +3,7 @@ package top.zhogjianhao;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import top.zhogjianhao.constant.CommonPattern;
+import top.zhogjianhao.regex.RegExUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,9 +13,13 @@ import java.util.regex.Pattern;
 public class FileUtils extends org.apache.commons.io.FileUtils {
 
   /**
-   * 文件名后缀
+   * 逆序的 文件扩展名
    */
-  public static final Pattern FILE_EXTENSION = Pattern.compile("\\.[a-zA-Z\\d]*$");
+  public static final Pattern PATTERN_REVERSE_FILE_EXTENSION = Pattern.compile("^([A-Za-z\\d]+)\\.");
+  /**
+   * 逆序的 文件名/
+   */
+  public static final Pattern PATTERN_REVERSE_SLASH_FILE_NAME = Pattern.compile("^(.*?\\..*?)[\\\\\\/]");
 
   /**
    * 获取工作目录路径
@@ -73,6 +78,26 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
   }
 
   /**
+   * 获取文件扩展名
+   *
+   * @param filePath 文件路径
+   * @return 文件扩展名
+   */
+  public static String getFileExtension(@NonNull final String filePath) {
+    return new StringBuffer(RegExUtils.match(new StringBuffer(filePath).reverse().toString(), PATTERN_REVERSE_FILE_EXTENSION, 0, 1)).reverse().toString();
+  }
+
+  /**
+   * 获取文件扩展名
+   *
+   * @param file 文件
+   * @return 文件扩展名
+   */
+  public static String getFileExtension(@NonNull final File file) {
+    return getFileExtension(file.getPath());
+  }
+
+  /**
    * 根据文件路径获取目录和文件名
    *
    * @param filePath 文件路径
@@ -82,12 +107,12 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
     int lastFileSeparatorIndex = CommonPattern.BACKSLASH.matcher(filePath).replaceAll("/").lastIndexOf("/");
     if (lastFileSeparatorIndex == -1) {
       // 是否有后缀
-      if (FILE_EXTENSION.matcher(filePath).find()) {
+      if (PATTERN_REVERSE_FILE_EXTENSION.matcher(new StringBuffer(filePath).reverse().toString()).find()) {
         return new String[]{"", filePath};
       }
       return new String[]{filePath, ""};
     }
-    return new String[]{filePath.substring(0, lastFileSeparatorIndex), filePath.substring(lastFileSeparatorIndex + 1)};
+    return new String[]{filePath.substring(0, lastFileSeparatorIndex + 1), filePath.substring(lastFileSeparatorIndex + 1)};
   }
 
   /**
@@ -97,7 +122,14 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
    * @return 目录
    */
   public static String getDirPathByPath(@NonNull final String filePath) {
-    return getDirPathAndNameByPath(filePath)[0];
+    int index = filePath.lastIndexOf("/");
+    if (index == -1) {
+      index = filePath.lastIndexOf("\\");
+    }
+    if (index != -1) {
+      return filePath.substring(0, index + 1);
+    }
+    return null;
   }
 
   /**
@@ -107,6 +139,25 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
    * @return 文件名
    */
   public static String getNameByPath(@NonNull final String filePath) {
-    return getDirPathAndNameByPath(filePath)[1];
+    return new StringBuffer(RegExUtils.matchFirst(new StringBuffer(filePath).reverse().append("/").toString(), PATTERN_REVERSE_SLASH_FILE_NAME, 1)).reverse().toString();
+  }
+
+  /**
+   * 替换文件路径
+   *
+   * @param filePath    文件路径
+   * @param newFilePath 新文件路径，其中 $1 为 filePath 中的文件名，$2 为 filePath 中的文件扩展名
+   * @return 新文件路径结果：如果 newFilePath 中含目录，则为目录 + 替换 $1、$2 后的文件名；如果 newFilePath 中不含目录，则为 filePath 中的目录 + 替换 $1、$2 后的文件名
+   */
+  public static String replace(@NonNull final String filePath, @NonNull final String newFilePath) {
+    String[] dirPathAndName = getDirPathAndNameByPath(filePath);
+    String fileName = dirPathAndName[1];
+    if (StringUtils.isBlank(fileName)) {
+      throw new IllegalArgumentException("FilePath: should be a file name and file extension");
+    }
+    String newDirPath = getDirPathByPath(newFilePath);
+    boolean hasNewDirPath = StringUtils.isNotBlank(newDirPath);
+    String[] fileNameAndExtension = fileName.split("\\.");
+    return (hasNewDirPath ? newDirPath : dirPathAndName[0]) + (hasNewDirPath ? getNameByPath(newFilePath) : newFilePath).replaceAll("\\$1", fileNameAndExtension[0]).replaceAll("\\$2", fileNameAndExtension[1]);
   }
 }
