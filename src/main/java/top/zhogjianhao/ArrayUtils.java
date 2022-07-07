@@ -691,7 +691,7 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param startIndex  开始查找的索引
    * @return 要查找的字符串在数组中的开始位置
    */
-  public static int indexOf(@NonNull final char[] array, @NonNull final String valueToFind, int startIndex) {
+  public static int indexOf(@NonNull final char[] array, @NonNull final String valueToFind, final int startIndex) {
     if (ArrayUtils.isEmpty(array)) {
       throw new IllegalArgumentException("Array: should not be empty");
     }
@@ -707,7 +707,6 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
       char[] valChars = valueToFind.toCharArray();
       char lChar = valChars[0];
       char rChar = valChars[1];
-      int index = -1;
 
       int lCharIndex = ArrayUtils.indexOf(array, lChar, startIndex);
       // 如果找不到左边字符
