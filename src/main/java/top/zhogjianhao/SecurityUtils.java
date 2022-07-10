@@ -76,7 +76,7 @@ public class SecurityUtils {
     if (keys.length < 8) {
       throw new IllegalArgumentException("Key: should be greater than 8 bytes");
     }
-    SecretKeySpec secretKeySpec = null;
+    SecretKeySpec secretKeySpec;
     try {
       // 取 key 的 [0]~[7]
       DESKeySpec keySpec = new DESKeySpec(keys);
@@ -98,17 +98,17 @@ public class SecurityUtils {
    * DES 算法 CBC 模式加解密
    *
    * @param key        8 字节密钥
-   * @param icv        8 字节向量
+   * @param iv         8 字节向量
    * @param in         数据
    * @param encrypting 是否为加密
    * @param padding    填充类型
    * @return 加解密的字节数组
    */
-  public static byte[] desCbc(@NonNull final byte[] key, @NonNull final byte[] icv, @NonNull final byte[] in, final boolean encrypting, final BlockCipherPadding padding) {
+  public static byte[] desCbc(@NonNull final byte[] key, @NonNull final byte[] iv, @NonNull final byte[] in, final boolean encrypting, final BlockCipherPadding padding) {
     if (key.length != 8) {
       throw new IllegalArgumentException("Key: should be 8 bytes");
     }
-    if (icv.length != 8) {
+    if (iv.length != 8) {
       throw new IllegalArgumentException("Icv: should be 8 bytes");
     }
     int inLen = in.length;
@@ -119,7 +119,7 @@ public class SecurityUtils {
     // 创建 DES 算法（默认 CBC 模式）的 BufferedBlockCipher
     BufferedBlockCipher cipher = new PaddedBufferedBlockCipher(new CBCBlockCipher(new DESEngine()), padding);
     // 根据密钥初始化
-    cipher.init(encrypting, new ParametersWithIV(new KeyParameter(key), icv));
+    cipher.init(encrypting, new ParametersWithIV(new KeyParameter(key), iv));
     // 创建输出数组
     byte[] out = new byte[cipher.getOutputSize(in.length)];
     // 处理数据
@@ -140,22 +140,22 @@ public class SecurityUtils {
    * DES 算法 CBC 模式加解密
    *
    * @param key        密钥
-   * @param icv        向量
+   * @param iv         向量
    * @param in         数据
    * @param encrypting 是否为加密
    * @param padding    填充类型
    * @return 加解密的字符串
    */
-  public static String desCbc(@NonNull final String key, @NonNull final String icv, @NonNull final String in, final boolean encrypting, final BlockCipherPadding padding) {
+  public static String desCbc(@NonNull final String key, @NonNull final String iv, @NonNull final String in, final boolean encrypting, final BlockCipherPadding padding) {
     byte[] keys = ArrayUtils.toBytes(key.toCharArray());
     if (keys.length < 8) {
       throw new IllegalArgumentException("Key: should be greater than 8 bytes");
     }
-    byte[] icvs = ArrayUtils.toBytes(icv.toCharArray());
-    if (icvs.length < 8) {
+    byte[] ivs = ArrayUtils.toBytes(iv.toCharArray());
+    if (ivs.length < 8) {
       throw new IllegalArgumentException("Icv: should be greater than 8 bytes");
     }
-    SecretKeySpec secretKeySpec = null;
+    SecretKeySpec secretKeySpec;
     try {
       // 取 key 的 [0]~[7]
       DESKeySpec keySpec = new DESKeySpec(keys);
@@ -167,9 +167,9 @@ public class SecurityUtils {
     keys = secretKeySpec.getEncoded();
 
     if (encrypting) {
-      return ByteUtils.toHexString(desCbc(keys, icvs, ArrayUtils.toBytes(in.toCharArray()), encrypting, padding));
+      return ByteUtils.toHexString(desCbc(keys, ivs, ArrayUtils.toBytes(in.toCharArray()), encrypting, padding));
     }
-    byte[] bytes = desCbc(keys, icvs, ByteUtils.fromHexString(in), encrypting, padding);
+    byte[] bytes = desCbc(keys, ivs, ByteUtils.fromHexString(in), encrypting, padding);
     return new String(ArrayUtils.toChars(bytes));
   }
 }
