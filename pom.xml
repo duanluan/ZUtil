@@ -4,7 +4,7 @@
 
   <groupId>top.zhogjianhao</groupId>
   <artifactId>ZUtil</artifactId>
-  <version>1.7.0</version>
+  <version>1.8.0</version>
 
   <name>ZUtil</name>
   <url>https://github.com/duanluan/ZUtil</url>
@@ -94,7 +94,7 @@
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-beans</artifactId>
-      <version>5.3.18</version>
+      <version>5.3.21</version>
     </dependency>
     <!-- 加密算法 -->
     <dependency>
