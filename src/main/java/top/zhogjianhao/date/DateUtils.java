@@ -6,66 +6,36 @@ import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.time.FastDateFormat;
 import org.apache.commons.text.WordUtils;
 import top.zhogjianhao.CollectionUtils;
-import top.zhogjianhao.regex.RegExUtils;
 import top.zhogjianhao.StringUtils;
+import top.zhogjianhao.date.constant.*;
+import top.zhogjianhao.regex.RegExUtils;
 
 import java.text.ParseException;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
+import java.time.format.ResolverStyle;
 import java.time.temporal.*;
 import java.util.*;
 import java.util.stream.Stream;
-
-import static top.zhogjianhao.date.DatePattern.*;
 
 /**
  * 时间工具类
  */
 @Slf4j
 public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
-
-  /**
-   * Date 对象最小年份
-   */
-  public static final int MIN_DATE_YEAR = 1970;
-
-  /**
-   * 默认内容类型，比如月份是中文还是英文
-   */
-  private static final Locale DEFAULT_LOCALE = Locale.ENGLISH;
-  /**
-   * 系统时区
-   */
-  public static final ZoneId SYSTEM_ZONE_ID = ZoneId.systemDefault();
-  /**
-   * 系统时区偏移
-   */
-  public static final ZoneOffset SYSTEM_ZONE_OFFSET = OffsetDateTime.now(SYSTEM_ZONE_ID).getOffset();
-
-  // static {
-  //   // 内容类型为英文
-  //   DEFAULT_LOCALE = Locale.ENGLISH;
-  //   // 系统时区
-  //   SYSTEM_ZONE_ID = ZoneId.systemDefault();
-  //   // 系统时区偏移
-  //   SYSTEM_ZONE_OFFSET = OffsetDateTime.now(SYSTEM_ZONE_ID).getOffset();
-  //   // 严格模式
-  //   DEFAULT_RESOLVER_STYLE = ResolverStyle.STRICT;
-  // }
-
   /**
    * LocalDate 默认格式
    */
-  public static String defaultLocalDatePattern = UUUU_MM_DD;
+  public static String defaultLocalDatePattern = DatePattern.UUUU_MM_DD;
   /**
    * LocalDateTime 默认格式
    */
-  public static String defaultLocalDateTimePattern = YYYY_MM_DD_HH_MM_SS;
+  public static String defaultLocalDateTimePattern = DatePattern.YYYY_MM_DD_HH_MM_SS;
   /**
    * LocalTime 默认格式
    */
-  public static String defaultLocalTimePattern = HH_MM_SS;
+  public static String defaultLocalTimePattern = DatePattern.HH_MM_SS;
 
   /**
    * 获取时间格式化构造器，并给不同时间级别赋默认值
@@ -113,14 +83,14 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
   }
 
   /**
-   * 获取默认的时间格式器（严格模式），对应时间级别没有就赋默认值：1970-01-01 00:00:00.00000000
+   * 获取默认的时间格式器（默认严格模式、区域英语），对应时间级别没有就赋默认值：0000-01-01 00:00:00.00000000
    *
-   * @param pattern  格式
-   * @param locale   区域
-   * @param atZoneId 时区
+   * @param pattern 格式
+   * @param locale  区域
+   * @param zoneId  时区
    * @return 时间格式器
    */
-  public static DateTimeFormatter getDefaultFormatter(@NonNull final String pattern, final Locale locale, final ZoneId atZoneId) {
+  public static DateTimeFormatter getDefaultFormatter(@NonNull final String pattern, final Locale locale, final ZoneId zoneId) {
     if (StringUtils.isBlank(pattern)) {
       throw new IllegalArgumentException("Pattern: should not be blank");
     }
@@ -133,19 +103,19 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     DateTimeFormatter dateTimeFormatter;
     DateTimeFormatterBuilder formatterBuilder = getFormatterBuilder(pattern, fieldValueMap);
     if (locale != null) {
-      dateTimeFormatter = formatterBuilder.toFormatter(locale);
+      dateTimeFormatter = formatterBuilder.toFormatter(DateFeature.get(locale));
     } else {
-      dateTimeFormatter = formatterBuilder.toFormatter();
+      dateTimeFormatter = formatterBuilder.toFormatter(DateConstant.DEFAULT_LOCALE);
     }
-    dateTimeFormatter.withResolverStyle(DEFAULT_RESOLVER_STYLE);
-    if (atZoneId != null) {
-      dateTimeFormatter = dateTimeFormatter.withZone(atZoneId);
+    dateTimeFormatter.withResolverStyle(DateFeature.get(DateConstant.DEFAULT_RESOLVER_STYLE));
+    if (zoneId != null) {
+      dateTimeFormatter = dateTimeFormatter.withZone(DateFeature.get(zoneId));
     }
     return dateTimeFormatter;
   }
 
   /**
-   * 获取默认的时间格式器（严格模式），对应时间级别没有就赋默认值：1970-01-01 00:00:00.0
+   * 获取默认的时间格式器（默认严格模式、区域英语），对应时间级别没有就赋默认值：0000-01-01 00:00:00.00000000
    *
    * @param pattern 格式
    * @param locale  区域
@@ -156,24 +126,24 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
   }
 
   /**
-   * 获取默认的时间格式器（严格模式），对应时间级别没有就赋默认值：1970-01-01 00:00:00.0
+   * 获取默认的时间格式器（默认严格模式、区域英语），对应时间级别没有就赋默认值：0000-01-01 00:00:00.00000000
    *
-   * @param pattern  格式
-   * @param atZoneId 时区
+   * @param pattern 格式
+   * @param zoneId  时区
    * @return 时间格式器
    */
-  public static DateTimeFormatter getDefaultFormatter(@NonNull final String pattern, @NonNull final ZoneId atZoneId) {
-    return getDefaultFormatter(pattern, null, atZoneId);
+  public static DateTimeFormatter getDefaultFormatter(@NonNull final String pattern, @NonNull final ZoneId zoneId) {
+    return getDefaultFormatter(pattern, null, zoneId);
   }
 
   /**
-   * 获取默认的时间格式器（严格模式），对应时间级别没有就赋默认值：1970-01-01 00:00:00.0，内容格式为英文
+   * 获取默认的时间格式器（默认严格模式、区域英语），对应时间级别没有就赋默认值：0000-01-01 00:00:00.00000000
    *
    * @param pattern 格式
    * @return 时间格式器
    */
   public static DateTimeFormatter getDefaultFormatter(@NonNull final String pattern) {
-    return getDefaultFormatter(pattern, DEFAULT_LOCALE);
+    return getDefaultFormatter(pattern, null, null);
   }
 
   /**
@@ -217,17 +187,17 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
       FastDateFormat formatMmm;
       FastDateFormat formatMm;
       if (Locale.US.equals(locale)) {
-        formatMmm = FORMAT_MMM_US;
-        formatMm = FORMAT_MM_US;
+        formatMmm = DateFormat.MMM_US;
+        formatMm = DateFormat.MM_US;
       } else if (Locale.SIMPLIFIED_CHINESE.equals(locale)) {
-        formatMmm = FORMAT_MMM_ZH_CN;
-        formatMm = FORMAT_MM_ZH_CN;
+        formatMmm = DateFormat.MMM_ZH_CN;
+        formatMm = DateFormat.MM_ZH_CN;
       } else if (Locale.TRADITIONAL_CHINESE.equals(locale)) {
-        formatMmm = FORMAT_MMM_ZH_TW;
-        formatMm = FORMAT_MM_ZH_TW;
+        formatMmm = DateFormat.MMM_ZH_TW;
+        formatMm = DateFormat.MM_ZH_TW;
       } else {
-        formatMmm = FastDateFormat.getInstance("MMM", locale);
-        formatMm = FastDateFormat.getInstance("MM", locale);
+        formatMmm = FastDateFormat.getInstance("MMM", DateFeature.get(locale));
+        formatMm = FastDateFormat.getInstance("MM", DateFeature.get(locale));
       }
       return formatMmm.format(formatMm.parse(monthNumber));
     } catch (ParseException e) {
@@ -243,7 +213,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * @return 英文短文本月
    */
   public static String convertMonthShortText(@NonNull final String monthNumber) {
-    return convertMonthShortText(monthNumber, Locale.US);
+    return convertMonthShortText(monthNumber, DateConstant.DEFAULT_LOCALE);
   }
 
   /**
@@ -265,17 +235,17 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
       FastDateFormat formatMmm;
       FastDateFormat formatMm;
       if (Locale.US.equals(locale)) {
-        formatMmm = FORMAT_MMMM_US;
-        formatMm = FORMAT_MM_US;
+        formatMmm = DateFormat.MMMM_US;
+        formatMm = DateFormat.MM_US;
       } else if (Locale.SIMPLIFIED_CHINESE.equals(locale)) {
-        formatMmm = FORMAT_MMMM_ZH_CN;
-        formatMm = FORMAT_MM_ZH_CN;
+        formatMmm = DateFormat.MMMM_ZH_CN;
+        formatMm = DateFormat.MM_ZH_CN;
       } else if (Locale.TRADITIONAL_CHINESE.equals(locale)) {
-        formatMmm = FORMAT_MMMM_ZH_TW;
-        formatMm = FORMAT_MM_ZH_TW;
+        formatMmm = DateFormat.MMMM_ZH_TW;
+        formatMm = DateFormat.MM_ZH_TW;
       } else {
-        formatMmm = FastDateFormat.getInstance("MMMM", locale);
-        formatMm = FastDateFormat.getInstance("MM", locale);
+        formatMmm = FastDateFormat.getInstance("MMMM", DateFeature.get(locale));
+        formatMm = FastDateFormat.getInstance("MM", DateFeature.get(locale));
       }
       return formatMmm.format(formatMm.parse(monthNumber));
     } catch (ParseException e) {
@@ -291,7 +261,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * @return 英文文本月
    */
   public static String convertMonthText(@NonNull final String monthNumber) {
-    return convertMonthText(monthNumber, Locale.US);
+    return convertMonthText(monthNumber, DateConstant.DEFAULT_LOCALE);
   }
 
   /**
@@ -309,11 +279,11 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     DateTimeFormatter dateTimeFormatter;
     // 使用已存在的格式转换器
     if (defaultLocalDateTimePattern.equals(pattern)) {
-      dateTimeFormatter = FORMATTER_YYYY_MM_DD_HH_MM_SS;
+      dateTimeFormatter = DateFormatter.YYYY_MM_DD_HH_MM_SS;
     } else if (defaultLocalDatePattern.equals(pattern)) {
-      dateTimeFormatter = FORMATTER_YYYY_MM_DD;
+      dateTimeFormatter = DateFormatter.YYYY_MM_DD;
     } else if (defaultLocalTimePattern.equals(pattern)) {
-      dateTimeFormatter = FORMATTER_HH_MM_SS;
+      dateTimeFormatter = DateFormatter.HH_MM_SS;
     } else {
       dateTimeFormatter = getDefaultFormatter(pattern);
     }
@@ -328,9 +298,9 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
         } else {
           localDateTime = ((LocalTime) temporal).atDate(LocalDate.now());
         }
-        return localDateTime.atZone(SYSTEM_ZONE_ID).withZoneSameInstant(zoneId).format(dateTimeFormatter);
+        return localDateTime.atZone(DateConstant.SYSTEM_ZONE_ID).withZoneSameInstant(DateFeature.get(zoneId)).format(dateTimeFormatter);
       } else if (temporal instanceof ZonedDateTime) {
-        return ((ZonedDateTime) temporal).withZoneSameInstant(zoneId).format(dateTimeFormatter);
+        return ((ZonedDateTime) temporal).withZoneSameInstant(DateFeature.get(zoneId)).format(dateTimeFormatter);
       } else {
         throw new IllegalArgumentException("Temporal: should be ZonedDateTime, LocalDateTime, LocalDate, or LocalTime");
       }
@@ -402,18 +372,18 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
       throw new IllegalArgumentException("Pattern: should not be blank");
     }
     if (zoneId != null) {
-      ZonedDateTime zonedDateTime = date.toInstant().atZone(SYSTEM_ZONE_ID);
-      zonedDateTime = zonedDateTime.withZoneSameInstant(zoneId);
+      ZonedDateTime zonedDateTime = date.toInstant().atZone(DateConstant.SYSTEM_ZONE_ID);
+      zonedDateTime = zonedDateTime.withZoneSameInstant(DateFeature.get(zoneId));
       return format(zonedDateTime.toLocalDateTime(), pattern);
     } else {
       FastDateFormat format = null;
       // 使用已存在的格式转换器
       if (defaultLocalDateTimePattern.equals(pattern)) {
-        format = FORMAT_YYYY_MM_DD_HH_MM_SS;
+        format = DateFormat.YYYY_MM_DD_HH_MM_SS;
       } else if (defaultLocalDatePattern.equals(pattern)) {
-        format = FORMAT_YYYY_MM_DD;
+        format = DateFormat.YYYY_MM_DD;
       } else if (defaultLocalTimePattern.equals(pattern)) {
-        format = FORMAT_HH_MM_SS;
+        format = DateFormat.HH_MM_SS;
       }
       if (format == null) {
         format = FastDateFormat.getInstance(pattern);
@@ -521,10 +491,10 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
       }
 
       // 1 位且前后都不是 W：1
-      pattern = DatePatternRegex.PATTERN_WEEK_OF_MONTH.matcher(pattern).replaceAll(String.valueOf(week));
+      pattern = DateRegexPattern.WEEK_OF_MONTH.matcher(pattern).replaceAll(String.valueOf(week));
       if (pattern.contains("W")) {
         // 2 位且前后都不是 W：01
-        pattern = DatePatternRegex.PATTERN_WEEK_OF_MONTH2.matcher(pattern).replaceAll(String.format("%02d", week));
+        pattern = DateRegexPattern.WEEK_OF_MONTH2.matcher(pattern).replaceAll(String.format("%02d", week));
       }
     }
     if (lowerCasePattern.contains("d")) {
@@ -533,9 +503,9 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
         epochMilli -= dayOfMonth * DateDuration.DAY_OF_MONTH_MILLIS;
       }
 
-      pattern = DatePatternRegex.PATTERN_DAY_OF_MONTH.matcher(pattern).replaceAll(String.valueOf(dayOfMonth));
+      pattern = DateRegexPattern.DAY_OF_MONTH.matcher(pattern).replaceAll(String.valueOf(dayOfMonth));
       if (pattern.contains("d")) {
-        pattern = DatePatternRegex.PATTERN_DAY_OF_MONTH2.matcher(pattern).replaceAll(String.format("%02d", dayOfMonth));
+        pattern = DateRegexPattern.DAY_OF_MONTH2.matcher(pattern).replaceAll(String.format("%02d", dayOfMonth));
       }
     }
     if (lowerCasePattern.contains("h") || lowerCasePattern.contains("k")) {
@@ -545,31 +515,31 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
       }
 
       if (pattern.contains("H")) {
-        pattern = DatePatternRegex.PATTERN_HOUR_OF_DAY.matcher(pattern).replaceAll(String.valueOf(hour));
+        pattern = DateRegexPattern.HOUR_OF_DAY.matcher(pattern).replaceAll(String.valueOf(hour));
       }
       if (pattern.contains("H")) {
-        pattern = DatePatternRegex.PATTERN_HOUR_OF_DAY2.matcher(pattern).replaceAll(String.format("%02d", hour));
+        pattern = DateRegexPattern.HOUR_OF_DAY2.matcher(pattern).replaceAll(String.format("%02d", hour));
       }
       if (pattern.contains("h")) {
         // h 为 (H+1)/2
-        pattern = DatePatternRegex.PATTERN_CLOCK_HOUR_OF_AM_PM12.matcher(pattern).replaceAll(String.valueOf((hour + 1) / 2));
+        pattern = DateRegexPattern.CLOCK_HOUR_OF_AM_PM12.matcher(pattern).replaceAll(String.valueOf((hour + 1) / 2));
       }
       if (pattern.contains("h")) {
-        pattern = DatePatternRegex.PATTERN_CLOCK_HOUR_OF_AM_PM12_2.matcher(pattern).replaceAll(String.format("%02d", (hour + 1) / 2));
+        pattern = DateRegexPattern.CLOCK_HOUR_OF_AM_PM12_2.matcher(pattern).replaceAll(String.format("%02d", (hour + 1) / 2));
       }
       if (pattern.contains("K")) {
         // K 为 H/2
-        pattern = DatePatternRegex.PATTERN_HOUR_OF_AM_PM.matcher(pattern).replaceAll(String.valueOf(hour / 2));
+        pattern = DateRegexPattern.HOUR_OF_AM_PM.matcher(pattern).replaceAll(String.valueOf(hour / 2));
       }
       if (pattern.contains("K")) {
-        pattern = DatePatternRegex.PATTERN_HOUR_OF_AM_PM2.matcher(pattern).replaceAll(String.format("%02d", hour / 2));
+        pattern = DateRegexPattern.HOUR_OF_AM_PM2.matcher(pattern).replaceAll(String.format("%02d", hour / 2));
       }
       if (pattern.contains("k")) {
         // k 为 H+1
-        pattern = DatePatternRegex.PATTERN_CLOCK_HOUR_OF_AM_PM24.matcher(pattern).replaceAll(String.valueOf(hour + 1));
+        pattern = DateRegexPattern.CLOCK_HOUR_OF_AM_PM24.matcher(pattern).replaceAll(String.valueOf(hour + 1));
       }
       if (pattern.contains("k")) {
-        pattern = DatePatternRegex.PATTERN_CLOCK_HOUR_OF_AM_PM24_2.matcher(pattern).replaceAll(String.format("%02d", hour + 1));
+        pattern = DateRegexPattern.CLOCK_HOUR_OF_AM_PM24_2.matcher(pattern).replaceAll(String.format("%02d", hour + 1));
       }
     }
     if (pattern.contains("m")) {
@@ -579,10 +549,10 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
       }
 
       if (pattern.contains("m")) {
-        pattern = DatePatternRegex.PATTERN_MINUTE_OF_HOUR.matcher(pattern).replaceAll(String.valueOf(minute));
+        pattern = DateRegexPattern.MINUTE_OF_HOUR.matcher(pattern).replaceAll(String.valueOf(minute));
       }
       if (pattern.contains("m")) {
-        pattern = DatePatternRegex.PATTERN_MINUTE_OF_HOUR2.matcher(pattern).replaceAll(String.format("%02d", minute));
+        pattern = DateRegexPattern.MINUTE_OF_HOUR2.matcher(pattern).replaceAll(String.format("%02d", minute));
       }
     }
     if (pattern.contains("s")) {
@@ -592,16 +562,16 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
       }
 
       if (pattern.contains("s")) {
-        pattern = DatePatternRegex.PATTERN_SECOND_OF_MINUTE.matcher(pattern).replaceAll(String.valueOf(second));
+        pattern = DateRegexPattern.SECOND_OF_MINUTE.matcher(pattern).replaceAll(String.valueOf(second));
       }
       if (pattern.contains("s")) {
-        pattern = DatePatternRegex.PATTERN_SECOND_OF_MINUTE2.matcher(pattern).replaceAll(String.format("%02d", second));
+        pattern = DateRegexPattern.SECOND_OF_MINUTE2.matcher(pattern).replaceAll(String.format("%02d", second));
       }
     }
     if (pattern.contains("S")) {
       long millis = epochMilli / DateDuration.MILLIS;
       if (pattern.contains("S")) {
-        pattern = DatePatternRegex.PATTERN_FRACTION_OF_SECOND3.matcher(pattern).replaceAll(String.format("%03d", millis));
+        pattern = DateRegexPattern.FRACTION_OF_SECOND3.matcher(pattern).replaceAll(String.format("%03d", millis));
       }
     }
     return pattern;
@@ -688,19 +658,22 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
       LocalDateTime localDateTime = ((LocalDateTime) temporal);
       final ZonedDateTime[] zonedDateTime = new ZonedDateTime[1];
       if (zoneId != null) {
+        ZoneId zoneId1 = DateFeature.get(zoneId);
         // 设置时区为 当前偏移量 - (指定偏移量 - 当前偏移量)，比如 zoneId 偏移量为 10，理论上 toDate 后时间需要 +2，但是因为 Date.from 之后是反的，所以真实偏移量要为 6 才对，假设当前偏移量为 8，那 8 - (10 -8) = 6
-        zoneId.getRules().getOffset(localDateTime).query((TemporalQuery<Integer>) temporal1 -> {
-          zonedDateTime[0] = localDateTime.atZone(ZoneOffset.ofTotalSeconds(SYSTEM_ZONE_OFFSET.getTotalSeconds() - (((ZoneOffset) temporal1).getTotalSeconds() - SYSTEM_ZONE_OFFSET.getTotalSeconds())));
+        zoneId1.getRules().getOffset(localDateTime).query((TemporalQuery<Integer>) temporal1 -> {
+          int systemZoneOffsetTotalSeconds = DateConstant.SYSTEM_ZONE_OFFSET.getTotalSeconds();
+          zonedDateTime[0] = localDateTime.atZone(ZoneOffset.ofTotalSeconds(systemZoneOffsetTotalSeconds - (((ZoneOffset) temporal1).getTotalSeconds() - systemZoneOffsetTotalSeconds)));
           return null;
         });
       } else {
-        zonedDateTime[0] = localDateTime.atZone(SYSTEM_ZONE_ID);
+        zonedDateTime[0] = localDateTime.atZone(DateConstant.SYSTEM_ZONE_ID);
       }
       return Date.from(zonedDateTime[0].toInstant());
     } else if (temporal instanceof LocalDate) {
-      return toDate(((LocalDate) temporal).atStartOfDay(), zoneId);
+      return toDate(((LocalDate) temporal).atStartOfDay(), DateFeature.get(zoneId));
     } else if (temporal instanceof LocalTime) {
-      return toDate(((LocalTime) temporal).atDate(LocalDate.of(MIN_DATE_YEAR, 1, 1)), zoneId);
+      //  遵循 Date 的默认规则，年为 1970
+      return toDate(((LocalTime) temporal).atDate(LocalDate.of(DateFeature.getMinDateYear(DateConstant.DEFAULT_MIN_DATE_YEAR).intValue(), 1, 1)), DateFeature.get(zoneId));
     } else if (temporal instanceof ZonedDateTime) {
       final ZonedDateTime[] zonedDateTime = {(ZonedDateTime) temporal};
       if (zoneId != null) {
@@ -711,8 +684,10 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
           zonedDateTimeTotalSeconds[0] = ((ZoneOffset) temporal1).getTotalSeconds();
           return null;
         });
-        zoneId.getRules().getOffset(localDateTime).query((TemporalQuery<Integer>) temporal1 -> {
-          zonedDateTime[0] = localDateTime.atZone(ZoneOffset.ofTotalSeconds(zonedDateTimeTotalSeconds[0] - (((ZoneOffset) temporal1).getTotalSeconds() - zonedDateTimeTotalSeconds[0])));
+        ZoneId zoneId1 = DateFeature.get(zoneId);
+        zoneId1.getRules().getOffset(localDateTime).query((TemporalQuery<Integer>) temporal1 -> {
+          int zonedDateTimeTotalSecond = zonedDateTimeTotalSeconds[0];
+          zonedDateTime[0] = localDateTime.atZone(ZoneOffset.ofTotalSeconds(zonedDateTimeTotalSecond - (((ZoneOffset) temporal1).getTotalSeconds() - zonedDateTimeTotalSecond)));
           return null;
         });
       }
@@ -739,7 +714,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * @return LocalDateTime 对象
    */
   public static LocalDateTime toLocalDateTime(@NonNull final Date date) {
-    return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+    return date.toInstant().atZone(DateConstant.SYSTEM_ZONE_ID).toLocalDateTime();
   }
 
   /**
@@ -749,7 +724,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * @return LocalDate 对象
    */
   public static LocalDate toLocalDate(@NonNull final Date date) {
-    return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+    return date.toInstant().atZone(DateConstant.SYSTEM_ZONE_ID).toLocalDate();
   }
 
   /**
@@ -759,7 +734,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * @return LocalTime 对象
    */
   public static LocalTime toLocalTime(@NonNull final Date date) {
-    return date.toInstant().atZone(ZoneId.systemDefault()).toLocalTime();
+    return date.toInstant().atZone(DateConstant.SYSTEM_ZONE_ID).toLocalTime();
   }
 
   /**
@@ -778,11 +753,27 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     } else if (LocalTime.class.equals(clazz)) {
       return (T) toLocalTime(date);
     } else if (ZonedDateTime.class.equals(clazz)) {
-      return (T) toLocalDateTime(date).atZone(ZoneId.systemDefault());
+      return (T) toLocalDateTime(date).atZone(DateConstant.SYSTEM_ZONE_ID);
     } else if (OffsetDateTime.class.equals(clazz)) {
-      return (T) toLocalDateTime(date).atZone(ZoneId.systemDefault()).toOffsetDateTime();
+      return (T) toLocalDateTime(date).atZone(DateConstant.SYSTEM_ZONE_ID).toOffsetDateTime();
     }
     return null;
+  }
+
+  // TODO
+  // public static long toEpochSecond(@NonNull final Temporal temporal) {
+  //   if (LocalDateTime.class.equals(clazz)) {
+  //     return (T) toLocalDateTime(date);
+  //   } else if (LocalDate.class.equals(clazz)) {
+  //     return (T) toLocalDate(date);
+  //   } else if (LocalTime.class.equals(clazz)) {
+  //     return (T) toLocalTime(date);
+  //   }
+  //   return null;
+  // }
+
+  public static long toEpochSecond(@NonNull final Date date) {
+    return date.toInstant().atZone(DateConstant.SYSTEM_ZONE_ID).toEpochSecond();
   }
 
   /**
@@ -793,9 +784,9 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * @return 指定时区的 LocalDateTime 对象
    */
   public static LocalDateTime parseLocalDateTime(final long epochMilli, final ZoneId zoneId) {
-    ZonedDateTime zonedDateTime = Instant.ofEpochMilli(epochMilli).atZone(SYSTEM_ZONE_ID);
+    ZonedDateTime zonedDateTime = Instant.ofEpochMilli(epochMilli).atZone(DateConstant.SYSTEM_ZONE_ID);
     if (zoneId != null) {
-      zonedDateTime = zonedDateTime.withZoneSameInstant(zoneId);
+      zonedDateTime = zonedDateTime.withZoneSameInstant(DateFeature.get(zoneId));
     }
     return zonedDateTime.toLocalDateTime();
   }
@@ -824,9 +815,9 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     }
     for (String pattern : patterns) {
       source = convertByPattern(source, pattern);
-      ZonedDateTime zonedDateTime = LocalDateTime.parse(source, getDefaultFormatter(pattern)).atZone(SYSTEM_ZONE_ID);
+      ZonedDateTime zonedDateTime = LocalDateTime.parse(source, getDefaultFormatter(pattern)).atZone(DateConstant.SYSTEM_ZONE_ID);
       if (zoneId != null) {
-        zonedDateTime = zonedDateTime.withZoneSameInstant(zoneId);
+        zonedDateTime = zonedDateTime.withZoneSameInstant(DateFeature.get(zoneId));
       }
       return zonedDateTime.toLocalDateTime();
     }
@@ -853,45 +844,45 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
       switch (source.length()) {
         case 19:
           if (source.contains("-")) {
-            pattern = UUUU_MM_DD_HH_MM_SS;
+            pattern = DatePattern.UUUU_MM_DD_HH_MM_SS;
           } else if (source.contains("/")) {
-            pattern = UUUU_MM_DD_SLASH_HH_MM_SS;
+            pattern = DatePattern.UUUU_MM_DD_SLASH_HH_MM_SS;
           } else if (source.contains(".")) {
-            pattern = UUUU_MM_DD_DOT_HH_MM_SS;
+            pattern = DatePattern.UUUU_MM_DD_DOT_HH_MM_SS;
           }
           break;
         case 16:
           if (source.contains("-")) {
-            pattern = UUUU_MM_DD_HH_MM;
+            pattern = DatePattern.UUUU_MM_DD_HH_MM;
           } else if (source.contains("/")) {
-            pattern = UUUU_MM_DD_SLASH_HH_MM;
+            pattern = DatePattern.UUUU_MM_DD_SLASH_HH_MM;
           } else if (source.contains(".")) {
-            pattern = UUUU_MM_DD_DOT_HH_MM;
+            pattern = DatePattern.UUUU_MM_DD_DOT_HH_MM;
           }
           break;
         case 10:
           if (source.contains("-")) {
-            pattern = UUUU_MM_DD;
+            pattern = DatePattern.UUUU_MM_DD;
           } else if (source.contains("/")) {
-            pattern = UUUU_MM_DD_SLASH;
+            pattern = DatePattern.UUUU_MM_DD_SLASH;
           } else if (source.contains(".")) {
-            pattern = UUUU_MM_DD_DOT;
+            pattern = DatePattern.UUUU_MM_DD_DOT;
           }
           break;
         case 7:
           if (source.contains("-")) {
-            pattern = UUUU_MM;
+            pattern = DatePattern.UUUU_MM;
           } else if (source.contains("/")) {
-            pattern = UUUU_MM_SLASH;
+            pattern = DatePattern.UUUU_MM_SLASH;
           } else if (source.contains(".")) {
-            pattern = UUUU_MM_DOT;
+            pattern = DatePattern.UUUU_MM_DOT;
           }
           break;
         case 8:
-          pattern = HH_MM_SS;
+          pattern = DatePattern.HH_MM_SS;
           break;
         case 5:
-          pattern = HH_MM;
+          pattern = DatePattern.HH_MM;
           break;
         default:
       }
@@ -939,9 +930,9 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * @return 指定时区的 LocalDate 对象
    */
   public static LocalDate parseLocalDate(final long epochMilli, final ZoneId zoneId) {
-    ZonedDateTime zonedDateTime = Instant.ofEpochMilli(epochMilli).atZone(SYSTEM_ZONE_ID);
+    ZonedDateTime zonedDateTime = Instant.ofEpochMilli(epochMilli).atZone(DateConstant.SYSTEM_ZONE_ID);
     if (zoneId != null) {
-      zonedDateTime = zonedDateTime.withZoneSameInstant(zoneId);
+      zonedDateTime = zonedDateTime.withZoneSameInstant(DateFeature.get(zoneId));
     }
     return zonedDateTime.toLocalDate();
   }
@@ -974,7 +965,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
       source = convertByPattern(source, pattern);
       LocalDate localDate = LocalDate.parse(source, getDefaultFormatter(pattern));
       if (zoneId != null) {
-        return localDate.atTime(LocalTime.MIN).atZone(SYSTEM_ZONE_ID).withZoneSameInstant(zoneId).toLocalDate();
+        return localDate.atTime(LocalTime.MIN).atZone(DateConstant.SYSTEM_ZONE_ID).withZoneSameInstant(DateFeature.get(zoneId)).toLocalDate();
       }
       return localDate;
     }
@@ -1001,27 +992,27 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
       switch (source.length()) {
         case 10:
           if (source.contains("-")) {
-            pattern = UUUU_MM_DD;
+            pattern = DatePattern.UUUU_MM_DD;
           } else if (source.contains("/")) {
-            pattern = UUUU_MM_DD_SLASH;
+            pattern = DatePattern.UUUU_MM_DD_SLASH;
           } else if (source.contains(".")) {
-            pattern = UUUU_MM_DD_DOT;
+            pattern = DatePattern.UUUU_MM_DD_DOT;
           }
           break;
         case 7:
           if (source.contains("-")) {
-            pattern = UUUU_MM;
+            pattern = DatePattern.UUUU_MM;
           } else if (source.contains("/")) {
-            pattern = UUUU_MM_SLASH;
+            pattern = DatePattern.UUUU_MM_SLASH;
           } else if (source.contains(".")) {
-            pattern = UUUU_MM_DOT;
+            pattern = DatePattern.UUUU_MM_DOT;
           }
           break;
         case 8:
-          pattern = HH_MM_SS;
+          pattern = DatePattern.HH_MM_SS;
           break;
         case 5:
-          pattern = HH_MM;
+          pattern = DatePattern.HH_MM;
           break;
         default:
       }
@@ -1067,9 +1058,9 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * @return 指定时区的 LocalTime 对象
    */
   public static LocalTime parseLocalTime(final long epochMilli, final ZoneId zoneId) {
-    ZonedDateTime zonedDateTime = Instant.ofEpochMilli(epochMilli).atZone(SYSTEM_ZONE_ID);
+    ZonedDateTime zonedDateTime = Instant.ofEpochMilli(epochMilli).atZone(DateConstant.SYSTEM_ZONE_ID);
     if (zoneId != null) {
-      zonedDateTime = zonedDateTime.withZoneSameInstant(zoneId);
+      zonedDateTime = zonedDateTime.withZoneSameInstant(DateFeature.get(zoneId));
     }
     return zonedDateTime.toLocalTime();
   }
@@ -1102,7 +1093,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
       source = convertByPattern(source, pattern);
       LocalTime localTime = LocalTime.parse(source, getDefaultFormatter(pattern));
       if (zoneId != null) {
-        return localTime.atDate(LocalDate.now()).atZone(SYSTEM_ZONE_ID).withZoneSameInstant(zoneId).toLocalTime();
+        return localTime.atDate(LocalDate.now()).atZone(DateConstant.SYSTEM_ZONE_ID).withZoneSameInstant(DateFeature.get(zoneId)).toLocalTime();
       }
       return localTime;
     }
@@ -1128,10 +1119,10 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
       if (srcLen == 8 || srcLen == 5) {
         switch (srcLen) {
           case 8:
-            pattern = HH_MM_SS;
+            pattern = DatePattern.HH_MM_SS;
             break;
           case 5:
-            pattern = HH_MM;
+            pattern = DatePattern.HH_MM;
             break;
           default:
         }
@@ -1175,7 +1166,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
   public static Date parseDate(final long epochMilli, final ZoneId zoneId) {
     Date date = new Date(epochMilli);
     if (zoneId != null) {
-      date = Date.from(date.toInstant().atZone(SYSTEM_ZONE_ID).withZoneSameInstant(zoneId).toInstant());
+      date = Date.from(date.toInstant().atZone(DateConstant.SYSTEM_ZONE_ID).withZoneSameInstant(DateFeature.get(zoneId)).toInstant());
     }
     return date;
   }
@@ -1400,7 +1391,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * @return 转换时区后的时间对象
    */
   public static <T extends Temporal> T withZoneInstant(@NonNull final T temporal, @NonNull final ZoneId newZoneId) {
-    return withZoneInstant(temporal, SYSTEM_ZONE_ID, newZoneId);
+    return withZoneInstant(temporal, DateConstant.SYSTEM_ZONE_ID, newZoneId);
   }
 
   /**
@@ -1412,7 +1403,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * @return 转换时区后的 Date 对象
    */
   public static Date withZoneInstant(@NonNull final Date date, @NonNull final ZoneId oldZoneId, final @NonNull ZoneId newZoneId) {
-    LocalDateTime localDateTime = withZoneInstant(LocalDateTime.ofInstant(date.toInstant(), SYSTEM_ZONE_ID), oldZoneId, newZoneId);
+    LocalDateTime localDateTime = withZoneInstant(LocalDateTime.ofInstant(date.toInstant(), DateConstant.SYSTEM_ZONE_ID), oldZoneId, newZoneId);
     if (localDateTime == null) {
       return null;
     }
@@ -1427,7 +1418,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * @return 转换时区后的 Date 对象
    */
   public static Date withZoneInstant(@NonNull final Date date, @NonNull final ZoneId newZoneId) {
-    return withZoneInstant(date, SYSTEM_ZONE_ID, newZoneId);
+    return withZoneInstant(date, DateConstant.SYSTEM_ZONE_ID, newZoneId);
   }
 
   /**
@@ -1436,7 +1427,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * @return 格式为 yyyy-MM-dd 的当天时间字符串
    */
   public static String today() {
-    return FORMAT_YYYY_MM_DD.format(new Date());
+    return DateFormat.YYYY_MM_DD.format(new Date());
   }
 
   /**
@@ -1445,7 +1436,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * @return 格式为 yyyy-MM-dd HH:mm:ss 的当前时间字符串
    */
   public static String now() {
-    return FORMAT_YYYY_MM_DD_HH_MM_SS.format(new Date());
+    return DateFormat.YYYY_MM_DD_HH_MM_SS.format(new Date());
   }
 
   /**
@@ -1465,7 +1456,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * @return 指定时区的当前时间字符串
    */
   public static String now(@NonNull final ZoneId zoneId) {
-    return DateTimeFormatter.ofPattern(DateUtils.defaultLocalDateTimePattern).format(ZonedDateTime.now(zoneId));
+    return DateTimeFormatter.ofPattern(DateUtils.defaultLocalDateTimePattern).format(ZonedDateTime.now(DateFeature.get(zoneId)));
   }
 
   /**
@@ -1476,7 +1467,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * @return 指定时区和格式的当前时间字符串
    */
   public static String now(@NonNull final ZoneId zoneId, @NonNull final String pattern) {
-    return DateTimeFormatter.ofPattern(pattern).format(ZonedDateTime.now(zoneId));
+    return DateTimeFormatter.ofPattern(pattern).format(ZonedDateTime.now(DateFeature.get(zoneId)));
   }
 
   /**
@@ -1487,12 +1478,12 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * @param <T>            时间类
    * @return 时间对象
    */
-  public static <T extends Temporal> T min(@NonNull Temporal temporal, @NonNull final TemporalField... temporalFields) {
+  public static <T extends Temporal> T min(@NonNull T temporal, @NonNull final TemporalField... temporalFields) {
     if (CollectionUtils.isAllEmpty(temporalFields)) {
       return null;
     }
     for (TemporalField temporalField : temporalFields) {
-      temporal = temporal.with(temporalField, temporalField.range().getMinimum());
+      temporal = (T) temporal.with(temporalField, temporalField.range().getMinimum());
     }
     return (T) temporal;
   }
@@ -1505,22 +1496,22 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * @param <T>            时间类
    * @return 时间对象
    */
-  public static <T extends Temporal> T max(@NonNull Temporal temporal, @NonNull final TemporalField... temporalFields) {
+  public static <T extends Temporal> T max(@NonNull T temporal, @NonNull final TemporalField... temporalFields) {
     if (CollectionUtils.isAllEmpty(temporalFields)) {
       return null;
     }
     for (TemporalField temporalField : temporalFields) {
       if (ChronoField.DAY_OF_MONTH.equals(temporalField)) {
-        temporal = temporal.with(TemporalAdjusters.lastDayOfMonth());
+        temporal = (T) temporal.with(TemporalAdjusters.lastDayOfMonth());
       } else if (ChronoField.DAY_OF_YEAR.equals(temporalField)) {
-        temporal = temporal.with(TemporalAdjusters.lastDayOfYear());
+        temporal = (T) temporal.with(TemporalAdjusters.lastDayOfYear());
       } else {
         ValueRange valueRange = temporalField.range();
         long newValue = valueRange.getMaximum();
-        temporal = temporal.with(temporalField, newValue);
+        temporal = (T) temporal.with(temporalField, newValue);
       }
     }
-    return (T) temporal;
+    return temporal;
   }
 
   /**
@@ -1566,7 +1557,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
       localDateTime = plusOrMinus(localDateTime, addOrSubtractDays, ChronoUnit.DAYS);
     }
     if (zoneId != null) {
-      return localDateTime.atZone(SYSTEM_ZONE_ID).withZoneSameInstant(zoneId).toLocalDateTime();
+      return localDateTime.atZone(DateConstant.SYSTEM_ZONE_ID).withZoneSameInstant(DateFeature.get(zoneId)).toLocalDateTime();
     }
     return localDateTime;
   }
@@ -1655,7 +1646,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
       localDateTime = plusOrMinus(localDateTime, addOrSubtractDays, ChronoUnit.DAYS);
     }
     if (zoneId != null) {
-      return localDateTime.atZone(SYSTEM_ZONE_ID).withZoneSameInstant(zoneId).toLocalDateTime();
+      return localDateTime.atZone(DateConstant.SYSTEM_ZONE_ID).withZoneSameInstant(DateFeature.get(zoneId)).toLocalDateTime();
     }
     return localDateTime;
   }
@@ -2300,5 +2291,277 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
       }
     }
     return result;
+  }
+
+  /**
+   * 获取天在月中是第几周，到周一算新的周
+   *
+   * @param localDate 天
+   * @return 第几周，从 1 开始
+   */
+  public static int getWeekOfMonth(@NonNull final LocalDate localDate) {
+    int week = 1;
+    // 获取这个月的第一天是周几
+    LocalDate dayOfMonthDate = localDate.with(ChronoField.DAY_OF_MONTH, 1);
+    int dayOfWeek = dayOfMonthDate.get(ChronoField.DAY_OF_WEEK);
+
+    // 如果月的第一天不是周一
+    if (dayOfWeek != 1) {
+      // 获取下周一，往后最多只有五周
+      dayOfMonthDate = dayOfMonthDate.plusDays(8 - dayOfMonthDate.getDayOfWeek().getValue());
+      // 如果下周一 > 此天，则就是第一周
+      if (dayOfMonthDate.isAfter(localDate)) {
+        return 1;
+      }
+      week++;
+    }
+    // 就算月的第一天为周一，最多也只有 5 周
+    for (int i = 1; i <= 5; i++) {
+      // 每次 +7 天，即到了下一周
+      dayOfMonthDate = dayOfMonthDate.plusDays(7);
+      // 如果下个周一 > 此天
+      if (dayOfMonthDate.isAfter(localDate)) {
+        break;
+      }
+      // 如果下个周一 == 此天，周再 +1
+      else if (dayOfMonthDate.isEqual(localDate)) {
+        return week + 1;
+      }
+      week++;
+    }
+    return week;
+  }
+
+  /**
+   * 获取这个月有几周，到周一算新的周
+   *
+   * @param localDate 天
+   * @return 有几周，从 1 开始
+   */
+  public static int getWeeksOfMonth(@NonNull final LocalDate localDate) {
+    int month = localDate.getMonthValue();
+    // 获取这个月的第一天是周几
+    LocalDate dayOfMonth = localDate.withDayOfMonth(1);
+    int dayOfWeek = dayOfMonth.get(ChronoField.DAY_OF_WEEK);
+    // 如果月的第一天为周一
+    if (dayOfWeek == 1) {
+      dayOfMonth = dayOfMonth.plusDays(28);
+      // 1 号为周一的月最多只有 5 周，加 1 天如果是下月了就是 4 周
+      if (dayOfMonth.plusDays(1).getMonthValue() != month) {
+        return 4;
+      }
+      return 5;
+    } else {
+      // 获取最后一天是几号
+      LocalDate lastDayOfMonth = max(dayOfMonth, ChronoField.DAY_OF_MONTH);
+      int dayOfMonth1 = lastDayOfMonth.getDayOfMonth();
+      if (dayOfMonth1 == 31) {
+        // 本月 1 号 - (7 - 本月最后一天的周) + 36（往后最多只有 5 周，5 * 7），如果结果在下月，说明只有 5 周，否则有 6 周
+        if (dayOfMonth.minusDays(7 - lastDayOfMonth.getDayOfWeek().getValue()).plusDays(35).getMonthValue() != month) {
+          return 5;
+        }
+        return 6;
+      } else if (dayOfMonth1 == 30) {
+        if (dayOfMonth.minusDays(7 - lastDayOfMonth.getDayOfWeek().getValue()).plusDays(34).getMonthValue() != month) {
+          return 5;
+        }
+        return 6;
+      }
+      return 5;
+    }
+  }
+
+  /**
+   * 获取月的周的开始天
+   *
+   * @param localDate 天
+   * @return 月的周的开始天
+   */
+  public static LocalDate getStartDayOfWeekOfMonth(@NonNull final LocalDate localDate) {
+    // 第几周
+    int weekOfMonth = getWeekOfMonth(localDate);
+    // 如果大于一周，说明开始天是周一
+    if (weekOfMonth > 1) {
+      return localDate.with(ChronoField.DAY_OF_WEEK, 1);
+    }
+    // 否则开始天是月的第一天
+    return localDate.withDayOfMonth(1);
+  }
+
+  /**
+   * 获取月的周的结束天
+   *
+   * @param localDate 天
+   * @return 月的周的结束天
+   */
+  public static LocalDate getEndDayOfWeekOfMonth(@NonNull final LocalDate localDate) {
+    // 总周数
+    int weeksOfMonth = getWeeksOfMonth(localDate);
+    // 第几周
+    int weekOfMonth = getWeekOfMonth(localDate);
+    if (weeksOfMonth == 4) {
+      return localDate.withDayOfMonth(weekOfMonth * 7);
+    } else {
+      LocalDate dayOfMonth = localDate.withDayOfMonth(1);
+      // 在第一周
+      if (weekOfMonth == 1) {
+        // 那就是第一周周日
+        return dayOfMonth.plusDays(7 - dayOfMonth.getDayOfWeek().getValue());
+      }
+      // 在最后一周
+      else if (weeksOfMonth == weekOfMonth) {
+        // 那就是月的最后一天
+        return DateUtils.max(localDate, ChronoField.DAY_OF_MONTH);
+      } else {
+        // 获取下周一
+        dayOfMonth = dayOfMonth.plusDays(8 - dayOfMonth.getDayOfWeek().getValue());
+        // 循环每次 +6 天到周日，如果周日 >= 天，那就是周日；此处 -2 是因为只需要判断中间的（总周数 - 2）周了
+        for (int i = 0; i < weeksOfMonth - 2; i++) {
+          // 每次 +7 天，即到下周一
+          dayOfMonth = dayOfMonth.plusDays(7);
+          // 如果下周一 > 此天，则为下周一 -1 天
+          if (dayOfMonth.isAfter(localDate)) {
+            return dayOfMonth.minusDays(1);
+          }
+          // 如果下周一 == 此天，则为下周日
+          else if (dayOfMonth.isEqual(localDate)) {
+            return dayOfMonth.plusDays(6);
+          }
+        }
+        // 实际上走不到这
+        return null;
+      }
+    }
+  }
+
+  /**
+   * 获取月的周的开始天
+   *
+   * @param localDate   年月
+   * @param weekOfMonth 在月的第几周，宽容模式、智能模式时允许超出指定年月
+   * @return 月的周的开始天：宽容模式会超出指定年月；智能模式超出指定年月时为指定年月的最后一周；严格模式超出指定年月时报错
+   */
+  public static LocalDate getStartDayOfWeekOfMonth(@NonNull final LocalDate localDate, final int weekOfMonth) {
+    if (weekOfMonth < 1) {
+      throw new IllegalArgumentException("WeekOfMonth: should be greater than 0");
+    }
+
+    // 1. 从月的第一周周一，即月的第一天开始
+    LocalDate dayOfMonth = localDate.withDayOfMonth(1);
+    // 如果在第一周则直接返回
+    if (weekOfMonth == 1) {
+      return dayOfMonth;
+    }
+    // 2. 获取第二周周一，即下周一
+    dayOfMonth = dayOfMonth.plusDays(8 - dayOfMonth.getDayOfWeek().getValue());
+    // 因为上面已经是第二周了，加上循环中是先加减日期再 week++，所以从第三周开始
+    int week = 3;
+    // 宽容模式可能会超出指定年月
+    ResolverStyle resolverStyle = DateFeature.getResolverStyle();
+    // 当月的结束天
+    LocalDate maxDayOfMonth = DateUtils.max(localDate, ChronoField.DAY_OF_MONTH);
+    // 下次是否 +7 天
+    boolean isPlusSevenDays = true;
+    while (true) {
+      if (isPlusSevenDays) {
+        // 3. 每次 +7 天，即下周一
+        dayOfMonth = dayOfMonth.plusDays(7);
+      } else {
+        // 5. 获取下周一
+        dayOfMonth = dayOfMonth.plusDays(8 - dayOfMonth.getDayOfWeek().getValue());
+        isPlusSevenDays = true;
+      }
+      // 如果是下月了
+      if (dayOfMonth.isAfter(maxDayOfMonth)) {
+        // 严格模式报错
+        if (ResolverStyle.STRICT.equals(resolverStyle)) {
+          throw new IllegalArgumentException("WeekOfMonth: should be less than 'week of month' or change 'DateFeature' to ResolverStyle.LENIENT or ResolverStyle.SMART");
+        }
+        // 智能模式返回指定年月的最后一周的周一
+        else if (ResolverStyle.SMART.equals(resolverStyle)) {
+          dayOfMonth = dayOfMonth.minusDays(dayOfMonth.getDayOfMonth());
+          return dayOfMonth.minusDays(dayOfMonth.getDayOfWeek().getValue() - 1);
+        }
+
+        // 4. 那就取下月 1 号
+        dayOfMonth = dayOfMonth.minusDays(dayOfMonth.getDayOfMonth() - 1);
+        // 更新当月结束天
+        maxDayOfMonth = DateUtils.max(dayOfMonth, ChronoField.DAY_OF_MONTH);
+        // 下次就不是 +7 天了，而是获取下周一
+        isPlusSevenDays = false;
+      }
+
+      // 6. 如果到达指定周了则返回
+      if (week == weekOfMonth) {
+        return dayOfMonth;
+      }
+      week++;
+    }
+  }
+
+  /**
+   * 获取月的周的结束天
+   *
+   * @param localDate   年月
+   * @param weekOfMonth 在月的第几周
+   * @return 月的周的结束天
+   */
+  public static LocalDate getEndDayOfWeekOfMonth(@NonNull final LocalDate localDate, final int weekOfMonth) {
+    if (weekOfMonth < 1) {
+      throw new IllegalArgumentException("WeekOfMonth: should be greater than 0");
+    }
+
+    // 1. 从月的第一周的周日开始
+    LocalDate dayOfMonth = localDate.withDayOfMonth(1).with(ChronoField.DAY_OF_WEEK, 7);
+    // 如果在第一周则直接返回
+    if (weekOfMonth == 1) {
+      return dayOfMonth;
+    }
+    // 上面已经是第一周了，加上循环中是先加减日期再 week++，所以从第二周开始
+    int week = 2;
+    // 宽容模式可能会超出指定年月
+    ResolverStyle resolverStyle = DateFeature.getResolverStyle();
+    // 当月的结束天
+    LocalDate maxDayOfMonth = DateUtils.max(localDate, ChronoField.DAY_OF_MONTH);
+    // 下次是否 +7 天
+    boolean isPlusSevenDays = true;
+    while (true) {
+      if (isPlusSevenDays) {
+        // 2. 每次 +7 天，即下周日
+        dayOfMonth = dayOfMonth.plusDays(7);
+      } else {
+        // 4. 获取下月第一周的周日
+        dayOfMonth = dayOfMonth.plusDays(1).with(ChronoField.DAY_OF_WEEK, 7);
+        isPlusSevenDays = true;
+      }
+
+      // 如果是下月了
+      if (dayOfMonth.isAfter(maxDayOfMonth)) {
+        // 严格模式报错
+        if (ResolverStyle.STRICT.equals(resolverStyle)) {
+          throw new IllegalArgumentException("WeekOfMonth: should be less than 'week of month' or change 'DateFeature' to ResolverStyle.LENIENT or ResolverStyle.SMART");
+        }
+        // 智能模式返回指定年月的最后一天
+        else if (ResolverStyle.SMART.equals(resolverStyle)) {
+          return dayOfMonth.minusDays(dayOfMonth.getDayOfMonth());
+        }
+
+        // 更新当月结束天
+        maxDayOfMonth = DateUtils.max(dayOfMonth, ChronoField.DAY_OF_MONTH);
+        // !(为 7 号 && 为周日)，比如 2022-07 ~ 2022-08，+7 天正常往下，不需要回退时间
+        if (!(dayOfMonth.getDayOfMonth() == 7 && dayOfMonth.getDayOfWeek().getValue() == 7)) {
+          // 3. 那就取指定年月的最后一天
+          dayOfMonth = dayOfMonth.minusDays(dayOfMonth.getDayOfMonth());
+          // 下次就不是 +7 天了，而是获取下周日
+          isPlusSevenDays = false;
+        }
+      }
+
+      // 5. 如果到达指定周了则返回
+      if (week == weekOfMonth) {
+        return dayOfMonth;
+      }
+      week++;
+    }
   }
 }

@@ -3,8 +3,9 @@ package top.zhogjianhao.junit;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import top.zhogjianhao.date.DatePattern;
 import top.zhogjianhao.date.DateUtils;
+import top.zhogjianhao.date.constant.DateConstant;
+import top.zhogjianhao.date.constant.DatePattern;
 
 import java.time.*;
 import java.time.format.DateTimeFormatter;
@@ -17,6 +18,31 @@ import java.util.Locale;
 @Slf4j
 @DisplayName("时间工具类测试")
 public class DateUtilsTest {
+
+  // public static void main(String[] args) {
+  //   // Date date = DateUtils.parseDate("Wed Aug 01 08:00:00 CST 2018", ZoneOffset.ofHours(0), "EEE MMM dd HH:mm:ss z yyyy");
+  //   // System.out.println(date);
+  //   //
+  //   // DateUtils.max(
+  //   //   DateUtils.plusOrMinus(
+  //   //     // 当前时间 加
+  //   //     LocalDateTime.now(),
+  //   //     // 14
+  //   //     14L,
+  //   //     // 天
+  //   //     ChronoUnit.DAYS),
+  //   //   // 天的纳秒级别 变成最大，即这一天的最大时间
+  //   //   ChronoField.NANO_OF_DAY);
+  //
+  //   LocalDate localDate = DateUtils.parseLocalDate("2022-01-31");
+  //   System.out.println(DateUtils.getStartDayOfWeekOfMonth(localDate));
+  //   System.out.println(DateUtils.getEndDayOfWeekOfMonth(localDate));
+  //
+  //   // DateFeature.RESOLVER_STYLE_ALWAYS = ResolverStyle.LENIENT;
+  //   // int weekOfMonth = 10;
+  //   // System.out.println(DateUtils.getStartDayOfWeekOfMonth(localDate,weekOfMonth));;
+  //   // System.out.println(DateUtils.getEndDayOfWeekOfMonth(localDate,weekOfMonth));;
+  // }
 
   private final ZonedDateTime nowZonedDateTime = ZonedDateTime.now();
   private final LocalDateTime nowLocalDateTime = LocalDateTime.now();
@@ -119,7 +145,7 @@ public class DateUtilsTest {
     println(now);
 
     // 系统区域，atZone 只是给对象赋时区，并不会修改小时
-    println(now.atZone(DateUtils.SYSTEM_ZONE_ID));
+    println(now.atZone(DateConstant.SYSTEM_ZONE_ID));
     // 设置区域
     println(now.atZone(ZoneId.of("Asia/Shanghai")));
     // 设置偏移量
@@ -127,18 +153,18 @@ public class DateUtilsTest {
 
     now = now.withMonth(8);
     // 指定时区修改小时，本地和 UTC 相差多少就会加上多少，比如 Asia/Shanghai 和 UTC 相差 -8 小时
-    println(now.atZone(DateUtils.SYSTEM_ZONE_ID).withZoneSameInstant(ZoneOffset.UTC));
+    println(now.atZone(DateConstant.SYSTEM_ZONE_ID).withZoneSameInstant(ZoneOffset.UTC));
     // 指定时区，其他保持不变，TODO 但会转换为此区域的有效时间（夏令时）？
-    println(now.atZone(DateUtils.SYSTEM_ZONE_ID).withZoneSameLocal(ZoneOffset.ofHours(-7)));
+    println(now.atZone(DateConstant.SYSTEM_ZONE_ID).withZoneSameLocal(ZoneOffset.ofHours(-7)));
     // 指定区域，其他保持不变
-    println(now.atZone(DateUtils.SYSTEM_ZONE_ID).withZoneSameLocal(ZoneId.of("America/Los_Angeles")));
+    println(now.atZone(DateConstant.SYSTEM_ZONE_ID).withZoneSameLocal(ZoneId.of("America/Los_Angeles")));
     // 将区域设置为偏移量（ISO-8601），方便网络传输
-    println(now.atZone(DateUtils.SYSTEM_ZONE_ID).withZoneSameLocal(ZoneId.of("America/Los_Angeles")).withFixedOffsetZone());
+    println(now.atZone(DateConstant.SYSTEM_ZONE_ID).withZoneSameLocal(ZoneId.of("America/Los_Angeles")).withFixedOffsetZone());
 
-    Instant instant = now.atZone(DateUtils.SYSTEM_ZONE_ID).toInstant();
+    Instant instant = now.atZone(DateConstant.SYSTEM_ZONE_ID).toInstant();
     // 夏令时在 ZoneOffset 当中表现，同一时区（使用夏令时），不同月份，甚至不同年份（tz database），夏季和冬季的 ZoneOffset 不同：https://www.itranslater.com/qa/details/2326279995771061248、https://en.wikipedia.org/wiki/Tz_database
     println(ZoneId.of("America/Los_Angeles").getRules().getOffset(instant));
-    instant = now.withMonth(1).atZone(DateUtils.SYSTEM_ZONE_ID).toInstant();
+    instant = now.withMonth(1).atZone(DateConstant.SYSTEM_ZONE_ID).toInstant();
     println(ZoneId.of("America/Los_Angeles").getRules().getOffset(instant));
   }
 
