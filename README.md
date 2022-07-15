@@ -23,7 +23,7 @@
 <dependency>
   <groupId>top.zhogjianhao</groupId>
   <artifactId>ZUtil</artifactId>
-  <version>1.7.0</version>
+  <version>1.8.0</version>
 </dependency>
 ```
 
@@ -31,9 +31,9 @@
 
 ```groovy
 // groovy
-implementation 'top.zhogjianhao:ZUtil:1.7.0'
+implementation 'top.zhogjianhao:ZUtil:1.8.0'
 // kotlin
-implementation("top.zhogjianhao:ZUtil:1.7.0")
+implementation("top.zhogjianhao:ZUtil:1.8.0")
 ```
 
 # Stargazers over time
