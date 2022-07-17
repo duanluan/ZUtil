@@ -1,4 +1,4 @@
-# Deprecated
+# 不兼容变更
 
 * 1.8.0：
   * `date.DateDuration`移到`date.constant`包下；

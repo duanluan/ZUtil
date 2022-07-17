@@ -1,14 +1,8 @@
 # 入门
 
-## 简介
-
-追求更快的 Java 工具类，一度想将名字改成 FastUtil，但自知能力不够，不敢妄自菲薄。
-
-大多以 Apache 工具类为基础进行扩展，再加上其他工具类为追求更快更全，所以引入了比较多的依赖包。
-
 ## 安装
 
-### Maven：
+### Maven
 
 ```xml
 <dependency>
@@ -27,7 +21,7 @@ implementation 'top.zhogjianhao:ZUtil:1.8.0'
 implementation("top.zhogjianhao:ZUtil:1.8.0")
 ```
 
-## 注意
+## 安装注意
 
 工具包中已使用 slf4j-api 和 slf4j-simple，和 spring-boot-starter-web 同时使用时会冲突，需要手动排除。
 
@@ -98,7 +92,5 @@ dependencies {
 
 ## 资源
 
-* [Github](https://github.com/duanluan/ZUtil)
-* [Gitee](https://gitee.com/duanluan/ZUtil)
 * [Maven 中央库](https://search.maven.org/artifact/top.zhogjianhao/ZUtil)
 * [Maven Repository](https://mvnrepository.com/artifact/top.zhogjianhao/ZUtil)
