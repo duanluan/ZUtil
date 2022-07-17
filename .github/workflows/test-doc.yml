@@ -2,7 +2,7 @@ name: Test deployment
 
 defaults:
   run:
-    working-directory: docs
+    working-directory: ./docs
 
 # 如果你想要进一步定义触发条件、路径等，可以查看文档
 # https://docs.github.com/cn/actions/using-workflows/workflow-syntax-for-github-actions#on
@@ -10,6 +10,8 @@ on:
   pull_request:
     branches:
       - main
+    paths:
+      - 'doc/**'
 
 jobs:
   test-deploy:
