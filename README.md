@@ -1,4 +1,4 @@
-![](https://socialify.git.ci/duanluan/ZUtil/image?description=1&forks=1&issues=1&language=1&name=1&owner=1&pattern=Floating%20Cogs&stargazers=1&theme=Light)
+![](https://socialify.git.ci/duanluan/ZUtil/image?description=1&font=Bitter&forks=1&issues=1&language=1&logo=https%3A%2F%2Fduanluan.github.io%2FZUtil%2Fimg%2Flogo.svg&name=1&owner=1&pattern=Floating%20Cogs&pulls=1&stargazers=1&theme=Light)
 
 # ZUtil
 
