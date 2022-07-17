@@ -15,7 +15,7 @@ const FeatureList: FeatureItem[] = [
     description: (
       <>
         使用 JMH 进行性能测试。<br/>
-        <a href='https://github.com/duanluan/ZUtil/tree/main/src/test/java/top/zhogjianhao/jmh'>https://github.com/duanluan/ZUtil/tree/main/src/test/java/top/zhogjianhao/jmh</a>
+        <a href='https://github.com/duanluan/ZUtil/tree/main/src/test/java/top/zhogjianhao/jmh' target='_blank'>https://github.com/duanluan/ZUtil/tree/main/src/test/java/top/zhogjianhao/jmh</a>
       </>
     ),
   },
@@ -34,8 +34,8 @@ const FeatureList: FeatureItem[] = [
     // Svg: require('@site/static/img/.svg').default,
     description: (
       <>
-        使用 JUnit 进行套件测试和代码覆盖率测试，保证每行代码都符合预期，更少出 BUG。<br/>
-        <a href="https://github.com/duanluan/ZUtil/tree/main/src/test/java/top/zhogjianhao/junit">https://github.com/duanluan/ZUtil/tree/main/src/test/java/top/zhogjianhao/junit</a>
+        使用 <a href='https://junit.org/junit5/' target='_blank'>JUnit</a> 进行套件测试，<a href='https://www.jacoco.org/jacoco/index.html' target='_blank'>JaCoCo</a> 进行代码覆盖率测试，保证每行代码都符合预期，更少出 BUG。<br/>
+        <a href='https://github.com/duanluan/ZUtil/tree/main/src/test/java/top/zhogjianhao/junit' target='_blank'>https://github.com/duanluan/ZUtil/tree/main/src/test/java/top/zhogjianhao/junit</a>
       </>
     ),
   },
