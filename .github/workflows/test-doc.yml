@@ -1,9 +1,5 @@
 name: Test deployment
 
-defaults:
-  run:
-    working-directory: ./docs
-
 # 如果你想要进一步定义触发条件、路径等，可以查看文档
 # https://docs.github.com/cn/actions/using-workflows/workflow-syntax-for-github-actions#on
 on:
@@ -11,7 +7,7 @@ on:
     branches:
       - main
     paths:
-      - 'doc/**'
+      - 'docs/**'
 
 jobs:
   test-deploy:
@@ -25,6 +21,8 @@ jobs:
           cache: npm
 
       - name: Install dependencies
+        working-directory: ./docs
         run: npm install --frozen-lockfile
       - name: Test build website
+        working-directory: ./docs
         run: npm build
