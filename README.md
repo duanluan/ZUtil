@@ -11,11 +11,17 @@
 [![](https://img.shields.io/github/stars/duanluan/ZUtil?style=social)](https://github.com/duanluan/ZUtil)
 [![star](https://gitee.com/duanluan/ZUtil/badge/star.svg?theme=white)](https://gitee.com/duanluan/ZUtil)
 
-追求更快的 Java 工具类。
+追求更快更全的 Java 工具类。
 
-工具类使用请查看[文档](https://duanluan.github.io/ZUtil)、[javadoc](https://apidoc.gitee.com/duanluan/ZUtil)、[test](src/test/java/top/zhogjianhao)，和 Hutool 的性能对比测试请查看 [jmh.contrast](src/test/java/top/zhogjianhao/jmh/contrast)。
+工具类使用请查看<a href='https://duanluan.github.io/ZUtil' target='_blank' style='font-size:25px'>文档</a>、[javadoc](https://apidoc.gitee.com/duanluan/ZUtil)。
 
-请使用最新版，无重大 bug 已经测试通过的方法的形参不会再更改。
+和 Hutool 的性能对比测试请查看 [jmh.contrast](src/test/java/top/zhogjianhao/jmh/contrast)。
+
+## 特性
+
+* 更快：使用 JMH 进行[性能测试](https://github.com/duanluan/ZUtil/tree/main/src/test/java/top/zhogjianhao/jmh)。
+* 更全：[时间工具类](https://github.com/duanluan/ZUtil/blob/main/src/main/java/top/zhogjianhao/date/DateUtils.java)近 120 个方法，2500+ 行；[正则工具类](https://github.com/duanluan/ZUtil/blob/main/src/main/java/top/zhogjianhao/regex/RegExUtils.java)近 50 个方法，750+ 行。其他工具类也在持续更新中……
+* 更安全：使用 JUnit 进行[套件测试](https://github.com/duanluan/ZUtil/tree/main/src/test/java/top/zhogjianhao/junit)，JaCoCo 进行[代码覆盖率测试](https://github.com/duanluan/ZUtil/tree/main/src/test/java/top/zhogjianhao/junit)，保证每行代码都符合预期，更少出 BUG。
 
 ## Maven：
 

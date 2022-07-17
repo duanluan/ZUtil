@@ -24,7 +24,9 @@ const FeatureList: FeatureItem[] = [
     // Svg: require('@site/static/img/.svg').default,
     description: (
       <>
-        时间工具类近 120 个方法，2500+ 行；<br/>正则工具类近 50 个方法，750+ 行。<br/>
+
+        <a href='https://github.com/duanluan/ZUtil/blob/main/src/main/java/top/zhogjianhao/date/DateUtils.java' target='_blank'>时间工具类</a>近 120 个方法，2500+ 行；<br/>
+        <a href='https://github.com/duanluan/ZUtil/blob/main/src/main/java/top/zhogjianhao/regex/RegExUtils.java' target='_blank'>正则工具类</a>近 50 个方法，750+ 行。<br/>
         其他工具类也在持续更新中……
       </>
     ),
