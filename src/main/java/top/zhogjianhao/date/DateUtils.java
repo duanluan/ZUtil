@@ -24,18 +24,6 @@ import java.util.stream.Stream;
  */
 @Slf4j
 public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
-  /**
-   * LocalDate 默认格式
-   */
-  public static String defaultLocalDatePattern = DatePattern.UUUU_MM_DD;
-  /**
-   * LocalDateTime 默认格式
-   */
-  public static String defaultLocalDateTimePattern = DatePattern.YYYY_MM_DD_HH_MM_SS;
-  /**
-   * LocalTime 默认格式
-   */
-  public static String defaultLocalTimePattern = DatePattern.HH_MM_SS;
 
   /**
    * 获取时间格式化构造器，并给不同时间级别赋默认值
@@ -105,7 +93,12 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     if (locale != null) {
       dateTimeFormatter = formatterBuilder.toFormatter(DateFeature.get(locale));
     } else {
-      dateTimeFormatter = formatterBuilder.toFormatter(DateConstant.DEFAULT_LOCALE);
+      Locale locale1 = DateFeature.getLocale();
+      if (locale1 != null) {
+        dateTimeFormatter = formatterBuilder.toFormatter(locale1);
+      } else {
+        dateTimeFormatter = formatterBuilder.toFormatter();
+      }
     }
     dateTimeFormatter.withResolverStyle(DateFeature.get(DateConstant.DEFAULT_RESOLVER_STYLE));
     if (zoneId != null) {
@@ -278,16 +271,22 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     }
     DateTimeFormatter dateTimeFormatter;
     // 使用已存在的格式转换器
-    if (defaultLocalDateTimePattern.equals(pattern)) {
-      dateTimeFormatter = DateFormatter.YYYY_MM_DD_HH_MM_SS;
-    } else if (defaultLocalDatePattern.equals(pattern)) {
-      dateTimeFormatter = DateFormatter.YYYY_MM_DD;
-    } else if (defaultLocalTimePattern.equals(pattern)) {
-      dateTimeFormatter = DateFormatter.HH_MM_SS;
-    } else {
-      dateTimeFormatter = getDefaultFormatter(pattern);
+    switch (pattern) {
+      case DateConstant.DEFAULT_LOCAL_DATE_TIME_PATTERN:
+        dateTimeFormatter = DateFormatter.YYYY_MM_DD_HH_MM_SS;
+        break;
+      case DateConstant.DEFAULT_LOCAL_DATE_PATTERN:
+        dateTimeFormatter = DateFormatter.YYYY_MM_DD;
+        break;
+      case DateConstant.DEFAULT_LOCAL_TIME_PATTERN:
+        dateTimeFormatter = DateFormatter.HH_MM_SS;
+        break;
+      default:
+        dateTimeFormatter = getDefaultFormatter(pattern);
+        break;
     }
-    if (zoneId != null) {
+    ZoneId zoneId1 = DateFeature.get(zoneId);
+    if (zoneId1 != null) {
       if (temporal instanceof LocalDateTime || temporal instanceof LocalDate || temporal instanceof LocalTime) {
         // 因为 LocalDate 和 LocalTime 不存在时区信息，所以先根据当前时间补全为 LocalDateTime
         LocalDateTime localDateTime;
@@ -298,9 +297,9 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
         } else {
           localDateTime = ((LocalTime) temporal).atDate(LocalDate.now());
         }
-        return localDateTime.atZone(DateConstant.SYSTEM_ZONE_ID).withZoneSameInstant(DateFeature.get(zoneId)).format(dateTimeFormatter);
+        return localDateTime.atZone(DateConstant.SYSTEM_ZONE_ID).withZoneSameInstant(zoneId1).format(dateTimeFormatter);
       } else if (temporal instanceof ZonedDateTime) {
-        return ((ZonedDateTime) temporal).withZoneSameInstant(DateFeature.get(zoneId)).format(dateTimeFormatter);
+        return ((ZonedDateTime) temporal).withZoneSameInstant(zoneId1).format(dateTimeFormatter);
       } else {
         throw new IllegalArgumentException("Temporal: should be ZonedDateTime, LocalDateTime, LocalDate, or LocalTime");
       }
@@ -311,9 +310,9 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
   /**
    * 格式化为指定时区和格式的字符串，格式根据时间对象的类型判断
    * <p>
-   * LocalDateTime、ZonedDateTime：DateUtils#defaultLocalDatePattern<br>
-   * LocalDate：DateUtils#defaultLocalDateTimePattern<br>
-   * LocalTime：DateUtils#defaultLocalTimePattern
+   * LocalDateTime、ZonedDateTime：DateConstant.DEFAULT_LOCAL_DATE_PATTERN<br>
+   * LocalDate：DateConstant.DEFAULT_LOCAL_DATE_TIME_PATTERN<br>
+   * LocalTime：DateConstant.DEFAULT_LOCAL_TIME_PATTERN
    *
    * @param temporal 时间对象
    * @param zoneId   时区
@@ -323,11 +322,11 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     // 根据不同的时间类型获取不同的默认格式
     String pattern;
     if (temporal instanceof LocalDateTime || temporal instanceof ZonedDateTime) {
-      pattern = defaultLocalDateTimePattern;
+      pattern = DateConstant.DEFAULT_LOCAL_DATE_TIME_PATTERN;
     } else if (temporal instanceof LocalDate) {
-      pattern = defaultLocalDatePattern;
+      pattern = DateConstant.DEFAULT_LOCAL_DATE_PATTERN;
     } else if (temporal instanceof LocalTime) {
-      pattern = defaultLocalTimePattern;
+      pattern = DateConstant.DEFAULT_LOCAL_TIME_PATTERN;
     } else {
       throw new IllegalArgumentException("Temporal: should be ZonedDateTime, LocalDateTime, LocalDate, or LocalTime");
     }
@@ -348,9 +347,9 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
   /**
    * 格式化为指定格式的字符串，格式根据时间对象的类型判断
    * <p>
-   * LocalDateTime、ZonedDateTime：DateUtils#defaultLocalDatePattern<br>
-   * LocalDate：DateUtils#defaultLocalDateTimePattern<br>
-   * LocalTime：DateUtils#defaultLocalTimePattern
+   * LocalDateTime、ZonedDateTime：DateConstant.DEFAULT_LOCAL_DATE_PATTERN<br>
+   * LocalDate：DateConstant.DEFAULT_LOCAL_DATE_TIME_PATTERN<br>
+   * LocalTime：DateConstant.DEFAULT_LOCAL_TIME_PATTERN
    *
    * @param temporal 时间对象
    * @return 指定格式的字符串
@@ -378,12 +377,16 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     } else {
       FastDateFormat format = null;
       // 使用已存在的格式转换器
-      if (defaultLocalDateTimePattern.equals(pattern)) {
-        format = DateFormat.YYYY_MM_DD_HH_MM_SS;
-      } else if (defaultLocalDatePattern.equals(pattern)) {
-        format = DateFormat.YYYY_MM_DD;
-      } else if (defaultLocalTimePattern.equals(pattern)) {
-        format = DateFormat.HH_MM_SS;
+      switch (pattern) {
+        case DateConstant.DEFAULT_LOCAL_DATE_TIME_PATTERN:
+          format = DateFormat.YYYY_MM_DD_HH_MM_SS;
+          break;
+        case DateConstant.DEFAULT_LOCAL_DATE_PATTERN:
+          format = DateFormat.YYYY_MM_DD;
+          break;
+        case DateConstant.DEFAULT_LOCAL_TIME_PATTERN:
+          format = DateFormat.HH_MM_SS;
+          break;
       }
       if (format == null) {
         format = FastDateFormat.getInstance(pattern);
@@ -400,7 +403,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * @return 指定时区的字符串
    */
   public static String format(@NonNull final Date date, @NonNull final ZoneId zoneId) {
-    return format(date, zoneId, defaultLocalDateTimePattern);
+    return format(date, zoneId, DateConstant.DEFAULT_LOCAL_DATE_TIME_PATTERN);
   }
 
   /**
@@ -415,13 +418,13 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
   }
 
   /**
-   * 格式化为 DateUtils#defaultLocalDateTimePattern 的字符串
+   * 格式化为 DateConstant.DEFAULT_LOCAL_DATE_TIME_PATTERN 的字符串
    *
    * @param date 时间对象
-   * @return DateUtils#defaultLocalDateTimePattern 格式的字符串
+   * @return DateConstant.DEFAULT_LOCAL_DATE_TIME_PATTERN 格式的字符串
    */
   public static String format(@NonNull final Date date) {
-    return format(date, defaultLocalDateTimePattern);
+    return format(date, DateConstant.DEFAULT_LOCAL_DATE_TIME_PATTERN);
   }
 
   /**
@@ -437,14 +440,14 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
   }
 
   /**
-   * 格式化为 DateUtils#defaultLocalDateTimePattern 的字符串
+   * 格式化为 DateConstant.DEFAULT_LOCAL_DATE_TIME_PATTERN 的字符串
    *
    * @param epochMilli 时间戳
    * @param zoneId     时区
    * @return 指定时区的字符串
    */
   public static String format(final long epochMilli, @NonNull final ZoneId zoneId) {
-    return format(epochMilli, zoneId, defaultLocalDateTimePattern);
+    return format(epochMilli, zoneId, DateConstant.DEFAULT_LOCAL_DATE_TIME_PATTERN);
   }
 
   /**
@@ -459,13 +462,13 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
   }
 
   /**
-   * 格式化为 DateUtils#defaultLocalDateTimePattern 的字符串
+   * 格式化为 DateConstant.DEFAULT_LOCAL_DATE_TIME_PATTERN 的字符串
    *
    * @param epochMilli 时间戳
-   * @return DateUtils#defaultLocalDateTimePattern 格式的字符串
+   * @return DateConstant.DEFAULT_LOCAL_DATE_TIME_PATTERN 格式的字符串
    */
   public static String format(final long epochMilli) {
-    return format(epochMilli, defaultLocalDateTimePattern);
+    return format(epochMilli, DateConstant.DEFAULT_LOCAL_DATE_TIME_PATTERN);
   }
 
   /**
@@ -673,7 +676,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
       return toDate(((LocalDate) temporal).atStartOfDay(), DateFeature.get(zoneId));
     } else if (temporal instanceof LocalTime) {
       //  遵循 Date 的默认规则，年为 1970
-      return toDate(((LocalTime) temporal).atDate(LocalDate.of(DateFeature.getMinDateYear(DateConstant.DEFAULT_MIN_DATE_YEAR).intValue(), 1, 1)), DateFeature.get(zoneId));
+      return toDate(((LocalTime) temporal).atDate(LocalDate.of(DateFeature.getLazyMinDateYear(DateConstant.DEFAULT_MIN_DATE_YEAR).intValue(), 1, 1)), DateFeature.get(zoneId));
     } else if (temporal instanceof ZonedDateTime) {
       final ZonedDateTime[] zonedDateTime = {(ZonedDateTime) temporal};
       if (zoneId != null) {
@@ -1456,7 +1459,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * @return 指定时区的当前时间字符串
    */
   public static String now(@NonNull final ZoneId zoneId) {
-    return DateTimeFormatter.ofPattern(DateUtils.defaultLocalDateTimePattern).format(ZonedDateTime.now(DateFeature.get(zoneId)));
+    return DateTimeFormatter.ofPattern(DateConstant.DEFAULT_LOCAL_DATE_TIME_PATTERN).format(ZonedDateTime.now(DateFeature.get(zoneId)));
   }
 
   /**
@@ -1630,7 +1633,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * @return 时间字符串
    */
   public static String todayMinTimeStr() {
-    return todayMinTimeStr(defaultLocalDateTimePattern);
+    return todayMinTimeStr(DateConstant.DEFAULT_LOCAL_DATE_TIME_PATTERN);
   }
 
   /**
@@ -1719,7 +1722,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * @return 时间字符串
    */
   public static String todayMaxTimeStr() {
-    return todayMaxTimeStr(defaultLocalDateTimePattern);
+    return todayMaxTimeStr(DateConstant.DEFAULT_LOCAL_DATE_TIME_PATTERN);
   }
 
   /**

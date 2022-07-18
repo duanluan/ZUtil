@@ -1,7 +1,11 @@
 package top.zhogjianhao.date.constant;
 
+import java.time.format.DateTimeFormatterBuilder;
+
 /**
  * 时间格式
+ *
+ * 参考 {@link DateTimeFormatterBuilder#appendPattern(String)}
  */
 public class DatePattern {
 
