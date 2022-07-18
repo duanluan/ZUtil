@@ -572,7 +572,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
       }
     }
     if (pattern.contains("S")) {
-      long millis = epochMilli / DateDuration.MILLIS;
+      long millis = epochMilli / DateDuration.MILLIS_1000;
       if (pattern.contains("S")) {
         pattern = DateRegexPattern.FRACTION_OF_SECOND3.matcher(pattern).replaceAll(String.format("%03d", millis));
       }
@@ -641,7 +641,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
       }
     }
     if (millisSuffix != null) {
-      long millis = epochMilli / DateDuration.MILLIS;
+      long millis = epochMilli / DateDuration.MILLIS_1000;
       if (millis > 0 || !isIgnoreZero) {
         result += millis + millisSuffix;
       }
