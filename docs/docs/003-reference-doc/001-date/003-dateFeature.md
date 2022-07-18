@@ -2,7 +2,7 @@
 
 可以通过临时或总是（Always）修改其静态成员变量，来决定 DateUtils 中方法对时间的处理方式。
 
-## RESOLVER_STYLE 解析器模式/风格
+## RESOLVER_STYLE - 解析器模式/风格
 
 ```java
 // 临时设置解析器模式为宽容
@@ -12,7 +12,7 @@ DateFeature.set(ResolverStyle.LENIENT);
 DateUtils.getStartDayOfWeekOfMonth(LocalDate.now(), 7);
 ```
 
-## LOCALE 区域
+## LOCALE - 区域
 
 ```java
 // 总是设置解析器模式为中文 
@@ -23,7 +23,7 @@ DateUtils.format(LocalDate.now(), "E")
 DateUtils.format(LocalDate.now(), "MMM")
 ```
 
-## ZONE_ID 时区/区域 ID
+## ZONE_ID - 时区/区域 ID
 
 ```java
 // 临时设置时区
@@ -32,7 +32,7 @@ DateFeature.set(ZoneId.from(ZoneOffset.UTC));
 DateUtils.format(LocalDateTime.now());
 ```
 
-## MIN_DATE_YEAR 最小 Date 年
+[//]: # (## MIN_DATE_YEAR - 最小 Date 年)
 
 ```java
 // 临时设置最小 Date 年
