@@ -1,4 +1,4 @@
-# 时间
+# DateUtils 时间工具类
 
 继承`org.apache.commons.lang3.time.DateUtils`。
 
