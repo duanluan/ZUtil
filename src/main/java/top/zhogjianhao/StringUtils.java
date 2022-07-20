@@ -8,6 +8,20 @@ import lombok.NonNull;
 public class StringUtils extends org.apache.commons.lang3.StringUtils {
 
   /**
+   * 查找 seq 中 searchSeq 的第一个索引位置，找不到返回 -1
+   *
+   * @param seq       被查找的字符串
+   * @param searchSeq 需要查找的字符串
+   * @return 需要查找的字符串在被查找的字符串中的第一个索引位置
+   */
+  public static int indexOf(@NonNull final CharSequence seq, @NonNull final CharSequence searchSeq) {
+    if (searchSeq.length() == 2) {
+      return ArrayUtils.indexOf(seq.toString().toCharArray(), searchSeq.toString());
+    }
+    return org.apache.commons.lang3.StringUtils.indexOf(seq, searchSeq);
+  }
+
+  /**
    * 删除开头，忽略大小写
    *
    * @param str    被删除的字符串
