@@ -2442,7 +2442,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    *
    * @param localDate   年月
    * @param weekOfMonth 在月的第几周，宽容模式、智能模式时允许超出指定年月
-   * @return 月的周的开始天：宽容模式会超出指定年月；智能模式超出指定年月时为指定年月的最后一周；严格模式超出指定年月时报错
+   * @return 月的周的开始天：宽容模式会超出指定年月；智能模式超出指定年月时为指定年月的最后一天；严格模式超出指定年月时报错
    */
   public static LocalDate getStartDayOfWeekOfMonth(@NonNull final LocalDate localDate, final int weekOfMonth) {
     if (weekOfMonth < 1) {
@@ -2506,8 +2506,8 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * 获取月的周的结束天
    *
    * @param localDate   年月
-   * @param weekOfMonth 在月的第几周
-   * @return 月的周的结束天
+   * @param weekOfMonth 在月的第几周，宽容模式、智能模式时允许超出指定年月
+   * @return 月的周的结束天：宽容模式会超出指定年月；智能模式超出指定年月时为指定年月的最后一天；严格模式超出指定年月时报错
    */
   public static LocalDate getEndDayOfWeekOfMonth(@NonNull final LocalDate localDate, final int weekOfMonth) {
     if (weekOfMonth < 1) {
