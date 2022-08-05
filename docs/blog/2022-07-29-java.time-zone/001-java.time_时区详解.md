@@ -5,33 +5,25 @@ authors: [duanluan]
 tags: [time,zone,时区,时间]
 ---
 
-常用的 LocalDate、LocalDateTime、LocalTime 类是不包含时区信息的，可以通过 `.atZone` 来设置 ZoneId，返回 ZoneDateTime 类对象。
+`LocalDateTime`类是不包含时区信息的，可以通过`atZone`方法来设置`ZoneId`，返回`ZonedDateTime`类实例，通过`atOffset`方法来设置`ZoneOffset`，返回`OffsetDateTime`类实例。
 
-## 关键词
+![](java.time.drawio.png)
 
-解释它们时会用到中文名称，使用它们时保持英文名称。
+## ZonedDateTime
 
-* 时区偏移：ZoneOffset
-* 时区 ID：ZoneId
-* 时区规则：ZoneRules
-* 瞬时：Instant
-* 本地日期时间：LocalDateTime
-
-## ZoneDateTime
-
-我们来逐段解读一下 ZoneDateTime 类的注释。
+我们来逐段解读一下 ZonedDateTime 类的注释。
 
 > A date-time with a time-zone in the ISO-8601 calendar system, such as `2007-12-03T10:15:30+01:00 Europe/Paris`.
 > 
-> ISO-8601 日历系统中带时区的日期时间，例如 `2007-12-03T10:15:30+01:00 Europe/Paris`。
+> ISO-8601 日历系统中带时区的日期时间，例如`2007-12-03T10:15:30+01:00 Europe/Paris`。
 
 [ISO-8601](https://zh.wikipedia.org/wiki/ISO_8601) 我们简单理解为是规定日期和时间如何表示的标准即可，此处不深入研究。
 
-`2007-12-03T10:15:30+01:00 Europe/Paris`中，`2007-12-03`为年月日；`T`是日期和时间组合表示时的固定写法，用于分隔；`+01:00`是此日期时间与 UTC 的时差为 +1 小时，即**时区偏移（ZoneOffset）**；`Europe/Paris`是指此日期时间的所在区域为欧洲/巴黎，即**时区 ID（ZoneId）**，time-zone ID 请查看：[List of tz database time zones](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)。
+`2007-12-03T10:15:30+01:00 Europe/Paris`中，`2007-12-03`为年月日；`T`是日期和时间组合表示时的固定写法，用于分隔；`10:15:30`是小时分钟秒；`+01:00`是此日期时间与 UTC 的时差为 +1 小时，即**时区偏移（ZoneOffset）**；`Europe/Paris`是指此日期时间的所在区域为欧洲/巴黎，即**时区 ID（ZoneId）**，time-zone ID 请查看：[List of tz database time zones](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)。
 
 > ZonedDateTime is an immutable representation of a date-time with a time-zone. This class stores all date and time fields, to a precision of nanoseconds, and a time-zone, with a zone offset used to handle ambiguous local date-times. For example, the value "2nd October 2007 at 13:45.30.123456789 +02:00 in the Europe/Paris time-zone" can be stored in a `ZonedDateTime`.
 > 
-> ZonedDateTime 是带时区的日期时间的常量表示。此类存储所有的日期时间（精确到纳秒）和时区，其中时区偏移用于处理不明确的本地日期时间。 例如，值“2nd October 2007 at 13:45.30.123456789 +02:00 in the Europe/Paris time-zone” 可以被存储在 `ZoneDateTime` 中。
+> ZonedDateTime 是带时区的日期时间的常量表示。此类存储所有的日期时间（精确到纳秒）和时区，其中时区偏移用于处理不明确的本地日期时间。 例如，值“2nd October 2007 at 13:45.30.123456789 +02:00 in the Europe/Paris time-zone” 可以被存储在`ZonedDateTime`中。
 
 说它是常量是因为此类是被`final`修饰的，调用它的方法时，**返回**的都是**新实例**。
 
@@ -53,11 +45,11 @@ System.out.println(zonedDateTime.getOffset());
 
 > This class handles conversion from the local time-line of `LocalDateTime` to the instant time-line of `Instant`. The difference between the two time-lines is the offset from UTC/Greenwich, represented by a `ZoneOffset`.
 > 
-> 此类处理 `LocalDateTime` 的本地时间线到 `Instant` 的瞬时时间线。两条时间线的差异是与 UTC/Greenwich 的偏移量，由 `ZoneOffset` 表示。
+> 此类处理`LocalDateTime`的本地时间线到`Instant`的瞬时时间线。两条时间线的差异是与 UTC/Greenwich 的偏移量，由`ZoneOffset`表示。
 
 **Instant（瞬时）**简单来说就是 java.time 中的时间戳（精度为纳秒），不包含时区信息。
 
-此处说“两条时间线的差异是与 UTC/Greenwich 的偏移量”是指 Instant 加上 ZoneOffset 就可以获取 LocalDateTime，但如果要将 Instant 转 ZoneDateTime 的话，需要设置 ZoneId。
+此处说“两条时间线的差异是与 UTC/Greenwich 的偏移量”是指 Instant 加上 ZoneOffset 就可以获取 LocalDateTime。但如果是要将 Instant 转换为 ZonedDateTime 的话，需要设置 ZoneId。
 
 ```java
 Instant instant = Instant.now();
@@ -65,33 +57,34 @@ LocalDateTime localDateTime = instant.atOffset(ZoneOffset.ofHours(8)).toLocalDat
 ZonedDateTime zonedDateTime = instant.atZone(ZoneId.systemDefault());
 ```
 
-> Converting between the two time-lines involves calculating the offset using the `rules` accessed from the `ZoneId`. Obtaining the offset for an instant is simple, as there is exactly one valid offset for each instant. By contrast, obtaining the offset for a local date-time is not straightforward. There are three cases:
+> Converting between the two time-lines involves calculating the offset using the [rules](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/zone/ZoneRules.html) accessed from the `ZoneId`. Obtaining the offset for an instant is simple, as there is exactly one valid offset for each instant. By contrast, obtaining the offset for a local date-time is not straightforward. There are three cases:
 > 
 > * Normal, with one valid offset. For the vast majority of the year, the normal case applies, where there is a single valid offset for the local date-time.
 > * Gap, with zero valid offsets. This is when clocks jump forward typically due to the spring daylight savings change from "winter" to "summer". In a gap there are local date-time values with no valid offset.
 > * Overlap, with two valid offsets. This is when clocks are set back typically due to the autumn daylight savings change from "summer" to "winter". In an overlap there are local date-time values with two valid offsets.
 >
-> Any method that converts directly or implicitly from a local date-time to an instant by obtaining the offset has the potential to be complicated.
-For Gaps, the general strategy is that if the local date-time falls in the middle of a Gap, then the resulting zoned date-time will have a local date-time shifted forwards by the length of the Gap, resulting in a date-time in the later offset, typically "summer" time.
-> 
-> For Overlaps, the general strategy is that if the local date-time falls in the middle of an Overlap, then the previous offset will be retained. If there is no previous offset, or the previous offset is invalid, then the earlier offset is used, typically "summer" time.. Two additional methods, `withEarlierOffsetAtOverlap()` and `withLaterOffsetAtOverlap()`, help manage the case of an overlap.
-> 
-> In terms of design, this class should be viewed primarily as the combination of a `LocalDateTime` and a `ZoneId`. The `ZoneOffset` is a vital, but secondary, piece of information, used to ensure that the class represents an instant, especially during a daylight savings overlap.
-> 
-> 两条时间线之间的转换涉及到使用 `ZoneId` 访问规则（ZoneRules）计算偏移量。获取一个 instant 的偏移量很简单，因为每个 instant 正好有一个有效偏移量。相比之下，获取一个 local date-time 的有效偏移量
+> 两条时间线之间的转换涉及到使用`ZoneId`访问[规则](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/zone/ZoneRules.html)（ZoneRules）计算偏移量。获取一个 instant 的偏移量很简单，因为每个 instant 正好有一个有效偏移量。相比之下，获取一个 local date-time 的有效偏移量
 并不简单。有三种情况：
-> 
+>
 > * 正常：有一个有效的偏移量。在一年中的绝大多数时间里，local date-time 有一个有效的偏移量。
-> * 间隙：没有有效的偏移量。这是由于春季夏令时从“冬季”到“夏季”，时钟被调快了，跳过了一段时间。在跳动的间隙中，有 local date-time，但没有有效的偏移量。
+> * 间隙：没有有效的偏移量。这是由于春季夏令时从“冬季”到“夏季”，时钟被调快了，跳过了一段时间。在跳过的间隙中，有 local date-time，但没有有效的偏移量。
 > * 重叠：有两个有效的偏移量。这是由于秋季夏令时从“夏季”到“冬季”，时钟往回调了一段时间。在重叠的情况下，有两个有效的偏移量的 local date-time。
+>
+> Any method that converts directly or implicitly from a local date-time to an instant by obtaining the offset has the potential to be complicated.
 > 
-> 任何通过获取偏移量显式或隐式地将 local date-time 转换为 instant 地方法都有可能变得复杂。
+> For Gaps, the general strategy is that if the local date-time falls in the middle of a Gap, then the resulting zoned date-time will have a local date-time shifted forwards by the length of the Gap, resulting in a date-time in the later offset, typically "summer" time.
 > 
-> 对于间隙，一般地策略是，如果 local date-time 落在间隙中间，那么产生地 zoned date-time 将有一个 local date-time 向前移动间歇的长度，导致日期在较晚的偏移量，通常是“夏季”时间。
+> For Overlaps, the general strategy is that if the local date-time falls in the middle of an Overlap, then the previous offset will be retained. If there is no previous offset, or the previous offset is invalid, then the earlier offset is used, typically "summer" time.. Two additional methods, [withEarlierOffsetAtOverlap()](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/ZonedDateTime.html#withEarlierOffsetAtOverlap()) and [withLaterOffsetAtOverlap()](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/ZonedDateTime.html#withLaterOffsetAtOverlap()), help manage the case of an overlap.
 > 
-> 对于重叠，一般策略是，如果 local date-time 落在重叠中间，那么以前的偏移量将被保留。如果以前没有偏移量，或者以前的偏移量无效，那么就使用较早的偏移量，通常是“夏季”时间。两个额外的方法，`withEarlierOffsetAtOverlap()` and `withLaterOffsetAtOverlap()`，可以帮助管理重合的情况。
+> 任何通过获取偏移量显式或隐式地将 local date-time 转换为 instant 地方都有可能变得复杂。
 > 
-> 就设计而言，这个类应该主要被看作是 `LocalDateTime` 和 `ZoneId` 的组合。`ZoneOffset` 是一个重要但次要的信息，用来确保这个类代表一个瞬间，特别是在夏令时重叠的时候。
+> 对于间隙，一般策略是，如果 local date-time 落在间隙中间，那么产生的 zoned date-time 是 local date-time 向前移动间歇的长度后的，导致日期在较晚的偏移量，通常是“夏季”时间。
+>
+> 对于重叠，一般策略是，如果 local date-time 落在重叠中间，那么以前的偏移量将被保留。如果以前没有偏移量，或者以前的偏移量无效，那么就使用较早的偏移量，通常是“夏季”时间。两个额外的方法，[withEarlierOffsetAtOverlap()](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/ZonedDateTime.html#withEarlierOffsetAtOverlap()) and [withLaterOffsetAtOverlap()](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/ZonedDateTime.html#withLaterOffsetAtOverlap())，可以帮助管理重合的情况。
+>
+> In terms of design, this class should be viewed primarily as the combination of a `LocalDateTime` and a `ZoneId`. The `ZoneOffset` is a vital, but secondary, piece of information, used to ensure that the class represents an instant, especially during a daylight savings overlap.
+>
+> 就设计而言，这个类应该主要被看作是`LocalDateTime`和`ZoneId`的组合。`ZoneOffset`是一个重要但次要的信息，用来确保这个类代表一个瞬间，特别是在夏令时重叠的时候。
 
 此处举例，美国夏令时一般在 **3 月第二个周日 2AM** 开始，将时钟拨快 1 小时，调到 3 点，那这一小时就是“冬季”到“夏季”的**间隙（Gap）**；在 **11 月第一个周日 2AM**，又会将时钟拨慢 1 小时，调回到 1 点，那这一小时就是“夏季”到“冬季”的**重叠（Overlap）**。
 
@@ -136,6 +129,20 @@ null
 ```
 
 说“重叠有两个有效的偏移量”，是因为落在重叠时，如果以前没有偏移量或者以前的偏移量无效时，会使用较早的偏移量；如果以前有偏移量且更晚时，会使用较晚的偏移量。
+
+> This is a [value-based](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/doc-files/ValueBased.html) class; use of identity-sensitive operations (including reference equality (`==`), identity hash code, or synchronization) on instances of `ZonedDateTime` may have unpredictable results and should be avoided. The `equals` method should be used for comparisons.
+> 
+> 这是一个 [value-based](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/doc-files/ValueBased.html) 类；在`ZonedDateTime`的实例上使用 identity-sensitive 的操作（包括引用相等`==`、identity hash code 或同步 synchronization）可能会产生不可预测的结果，所以要避免。应该使用 equals 方法来进行比较。
+> 
+> A `ZonedDateTime` holds state equivalent to three separate objects, a `LocalDateTime`, a `ZoneId` and the resolved `ZoneOffset`. The offset and local date-time are used to define an instant when necessary. The zone ID is used to obtain the rules for how and when the offset changes. The offset cannot be freely set, as the zone controls which offsets are valid.
+> 
+> 一个`ZonedDateTime`相当于持有三个独立对象的状态，一个`LocalDateTime`，一个`ZoneId`和已解决的`ZoneOffset`。必要时，偏移量和 local date-time 被用来定义一个瞬间。zone ID 被用来获取偏移量及何时变化的规则。偏移量不能自由设置，因为时区控制着哪些偏移量时有效的。
+> 
+> This class is immutable and thread-safe.
+> 
+> 这个类是不可变的，并且是线程安全的。
+
+## 时区处理示例
 
 ……
 
