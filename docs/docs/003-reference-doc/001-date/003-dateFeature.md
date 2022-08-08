@@ -16,7 +16,7 @@ DateUtils.getStartDayOfWeekOfMonth(LocalDate.now(), 7);
 
 ```java
 // 总是设置解析器模式为中文 
-DateFeature.set(Locale.SIMPLIFIED_CHINESE);
+DateFeature.setAlways(Locale.SIMPLIFIED_CHINESE);
 // 输出周时结果为中文
 DateUtils.format(LocalDate.now(), "E")
 // 输出月时结果仍为中文
