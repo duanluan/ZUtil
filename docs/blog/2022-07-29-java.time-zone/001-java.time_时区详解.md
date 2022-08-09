@@ -142,9 +142,102 @@ null
 > 
 > 这个类是不可变的，并且是线程安全的。
 
-## 时区处理示例
+## withZoneSameLocal 和 withZoneSameInstant 的使用与区别
 
-……
+### withZoneSameLocal 简介
+
+先看 `withZoneSameLocal` 方法的注释：
+
+> Returns a copy of this date-time with a different time-zone, retaining the local date-time if possible.
+> 
+> This method changes the time-zone and retains the local date-time. The local date-time is only changed if it is invalid for the new zone, determined using the same approach as [ofLocal(LocalDateTime, ZoneId, ZoneOffset)](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/ZonedDateTime.html#ofLocal(java.time.LocalDateTime,java.time.ZoneId,java.time.ZoneOffset)).
+>
+> To change the zone and adjust the local date-time, use [withZoneSameInstant(ZoneId)](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/ZonedDateTime.html#withZoneSameInstant(java.time.ZoneId)).
+> 
+> This instance is immutable and unaffected by this method call.
+> 
+> `@param` `zone` – the time-zone to change to, not null
+>
+> `@return` a `ZonedDateTime` based on this date-time with the requested zone, not null
+> 
+> 返回一个具有不同时区的 date-time 的副本，如果可能的话，保留 local date-time。
+> 
+> 这个方法改变了时区并保留了 local date-time。在新的时区无效时，local date-time 才会被改变，与使用 [ofLocal(LocalDateTime, ZoneId, ZoneOffset)](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/ZonedDateTime.html#ofLocal(java.time.LocalDateTime,java.time.ZoneId,java.time.ZoneOffset)) 方法相同。
+> 
+> 要改变区域并调整 local date-time，请使用 [withZoneSameInstant(ZoneId)](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/ZonedDateTime.html#withZoneSameInstant(java.time.ZoneId))。
+> 
+> 被调用实例是不可变的，不受此方法调用的影响。
+> 
+> `形参`：zone - 要改变的时区，不为 null。
+> 
+> `返回值`：a ZonedDateTime - 基于该 date-time 的请求时区，不为 null。
+
+简单来说就是修改时区但是保持 local date-time 不变：
+
+
+```java
+LocalDateTime localDateTime = LocalDateTime.now();
+ZonedDateTime zonedDateTime = localDateTime.atZone(ZoneId.of("Asia/Shanghai"));
+System.out.println(zonedDateTime);
+System.out.println(zonedDateTime.withZoneSameLocal(ZoneId.of("Europe/Moscow")));
+
+// 输出结果为
+2022-08-08T18:45:22.711+08:00[Asia/Shanghai]
+2022-08-08T18:45:22.711+03:00[Europe/Moscow]
+```
+
+### withZoneSameInstant 简介
+
+再看 `withZoneSameInstant` 方法注释：
+
+> Returns a copy of this date-time with a different time-zone, retaining the instant.
+>
+> This method changes the time-zone and retains the instant. This normally results in a change to the local date-time.
+> 
+> This method is based on retaining the same instant, thus gaps and overlaps in the local time-line have no effect on the result.
+> 
+> To change the offset while keeping the local time, use [withZoneSameLocal(ZoneId)](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/ZonedDateTime.html#withZoneSameLocal(java.time.ZoneId)).
+> 
+> `@param` `zone` – the time-zone to change to, not null
+>
+> `@return` a `ZonedDateTime` based on this date-time with the requested zone, not null
+> 
+> `@throws` [DateTimeException](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/DateTimeException.html) – if the result exceeds the supported date range
+>
+> 返回一个具有不同时区的 date-time 的副本，保留 instant。
+> 
+> 这个方法改变了时区并保留了 instant。这通常会导致 local date-time 的改变。
+> 
+> 这个方法是基于保留相同的 instant，因此本地时间线的间歇和重叠对结果没有影响。
+> 
+> 要保持 local date-time 的同时改变偏移量，请使用 [withZoneSameLocal(ZoneId)](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/ZonedDateTime.html#withZoneSameLocal(java.time.ZoneId))。
+> 
+> `形参`：`zone` - 要改变的时区，不为 null。
+> 
+> `返回值`：a `ZonedDateTime` - 基于该 date-time 的请求时区，不为 null。
+> 
+> `抛出`：[DateTimeException](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/DateTimeException.html) – 如果结果超出了支持的日期范围。
+
+简单来说就是修改时区但是保持 instant 不变。因为时区变了，偏移量肯定变了，所以 local date-time 也会改变以保持 instant 不变。
+
+```java
+LocalDateTime localDateTime = LocalDateTime.now();
+ZonedDateTime zonedDateTime = localDateTime.atZone(ZoneId.of("Asia/Shanghai"));
+System.out.println(zonedDateTime);
+System.out.println(zonedDateTime.withZoneSameInstant(ZoneId.of("Europe/Moscow")));
+
+// 输出结果为
+2022-08-09T20:06:35.753+08:00[Asia/Shanghai]
+2022-08-09T15:06:35.753+03:00[Europe/Moscow]
+```
+
+## ……
+
+## 疑问
+
+我了解的并不全面，或者是因为英语能力有限，原本要和上下文关联理解的地方没翻译好，导致我有以下疑问。如果你知道，欢迎联系我！
+
+* 文中“or the previous offset is invalid”、“The local date-time is only changed if it is invalid for the new zone”这两段话的无效偏移量、时区具体指的是什么？
 
 ## 参考
 
