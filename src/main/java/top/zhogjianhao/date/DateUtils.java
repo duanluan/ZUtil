@@ -2457,6 +2457,9 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     }
     // 2. 获取第二周周一，即下周一
     dayOfMonth = dayOfMonth.plusDays(8 - dayOfMonth.getDayOfWeek().getValue());
+    if(weekOfMonth == 2) {
+      return dayOfMonth;
+    }
     // 因为上面已经是第二周了，加上循环中是先加减日期再 week++，所以从第三周开始
     int week = 3;
     // 宽容模式可能会超出指定年月
