@@ -11,8 +11,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @Slf4j
 @DisplayName("文件工具类测试")
 public class FileUtilsTest {
-  private static final String PROJECT_PATH = System.getProperty("user.dir");
-  private static final String PROJECT_PATH_SLASH = System.getProperty("user.dir").replace("\\", "/");
+  private static final String PROJECT_PATH = FileUtils.getUserDir();
+  private static final String PROJECT_PATH_SLASH = FileUtils.getUserDir().replace("\\", "/");
 
   public static void main(String[] args) {
     System.out.println(FileUtils.getClassRootPath());
