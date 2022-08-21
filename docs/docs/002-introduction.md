@@ -8,7 +8,7 @@
 <dependency>
   <groupId>top.zhogjianhao</groupId>
   <artifactId>ZUtil</artifactId>
-  <version>1.8.2</version>
+  <version>1.8.3</version>
 </dependency>
 ```
 
@@ -16,9 +16,9 @@
 
 ```groovy
 // groovy
-implementation 'top.zhogjianhao:ZUtil:1.8.2'
+implementation 'top.zhogjianhao:ZUtil:1.8.3'
 // kotlin
-implementation("top.zhogjianhao:ZUtil:1.8.2")
+implementation("top.zhogjianhao:ZUtil:1.8.3")
 ```
 
 ## 安装注意
@@ -32,7 +32,7 @@ implementation("top.zhogjianhao:ZUtil:1.8.2")
 <dependency>
   <groupId>top.zhogjianhao</groupId>
   <artifactId>ZUtil</artifactId>
-  <version>1.8.2</version>
+  <version>1.8.3</version>
   <exclusions>
     <exclusion>
       <groupId>org.slf4j</groupId>
@@ -65,7 +65,7 @@ implementation("top.zhogjianhao:ZUtil:1.8.2")
 // groovy
 dependencies {
   // 方式一：ZUtil 排除 slf4j
-  implementation('top.zhogjianhao:ZUtil:1.8.2') {
+  implementation('top.zhogjianhao:ZUtil:1.8.3') {
     exclude group: 'org.slf4j', module: 'slf4j-api'
     exclude group: 'org.slf4j', module: 'slf4j-simple'
   }
@@ -78,7 +78,7 @@ dependencies {
 // kotlin
 dependencies {
   // 方式一：ZUtil 排除 slf4j
-  implementation("top.zhogjianhao:ZUtil:1.8.2") {
+  implementation("top.zhogjianhao:ZUtil:1.8.3") {
     exclude(group = "org.slf4j", module = "slf4j-api")
     exclude(group = "org.slf4j", module = "slf4j-simple")
   }
