@@ -8,7 +8,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 const config = {
   title: 'ZUtil',
   tagline: '追求更快更全的 Java 工具类',
-  url: 'https://duanluan.github.io/ZUtil',
+  url: 'https://duanluan.github.io',
   baseUrl: '/ZUtil/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
