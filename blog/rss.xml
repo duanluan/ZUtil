@@ -2,7 +2,7 @@
 <rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/">
     <channel>
         <title>ZUtil Blog</title>
-        <link>https://duanluan.github.io/ZUtil/ZUtil/blog</link>
+        <link>https://duanluan.github.io/ZUtil/blog</link>
         <description>ZUtil Blog</description>
         <lastBuildDate>Fri, 29 Jul 2022 00:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
@@ -10,7 +10,7 @@
         <language>zh-Hans</language>
         <item>
             <title><![CDATA[java.time 时区详解]]></title>
-            <link>https://duanluan.github.io/ZUtil/ZUtil/blog/javaTimeZone</link>
+            <link>https://duanluan.github.io/ZUtil/blog/javaTimeZone</link>
             <guid>javaTimeZone</guid>
             <pubDate>Fri, 29 Jul 2022 00:00:00 GMT</pubDate>
             <description><![CDATA[LocalDateTime类是不包含时区信息的，可以通过atZone方法来设置ZoneId，返回ZonedDateTime类实例，通过atOffset方法来设置ZoneOffset，返回OffsetDateTime类实例。]]></description>
@@ -23,7 +23,7 @@
         </item>
         <item>
             <title><![CDATA[欢迎]]></title>
-            <link>https://duanluan.github.io/ZUtil/ZUtil/blog/welcome</link>
+            <link>https://duanluan.github.io/ZUtil/blog/welcome</link>
             <guid>welcome</guid>
             <pubDate>Sat, 16 Jul 2022 00:00:00 GMT</pubDate>
             <description><![CDATA[Hello, World!]]></description>
