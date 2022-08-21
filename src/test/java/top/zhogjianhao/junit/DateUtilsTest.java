@@ -19,31 +19,6 @@ import java.util.Locale;
 @DisplayName("时间工具类测试")
 public class DateUtilsTest {
 
-  // public static void main(String[] args) {
-  //   // Date date = DateUtils.parseDate("Wed Aug 01 08:00:00 CST 2018", ZoneOffset.ofHours(0), "EEE MMM dd HH:mm:ss z yyyy");
-  //   // System.out.println(date);
-  //   //
-  //   // DateUtils.max(
-  //   //   DateUtils.plusOrMinus(
-  //   //     // 当前时间 加
-  //   //     LocalDateTime.now(),
-  //   //     // 14
-  //   //     14L,
-  //   //     // 天
-  //   //     ChronoUnit.DAYS),
-  //   //   // 天的纳秒级别 变成最大，即这一天的最大时间
-  //   //   ChronoField.NANO_OF_DAY);
-  //
-  //   LocalDate localDate = DateUtils.parseLocalDate("2022-01-31");
-  //   System.out.println(DateUtils.getStartDayOfWeekOfMonth(localDate));
-  //   System.out.println(DateUtils.getEndDayOfWeekOfMonth(localDate));
-  //
-  //   // DateFeature.RESOLVER_STYLE_ALWAYS = ResolverStyle.LENIENT;
-  //   // int weekOfMonth = 10;
-  //   // System.out.println(DateUtils.getStartDayOfWeekOfMonth(localDate,weekOfMonth));;
-  //   // System.out.println(DateUtils.getEndDayOfWeekOfMonth(localDate,weekOfMonth));;
-  // }
-
   private final ZonedDateTime nowZonedDateTime = ZonedDateTime.now();
   private final LocalDateTime nowLocalDateTime = LocalDateTime.now();
   private final LocalDate nowLocalDate = LocalDate.now();
