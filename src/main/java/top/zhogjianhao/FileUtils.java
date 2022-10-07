@@ -7,6 +7,7 @@ import top.zhogjianhao.regex.RegExUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 @Slf4j
@@ -55,7 +56,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
    * @return 类的根路径（不含包）
    */
   public static String getClassRootPath(@NonNull final Class<?> clazz) {
-    return clazz.getClassLoader().getResource("").getPath();
+    return Objects.requireNonNull(clazz.getClassLoader().getResource("")).getPath().substring(1);
   }
 
   /**
@@ -64,7 +65,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
    * @return 类的根路径（不含包）
    */
   public static String getClassRootPath() {
-    return Thread.currentThread().getContextClassLoader().getResource("").getPath();
+    return Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource("")).getPath().substring(1);
   }
 
   /**
@@ -74,7 +75,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
    * @return 类路径
    */
   public static String getClassPath(@NonNull final Class<?> clazz) {
-    return clazz.getResource("").getPath();
+    return clazz.getResource("").getPath().substring(1);
   }
 
   /**
