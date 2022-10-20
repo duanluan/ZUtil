@@ -27,7 +27,7 @@
             <guid>welcome</guid>
             <pubDate>Sat, 16 Jul 2022 00:00:00 GMT</pubDate>
             <description><![CDATA[Hello, World!]]></description>
-            <content:encoded><![CDATA[<p>Hello, World!</p>]]></content:encoded>
+            <content:encoded><![CDATA[<p>Hello, World!</p><p>欢迎访问我的博客：<a href="http://blog.zhogjianhao.top/" target="_blank" rel="noopener noreferrer">欲穷三千界的博客</a></p>]]></content:encoded>
             <category>hello</category>
         </item>
     </channel>

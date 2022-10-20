@@ -30,7 +30,7 @@
         <link href="https://duanluan.github.io/ZUtil/blog/welcome"/>
         <updated>2022-07-16T00:00:00.000Z</updated>
         <summary type="html"><![CDATA[Hello, World!]]></summary>
-        <content type="html"><![CDATA[<p>Hello, World!</p>]]></content>
+        <content type="html"><![CDATA[<p>Hello, World!</p><p>欢迎访问我的博客：<a href="http://blog.zhogjianhao.top/" target="_blank" rel="noopener noreferrer">欲穷三千界的博客</a></p>]]></content>
         <author>
             <name>ZhongJianhao</name>
             <uri>https://github.com/duanluan</uri>
