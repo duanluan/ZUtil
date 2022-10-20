@@ -5,7 +5,7 @@ package top.zhogjianhao.http;
  * <p>
  * 通过 top.zhogjianhao.HttpUtilsTest#getMediaTypes() 获取
  * <p>
- * Media Types：https://www.iana.org/assignments/media-types/media-types.xhtml
+ * Media Types：<a href="https://www.iana.org/assignments/media-types/media-types.xhtml">Media Types - iana</a>
  */
 public class ContentTypeConstant {
 

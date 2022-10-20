@@ -56,7 +56,10 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
    * @return 类的根路径（不含包）
    */
   public static String getClassRootPath(@NonNull final Class<?> clazz) {
-    return Objects.requireNonNull(clazz.getClassLoader().getResource("")).getPath().substring(1);
+    if(SystemUtils.IS_OS_WINDOWS){
+      return clazz.getClassLoader().getResource("").getPath().substring(1);
+    }
+    return clazz.getClassLoader().getResource("").getPath();
   }
 
   /**
@@ -65,7 +68,10 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
    * @return 类的根路径（不含包）
    */
   public static String getClassRootPath() {
-    return Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource("")).getPath().substring(1);
+    if(SystemUtils.IS_OS_WINDOWS){
+      return Thread.currentThread().getContextClassLoader().getResource("").getPath().substring(1);
+    }
+    return Thread.currentThread().getContextClassLoader().getResource("").getPath();
   }
 
   /**
@@ -75,7 +81,10 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
    * @return 类路径
    */
   public static String getClassPath(@NonNull final Class<?> clazz) {
-    return clazz.getResource("").getPath().substring(1);
+    if(SystemUtils.IS_OS_WINDOWS){
+      return clazz.getResource("").getPath().substring(1);
+    }
+    return clazz.getResource("").getPath();
   }
 
   /**

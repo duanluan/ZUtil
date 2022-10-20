@@ -4,7 +4,7 @@
 
   <groupId>top.zhogjianhao</groupId>
   <artifactId>ZUtil</artifactId>
-  <version>1.8.3</version>
+  <version>1.8.4</version>
 
   <name>ZUtil</name>
   <url>https://github.com/duanluan/ZUtil</url>
@@ -68,7 +68,7 @@
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-text</artifactId>
-      <version>1.9</version>
+      <version>1.10.0</version>
       <exclusions>
         <exclusion>
           <groupId>org.apache.commons</groupId>
@@ -106,7 +106,7 @@
     <dependency>
       <groupId>com.ejlchina</groupId>
       <artifactId>okhttps-jackson</artifactId>
-      <version>3.5.0</version>
+      <version>3.5.3</version>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
@@ -133,7 +133,7 @@
     <dependency>
       <groupId>org.yaml</groupId>
       <artifactId>snakeyaml</artifactId>
-      <version>1.29</version>
+      <version>1.33</version>
     </dependency>
 
 
@@ -181,7 +181,7 @@
     <dependency>
       <groupId>org.jsoup</groupId>
       <artifactId>jsoup</artifactId>
-      <version>1.14.3</version>
+      <version>1.15.3</version>
       <scope>test</scope>
     </dependency>
     <!--<dependency>-->
