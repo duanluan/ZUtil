@@ -7,7 +7,7 @@ import top.zhogjianhao.charset.StandardCharsets;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Array;
 import java.nio.charset.Charset;
-import java.util.Arrays;
+import java.util.*;
 
 /**
  * 数组工具类
@@ -134,6 +134,9 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
     }
     // 开始下标或位数不正确
     int arrayLen = getLength(array);
+    if (arrayLen == 0) {
+      throw new IllegalArgumentException("Array: should not be empty");
+    }
     if (startIndex < 0 || length < 1 || startIndex >= arrayLen || arrayLen - length < 0) {
       throw new IndexOutOfBoundsException("StartIndex: " + startIndex + ", Length:" + length);
     }
@@ -225,7 +228,7 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param lastElementValue 最后一个元素的值
    * @return 数组
    */
-  public static boolean[] remove(@NonNull final boolean[] array, final int index, final boolean lastElementValue) {
+  public static boolean[] remove(final boolean[] array, final int index, final boolean lastElementValue) {
     return (boolean[]) remove((Object) array, index, lastElementValue);
   }
 
@@ -323,10 +326,6 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @return 数组
    */
   private static Object fill(@NonNull final Object array, final int fromIndex, final int toIndex, final Object value) {
-    // 不是数组
-    if (!(array instanceof Object[] || array instanceof int[] || array instanceof long[] || array instanceof double[] || array instanceof float[] || array instanceof boolean[] || array instanceof short[] || array instanceof byte[] || array instanceof char[])) {
-      throw new IllegalArgumentException("Array: should be an array");
-    }
     int arrayLen = getLength(array);
     Object result = array;
     // 此处不减 1，因为 Arrays.fill 的 toIndex 要 +1 才能填充完最后一个元素
@@ -405,7 +404,7 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param val       填充值
    * @return 数组
    */
-  public static boolean[] fill(@NonNull final boolean[] array, final int fromIndex, final int toIndex, final boolean val) {
+  public static boolean[] fill(final boolean[] array, final int fromIndex, final int toIndex, final boolean val) {
     return (boolean[]) fill((Object) array, fromIndex, toIndex, val);
   }
 
@@ -507,7 +506,10 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param val   包含内容
    * @return 是否包含
    */
-  private static boolean containsObject(@NonNull final Object array, final Object val) {
+  private static boolean containsObject(@NonNull final Object array, @NonNull final Object val) {
+    if (Array.getLength(array) == 0) {
+      return false;
+    }
     if (array instanceof int[]) {
       return contains((int[]) array, ((int[]) val)[0]);
     } else if (array instanceof long[]) {
@@ -537,6 +539,9 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @return 数组
    */
   private static Object removeAllElements(@NonNull final Object array, @NonNull final Object... vals) {
+    if (Array.getLength(array) == 0) {
+      return array;
+    }
     Object result;
     if (array instanceof int[]) {
       result = ((int[]) array).clone();
@@ -602,7 +607,7 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param vals  需要删除的内容
    * @return 数组
    */
-  public static boolean[] removeAllElements(@NonNull final boolean[] array, @NonNull final boolean... vals) {
+  public static boolean[] removeAllElements(final boolean[] array, final boolean... vals) {
     return (boolean[]) removeAllElements(array, (Object) vals);
   }
 
@@ -693,7 +698,7 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    */
   public static int indexOf(@NonNull final char[] array, @NonNull final String valueToFind, final int startIndex) {
     if (ArrayUtils.isEmpty(array)) {
-      throw new IllegalArgumentException("Array: should not be empty");
+      return -1;
     }
     if (StringUtils.isBlank(valueToFind)) {
       throw new IllegalArgumentException("ValueToFind: should not be blank");
@@ -747,12 +752,596 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    */
   public static int allLength(@NonNull final String... strs) {
     if (StringUtils.isAllBlank(strs)) {
-      throw new IllegalArgumentException("Strs: should not be all blank");
+      return 0;
     }
     int result = 0;
     for (String str : strs) {
       result += str.length();
     }
     return result;
+  }
+
+  /**
+   * 去重
+   *
+   * @param array 数组
+   * @return 去重后的数组，保留第一个重复元素
+   */
+  private static Object deduplicate(@NonNull final Object array) {
+    int arrayLen = Array.getLength(array);
+    if (arrayLen == 0) {
+      return array;
+    }
+    Object result;
+    if (array instanceof int[]) {
+      result = ((int[]) array).clone();
+    } else if (array instanceof long[]) {
+      result = ((long[]) array).clone();
+    } else if (array instanceof double[]) {
+      result = ((double[]) array).clone();
+    } else if (array instanceof float[]) {
+      result = ((float[]) array).clone();
+    } else if (array instanceof byte[]) {
+      result = ((byte[]) array).clone();
+    } else if (array instanceof char[]) {
+      result = ((char[]) array).clone();
+    } else if (array instanceof boolean[]) {
+      result = ((boolean[]) array).clone();
+    } else if (array instanceof short[]) {
+      result = ((short[]) array).clone();
+    } else {
+      result = ((Object[]) array).clone();
+    }
+    int x = 0;
+    for (int i = 0; i < arrayLen; i++) {
+      int j = 0;
+      ;
+      for (; j < i; j++) {
+        if (Array.get(array, i).equals(Array.get(array, j))) {
+          break;
+        }
+      }
+      if (i == j) {
+        Array.set(result, x, Array.get(array, i));
+        x++;
+      }
+    }
+    if (array instanceof int[]) {
+      return Arrays.copyOf((int[]) result, x);
+    } else if (array instanceof long[]) {
+      return Arrays.copyOf((long[]) result, x);
+    } else if (array instanceof double[]) {
+      return Arrays.copyOf((double[]) result, x);
+    } else if (array instanceof float[]) {
+      return Arrays.copyOf((float[]) result, x);
+    } else if (array instanceof byte[]) {
+      return Arrays.copyOf((byte[]) result, x);
+    } else if (array instanceof char[]) {
+      return Arrays.copyOf((char[]) result, x);
+    } else if (array instanceof boolean[]) {
+      return Arrays.copyOf((boolean[]) result, x);
+    } else if (array instanceof short[]) {
+      return Arrays.copyOf((short[]) result, x);
+    } else {
+      return Arrays.copyOf((Object[]) result, x);
+    }
+  }
+
+  /**
+   * 去重
+   *
+   * @param array 数组
+   * @param <T>   数组元素类型
+   * @return 去重后的数组，保留第一个重复元素
+   */
+  public static <T> T[] deduplicate(@NonNull final T[] array) {
+    return (T[]) deduplicate((Object) array);
+  }
+
+  /**
+   * 去重
+   *
+   * @param array 数组
+   * @return 去重后的数组，保留第一个重复元素
+   */
+  public static boolean[] deduplicate(@NonNull final boolean[] array) {
+    return (boolean[]) deduplicate((Object) array);
+  }
+
+  /**
+   * 去重
+   *
+   * @param array 数组
+   * @return 去重后的数组，保留第一个重复元素
+   */
+  public static byte[] deduplicate(@NonNull final byte[] array) {
+    return (byte[]) deduplicate((Object) array);
+  }
+
+  /**
+   * 去重
+   *
+   * @param array 数组
+   * @return 去重后的数组，保留第一个重复元素
+   */
+  public static char[] deduplicate(@NonNull final char[] array) {
+    return (char[]) deduplicate((Object) array);
+  }
+
+  /**
+   * 去重
+   *
+   * @param array 数组
+   * @return 去重后的数组，保留第一个重复元素
+   */
+  public static double[] deduplicate(@NonNull final double[] array) {
+    return (double[]) deduplicate((Object) array);
+  }
+
+  /**
+   * 去重
+   *
+   * @param array 数组
+   * @return 去重后的数组，保留第一个重复元素
+   */
+  public static float[] deduplicate(@NonNull final float[] array) {
+    return (float[]) deduplicate((Object) array);
+  }
+
+  /**
+   * 去重
+   *
+   * @param array 数组
+   * @return 去重后的数组，保留第一个重复元素
+   */
+  public static short[] deduplicate(@NonNull final short[] array) {
+    return (short[]) deduplicate((Object) array);
+  }
+
+  /**
+   * 去重
+   *
+   * @param array 数组
+   * @return 去重后的数组，保留第一个重复元素
+   */
+  public static int[] deduplicate(@NonNull final int[] array) {
+    return (int[]) deduplicate((Object) array);
+  }
+
+  /**
+   * 去重
+   *
+   * @param array 数组
+   * @return 去重后的数组，保留第一个重复元素
+   */
+  public static long[] deduplicate(@NonNull final long[] array) {
+    return (long[]) deduplicate((Object) array);
+  }
+
+  /**
+   * 去重
+   *
+   * @param array 数组
+   * @return 去重后的数组，保留最后一个重复元素
+   */
+  private static Object deduplicatePreceding(@NonNull final Object array) {
+    int arrayLen = Array.getLength(array);
+    if (arrayLen == 0) {
+      return array;
+    }
+    // 用来记录去除重复之后的数组长度和给临时数组作为下标索引
+    int t = 0;
+    // 临时数组
+    Object[] tempArr = new Object[arrayLen];
+    // 遍历原数组
+    for (int i = 0; i < arrayLen; i++) {
+      Object item = Array.get(array, i);
+      // 声明一个标记，并每次重置
+      boolean isTrue = true;
+      // 内层循环将原数组的元素逐个对比
+      for (int j = i + 1; j < arrayLen; j++) {
+        // 如果发现有重复元素，改变标记状态并结束当次内层循环
+        if (item.equals(Array.get(array, j))) {
+          isTrue = false;
+          break;
+        }
+      }
+      // 判断标记是否被改变，如果没被改变就是没有重复元素
+      if (isTrue) {
+        // 没有元素就将原数组的元素赋给临时数组
+        tempArr[t] = item;
+        // 走到这里证明当前元素没有重复，那么记录自增
+        t++;
+      }
+    }
+    // 声明需要返回的数组，这个才是去重后的数组
+    Object[] newArr = new Object[t];
+    // 用 arraycopy 方法将刚才去重的数组拷贝到新数组并返回
+    System.arraycopy(tempArr, 0, newArr, 0, t);
+    return newArr;
+  }
+
+  /**
+   * 去重
+   *
+   * @param array 数组
+   * @param <T>   数组元素类型
+   * @return 去重后的数组，保留最后一个重复元素
+   */
+  public static <T> T[] deduplicatePreceding(@NonNull final T[] array) {
+    return (T[]) deduplicatePreceding((Object) array);
+  }
+
+  /**
+   * 去重
+   *
+   * @param array 数组
+   * @return 去重后的数组，保留最后一个重复元素
+   */
+  public static boolean[] deduplicatePreceding(@NonNull final boolean[] array) {
+    return (boolean[]) deduplicatePreceding((Object) array);
+  }
+
+  /**
+   * 去重
+   *
+   * @param array 数组
+   * @return 去重后的数组，保留最后一个重复元素
+   */
+  public static byte[] deduplicatePreceding(@NonNull final byte[] array) {
+    return (byte[]) deduplicatePreceding((Object) array);
+  }
+
+  /**
+   * 去重
+   *
+   * @param array 数组
+   * @return 去重后的数组，保留最后一个重复元素
+   */
+  public static char[] deduplicatePreceding(@NonNull final char[] array) {
+    return (char[]) deduplicatePreceding((Object) array);
+  }
+
+  /**
+   * 去重
+   *
+   * @param array 数组
+   * @return 去重后的数组，保留最后一个重复元素
+   */
+  public static double[] deduplicatePreceding(@NonNull final double[] array) {
+    return (double[]) deduplicatePreceding((Object) array);
+  }
+
+  /**
+   * 去重
+   *
+   * @param array 数组
+   * @return 去重后的数组，保留最后一个重复元素
+   */
+  public static float[] deduplicatePreceding(@NonNull final float[] array) {
+    return (float[]) deduplicatePreceding((Object) array);
+  }
+
+  /**
+   * 去重
+   *
+   * @param array 数组
+   * @return 去重后的数组，保留最后一个重复元素
+   */
+  public static short[] deduplicatePreceding(@NonNull final short[] array) {
+    return (short[]) deduplicatePreceding((Object) array);
+  }
+
+  /**
+   * 去重
+   *
+   * @param array 数组
+   * @return 去重后的数组，保留最后一个重复元素
+   */
+  public static int[] deduplicatePreceding(@NonNull final int[] array) {
+    return (int[]) deduplicatePreceding((Object) array);
+  }
+
+  /**
+   * 去重
+   *
+   * @param array 数组
+   * @return 去重后的数组，保留最后一个重复元素
+   */
+  public static long[] deduplicatePreceding(@NonNull final long[] array) {
+    return (long[]) deduplicatePreceding((Object) array);
+  }
+
+  /**
+   * 去重
+   *
+   * @param array 数组
+   * @return 去重后的数组，倒序
+   */
+  private static Object deduplicateReverse(@NonNull final Object array) {
+    if (Array.getLength(array) == 0) {
+      return array;
+    }
+    Set<?> treeSet;
+    if (array instanceof int[]) {
+      treeSet = new TreeSet<>(Arrays.asList((int[]) array)).descendingSet();
+    } else if (array instanceof long[]) {
+      treeSet = new TreeSet<>(Arrays.asList((long[]) array)).descendingSet();
+    } else if (array instanceof short[]) {
+      treeSet = new TreeSet<>(Arrays.asList((short[]) array)).descendingSet();
+    } else if (array instanceof float[]) {
+      treeSet = new TreeSet<>(Arrays.asList((float[]) array)).descendingSet();
+    } else if (array instanceof double[]) {
+      treeSet = new TreeSet<>(Arrays.asList((double[]) array)).descendingSet();
+    } else if (array instanceof char[]) {
+      treeSet = new TreeSet<>(Arrays.asList((char[]) array)).descendingSet();
+    } else if (array instanceof byte[]) {
+      treeSet = new TreeSet<>(Arrays.asList((byte[]) array)).descendingSet();
+    } else if (array instanceof boolean[]) {
+      treeSet = new TreeSet<>(Arrays.asList((boolean[]) array)).descendingSet();
+    } else {
+      treeSet = new TreeSet<>(Arrays.asList((Object[]) array)).descendingSet();
+    }
+    return new ArrayList<>(treeSet).toArray(new Object[treeSet.size()]);
+  }
+
+  /**
+   * 去重
+   *
+   * @param array 数组
+   * @param <T>   数组元素类型
+   * @return 去重后的数组，倒序
+   */
+  public static <T> T[] deduplicateReverse(@NonNull final T[] array) {
+    return (T[]) deduplicateReverse((Object) array);
+  }
+
+  /**
+   * 去重
+   *
+   * @param array 数组
+   * @return 去重后的数组，倒序
+   */
+  public static boolean[] deduplicateReverse(@NonNull final boolean[] array) {
+    return (boolean[]) deduplicateReverse((Object) array);
+  }
+
+  /**
+   * 去重
+   *
+   * @param array 数组
+   * @return 去重后的数组，倒序
+   */
+  public static byte[] deduplicateReverse(@NonNull final byte[] array) {
+    return (byte[]) deduplicateReverse((Object) array);
+  }
+
+  /**
+   * 去重
+   *
+   * @param array 数组
+   * @return 去重后的数组，倒序
+   */
+  public static char[] deduplicateReverse(@NonNull final char[] array) {
+    return (char[]) deduplicateReverse((Object) array);
+  }
+
+  /**
+   * 去重
+   *
+   * @param array 数组
+   * @return 去重后的数组，倒序
+   */
+  public static double[] deduplicateReverse(@NonNull final double[] array) {
+    return (double[]) deduplicateReverse((Object) array);
+  }
+
+  /**
+   * 去重
+   *
+   * @param array 数组
+   * @return 去重后的数组，倒序
+   */
+  public static float[] deduplicateReverse(@NonNull final float[] array) {
+    return (float[]) deduplicateReverse((Object) array);
+  }
+
+  /**
+   * 去重
+   *
+   * @param array 数组
+   * @return 去重后的数组，倒序
+   */
+  public static short[] deduplicateReverse(@NonNull final short[] array) {
+    return (short[]) deduplicateReverse((Object) array);
+  }
+
+  /**
+   * 去重
+   *
+   * @param array 数组
+   * @return 去重后的数组，倒序
+   */
+  public static int[] deduplicateReverse(@NonNull final int[] array) {
+    return (int[]) deduplicateReverse((Object) array);
+  }
+
+  /**
+   * 去重
+   *
+   * @param array 数组
+   * @return 去重后的数组，倒序
+   */
+  public static long[] deduplicateReverse(@NonNull final long[] array) {
+    return (long[]) deduplicateReverse((Object) array);
+  }
+
+  /**
+   * 去重
+   *
+   * @param array 数组
+   * @return 去重后的数组，hash 排序
+   */
+  private static Object deduplicateHashSort(@NonNull final Object array) {
+    if (Array.getLength(array) == 0) {
+      return array;
+    }
+    Map<Object, Object> map = new HashMap<>();
+    if (array instanceof int[]) {
+      for (int item : (int[]) array) {
+        if (map.containsKey(item)) {
+          continue;
+        }
+        map.put(item, item);
+      }
+    } else if (array instanceof long[]) {
+      for (long item : (long[]) array) {
+        if (map.containsKey(item)) {
+          continue;
+        }
+        map.put(item, item);
+      }
+    } else if (array instanceof short[]) {
+      for (short item : (short[]) array) {
+        if (map.containsKey(item)) {
+          continue;
+        }
+        map.put(item, item);
+      }
+    } else if (array instanceof float[]) {
+      for (float item : (float[]) array) {
+        if (map.containsKey(item)) {
+          continue;
+        }
+        map.put(item, item);
+      }
+    } else if (array instanceof double[]) {
+      for (double item : (double[]) array) {
+        if (map.containsKey(item)) {
+          continue;
+        }
+        map.put(item, item);
+      }
+    } else if (array instanceof char[]) {
+      for (char item : (char[]) array) {
+        if (map.containsKey(item)) {
+          continue;
+        }
+        map.put(item, item);
+      }
+    } else if (array instanceof byte[]) {
+      for (byte item : (byte[]) array) {
+        if (map.containsKey(item)) {
+          continue;
+        }
+        map.put(item, item);
+      }
+    } else if (array instanceof boolean[]) {
+      for (boolean item : (boolean[]) array) {
+        if (map.containsKey(item)) {
+          continue;
+        }
+        map.put(item, item);
+      }
+    } else {
+      for (Object item : (Object[]) array) {
+        if (map.containsKey(item)) {
+          continue;
+        }
+        map.put(item, item);
+      }
+    }
+    return new ArrayList<>(map.values()).toArray(new Object[0]);
+  }
+
+  /**
+   * 去重
+   *
+   * @param array 数组
+   * @param <T>   数组元素类型
+   * @return 去重后的数组，hash 排序
+   */
+  public static <T> T[] deduplicateHashSort(@NonNull final T[] array) {
+    return (T[]) deduplicateHashSort((Object) array);
+  }
+
+  /**
+   * 去重
+   *
+   * @param array 数组
+   * @return 去重后的数组，hash 排序
+   */
+  public static boolean[] deduplicateHashSort(@NonNull final boolean[] array) {
+    return (boolean[]) deduplicateHashSort((Object) array);
+  }
+
+  /**
+   * 去重
+   *
+   * @param array 数组
+   * @return 去重后的数组，hash 排序
+   */
+  public static byte[] deduplicateHashSort(@NonNull final byte[] array) {
+    return (byte[]) deduplicateHashSort((Object) array);
+  }
+
+  /**
+   * 去重
+   *
+   * @param array 数组
+   * @return 去重后的数组，hash 排序
+   */
+  public static char[] deduplicateHashSort(@NonNull final char[] array) {
+    return (char[]) deduplicateHashSort((Object) array);
+  }
+
+  /**
+   * 去重
+   *
+   * @param array 数组
+   * @return 去重后的数组，hash 排序
+   */
+  public static double[] deduplicateHashSort(@NonNull final double[] array) {
+    return (double[]) deduplicateHashSort((Object) array);
+  }
+
+  /**
+   * 去重
+   *
+   * @param array 数组
+   * @return 去重后的数组，hash 排序
+   */
+  public static float[] deduplicateHashSort(@NonNull final float[] array) {
+    return (float[]) deduplicateHashSort((Object) array);
+  }
+
+  /**
+   * 去重
+   *
+   * @param array 数组
+   * @return 去重后的数组，hash 排序
+   */
+  public static short[] deduplicateHashSort(@NonNull final short[] array) {
+    return (short[]) deduplicateHashSort((Object) array);
+  }
+
+  /**
+   * 去重
+   *
+   * @param array 数组
+   * @return 去重后的数组，hash 排序
+   */
+  public static int[] deduplicateHashSort(@NonNull final int[] array) {
+    return (int[]) deduplicateHashSort((Object) array);
+  }
+
+  /**
+   * 去重
+   *
+   * @param array 数组
+   * @return 去重后的数组，hash 排序
+   */
+  public static long[] deduplicateHashSort(@NonNull final long[] array) {
+    return (long[]) deduplicateHashSort((Object) array);
   }
 }
