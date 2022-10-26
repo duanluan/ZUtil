@@ -46,7 +46,7 @@ public class ToPinyinTest {
 
   @Benchmark
   public String toPinyinByZUtil() {
-    // PinyinFeature.setNotPinyinAroundHasSeparator(true);
+    // PinyinFeature.setHasSeparatorByNotPinyinAround(true);
     return PinyinUtils.getAll(STR, false, " ");
   }
 }

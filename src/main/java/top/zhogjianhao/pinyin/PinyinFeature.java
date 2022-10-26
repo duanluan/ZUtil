@@ -175,45 +175,45 @@ public class PinyinFeature {
   /**
    * 非拼音前后是否需要分隔符
    */
-  private static final ThreadLocal<Boolean> NOT_PINYIN_AROUND_HAS_SEPARATOR = new ThreadLocal<>();
+  private static final ThreadLocal<Boolean> HAS_SEPARATOR_BY_NOT_PINYIN_AROUND = new ThreadLocal<>();
   /**
    * 持久的非拼音前后是否需要分隔符
    */
-  private static volatile Boolean NOT_PINYIN_AROUND_HAS_SEPARATOR_ALWAYS = null;
+  private static volatile Boolean HAS_SEPARATOR_BY_NOT_PINYIN_AROUND_ALWAYS = null;
 
   /**
    * 设置非拼音前后是否需要分隔符
    *
-   * @param notPinyinAroundHasSeparator 非拼音前后是否需要分隔符
+   * @param hasSeparatorByNotPinyinAround 非拼音前后是否需要分隔符
    */
-  public static void setNotPinyinAroundHasSeparator(final Boolean notPinyinAroundHasSeparator) {
-    NOT_PINYIN_AROUND_HAS_SEPARATOR.set(notPinyinAroundHasSeparator);
+  public static void setHasSeparatorByNotPinyinAround(final Boolean hasSeparatorByNotPinyinAround) {
+    HAS_SEPARATOR_BY_NOT_PINYIN_AROUND.set(hasSeparatorByNotPinyinAround);
   }
 
   /**
    * 设置持久的非拼音前后是否需要分隔符
    *
-   * @param notPinyinAroundHasSeparator 持久的非拼音前后是否需要分隔符
+   * @param hasSeparatorByNotPinyinAround 持久的非拼音前后是否需要分隔符
    */
-  public static void setNotPinyinAroundHasSeparatorAlways(final Boolean notPinyinAroundHasSeparator) {
-    NOT_PINYIN_AROUND_HAS_SEPARATOR_ALWAYS = notPinyinAroundHasSeparator;
+  public static void setHasSeparatorByNotPinyinAroundAlways(final Boolean hasSeparatorByNotPinyinAround) {
+    HAS_SEPARATOR_BY_NOT_PINYIN_AROUND_ALWAYS = hasSeparatorByNotPinyinAround;
   }
 
   /**
    * 获取非拼音前后是否需要分隔符
    *
-   * @param notPinyinAroundHasSeparator 非拼音前后是否需要分隔符
+   * @param hasSeparatorByNotPinyinAround 非拼音前后是否需要分隔符
    * @return 非拼音前后是否需要分隔符，默认为 false
    */
-  public static Boolean getNotPinyinAroundHasSeparator(final Boolean notPinyinAroundHasSeparator) {
-    if (notPinyinAroundHasSeparator != null) {
-      return notPinyinAroundHasSeparator;
-    } else if (NOT_PINYIN_AROUND_HAS_SEPARATOR_ALWAYS != null) {
-      return NOT_PINYIN_AROUND_HAS_SEPARATOR_ALWAYS;
-    } else if (NOT_PINYIN_AROUND_HAS_SEPARATOR.get() != null) {
-      Boolean notPinyinAroundHasSeparator1 = NOT_PINYIN_AROUND_HAS_SEPARATOR.get();
-      NOT_PINYIN_AROUND_HAS_SEPARATOR.remove();
-      return notPinyinAroundHasSeparator1;
+  public static Boolean getHasSeparatorByNotPinyinAround(final Boolean hasSeparatorByNotPinyinAround) {
+    if (hasSeparatorByNotPinyinAround != null) {
+      return hasSeparatorByNotPinyinAround;
+    } else if (HAS_SEPARATOR_BY_NOT_PINYIN_AROUND_ALWAYS != null) {
+      return HAS_SEPARATOR_BY_NOT_PINYIN_AROUND_ALWAYS;
+    } else if (HAS_SEPARATOR_BY_NOT_PINYIN_AROUND.get() != null) {
+      Boolean hasSeparatorByNotPinyinAround1 = HAS_SEPARATOR_BY_NOT_PINYIN_AROUND.get();
+      HAS_SEPARATOR_BY_NOT_PINYIN_AROUND.remove();
+      return hasSeparatorByNotPinyinAround1;
     }
     return false;
   }
@@ -221,18 +221,18 @@ public class PinyinFeature {
   /**
    * 获取非拼音前后是否需要分隔符
    *
-   * @param notPinyinAroundHasSeparator 非拼音前后是否需要分隔符
+   * @param hasSeparatorByNotPinyinAround 非拼音前后是否需要分隔符
    * @return 非拼音前后是否需要分隔符，默认为形参
    */
-  public static Boolean getNotPinyinAroundHasSeparatorLazy(final Boolean notPinyinAroundHasSeparator) {
-    if (NOT_PINYIN_AROUND_HAS_SEPARATOR_ALWAYS != null) {
-      return NOT_PINYIN_AROUND_HAS_SEPARATOR_ALWAYS;
-    } else if (NOT_PINYIN_AROUND_HAS_SEPARATOR.get() != null) {
-      Boolean notPinyinAroundHasSeparator1 = NOT_PINYIN_AROUND_HAS_SEPARATOR.get();
-      NOT_PINYIN_AROUND_HAS_SEPARATOR.remove();
-      return notPinyinAroundHasSeparator1;
+  public static Boolean getHasSeparatorByNotPinyinAroundLazy(final Boolean hasSeparatorByNotPinyinAround) {
+    if (HAS_SEPARATOR_BY_NOT_PINYIN_AROUND_ALWAYS != null) {
+      return HAS_SEPARATOR_BY_NOT_PINYIN_AROUND_ALWAYS;
+    } else if (HAS_SEPARATOR_BY_NOT_PINYIN_AROUND.get() != null) {
+      Boolean hasSeparatorByNotPinyinAround1 = HAS_SEPARATOR_BY_NOT_PINYIN_AROUND.get();
+      HAS_SEPARATOR_BY_NOT_PINYIN_AROUND.remove();
+      return hasSeparatorByNotPinyinAround1;
     }
-    return notPinyinAroundHasSeparator;
+    return hasSeparatorByNotPinyinAround;
   }
 
   /**
@@ -240,13 +240,13 @@ public class PinyinFeature {
    *
    * @return 非拼音前后是否需要分隔符，默认为 false
    */
-  public static Boolean getNotPinyinAroundHasSeparator() {
-    if (NOT_PINYIN_AROUND_HAS_SEPARATOR_ALWAYS != null) {
-      return NOT_PINYIN_AROUND_HAS_SEPARATOR_ALWAYS;
-    } else if (NOT_PINYIN_AROUND_HAS_SEPARATOR.get() != null) {
-      Boolean notPinyinAroundHasSeparator1 = NOT_PINYIN_AROUND_HAS_SEPARATOR.get();
-      NOT_PINYIN_AROUND_HAS_SEPARATOR.remove();
-      return notPinyinAroundHasSeparator1;
+  public static Boolean getHasSeparatorByNotPinyinAround() {
+    if (HAS_SEPARATOR_BY_NOT_PINYIN_AROUND_ALWAYS != null) {
+      return HAS_SEPARATOR_BY_NOT_PINYIN_AROUND_ALWAYS;
+    } else if (HAS_SEPARATOR_BY_NOT_PINYIN_AROUND.get() != null) {
+      Boolean hasSeparatorByNotPinyinAround1 = HAS_SEPARATOR_BY_NOT_PINYIN_AROUND.get();
+      HAS_SEPARATOR_BY_NOT_PINYIN_AROUND.remove();
+      return hasSeparatorByNotPinyinAround1;
     }
     return false;
   }

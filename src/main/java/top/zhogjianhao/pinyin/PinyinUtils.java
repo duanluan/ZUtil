@@ -63,11 +63,12 @@ public class PinyinUtils {
     Map<String, String> pinyinDataMap = isWithTone ? PINYIN_DATA_WITH_TONE : PINYIN_DATA;
 
     StringBuilder result = new StringBuilder();
-    boolean hasPinyinSeparator = StringUtils.isNotBlank(pinyinSeparator);
+    boolean hasPinyinSeparator = StringUtils.isNotEmpty(pinyinSeparator);
+    boolean hasPinyinSeparator1 = hasPinyinSeparator;
     // 拼音工具类特性
     Boolean firstWordInitialCapFeature = PinyinFeature.getFirstWordInitialCap();
     Boolean secondWordInitialCapFeature = PinyinFeature.getSecondWordInitialCap();
-    Boolean notPinyinAroundHasSeparator = PinyinFeature.getNotPinyinAroundHasSeparator();
+    Boolean hasSeparatorByNotPinyinAround = PinyinFeature.getHasSeparatorByNotPinyinAround();
 
     char[] arr = str.toCharArray();
     for (int i = 0; i < arr.length; i++) {
@@ -125,14 +126,19 @@ public class PinyinUtils {
           result.append(pinyinSeparator);
         }
         result.append(pinyin);
-        hasPinyinSeparator = true;
+        // 非拼音时可能已经将是否需要分隔符设置成了 false，所以这里需要重新设置
+        if (!hasPinyinSeparator && hasPinyinSeparator1) {
+          hasPinyinSeparator = true;
+        }
       }
       // 非拼音
       else {
-        // 是否需要拼音分隔符
-        if (!notPinyinAroundHasSeparator) {
+        // 非拼音前后如果不需要分隔符
+        if (!hasSeparatorByNotPinyinAround) {
+          // 则将是否需要分隔符设置为 false，因为为拼音时是先拼接分隔符再拼接拼音的，非拼音后不需要拼接分隔符
           hasPinyinSeparator = false;
         }
+        // 是否需要拼音分隔符
         if (hasPinyinSeparator) {
           result.append(pinyinSeparator);
         }

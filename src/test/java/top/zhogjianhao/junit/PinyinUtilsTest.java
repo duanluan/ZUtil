@@ -93,7 +93,8 @@ public class PinyinUtilsTest {
   void test() {
     PinyinFeature.setFirstWordInitialCap(true);
     PinyinFeature.setSecondWordInitialCap(true);
-    PinyinFeature.setNotPinyinAroundHasSeparator(false);
+    PinyinFeature.setHasSeparatorByNotPinyinAround(false);
     System.out.println(PinyinUtils.get("好好学习，，为国为民", false, false, " "));
+    System.out.println(PinyinUtils.getFirst("好好学习，，为国为民", false));
   }
 }
