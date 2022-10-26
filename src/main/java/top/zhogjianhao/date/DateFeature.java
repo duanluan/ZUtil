@@ -16,7 +16,7 @@ public class DateFeature {
   /**
    * 解析器模式
    */
-  private static volatile ThreadLocal<ResolverStyle> RESOLVER_STYLE = new ThreadLocal<>();
+  private static final ThreadLocal<ResolverStyle> RESOLVER_STYLE = new ThreadLocal<>();
   /**
    * 持久的解析器模式
    */
@@ -29,7 +29,6 @@ public class DateFeature {
    */
   public static void set(final ResolverStyle resolverStyle) {
     RESOLVER_STYLE.set(resolverStyle);
-    log.info("the value of RESOLVER_STYLE updated to " + resolverStyle.toString());
   }
 
   /**
@@ -39,7 +38,6 @@ public class DateFeature {
    */
   public static void setAlways(final ResolverStyle resolverStyle) {
     RESOLVER_STYLE_ALWAYS = resolverStyle;
-    log.info("the value of RESOLVER_STYLE_ALWAYS updated to " + resolverStyle.toString());
   }
 
   /**
@@ -97,7 +95,7 @@ public class DateFeature {
   /**
    * 区域，比如月份是中文还是英文
    */
-  private static volatile ThreadLocal<Locale> LOCALE = new ThreadLocal<>();
+  private static final ThreadLocal<Locale> LOCALE = new ThreadLocal<>();
   /**
    * 持久的区域，比如月份是中文还是英文
    */
@@ -110,7 +108,6 @@ public class DateFeature {
    */
   public static void set(final Locale locale) {
     LOCALE.set(locale);
-    log.info("the value of LOCALE updated to " + locale.toString());
   }
 
   /**
@@ -120,7 +117,6 @@ public class DateFeature {
    */
   public static void setAlways(final Locale locale) {
     LOCALE_ALWAYS = locale;
-    log.info("the value of LOCALE_ALWAYS updated to " + locale.toString());
   }
 
   /**
@@ -178,7 +174,7 @@ public class DateFeature {
   /**
    * 时区
    */
-  private static volatile ThreadLocal<ZoneId> ZONE_ID = new ThreadLocal<>();
+  private static final ThreadLocal<ZoneId> ZONE_ID = new ThreadLocal<>();
   /**
    * 持久的时区
    */
@@ -191,7 +187,6 @@ public class DateFeature {
    */
   public static void set(final ZoneId zoneId) {
     ZONE_ID.set(zoneId);
-    log.info("the value of ZONE_ID updated to " + zoneId.toString());
   }
 
   /**
@@ -201,7 +196,6 @@ public class DateFeature {
    */
   public static void setAlways(final ZoneId zoneId) {
     ZONE_ID_ALWAYS = zoneId;
-    log.info("the value of ZONE_ID_ALWAYS updated to " + zoneId.toString());
   }
 
   /**
@@ -259,7 +253,7 @@ public class DateFeature {
   /**
    * 最小 Date 年
    */
-  private static volatile ThreadLocal<Long> MIN_DATE_YEAR = new ThreadLocal<>();
+  private static final ThreadLocal<Long> MIN_DATE_YEAR = new ThreadLocal<>();
   /**
    * 持久的最小 Date 年
    */
@@ -272,7 +266,6 @@ public class DateFeature {
    */
   public static void setMinDateYear(final Long minDateYear) {
     MIN_DATE_YEAR.set(minDateYear);
-    log.info("the value of MIN_DATE_YEAR updated to " + minDateYear.toString());
   }
 
   /**
@@ -282,7 +275,6 @@ public class DateFeature {
    */
   public static void setMinDateYearAlways(final Long minDateYear) {
     MIN_DATE_YEAR_ALWAYS = minDateYear;
-    log.info("the value of MIN_DATE_YEAR_ALWAYS updated to " + minDateYear.toString());
   }
 
   /**
