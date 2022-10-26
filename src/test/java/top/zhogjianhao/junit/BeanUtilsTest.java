@@ -19,7 +19,13 @@ public class BeanUtilsTest {
 
   @NoArgsConstructor
   @Data
-  public static class TestBean {
+  public static class TestSuperBean{
+    private String superName;
+  }
+
+  @NoArgsConstructor
+  @Data
+  public static class TestBean extends TestSuperBean {
     private String name;
     private List<TestBean> beanList;
 
@@ -30,7 +36,7 @@ public class BeanUtilsTest {
 
   @NoArgsConstructor
   @Data
-  public static class CopyPropertieTestBean {
+  public static class CopyPropertieTestBean extends TestSuperBean{
     private String name;
     private List<TestBean> beanList;
   }
@@ -40,6 +46,7 @@ public class BeanUtilsTest {
   void copyProperties() {
     TestBean testBean = new TestBean();
     testBean.setName("1");
+    testBean.setSuperName("2");
     List<TestBean> beanList = new ArrayList<>();
     beanList.add(testBean);
     testBean.setBeanList(beanList);
@@ -47,7 +54,7 @@ public class BeanUtilsTest {
     CopyPropertieTestBean testBean1 = BeanUtils.copyProperties(testBean, CopyPropertieTestBean.class);
     println(testBean1.getName());
     // 如果 List<T> 中的 T 不同的话，就不会复制
-    println(testBean1.getBeanList().get(0).getName());
+    println(testBean1.getBeanList().get(0).getSuperName());
   }
 
   @DisplayName("copyPropertiesByList：复制属性到新类型对象列表中")
@@ -55,11 +62,12 @@ public class BeanUtilsTest {
   void copyPropertiesByList() {
     TestBean testBean = new TestBean();
     testBean.setName("1");
+    testBean.setSuperName("2");
     List<TestBean> beanList = new ArrayList<>();
     beanList.add(testBean);
 
     List<CopyPropertieTestBean> beanList1 = BeanUtils.copyProperties(beanList, CopyPropertieTestBean.class);
-    println(beanList1.get(0).getName());
+    println(beanList1.get(0).getSuperName());
   }
 
   @DisplayName("toMap：Bean 转 Map")
