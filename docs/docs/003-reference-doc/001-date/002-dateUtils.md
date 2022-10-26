@@ -17,10 +17,10 @@ fieldValueMap.put(ChronoField.YEAR, 0L);
 DateTimeFormatterBuilder formatterBuilder = DateUtils.getFormatterBuilder("MM-dd", fieldValueMap);
 ```
 
-# getStartDayOfWeekOfMonth 
+## getStartDayOfWeekOfMonth 
 
 ![](DateUtils.getStartDayOfWeekOfMonth.png)
 
-# getEndDayOfWeekOfMonth
+## getEndDayOfWeekOfMonth
 
 ![](DateUtils.getEndDayOfWeekOfMonth.png)
