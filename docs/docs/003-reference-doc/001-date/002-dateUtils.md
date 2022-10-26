@@ -19,8 +19,8 @@ DateTimeFormatterBuilder formatterBuilder = DateUtils.getFormatterBuilder("MM-dd
 
 # getStartDayOfWeekOfMonth 
 
-![](DateUtils%23getStartDayOfWeekOfMonth(java.time.LocalDate,%20int).png)
+![](DateUtils.getStartDayOfWeekOfMonth.png)
 
 # getEndDayOfWeekOfMonth
 
-![](DateUtils%23getEndDayOfWeekOfMonth(java.time.LocalDate,%20int).png)
+![](DateUtils.getEndDayOfWeekOfMonth.png)
