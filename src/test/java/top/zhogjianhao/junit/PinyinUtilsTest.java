@@ -52,12 +52,13 @@ public class PinyinUtilsTest {
 
       result.add(pinyin + "#" + pinyins[1].trim() + "#" + pinyin1);
     }
-    FileUtils.writeLines(new File(FileUtils.getUserDir() + "/src/main/resources/pinyin/pinyin.txt"), result);
+    File pinyinDataFile = new File(FileUtils.getTempDirectory() + "/pinyin.txt");
+    FileUtils.writeLines(pinyinDataFile, result);
 
     // 从拼音数据文件中读取数据
     Map<String, String> pinyinDataWithToneMap = new HashMap<>();
     Map<String, String> pinyinDataMap = new HashMap<>();
-    FileUtils.readLines(new File(FileUtils.getUserDir() + "/src/main/resources/pinyin/pinyin.txt"), StandardCharsets.UTF_8).forEach(line -> {
+    FileUtils.readLines(pinyinDataFile, StandardCharsets.UTF_8).forEach(line -> {
       String[] arr = StringUtils.split(line, "#");
       pinyinDataWithToneMap.put(arr[1], arr[0]);
       pinyinDataMap.put(arr[1], arr[2]);
