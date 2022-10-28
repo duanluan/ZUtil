@@ -7,7 +7,6 @@ import top.zhogjianhao.regex.RegExUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Objects;
 import java.util.regex.Pattern;
 
 @Slf4j
@@ -55,9 +54,13 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
    * @param clazz 类
    * @return 类的根路径（不含包）
    */
-  public static String getClassRootPath(@NonNull final Class<?> clazz) {
-    if(SystemUtils.IS_OS_WINDOWS){
-      return clazz.getClassLoader().getResource("").getPath().substring(1);
+  public static String getResourcePath(@NonNull final Class<?> clazz) {
+    if (SystemUtils.IS_OS_WINDOWS) {
+      String result = clazz.getClassLoader().getResource("").getPath();
+      if (result.startsWith("/")) {
+        result = result.substring(1);
+      }
+      return result;
     }
     return clazz.getClassLoader().getResource("").getPath();
   }
@@ -67,9 +70,13 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
    *
    * @return 类的根路径（不含包）
    */
-  public static String getClassRootPath() {
-    if(SystemUtils.IS_OS_WINDOWS){
-      return Thread.currentThread().getContextClassLoader().getResource("").getPath().substring(1);
+  public static String getResourcePath() {
+    if (SystemUtils.IS_OS_WINDOWS) {
+      String result = Thread.currentThread().getContextClassLoader().getResource("").getPath();
+      if (result.startsWith("/")) {
+        result = result.substring(1);
+      }
+      return result;
     }
     return Thread.currentThread().getContextClassLoader().getResource("").getPath();
   }
@@ -81,8 +88,12 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
    * @return 类路径
    */
   public static String getClassPath(@NonNull final Class<?> clazz) {
-    if(SystemUtils.IS_OS_WINDOWS){
-      return clazz.getResource("").getPath().substring(1);
+    if (SystemUtils.IS_OS_WINDOWS) {
+      String result = clazz.getResource("").getPath();
+      if (result.startsWith("/")) {
+        result = result.substring(1);
+      }
+      return result;
     }
     return clazz.getResource("").getPath();
   }
