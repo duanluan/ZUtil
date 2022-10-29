@@ -1,6 +1,6 @@
 # 不兼容变更
 
-* 1.9.4：
+* 1.9.2：
   * 删除`FileUtils.getClassRootPath`；
   * 删除`FileUtils.getClassPath`；
   * `FileUtils`移至`io`包下。
