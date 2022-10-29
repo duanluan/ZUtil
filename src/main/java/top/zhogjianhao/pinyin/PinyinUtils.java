@@ -1,11 +1,11 @@
 package top.zhogjianhao.pinyin;
 
 import lombok.NonNull;
-import top.zhogjianhao.FileUtils;
 import top.zhogjianhao.StringUtils;
+import top.zhogjianhao.io.FileUtils;
+import top.zhogjianhao.io.IOUtils;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.Map;
@@ -24,21 +24,10 @@ public class PinyinUtils {
 
   static {
     try {
-      // PINYIN_DATA_WITH_TONE = ChronicleMapBuilder
-      //   .of(String.class, String.class)
-      //   .name("pinyinDataWithTone")
-      //   .averageKeySize(1)
-      //   .averageValueSize(3)
-      //   .entries(41497)
-      //   // .create();
-      // .createOrRecoverPersistedTo(new File(FileUtils.getTempDirectory() + "pinyinDataWithTone.dat"));
-      // // .recoverPersistedTo(new File(FileUtils.getUserDir() + "/src/main/resources/pinyin/pinyinDataWithTone.dat"), true);
-      File file = new File(FileUtils.getUserDir() + "/src/main/resources/pinyin/pinyinDataWithTone.dat");
-      byte[] fileBytes = FileUtils.readFileToByteArray(file);
+      byte[] fileBytes = IOUtils.toByteArray(FileUtils.getResourceAsStream(PinyinUtils.class, "pinyin/pinyinDataWithTone.dat"));
       PINYIN_DATA_WITH_TONE = (Map<String, String>) new ObjectInputStream(new ByteArrayInputStream(fileBytes)).readObject();
 
-      file = new File(FileUtils.getUserDir() + "/src/main/resources/pinyin/pinyinData.dat");
-      fileBytes = FileUtils.readFileToByteArray(file);
+      fileBytes = IOUtils.toByteArray(FileUtils.getResourceAsStream(PinyinUtils.class, "pinyin/pinyinData.dat"));
       PINYIN_DATA = (Map<String, String>) new ObjectInputStream(new ByteArrayInputStream(fileBytes)).readObject();
     } catch (IOException | ClassNotFoundException e) {
       throw new RuntimeException(e);

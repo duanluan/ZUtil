@@ -8,8 +8,8 @@ import org.dom4j.Document;
 import org.dom4j.Element;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import top.zhogjianhao.FileUtils;
 import top.zhogjianhao.XmlUtils;
+import top.zhogjianhao.io.FileUtils;
 
 @Slf4j
 @DisplayName("XML 工具类测试")

@@ -2,7 +2,8 @@
 
 * 1.9.4：
   * 删除`FileUtils.getClassRootPath`；
-  * 删除`FileUtils.getClassPath`。
+  * 删除`FileUtils.getClassPath`；
+  * `FileUtils`移至`io`包下。
 * 1.8.1：
   * `date.DateFeature`中静态变量的赋值方式由直接赋值改为通过`set`、`setAlways`方法赋值；
   * `DateUtils.defaultLocalDatePattern`移至`DateConstant.DEFAULT_LOCAL_DATE_PATTERN`；
