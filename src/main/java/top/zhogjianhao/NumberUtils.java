@@ -9,87 +9,43 @@ import lombok.extern.slf4j.Slf4j;
 public class NumberUtils extends org.apache.commons.lang3.math.NumberUtils {
 
   /**
-   * 小于 0（Integer、Long、Double、Float、Short）
+   * 小于 0
    *
-   * @param object 值
+   * @param number 数字
    * @return 是否小于 0
    */
-  public static boolean leThanZero(Object object) {
-    if (object instanceof Integer) {
-      return (Integer) object < 0;
-    } else if (object instanceof Long) {
-      return (Long) object < 0;
-    } else if (object instanceof Double) {
-      return (Double) object < 0;
-    } else if (object instanceof Float) {
-      return (Float) object < 0;
-    } else if (object instanceof Short) {
-      return (Short) object < 0;
-    }
-    return false;
+  public static boolean leThanZero(Number number) {
+    return number.intValue() < 0;
   }
 
   /**
-   * 小于等于 0（Integer、Long、Double、Float、Short）
+   * 小于等于 0
    *
-   * @param object 值
+   * @param number 数字
    * @return 是否小于等于 0
    */
-  public static boolean leThanEqToZero(Object object) {
-    if (object instanceof Integer) {
-      return (Integer) object <= 0;
-    } else if (object instanceof Long) {
-      return (Long) object <= 0;
-    } else if (object instanceof Double) {
-      return (Double) object <= 0;
-    } else if (object instanceof Float) {
-      return (Float) object <= 0;
-    } else if (object instanceof Short) {
-      return (Short) object <= 0;
-    }
-    return false;
+  public static boolean leThanEqToZero(Number number) {
+    return number.doubleValue() <= 0;
   }
 
   /**
-   * 大于 0（Integer、Long、Double、Float、Short）
+   * 大于 0
    *
-   * @param object 值
+   * @param number 数字
    * @return 是否大于 0
    */
-  public static boolean geThanZero(Object object) {
-    if (object instanceof Integer) {
-      return (Integer) object > 0;
-    } else if (object instanceof Long) {
-      return (Long) object > 0;
-    } else if (object instanceof Double) {
-      return (Double) object > 0;
-    } else if (object instanceof Float) {
-      return (Float) object > 0;
-    } else if (object instanceof Short) {
-      return (Short) object > 0;
-    }
-    return false;
+  public static boolean geThanZero(Number number) {
+    return number.doubleValue() > 0;
   }
 
   /**
-   * 大于等于 0（Integer、Long、Double、Float、Short）
+   * 大于等于 0
    *
-   * @param object 值
+   * @param number 数字
    * @return 是否大于等于 0
    */
-  public static boolean geThanEqToZero(Object object) {
-    if (object instanceof Integer) {
-      return (Integer) object >= 0;
-    } else if (object instanceof Long) {
-      return (Long) object >= 0;
-    } else if (object instanceof Double) {
-      return (Double) object >= 0;
-    } else if (object instanceof Float) {
-      return (Float) object >= 0;
-    } else if (object instanceof Short) {
-      return (Short) object >= 0;
-    }
-    return false;
+  public static boolean geThanEqToZero(Number number) {
+    return number.doubleValue() >= 0;
   }
 
   /**
