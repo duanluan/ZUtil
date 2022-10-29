@@ -1,7 +1,8 @@
 # 不兼容变更
 
 * 1.9.4：
-  * `FileUtils.getClassRootPath`重命名为`getResourcePath`。
+  * 删除`FileUtils.getClassRootPath`；
+  * 删除`FileUtils.getClassPath`。
 * 1.8.1：
   * `date.DateFeature`中静态变量的赋值方式由直接赋值改为通过`set`、`setAlways`方法赋值；
   * `DateUtils.defaultLocalDatePattern`移至`DateConstant.DEFAULT_LOCAL_DATE_PATTERN`；

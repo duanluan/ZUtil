@@ -7,6 +7,7 @@ import top.zhogjianhao.regex.RegExUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.regex.Pattern;
 
 @Slf4j
@@ -48,54 +49,68 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
     }
   }
 
+  // /**
+  //  * 获取类的根路径（不含包）
+  //  *
+  //  * @param clazz 类
+  //  * @return 类的根路径（不含包）
+  //  */
+  // public static String getResourcePath(@NonNull final Class<?> clazz) {
+  //   String result = clazz.getClassLoader().getResource("").getPath();
+  //   if (result.startsWith("/") || result.startsWith("\\")) {
+  //     result = result.substring(1);
+  //   }
+  //   return result;
+  // }
+  //
+  // /**
+  //  * 获取类的根路径（不含包）
+  //  *
+  //  * @return 类的根路径（不含包）
+  //  */
+  // public static String getResourcePath() {
+  //   String result = Thread.currentThread().getContextClassLoader().getResource("").getPath();
+  //   if (result.startsWith("/") || result.startsWith("\\")) {
+  //     result = result.substring(1);
+  //   }
+  //   return result;
+  // }
+  //
+  // /**
+  //  * 获取类路径
+  //  *
+  //  * @param clazz 类
+  //  * @return 类路径
+  //  */
+  // public static String getClassPath(@NonNull final Class<?> clazz) {
+  //   String result = clazz.getResource("").getPath();
+  //   if (result.startsWith("/") || result.startsWith("\\")) {
+  //     result = result.substring(1);
+  //   }
+  //   if (result.startsWith("file:/")) {
+  //     result = result.substring(6);
+  //   }
+  //   return result;
+  // }
+
   /**
-   * 获取类的根路径（不含包）
+   * 获取 resources 目录下的文件输入流
    *
-   * @param clazz 类
-   * @return 类的根路径（不含包）
+   * @param path 文件路径
+   * @return 文件输入流
    */
-  public static String getResourcePath(@NonNull final Class<?> clazz) {
-    if (SystemUtils.IS_OS_WINDOWS) {
-      String result = clazz.getClassLoader().getResource("").getPath();
-      if (result.startsWith("/")) {
-        result = result.substring(1);
-      }
-      return result;
-    }
-    return clazz.getClassLoader().getResource("").getPath();
+  public static InputStream getResourceAsStream(@NonNull Class<?> clazz, @NonNull final String path) {
+    return clazz.getClassLoader().getResourceAsStream(path);
   }
 
   /**
-   * 获取类的根路径（不含包）
+   * 获取 resources 目录下的文件输入流
    *
-   * @return 类的根路径（不含包）
+   * @param path 文件路径
+   * @return 文件输入流
    */
-  public static String getResourcePath() {
-    if (SystemUtils.IS_OS_WINDOWS) {
-      String result = Thread.currentThread().getContextClassLoader().getResource("").getPath();
-      if (result.startsWith("/")) {
-        result = result.substring(1);
-      }
-      return result;
-    }
-    return Thread.currentThread().getContextClassLoader().getResource("").getPath();
-  }
-
-  /**
-   * 获取类路径
-   *
-   * @param clazz 类
-   * @return 类路径
-   */
-  public static String getClassPath(@NonNull final Class<?> clazz) {
-    if (SystemUtils.IS_OS_WINDOWS) {
-      String result = clazz.getResource("").getPath();
-      if (result.startsWith("/")) {
-        result = result.substring(1);
-      }
-      return result;
-    }
-    return clazz.getResource("").getPath();
+  public static InputStream getResourceAsStream(@NonNull final String path) {
+    return Thread.currentThread().getContextClassLoader().getResourceAsStream(path);
   }
 
   /**
