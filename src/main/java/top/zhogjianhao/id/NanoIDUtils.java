@@ -5,8 +5,6 @@ import java.util.Random;
 
 /**
  * NanoID 工具类
- * @author yeliulee
- * @create 2022/10/29 22:05
  */
 public class NanoIDUtils {
 

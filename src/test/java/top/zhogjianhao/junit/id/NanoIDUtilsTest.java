@@ -5,9 +5,7 @@ import org.junit.jupiter.api.Test;
 import top.zhogjianhao.id.NanoIDUtils;
 
 /**
- * @author yeliulee
- * @description NanoIDUtils Test
- * @create 2022-10-29 22:34
+ * NanoIDUtils 测试类
  */
 @DisplayName("NanoIDUtils 测试")
 class NanoIDUtilsTest {
