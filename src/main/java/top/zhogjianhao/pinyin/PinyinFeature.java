@@ -8,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
  * 默认值：<br>
  * 第一个单词首字母是否大写：false<br>
  * 第二个单词首字母是否大写：false<br>
- * 多音字去声调后是否去重：true<br>
  * 非拼音前后是否需要分隔符：false
  */
 @Slf4j
