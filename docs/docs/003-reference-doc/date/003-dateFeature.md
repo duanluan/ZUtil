@@ -32,7 +32,7 @@ DateFeature.set(ZoneId.from(ZoneOffset.UTC));
 DateUtils.format(LocalDateTime.now());
 ```
 
-[//]: # (## MIN_DATE_YEAR - 最小 Date 年)
+## MIN_DATE_YEAR - 最小 Date 年
 
 ```java
 // 临时设置最小 Date 年
