@@ -14,6 +14,7 @@ import java.text.ParseException;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
+import java.time.format.DateTimeParseException;
 import java.time.format.ResolverStyle;
 import java.time.temporal.*;
 import java.util.*;
@@ -1359,6 +1360,22 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
       return (T) parseDate(source);
     }
     return null;
+  }
+
+  /**
+   * 校验字符串是否符合时间格式，如果稍后就要再 parse，不要使用这个方法，自己 try catch。
+   *
+   * @param text    字符串
+   * @param pattern 格式
+   * @return 时间格式是否正确
+   */
+  public static boolean validate(final String text, final String pattern) {
+    try {
+      parseLocalDateTime(text, pattern);
+    } catch (DateTimeParseException e) {
+      return false;
+    }
+    return true;
   }
 
   /**
