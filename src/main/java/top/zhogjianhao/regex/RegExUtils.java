@@ -23,11 +23,11 @@ public class RegExUtils extends org.apache.commons.lang3.RegExUtils {
   /**
    * 替换特殊字符
    *
-   * @param source 需要替换的内容
+   * @param text 需要替换的内容
    * @return 替换后的内容
    */
-  public static String replaceAllSpecialChar(@NonNull final String source) {
-    return SPECIAL_CHAR_PATTERN.matcher(source).replaceAll("\\\\$1");
+  public static String replaceAllSpecialChar(@NonNull final CharSequence text) {
+    return SPECIAL_CHAR_PATTERN.matcher(text).replaceAll("\\\\$1");
   }
 
   /**
@@ -38,7 +38,7 @@ public class RegExUtils extends org.apache.commons.lang3.RegExUtils {
    * @param flags 匹配模式
    * @return Matcher 对象
    */
-  public static Matcher getMatcher(@NonNull final String text, @NonNull final String regex, final int flags) {
+  public static Matcher getMatcher(@NonNull final CharSequence text, @NonNull final String regex, final int flags) {
     Pattern pattern = Pattern.compile(regex, flags);
     return pattern.matcher(text);
   }
@@ -51,7 +51,7 @@ public class RegExUtils extends org.apache.commons.lang3.RegExUtils {
    * @param flagsEnums 匹配模式
    * @return Matcher 对象
    */
-  public static Matcher getMatcher(@NonNull final String text, @NonNull final String regex, @NonNull final FlagsEnum... flagsEnums) {
+  public static Matcher getMatcher(@NonNull final CharSequence text, @NonNull final String regex, @NonNull final FlagsEnum... flagsEnums) {
     return getMatcher(text, regex, Arrays.stream(flagsEnums).map(FlagsEnum::getValue).reduce(0, (a, b) -> a | b));
   }
 
@@ -62,7 +62,7 @@ public class RegExUtils extends org.apache.commons.lang3.RegExUtils {
    * @param regex 正则
    * @return Matcher 对象
    */
-  public static Matcher getMatcher(@NonNull final String text, @NonNull final String regex) {
+  public static Matcher getMatcher(@NonNull final CharSequence text, @NonNull final String regex) {
     return getMatcher(text, regex, 0);
   }
 
@@ -74,7 +74,7 @@ public class RegExUtils extends org.apache.commons.lang3.RegExUtils {
    * @param flags 匹配模式
    * @return 匹配的下标
    */
-  public static int indexOf(@NonNull final String text, @NonNull final String regex, final int flags) {
+  public static int indexOf(@NonNull final CharSequence text, @NonNull final String regex, final int flags) {
     Matcher matcher = getMatcher(text, regex, flags);
     if (matcher.find()) {
       return matcher.start();
@@ -90,7 +90,7 @@ public class RegExUtils extends org.apache.commons.lang3.RegExUtils {
    * @param flagsEnums 匹配模式
    * @return 匹配的下标
    */
-  public static int indexOf(@NonNull final String text, @NonNull final String regex, final FlagsEnum... flagsEnums) {
+  public static int indexOf(@NonNull final CharSequence text, @NonNull final String regex, final FlagsEnum... flagsEnums) {
     return indexOf(text, regex, Arrays.stream(flagsEnums).map(FlagsEnum::getValue).reduce(0, (a, b) -> a | b));
   }
 
@@ -101,7 +101,7 @@ public class RegExUtils extends org.apache.commons.lang3.RegExUtils {
    * @param regex 正则
    * @return 匹配的下标
    */
-  public static int indexOf(@NonNull final String text, @NonNull final String regex) {
+  public static int indexOf(@NonNull final CharSequence text, @NonNull final String regex) {
     Matcher matcher = getMatcher(text, regex);
     if (matcher.find()) {
       return matcher.start();
@@ -116,7 +116,7 @@ public class RegExUtils extends org.apache.commons.lang3.RegExUtils {
    * @param pattern 正则
    * @return 匹配的下标
    */
-  public static int indexOf(@NonNull final String text, @NonNull final Pattern pattern) {
+  public static int indexOf(@NonNull final CharSequence text, @NonNull final Pattern pattern) {
     Matcher matcher = pattern.matcher(text);
     if (matcher.find()) {
       return matcher.start();
@@ -134,7 +134,7 @@ public class RegExUtils extends org.apache.commons.lang3.RegExUtils {
    * @param flags 匹配模式
    * @return 匹配值
    */
-  public static String match(@NonNull final String text, @NonNull final String regex, final int item, final int group, final int flags) {
+  public static String match(@NonNull final CharSequence text, @NonNull final String regex, final int item, final int group, final int flags) {
     if (item < 0) {
       throw new IllegalArgumentException("Item: should be greater than 0");
     }
@@ -163,7 +163,7 @@ public class RegExUtils extends org.apache.commons.lang3.RegExUtils {
    * @param flagsEnums 匹配模式
    * @return 匹配值
    */
-  public static String match(@NonNull final String text, @NonNull final String regex, final int item, final int group, final FlagsEnum... flagsEnums) {
+  public static String match(@NonNull final CharSequence text, @NonNull final String regex, final int item, final int group, final FlagsEnum... flagsEnums) {
     return match(text, regex, item, group, Arrays.stream(flagsEnums).map(FlagsEnum::getValue).reduce(0, (a, b) -> a | b));
   }
 
@@ -176,7 +176,7 @@ public class RegExUtils extends org.apache.commons.lang3.RegExUtils {
    * @param group 捕获组
    * @return 匹配值
    */
-  public static String match(@NonNull final String text, @NonNull final String regex, final int item, final int group) {
+  public static String match(@NonNull final CharSequence text, @NonNull final String regex, final int item, final int group) {
     return match(text, regex, item, group, 0);
   }
 
@@ -189,7 +189,7 @@ public class RegExUtils extends org.apache.commons.lang3.RegExUtils {
    * @param group   捕获组
    * @return 匹配值
    */
-  public static String match(@NonNull final String text, @NonNull final Pattern pattern, final int item, final int group) {
+  public static String match(@NonNull final CharSequence text, @NonNull final Pattern pattern, final int item, final int group) {
     if (item < 0) {
       throw new IllegalArgumentException("Item: should be greater than 0");
     }
@@ -216,7 +216,7 @@ public class RegExUtils extends org.apache.commons.lang3.RegExUtils {
    * @param item  匹配项
    * @return 匹配值
    */
-  public static String match(@NonNull final String text, @NonNull final String regex, final int item) {
+  public static String match(@NonNull final CharSequence text, @NonNull final String regex, final int item) {
     return match(text, regex, item, 0);
   }
 
@@ -228,7 +228,7 @@ public class RegExUtils extends org.apache.commons.lang3.RegExUtils {
    * @param item    匹配项
    * @return 匹配值
    */
-  public static String match(@NonNull final String text, @NonNull final Pattern pattern, final int item) {
+  public static String match(@NonNull final CharSequence text, @NonNull final Pattern pattern, final int item) {
     return match(text, pattern, item, 0);
   }
 
@@ -241,7 +241,7 @@ public class RegExUtils extends org.apache.commons.lang3.RegExUtils {
    * @param flags 匹配模式
    * @return 匹配值
    */
-  public static String matchFirst(@NonNull final String text, @NonNull final String regex, final int group, final int flags) {
+  public static String matchFirst(@NonNull final CharSequence text, @NonNull final String regex, final int group, final int flags) {
     return match(text, regex, 0, group, flags);
   }
 
@@ -255,7 +255,7 @@ public class RegExUtils extends org.apache.commons.lang3.RegExUtils {
    * @param flagsEnums 匹配模式
    * @return 匹配值
    */
-  public static String matchFirst(@NonNull final String text, @NonNull final String regex, final int group, final FlagsEnum... flagsEnums) {
+  public static String matchFirst(@NonNull final CharSequence text, @NonNull final String regex, final int group, final FlagsEnum... flagsEnums) {
     return matchFirst(text, regex, group, Arrays.stream(flagsEnums).map(FlagsEnum::getValue).reduce(0, (a, b) -> a | b));
   }
 
@@ -267,7 +267,7 @@ public class RegExUtils extends org.apache.commons.lang3.RegExUtils {
    * @param group 捕获组
    * @return 匹配值
    */
-  public static String matchFirst(@NonNull final String text, @NonNull final String regex, final int group) {
+  public static String matchFirst(@NonNull final CharSequence text, @NonNull final String regex, final int group) {
     return matchFirst(text, regex, group, 0);
   }
 
@@ -279,7 +279,7 @@ public class RegExUtils extends org.apache.commons.lang3.RegExUtils {
    * @param group   捕获组
    * @return 匹配值
    */
-  public static String matchFirst(@NonNull final String text, @NonNull final Pattern pattern, final int group) {
+  public static String matchFirst(@NonNull final CharSequence text, @NonNull final Pattern pattern, final int group) {
     return match(text, pattern, 0, group);
   }
 
@@ -290,7 +290,7 @@ public class RegExUtils extends org.apache.commons.lang3.RegExUtils {
    * @param regex 正则
    * @return 匹配值
    */
-  public static String matchFirst(@NonNull final String text, @NonNull final String regex) {
+  public static String matchFirst(@NonNull final CharSequence text, @NonNull final String regex) {
     return matchFirst(text, regex, 0);
   }
 
@@ -301,7 +301,7 @@ public class RegExUtils extends org.apache.commons.lang3.RegExUtils {
    * @param pattern 正则
    * @return 匹配值
    */
-  public static String matchFirst(@NonNull final String text, @NonNull final Pattern pattern) {
+  public static String matchFirst(@NonNull final CharSequence text, @NonNull final Pattern pattern) {
     return matchFirst(text, pattern, 0);
   }
 
@@ -313,7 +313,7 @@ public class RegExUtils extends org.apache.commons.lang3.RegExUtils {
    * @param flags 匹配模式
    * @return 是否能匹配
    */
-  public static boolean isMatch(@NonNull final String text, @NonNull final String regex, final int flags) {
+  public static boolean isMatch(@NonNull final CharSequence text, @NonNull final String regex, final int flags) {
     return StringUtils.isNotBlank(matchFirst(text, regex, 0, flags));
   }
 
@@ -325,7 +325,7 @@ public class RegExUtils extends org.apache.commons.lang3.RegExUtils {
    * @param flagsEnums 匹配模式
    * @return 是否能匹配
    */
-  public static boolean isMatch(@NonNull final String text, @NonNull final String regex, final FlagsEnum... flagsEnums) {
+  public static boolean isMatch(@NonNull final CharSequence text, @NonNull final String regex, final FlagsEnum... flagsEnums) {
     return isMatch(text, regex, Arrays.stream(flagsEnums).map(FlagsEnum::getValue).reduce(0, (a, b) -> a | b));
   }
 
@@ -336,7 +336,7 @@ public class RegExUtils extends org.apache.commons.lang3.RegExUtils {
    * @param regex 正则
    * @return 是否能匹配
    */
-  public static boolean isMatch(@NonNull final String text, @NonNull final String regex) {
+  public static boolean isMatch(@NonNull final CharSequence text, @NonNull final String regex) {
     return Pattern.compile(regex).matcher(text).find();
   }
 
@@ -348,7 +348,7 @@ public class RegExUtils extends org.apache.commons.lang3.RegExUtils {
    * @param pattern 正则
    * @return 是否能匹配
    */
-  public static boolean isMatch(@NonNull final String text, @NonNull final Pattern pattern) {
+  public static boolean isMatch(@NonNull final CharSequence text, @NonNull final Pattern pattern) {
     return pattern.matcher(text).find();
   }
 
@@ -362,7 +362,7 @@ public class RegExUtils extends org.apache.commons.lang3.RegExUtils {
    * @param flags 匹配模式
    * @return 匹配集合
    */
-  public static List<String> matches(@NonNull final String text, @NonNull final String regex, final int group, final int flags) {
+  public static List<String> matches(@NonNull final CharSequence text, @NonNull final String regex, final int group, final int flags) {
     List<String> resultList = new ArrayList<>();
     Matcher matcher = getMatcher(text, regex, flags);
     while (matcher.find()) {
@@ -380,7 +380,7 @@ public class RegExUtils extends org.apache.commons.lang3.RegExUtils {
    * @param flagsEnums 匹配模式
    * @return 匹配集合
    */
-  public static List<String> matches(@NonNull final String text, @NonNull final String regex, final int group, final FlagsEnum... flagsEnums) {
+  public static List<String> matches(@NonNull final CharSequence text, @NonNull final String regex, final int group, final FlagsEnum... flagsEnums) {
     return matches(text, regex, group, Arrays.stream(flagsEnums).map(FlagsEnum::getValue).reduce(0, (a, b) -> a | b));
   }
 
@@ -392,7 +392,7 @@ public class RegExUtils extends org.apache.commons.lang3.RegExUtils {
    * @param group 捕获组
    * @return 匹配集合
    */
-  public static List<String> matches(@NonNull final String text, @NonNull final String regex, final int group) {
+  public static List<String> matches(@NonNull final CharSequence text, @NonNull final String regex, final int group) {
     return matches(text, regex, group, 0);
   }
 
@@ -404,7 +404,7 @@ public class RegExUtils extends org.apache.commons.lang3.RegExUtils {
    * @param group   捕获组
    * @return 匹配集合
    */
-  public static List<String> matches(@NonNull final String text, @NonNull final Pattern pattern, final int group) {
+  public static List<String> matches(@NonNull final CharSequence text, @NonNull final Pattern pattern, final int group) {
     List<String> resultList = new ArrayList<>();
     Matcher matcher = pattern.matcher(text);
     while (matcher.find()) {
@@ -420,7 +420,7 @@ public class RegExUtils extends org.apache.commons.lang3.RegExUtils {
    * @param regex 正则
    * @return 匹配集合
    */
-  public static List<String> matches(@NonNull final String text, @NonNull final String regex) {
+  public static List<String> matches(@NonNull final CharSequence text, @NonNull final String regex) {
     return matches(text, regex, 0);
   }
 
@@ -431,7 +431,7 @@ public class RegExUtils extends org.apache.commons.lang3.RegExUtils {
    * @param pattern 正则
    * @return 匹配集合
    */
-  public static List<String> matches(@NonNull final String text, @NonNull final Pattern pattern) {
+  public static List<String> matches(@NonNull final CharSequence text, @NonNull final Pattern pattern) {
     return matches(text, pattern, 0);
   }
 
