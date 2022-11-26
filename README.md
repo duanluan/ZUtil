@@ -5,7 +5,6 @@
 [![](https://img.shields.io/maven-central/v/top.zhogjianhao/ZUtil?style=flat-square)](https://search.maven.org/artifact/top.zhogjianhao/ZUtil)
 [![](https://img.shields.io/hexpm/l/plug?style=flat-square)](./LICENSE)
 [![](https://img.shields.io/badge/JDK-8%2B-orange?style=flat-square)]()
-[![](https://img.shields.io/badge/%E4%BD%9C%E8%80%85-duanluan-red.svg)](https://github.com/duanluan)
 [![](https://img.shields.io/badge/made%20with-%e2%9d%a4-ff69b4.svg?style=flat-square)](#)
 [![](https://img.shields.io/badge/273743748-🐧-388adc.svg?style=flat-square)](https://jq.qq.com/?_wv=1027&k=pYzF0R18)
 [![](https://img.shields.io/github/stars/duanluan/ZUtil?style=social)](https://github.com/duanluan/ZUtil)
