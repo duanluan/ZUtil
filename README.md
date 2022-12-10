@@ -64,7 +64,7 @@ Mode 即为`org.openjdk.jmh.annotations.Mode`，分为：
 <dependency>
   <groupId>top.zhogjianhao</groupId>
   <artifactId>ZUtil</artifactId>
-  <version>1.9.2</version>
+  <version>1.10.0</version>
 </dependency>
 ```
 
@@ -72,9 +72,9 @@ Mode 即为`org.openjdk.jmh.annotations.Mode`，分为：
 
 ```groovy
 // groovy
-implementation 'top.zhogjianhao:ZUtil:1.9.2'
+implementation 'top.zhogjianhao:ZUtil:1.10.0'
 // kotlin
-implementation("top.zhogjianhao:ZUtil:1.9.2")
+implementation("top.zhogjianhao:ZUtil:1.10.0")
 ```
 
 # Stargazers over time
