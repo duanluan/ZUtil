@@ -22,9 +22,11 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 18
-          cache: yarn
+          cache: npm
+          # https://github.com/actions/setup-node#caching-global-packages-data
+          cache-dependency-path: docs/package-lock.json
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: npm ci
       - name: Test build website
-        run: yarn build
+        run: npm run build
