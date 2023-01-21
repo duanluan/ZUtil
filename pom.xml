@@ -37,9 +37,6 @@
   <properties>
     <java.version>1.8</java.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
-    <!-- 跳过运行测试，测试资源，测试代码编译 -->
-    <!--<maven.test.skip>true</maven.test.skip>-->
   </properties>
 
   <dependencies>
@@ -199,126 +196,165 @@
   </dependencies>
 
   <build>
+    <pluginManagement>
+      <plugins>
+        <!-- Apache Maven Compiler Plugin：配置 compiler:compile、compiler:testCompile https://maven.apache.org/plugins/maven-compiler-plugin/index.html -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.10.1</version>
+          <!-- compiler:compile https://maven.apache.org/plugins/maven-compiler-plugin/compile-mojo.html -->
+          <configuration>
+            <!-- Setting the -source and -target of the Java Compiler https://maven.apache.org/plugins/maven-compiler-plugin/examples/set-compiler-source-and-target.html -->
+            <!-- Java 编译器的 -source 参数 https://maven.apache.org/plugins/maven-compiler-plugin/compile-mojo.html#source -->
+            <source>${java.version}</source>
+            <!-- Java 编译器的 -target 参数 https://maven.apache.org/plugins/maven-compiler-plugin/compile-mojo.html#target -->
+            <target>${java.version}</target>
+            <!-- 显示编译警告 https://maven.apache.org/plugins/maven-compiler-plugin/compile-mojo.html#showWarnings -->
+            <showWarnings>true</showWarnings>
+          </configuration>
+        </plugin>
+        <!-- Apache Maven Surefire Plugin：配置 test 生命周期阶段 https://maven.apache.org/surefire/maven-surefire-plugin/ -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>2.22.2</version>
+          <!-- surefire:test https://maven.apache.org/surefire/maven-surefire-plugin/test-mojo.html -->
+          <configuration>
+            <!-- 忽略测试失败 https://maven.apache.org/surefire/maven-surefire-plugin/test-mojo.html#testFailureIgnore -->
+            <testFailureIgnore>true</testFailureIgnore>
+            <!-- 需排除的测试 https://maven.apache.org/surefire/maven-surefire-plugin/test-mojo.html#excludes -->
+            <excludes>
+              <!-- JMH 性能测试 -->
+              <exclude>**/jmh/**</exclude>
+            </excludes>
+            <argLine>${jacocoArgLine}</argLine>
+          </configuration>
+        </plugin>
+
+        <!-- Javadoc and Sources Attachments - The Central Repository Documentation https://central.sonatype.org/publish/publish-maven/#javadoc-and-sources-attachments -->
+        <!-- Apache Maven Source Plugin：创建源码 jar https://maven.apache.org/plugins/maven-source-plugin/ -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-source-plugin</artifactId>
+          <version>3.2.1</version>
+          <executions>
+            <execution>
+              <id>attach-sources</id>
+              <goals>
+                <!-- 默认生命周期阶段为 package。其他插件绑定到它的生命周期阶段时，用 jar 会重复打包，jar-no-fork 可以避免 https://stackoverflow.com/a/10568004 -->
+                <!-- https://maven.apache.org/plugins/maven-source-plugin/jar-no-fork-mojo.html -->
+                <goal>jar-no-fork</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+        <!-- Maven Javadoc Plugin：生成 Javadoc https://maven.apache.org/plugins/maven-javadoc-plugin/ -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-javadoc-plugin</artifactId>
+          <version>3.4.1</version>
+          <executions>
+            <execution>
+              <id>attach-javadocs</id>
+              <goals>
+                <!-- 默认生命周期阶段为 package。用于创建 Javadoc jar https://maven.apache.org/plugins/maven-javadoc-plugin/jar-mojo.html -->
+                <goal>jar</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+
+        <!-- GPG Signed Components - The Central Repository Documentation https://central.sonatype.org/publish/publish-maven/#gpg-signed-components -->
+        <!-- Apache Maven GPG Plugin：使用 GPG 对项目 Artifacts（发行版文件）进行签名 https://maven.apache.org/plugins/maven-gpg-plugin/ -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-gpg-plugin</artifactId>
+          <version>3.0.1</version>
+          <executions>
+            <execution>
+              <id>sign-artifacts</id>
+              <goals>
+                <!-- 签名项目 Artifact、POM、附加 artifacts（源码、Javadoc、本地 jar 等） https://maven.apache.org/plugins/maven-gpg-plugin/sign-mojo.html -->
+                <goal>sign</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+        <!-- Nexus Staging Maven Plugin for Deployment and Release - The Central Repository Documentation https://central.sonatype.org/publish/publish-maven/#nexus-staging-maven-plugin-for-deployment-and-release -->
+        <!-- Nexus Staging Maven Plugin：Nexus 流程 https://github.com/sonatype/nexus-maven-plugins/tree/main/staging/maven-plugin -->
+        <plugin>
+          <groupId>org.sonatype.plugins</groupId>
+          <artifactId>nexus-staging-maven-plugin</artifactId>
+          <version>1.6.13</version>
+          <extensions>true</extensions>
+          <configuration>
+            <!-- Maven setting.xml 中 <server> 的 ID，用于获取身份验证信息 https://github.com/sonatype/nexus-maven-plugins/tree/main/staging/maven-plugin#configuring-the-plugin -->
+            <serverId>ossrh</serverId>
+            <!-- 目标 Nexus URL -->
+            <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
+            <!-- deploy、close、rc-close 执行成功后自动 release -->
+            <autoReleaseAfterClose>true</autoReleaseAfterClose>
+          </configuration>
+        </plugin>
+
+        <!--
+          JaCoCo https://www.eclemma.org/jacoco/trunk/doc/maven.html
+          如果想在覆盖率报告中显示行号，或者突出显示源代码，必须 debug 编译
+          使用 maven-surefire-plugin 或 maven-fails-plugin 时，不能将 forkCount 设置为 0 或将 forkMode 设置为 never，因为这将阻止运行测试的 -javaagent 参数，导致无法记录覆盖率
+        -->
+        <plugin>
+          <groupId>org.jacoco</groupId>
+          <artifactId>jacoco-maven-plugin</artifactId>
+          <version>0.8.8</version>
+          <configuration>
+            <!-- 指定包含 JaCoCo 代理的属性名 https://www.eclemma.org/jacoco/trunk/doc/prepare-agent-mojo.html#propertyName -->
+            <!-- 使用 maven-surefire-plugin 时会覆盖 VM 参数，所以需要取名并配置到 maven-surefire-plugin 的 argLine 中 -->
+            <propertyName>jacocoArgLine</propertyName>
+          </configuration>
+          <executions>
+            <execution>
+              <id>jacoco-initialize</id>
+              <goals>
+                <!-- 默认生命周期阶段为 initialize。此代理通过 VM 参数传递给测试程序，在执行阶段收集覆盖率信息，在结束时写入文件。https://www.eclemma.org/jacoco/trunk/doc/prepare-agent-mojo.html -->
+                <goal>prepare-agent</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+
     <plugins>
-      <!-- The Compiler Plugin is used to compile the sources of your project. -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.8.1</version>
-        <configuration>
-          <source>${java.version}</source>
-          <target>${java.version}</target>
-          <encoding>UTF-8</encoding>
-          <showWarnings>true</showWarnings>
-        </configuration>
       </plugin>
-
-      <!-- Provides support to access staging functionality in a remote Nexus Professional server. -->
-      <plugin>
-        <groupId>org.sonatype.plugins</groupId>
-        <artifactId>nexus-staging-maven-plugin</artifactId>
-        <version>1.6.8</version>
-        <extensions>true</extensions>
-        <configuration>
-          <!-- 和 Maven settings.xml 中的 server id 对应 -->
-          <serverId>ossrh</serverId>
-          <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
-          <autoReleaseAfterClose>true</autoReleaseAfterClose>
-        </configuration>
-      </plugin>
-      <!-- The Maven Source Plugin creates a JAR archive of the source files of the current project. -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-source-plugin</artifactId>
-        <version>3.2.1</version>
-        <executions>
-          <execution>
-            <id>attach-sources</id>
-            <goals>
-              <goal>jar-no-fork</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <!-- The Apache Maven Javadoc Plugin is a plugin that uses the javadoc tool for generating javadocs for the specified project. -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <version>3.3.1</version>
-        <executions>
-          <execution>
-            <id>attach-javadocs</id>
-            <goals>
-              <goal>jar</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-
-      <!-- Signs the project artifacts with GnuPG. -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-gpg-plugin</artifactId>
-        <version>1.5</version>
-        <executions>
-          <execution>
-            <id>sign-artifacts</id>
-            <phase>verify</phase>
-            <goals>
-              <goal>sign</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-
-      <!-- This plugin is used to release a project with Maven, saving a lot of repetitive, manual work. -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-release-plugin</artifactId>
-        <version>2.5.3</version>
-      </plugin>
-
-      <!-- 代码覆盖率 -->
-      <plugin>
-        <groupId>org.jacoco</groupId>
-        <artifactId>jacoco-maven-plugin</artifactId>
-        <version>0.8.8</version>
-        <configuration>
-          <!-- 配置 JaCoCo 运行时属性名，同时使用 maven-surefire-plugin 时需要配置此项，否则 surefire 会覆盖 jacoco 的参数，导致无法生成 jacoco.exec 而无法生成报告 -->
-          <propertyName>surefireArgLine</propertyName>
-        </configuration>
-        <executions>
-          <!-- 不配置无法生成 jacoco.exec -->
-          <execution>
-            <id>jacoco-initialize</id>
-            <goals>
-              <goal>prepare-agent</goal>
-            </goals>
-          </execution>
-          <!--<execution>-->
-          <!--  <id>jacoco-site</id>-->
-          <!--  <phase>package</phase>-->
-          <!--  <goals>-->
-          <!--    <goal>report</goal>-->
-          <!--  </goals>-->
-          <!--</execution>-->
-        </executions>
-      </plugin>
-      <!-- 配置 mvn test 命令 -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
-        <version>2.22.2</version>
-        <configuration>
-          <!-- 跳过错误 -->
-          <testFailureIgnore>true</testFailureIgnore>
-          <!-- 配置 VM 参数 -->
-          <argLine>${surefireArgLine}</argLine>
-          <excludes>
-            <!-- 跳过 JMH 性能测试 -->
-            <exclude>**/jmh/**/*.java</exclude>
-          </excludes>
-        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+      </plugin>
+
+      <plugin>
+        <groupId>org.sonatype.plugins</groupId>
+        <artifactId>nexus-staging-maven-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-gpg-plugin</artifactId>
+      </plugin>
+
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
       </plugin>
     </plugins>
   </build>
