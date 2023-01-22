@@ -87,12 +87,12 @@ Mode 即为`org.openjdk.jmh.annotations.Mode`，分为：
 
 ### 参与开发
 
-1. Fork 并 Clone 项目到本地。
+1. **Fork** 并 **Clone** 项目到本地。
 2. 开发：
-   * 新增类或方法需提前[加群](https://jq.qq.com/?_wv=1027&k=pYzF0R18)沟通。
-   * 修复 BUG（fix）、优化性能（perf）或新增/更正测试（test）。
+   * **新增类或方法**需提前[加群](https://jq.qq.com/?_wv=1027&k=pYzF0R18)沟通。
+   * **修复 BUG**（fix）、**优化性能**（perf）或**新增/更正测试**（test）。
 3. 测试：
-   * 使用`org.junit.jupiter.api.Assertions`进行代码覆盖率测试：
+   * 使用`org.junit.jupiter.api.Assertions`进行**代码覆盖率测试**：
     ```java
     ……
     import static org.junit.jupiter.api.Assertions.*;
@@ -116,5 +116,5 @@ Mode 即为`org.openjdk.jmh.annotations.Mode`，分为：
     ```
    * Maven`test`进行测试，测试后会在`target`下生成`jacoco.exec`。
    * Maven`jacoco:report`生成代码覆盖率测试报告，在`target/site`目录下。
-   * 查看更新的类或方法，覆盖率在 90% 以上时提交。
-4. 提交时遵循 [Angular 提交消息规范](https://github.com/angular/angular/blob/22b96b9/CONTRIBUTING.md#-commit-message-guidelines)，提交后新建 pull request 即可。
+   * 查看更新的类或方法，覆盖率在 **90%** 以上时提交。
+4. 提交时遵循 **[Angular 提交消息规范](https://github.com/angular/angular/blob/22b96b9/CONTRIBUTING.md#-commit-message-guidelines)**，提交后新建 **pull request** 即可。
