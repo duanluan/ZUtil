@@ -6,9 +6,9 @@
 
 ```xml
 <dependency>
-  <groupId>top.zhogjianhao</groupId>
+  <groupId>top.csaf</groupId>
   <artifactId>ZUtil</artifactId>
-  <version>1.10.1</version>
+  <version>1.11.0</version>
 </dependency>
 ```
 
@@ -16,9 +16,9 @@
 
 ```groovy
 // groovy
-implementation 'top.zhogjianhao:ZUtil:1.10.1'
+implementation 'top.csaf:ZUtil:1.11.0'
 // kotlin
-implementation("top.zhogjianhao:ZUtil:1.10.1")
+implementation("top.csaf:ZUtil:1.11.0")
 ```
 
 ## 安装注意
@@ -30,9 +30,9 @@ implementation("top.zhogjianhao:ZUtil:1.10.1")
 ```xml
 <!-- 方式一：ZUtil 排除 slf4j -->
 <dependency>
-  <groupId>top.zhogjianhao</groupId>
+  <groupId>top.csaf</groupId>
   <artifactId>ZUtil</artifactId>
-  <version>1.10.1</version>
+  <version>1.11.0</version>
   <exclusions>
     <exclusion>
       <groupId>org.slf4j</groupId>
@@ -65,7 +65,7 @@ implementation("top.zhogjianhao:ZUtil:1.10.1")
 // groovy
 dependencies {
   // 方式一：ZUtil 排除 slf4j
-  implementation('top.zhogjianhao:ZUtil:1.10.1') {
+  implementation('top.csaf:ZUtil:1.11.0') {
     exclude group: 'org.slf4j', module: 'slf4j-api'
     exclude group: 'org.slf4j', module: 'slf4j-simple'
   }
@@ -78,7 +78,7 @@ dependencies {
 // kotlin
 dependencies {
   // 方式一：ZUtil 排除 slf4j
-  implementation("top.zhogjianhao:ZUtil:1.10.1") {
+  implementation("top.csaf:ZUtil:1.11.0") {
     exclude(group = "org.slf4j", module = "slf4j-api")
     exclude(group = "org.slf4j", module = "slf4j-simple")
   }
@@ -92,5 +92,5 @@ dependencies {
 
 ## 资源
 
-* [Maven 中央库](https://search.maven.org/artifact/top.zhogjianhao/ZUtil)
-* [Maven Repository](https://mvnrepository.com/artifact/top.zhogjianhao/ZUtil)
+* [Maven 中央库](https://search.maven.org/artifact/top.csaf/ZUtil)
+* [Maven Repository](https://mvnrepository.com/artifact/top.csaf/ZUtil)

@@ -1,5 +1,7 @@
 # 不兼容变更
 
+* 1.11.0
+  * Group Id 由`top.zhogjianhao`重命名为`top.csaf`。
 * 1.10.1
   * `id.NanoIDUtils`重命名为`id.NanoIdUtils`。
 * 1.9.2

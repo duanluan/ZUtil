@@ -6,7 +6,7 @@
 
 本文档只会介绍常用及特色功能，具体使用请查看 [javadoc](https://apidoc.gitee.com/duanluan/ZUtil)。
 
-和 Hutool 的性能对比测试可以查看 [jmh.contrast](https://github.com/duanluan/ZUtil/tree/main/src/test/java/top/zhogjianhao/jmh/contrast)。
+和 Hutool 的性能对比测试可以查看 [jmh.contrast](https://github.com/duanluan/ZUtil/tree/main/src/test/java/top/csaf/jmh/contrast)。
 
 ## 资源
 
