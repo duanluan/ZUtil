@@ -1,4 +1,4 @@
-package top.csaf.jmh.base;
+package top.csaf.jmh.base.to;
 
 import org.junit.jupiter.api.Test;
 import org.openjdk.jmh.annotations.*;
@@ -22,17 +22,17 @@ import java.util.concurrent.TimeUnit;
 @Warmup(iterations = 5, time = 1)
 @Measurement(iterations = 5, time = 1)
 @BenchmarkMode(Mode.All)
-public class ToBytesTest {
+public class CharsToBytesTest {
 
   public static void main(String[] args) {
     // 结果是否相等
-    ToBytesTest test = new ToBytesTest();
+    CharsToBytesTest test = new CharsToBytesTest();
     System.out.println(test.string()[0] == test.charBufferWrap()[0] && test.charBufferWrap()[0] == test.charBufferAllocate()[0]);
   }
 
   @Test
   public void benchmark() throws Exception {
-    org.openjdk.jmh.Main.main(new String[]{ToBytesTest.class.getName()});
+    org.openjdk.jmh.Main.main(new String[]{CharsToBytesTest.class.getName()});
   }
 
   char[] chars = new char[]{'中', '国'};

@@ -1,4 +1,4 @@
-package top.csaf.jmh.base;
+package top.csaf.jmh.base.array;
 
 import org.junit.jupiter.api.Test;
 import org.openjdk.jmh.annotations.*;

@@ -1,4 +1,4 @@
-package top.csaf.jmh.base;
+package top.csaf.jmh.base.to;
 
 import com.alibaba.fastjson2.JSON;
 import org.junit.jupiter.api.Test;
@@ -22,18 +22,18 @@ import java.util.concurrent.TimeUnit;
 @Warmup(iterations = 5, time = 1)
 @Measurement(iterations = 5, time = 1)
 @BenchmarkMode(Mode.All)
-public class ToMapTest {
+public class BeanMapToMapTest {
 
   public static void main(String[] args) {
     // 结果是否相等
-    ToMapTest test = new ToMapTest();
+    BeanMapToMapTest test = new BeanMapToMapTest();
     System.out.println(test.putAll().equals(test.beanMapAndConstructor()) && test.beanMapAndConstructor().equals(test.beanMapAndForeach()));
     System.out.println(((List<BeanUtilsTest.TestBean>) (test.beanMapAndForeach().get("beanList"))).get(0).getName().equals(((List<Map<String, Object>>) (test.json().get("beanList"))).get(0).get("name")));
   }
 
   @Test
   public void benchmark() throws Exception {
-    org.openjdk.jmh.Main.main(new String[]{ToMapTest.class.getName()});
+    org.openjdk.jmh.Main.main(new String[]{BeanMapToMapTest.class.getName()});
   }
 
   private static final BeanUtilsTest.TestBean testBean;

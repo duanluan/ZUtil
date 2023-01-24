@@ -1,4 +1,4 @@
-package top.csaf.jmh.base;
+package top.csaf.jmh.base.to;
 
 import org.junit.jupiter.api.Test;
 import org.openjdk.jmh.annotations.*;
@@ -18,17 +18,17 @@ import java.util.concurrent.TimeUnit;
 @Warmup(iterations = 5, time = 1)
 @Measurement(iterations = 5, time = 1)
 @BenchmarkMode(Mode.All)
-public class ToUrlParamsTest {
+public class MapToUrlParamsTest {
 
   public static void main(String[] args) {
     // 结果是否相等
-    ToUrlParamsTest test = new ToUrlParamsTest();
+    MapToUrlParamsTest test = new MapToUrlParamsTest();
     System.out.println(test.toUrlParamsByKeySet().equals(test.toUrlParamsByKeySet1()) && test.toUrlParamsByKeySet1().equals(test.toUrlParamsByEntrySet()) && test.toUrlParamsByEntrySet().equals(test.toUrlParamsByEntrySet1()));
   }
 
   @Test
   public void benchmark() throws Exception {
-    org.openjdk.jmh.Main.main(new String[]{ToUrlParamsTest.class.getName()});
+    org.openjdk.jmh.Main.main(new String[]{MapToUrlParamsTest.class.getName()});
   }
 
   private Map<String, Object> getMap() {

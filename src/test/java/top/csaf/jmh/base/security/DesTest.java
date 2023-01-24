@@ -1,4 +1,4 @@
-package top.csaf.jmh.base;
+package top.csaf.jmh.base.security;
 
 import org.bouncycastle.crypto.InvalidCipherTextException;
 import org.bouncycastle.crypto.paddings.ZeroBytePadding;
