@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.IteratorUtils;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.*;
 import java.util.function.Function;
 
@@ -326,7 +325,7 @@ public class CollectionUtils {
       throw new IllegalArgumentException("Objects: length should be greater than 0");
     }
     for (Object object : objects) {
-      if(isAnyEmpty(object)) {
+      if (isAnyEmpty(object)) {
         return true;
       }
     }
@@ -344,13 +343,14 @@ public class CollectionUtils {
   }
 
   /**
-   * 基础类型和 BigDecimal、BigInteger 会被转换为 String，且小数点后无效的 0 会被去除
+   * 转为字符串，Float、Double、BigDecimal 小数点后多余的 0 会被去除
    *
-   * @param object 元素
+   * @param object     需转换的对象
+   * @param isByString 是否转换
    * @return 字符串
    */
-  private static Object toStringByBasic(Object object, boolean isByValue) {
-    if (isByValue && (ClassUtils.isBasic(object) || object instanceof BigDecimal || object instanceof BigInteger)) {
+  private static Object stripTrailingZerosToString(Object object, boolean isByString) {
+    if (isByString) {
       if (object instanceof Float || object instanceof Double || object instanceof BigDecimal) {
         object = new BigDecimal(object.toString()).stripTrailingZeros().toPlainString();
       } else {
@@ -363,12 +363,12 @@ public class CollectionUtils {
   /**
    * 是否 每个对象的每个元素都相等
    *
-   * @param isByValue        是否根据值来判断是否相等，基础类型和 BigDecimal、BigInteger 会被转换为 String，且小数点后无效的 0 会被去除
+   * @param isByString       是否根据 toString() 的值来判断是否相等，Float、Double、BigDecimal 小数点后多余的 0 会被去除
    * @param continueFunction 对象何时不参与判断
    * @param objects          多个对象
    * @return 是否 每个对象的每个元素都相等
    */
-  public static boolean isAllEquals(boolean isByValue, Function<Object, Boolean> continueFunction, final Object... objects) {
+  public static boolean isAllEquals(boolean isByString, Function<Object, Boolean> continueFunction, final Object... objects) {
     if (objects == null) {
       return true;
     }
@@ -395,7 +395,7 @@ public class CollectionUtils {
         int i = 0;
         while (iterator.hasNext()) {
           // 基础类型转为 String
-          Object nextObj = toStringByBasic(iterator.next(), isByValue);
+          Object nextObj = stripTrailingZerosToString(iterator.next(), isByString);
           // 首次判断前跳过第一次循环
           if (prevObj == null && i == 0) {
             prevObj = nextObj;
@@ -410,7 +410,7 @@ public class CollectionUtils {
       } else if (object instanceof Iterable<?>) {
         int i = 0;
         for (Object o : (Iterable<?>) object) {
-          Object nextObj = toStringByBasic(o, isByValue);
+          Object nextObj = stripTrailingZerosToString(o, isByString);
           if (prevObj == null && i == 0) {
             prevObj = nextObj;
             i = 1;
@@ -424,7 +424,7 @@ public class CollectionUtils {
       } else if (object instanceof Object[]) {
         Object[] objects1 = (Object[]) object;
         for (int i = 0; i < objects1.length; i++) {
-          Object nextObj = toStringByBasic(objects1[i], isByValue);
+          Object nextObj = stripTrailingZerosToString(objects1[i], isByString);
           if (prevObj == null && i == 0) {
             prevObj = nextObj;
             i = 1;
@@ -439,7 +439,7 @@ public class CollectionUtils {
         Enumeration<?> enumeration = (Enumeration<?>) object;
         int i = 0;
         while (enumeration.hasMoreElements()) {
-          Object nextObj = toStringByBasic(enumeration.nextElement(), isByValue);
+          Object nextObj = stripTrailingZerosToString(enumeration.nextElement(), isByString);
           if (prevObj == null && i == 0) {
             prevObj = nextObj;
             i = 1;
@@ -458,24 +458,24 @@ public class CollectionUtils {
   /**
    * 是否不满足 每个对象的每个元素都相等
    *
-   * @param isByValue        是否根据值来判断是否相等，基础类型和 BigDecimal、BigInteger 会被转换为 String，且小数点后无效的 0 会被去除
+   * @param isByString       是否根据 toString() 的值来判断是否相等，Float、Double、BigDecimal 小数点后多余的 0 会被去除
    * @param continueFunction 对象何时不参与判断
    * @param objects          多个对象
    * @return 是否不满足 每个对象的每个元素都相等
    */
-  public static boolean isNotAllEquals(boolean isByValue, Function<Object, Boolean> continueFunction, final Object... objects) {
-    return !isAllEquals(isByValue, continueFunction, objects);
+  public static boolean isNotAllEquals(boolean isByString, Function<Object, Boolean> continueFunction, final Object... objects) {
+    return !isAllEquals(isByString, continueFunction, objects);
   }
 
   /**
    * 是否 每个对象的同一位置的元素都相等
    *
-   * @param isByValue        是否根据值来判断是否相等，基础类型和 BigDecimal、BigInteger 会被转换为 String，且小数点后无效的 0 会被去除
+   * @param isByString       是否根据 toString() 的值来判断是否相等，Float、Double、BigDecimal 小数点后多余的 0 会被去除
    * @param continueFunction 对象何时不参与判断
    * @param objects          多个对象
    * @return 是否 每个对象的同一位置的元素都相等
    */
-  public static boolean isAllEqualsSameIndex(boolean isByValue, Function<Object, Boolean> continueFunction, final Object... objects) {
+  public static boolean isAllEqualsSameIndex(boolean isByString, Function<Object, Boolean> continueFunction, final Object... objects) {
     if (objects == null) {
       return true;
     }
@@ -533,7 +533,7 @@ public class CollectionUtils {
         int i = 0;
         for (; iterator.hasNext(); i++) {
           // 基础类型转为 String
-          Object nextObj = toStringByBasic(iterator.next(), isByValue);
+          Object nextObj = stripTrailingZerosToString(iterator.next(), isByString);
           if (prevList.size() < i + 1) {
             prevList.add(nextObj);
             i = 1;
@@ -547,7 +547,7 @@ public class CollectionUtils {
       } else if (object instanceof Iterable<?>) {
         int i = 0;
         for (Object o : (Iterable<?>) object) {
-          Object nextObj = toStringByBasic(o, isByValue);
+          Object nextObj = stripTrailingZerosToString(o, isByString);
           if (prevList.size() < i + 1) {
             prevList.add(nextObj);
             i = 1;
@@ -562,7 +562,7 @@ public class CollectionUtils {
       } else if (object instanceof Object[]) {
         Object[] objects1 = (Object[]) object;
         for (int i = 0; i < objects1.length; i++) {
-          Object nextObj = toStringByBasic(objects1[i], isByValue);
+          Object nextObj = stripTrailingZerosToString(objects1[i], isByString);
           if (prevList.size() < i + 1) {
             prevList.add(nextObj);
             i = 1;
@@ -577,7 +577,7 @@ public class CollectionUtils {
         Enumeration<?> enumeration = (Enumeration<?>) object;
         int i = 0;
         for (; enumeration.hasMoreElements(); i++) {
-          Object nextObj = toStringByBasic(enumeration.nextElement(), isByValue);
+          Object nextObj = stripTrailingZerosToString(enumeration.nextElement(), isByString);
           if (prevList.size() < i + 1) {
             prevList.add(nextObj);
             i = 1;
@@ -596,12 +596,12 @@ public class CollectionUtils {
   /**
    * 是否不满足 每个对象的同一位置的元素都相等
    *
-   * @param isByValue        是否根据值来判断是否相等，基础类型和 BigDecimal、BigInteger 会被转换为 String，且小数点后无效的 0 会被去除
+   * @param isByString       是否根据 toString() 的值来判断是否相等，Float、Double、BigDecimal 小数点后多余的 0 会被去除
    * @param continueFunction 对象何时不参与判断
    * @param objects          多个对象
    * @return 是否不满足 每个对象的同一位置的元素都相等
    */
-  public static boolean isNotAllEqualsSameIndex(boolean isByValue, Function<Object, Boolean> continueFunction, final Object... objects) {
-    return !isAllEqualsSameIndex(isByValue, continueFunction, objects);
+  public static boolean isNotAllEqualsSameIndex(boolean isByString, Function<Object, Boolean> continueFunction, final Object... objects) {
+    return !isAllEqualsSameIndex(isByString, continueFunction, objects);
   }
 }
