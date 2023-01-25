@@ -8,7 +8,7 @@ import java.time.format.ResolverStyle;
 import java.util.Locale;
 
 /**
- * 时间特性，决定着时间工具类的处理方式，“_ALWAYS”结尾的总是生效
+ * 时间特性，决定着 {@link DateUtils} 的处理方式，“_ALWAYS”结尾的总是生效
  */
 @Slf4j
 public class DateFeature {
