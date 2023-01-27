@@ -1,8 +1,10 @@
 package top.csaf;
 
 
+import com.google.gson.JsonPrimitive;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.EnumerationUtils;
 import org.apache.commons.collections4.IteratorUtils;
 
 import java.math.BigDecimal;
@@ -470,123 +472,109 @@ public class CollectionUtils {
   /**
    * 是否 每个对象的同一位置的元素都相等
    *
-   * @param isByString       是否根据 toString() 的值来判断是否相等，Float、Double、BigDecimal 小数点后多余的 0 会被去除
+   * @param isByString       是否根据 toString() 的值来判断是否相等，
+   *                         Float、Double、BigDecimal 会去除小数点后多余的 0。
    * @param continueFunction 对象何时不参与判断
-   * @param objects          多个对象
+   * @param objects          多个对象。Iterator、Enumeration 会被使用掉。
    * @return 是否 每个对象的同一位置的元素都相等
    */
-  public static boolean isAllEqualsSameIndex(boolean isByString, Function<Object, Boolean> continueFunction, final Object... objects) {
-    if (objects == null) {
-      return true;
-    }
+  public static boolean isAllEqualsSameIndex(final boolean isByString, final Function<Object, Boolean> continueFunction, @NonNull final Object... objects) {
     if (objects.length < 2) {
-      throw new IllegalArgumentException("Objects: length should be greater than 1");
+      throw new IllegalArgumentException("Objects: length must be greater than 1");
     }
 
-    Integer objectSize = null;
-    for (Object object : objects) {
-      // continueFunction 中可能已经使用了 Iterator，所以在调用前转换为 List
+    Integer prevObjSize = null;
+    for (int i = 0; i < objects.length; i++) {
+      Object object = objects[i];
+
+      // Iterator、Enumeration 获取对象元素长度时可能需要循环，所以先转换为 List，避免后续无法循环
       if (object instanceof Iterator<?>) {
         object = IteratorUtils.toList((Iterator<?>) object);
+        objects[i] = object;
+      } else if (object instanceof Enumeration<?>) {
+        object = EnumerationUtils.toList((Enumeration<?>) object);
+        objects[i] = object;
       }
-      // 对象指定条件时不参与判断
-      if (continueFunction != null && continueFunction.apply(object)) {
+      // 满足条件时对象不参与判断
+      if (continueFunction != null && Boolean.TRUE.equals(continueFunction.apply(object))) {
         continue;
       }
-      int size = -1;
-      if (object instanceof Collection<?>) {
-        size = ((Collection<?>) object).size();
+
+      int objSize = -1;
+      // 不同类型获取元素长度
+      if (object instanceof Iterable<?>) {
+        if (object instanceof Collection<?>) {
+          objSize = ((Collection<?>) object).size();
+        } else {
+          int j = 0;
+          for (Object o : (Iterable<?>) object) {
+            j++;
+          }
+          objSize = j;
+        }
       } else if (object instanceof Map<?, ?>) {
-        size = ((Map<?, ?>) object).values().size();
-      } else if (object instanceof Iterable<?>) {
-        int i = 0;
-        for (Object o : (Iterable<?>) object) {
-          i++;
-        }
-        size = i;
+        objSize = ((Map<?, ?>) object).values().size();
       } else if (object instanceof Object[]) {
-        size = ((Object[]) object).length;
-      } else if (object instanceof Enumeration<?>) {
-        Enumeration<?> enumeration = (Enumeration<?>) object;
-        int i = 0;
-        for (; enumeration.hasMoreElements(); i++) {
-          enumeration.nextElement();
-        }
-        size = i;
+        objSize = ((Object[]) object).length;
       }
-      // 元素长度不一致时退出
-      if (objectSize != null && !objectSize.equals(size)) {
+      // 当前对象元素长度和上一次循环的对象元素长度不一致时退出
+      if (prevObjSize != null && !prevObjSize.equals(objSize)) {
         return false;
       }
-      objectSize = size;
+      prevObjSize = objSize;
     }
 
     List<Object> prevList = new LinkedList<>();
     for (Object object : objects) {
-      if (object instanceof Collection<?> || object instanceof Map<?, ?>) {
+      // 满足条件时对象不参与判断
+      if (continueFunction != null && Boolean.TRUE.equals(continueFunction.apply(object))) {
+        continue;
+      }
+
+      // Iterable、Map
+      if (object instanceof Iterable<?> || object instanceof Iterator<?> || object instanceof Map<?, ?>) {
+        // 不同类型获取 Iterator
         Iterator<?> iterator;
-        if (object instanceof Collection<?>) {
-          iterator = ((Collection<?>) object).iterator();
+        if (object instanceof Iterable<?>) {
+          iterator = ((Iterable<?>) object).iterator();
         } else {
           iterator = (((Map<?, ?>) object).values()).iterator();
         }
+
         int i = 0;
         for (; iterator.hasNext(); i++) {
+          Object nextObj = iterator.next();
+          /** {@link com.google.gson.JsonArray } 循环时需转换为 JsonPrimitive 后处理 */
+          if (nextObj instanceof JsonPrimitive) {
+            JsonPrimitive jsonPrimitive = (JsonPrimitive) nextObj;
+            nextObj = jsonPrimitive.isNumber() ? jsonPrimitive.getAsBigDecimal() : jsonPrimitive.getAsString();
+          }
+
           // 基础类型转为 String
-          Object nextObj = stripTrailingZerosToString(iterator.next(), isByString);
+          nextObj = stripTrailingZerosToString(nextObj, isByString);
+          // 如果上一次列表的长度 < i + 1，即 prevList（上一次列表）未填充完需要判断的第一个对象的所有元素
           if (prevList.size() < i + 1) {
             prevList.add(nextObj);
-            i = 1;
             continue;
           }
+          // 对比上一次列表和当前列表的元素
           if (!Objects.equals(prevList.get(i), nextObj)) {
             return false;
           }
-          prevList.set(i, nextObj);
         }
-      } else if (object instanceof Iterable<?>) {
-        int i = 0;
-        for (Object o : (Iterable<?>) object) {
-          Object nextObj = stripTrailingZerosToString(o, isByString);
-          if (prevList.size() < i + 1) {
-            prevList.add(nextObj);
-            i = 1;
-            continue;
-          }
-          if (!Objects.equals(prevList.get(i), nextObj)) {
-            return false;
-          }
-          prevList.set(i, nextObj);
-          i++;
-        }
-      } else if (object instanceof Object[]) {
+      }
+      // Object[]
+      else if (object instanceof Object[]) {
         Object[] objects1 = (Object[]) object;
         for (int i = 0; i < objects1.length; i++) {
           Object nextObj = stripTrailingZerosToString(objects1[i], isByString);
           if (prevList.size() < i + 1) {
             prevList.add(nextObj);
-            i = 1;
             continue;
           }
           if (!Objects.equals(prevList.get(i), nextObj)) {
             return false;
           }
-          prevList.set(i, nextObj);
-        }
-      } else if (object instanceof Enumeration<?>) {
-        Enumeration<?> enumeration = (Enumeration<?>) object;
-        int i = 0;
-        for (; enumeration.hasMoreElements(); i++) {
-          Object nextObj = stripTrailingZerosToString(enumeration.nextElement(), isByString);
-          if (prevList.size() < i + 1) {
-            prevList.add(nextObj);
-            i = 1;
-            continue;
-          }
-          if (!Objects.equals(prevList.get(i), nextObj)) {
-            return false;
-          }
-          prevList.set(i, nextObj);
         }
       }
     }

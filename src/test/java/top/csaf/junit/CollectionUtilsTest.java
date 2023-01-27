@@ -1,5 +1,6 @@
 package top.csaf.junit;
 
+import com.google.gson.JsonArray;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -8,6 +9,8 @@ import top.csaf.CollectionUtils;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.*;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @Slf4j
 @DisplayName("集合工具类测试")
@@ -100,29 +103,41 @@ public class CollectionUtilsTest {
   @DisplayName("是否 每个对象的同一位置的元素都相等")
   @Test
   void isAllEqualsSameIndex() {
-    List<String> list = new ArrayList<>();
+    assertThrows(NullPointerException.class, () -> CollectionUtils.isAllEqualsSameIndex(true, null, null));
+    assertThrows(IllegalArgumentException.class, () -> CollectionUtils.isAllEqualsSameIndex(true, null, new ArrayList<>()));
+
+    List<Object> list = new ArrayList<>();
     list.add("1");
-    list.add("2");
-    List<String> list1 = new ArrayList<>();
-    list1.add("1");
-    list1.add("2");
-    List<String> list2 = new ArrayList<>();
+    list.add(2);
+    list.add(new BigDecimal("3.0"));
+    List<Object> list1 = new ArrayList<>();
+    list1.add(new BigInteger("1"));
+    list1.add(2.0f);
+    list1.add(3L);
+    JsonArray jsonArray = new JsonArray();
+    jsonArray.add('1');
+    jsonArray.add(2.0);
+    jsonArray.add(3);
     Map<String, Object> map = new HashMap<>();
-    map.put("1", "1");
-    map.put("2", "2");
-    println("忽略 null 和空元素：" + CollectionUtils.isAllEqualsSameIndex(false, CollectionUtils::sizeIsEmpty, list, list1.iterator(), null, map));
-    List<String> list3 = new ArrayList<>();
-    list3.add(null);
-    println("忽略 null 和空元素和元素为 null：" + CollectionUtils.isAllEqualsSameIndex(false, CollectionUtils::isAllEmpty, list, list1.iterator(), null, list2, list3, map));
-    Vector<Integer> vector = new Vector<>();
-    vector.add(1);
-    vector.add(2);
-    List<Object> list4 = new ArrayList<>();
-    list4.add(1.0f);
-    list4.add(2.0);
-    List<Number> list5 = new ArrayList<>();
-    list5.add(new BigDecimal("1.0"));
-    list5.add(new BigInteger("2"));
-    println("忽略值类型、忽略 null 和空元素和元素为 null：" + CollectionUtils.isAllEqualsSameIndex(true, CollectionUtils::isAllEmpty, list, list1.iterator(), list2, list3, list4, list5, map, vector));
+    map.put("1", '1');
+    map.put("2", 2.0);
+    map.put("3", 3);
+    Object[] array = new Object[]{'1', 2.0, 3};
+    Vector<Object> vector = new Vector<>();
+    vector.add('1');
+    vector.add(2.0);
+    vector.add(3);
+    assertTrue(CollectionUtils.isAllEqualsSameIndex(true, CollectionUtils::sizeIsEmpty, list, null, list1.iterator(), jsonArray, map, array, vector.elements()));
+    // 非可循环对象且长度不一致判断结束
+    list.remove(2);
+    assertFalse(CollectionUtils.isAllEqualsSameIndex(true, null, "", list));
+    // 列表元素不一致结束
+    list.add(4);
+    assertFalse(CollectionUtils.isAllEqualsSameIndex(true, null, list, list1.iterator()));
+    // 数组排在第一个用于填充上一次列表
+    assertTrue(CollectionUtils.isAllEqualsSameIndex(true, CollectionUtils::sizeIsEmpty, array, list1));
+    // 数组元素不一致结束
+    array[2] = 4;
+    assertFalse(CollectionUtils.isAllEqualsSameIndex(true, CollectionUtils::sizeIsEmpty, list1, array));
   }
 }
