@@ -9,6 +9,7 @@ import top.csaf.CollectionUtils;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.*;
+import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -80,29 +81,64 @@ public class CollectionUtilsTest {
   @DisplayName("是否 每个对象的每个元素都相等")
   @Test
   void isAllEquals() {
-    List<String> list = new ArrayList<>();
+    /** {@link CollectionUtils#isAllEquals(boolean, Function, Object...)} */
+    assertThrows(NullPointerException.class, () -> CollectionUtils.isAllEquals(true, null, null));
+    assertThrows(IllegalArgumentException.class, () -> CollectionUtils.isAllEquals(true, null, new Object[]{}));
+
+    List<Object> list = new ArrayList<>();
     list.add("1");
-    List<String> list1 = new ArrayList<>();
-    list1.add("1");
-    List<String> list2 = new ArrayList<>();
+    List<Object> list1 = new ArrayList<>();
+    list1.add(new BigInteger("1"));
+    JsonArray jsonArray = new JsonArray();
+    jsonArray.add('1');
     Map<String, Object> map = new HashMap<>();
-    map.put("", "1");
-    println("忽略 null 和空元素：" + CollectionUtils.isAllEquals(false, CollectionUtils::sizeIsEmpty, list, list1.iterator(), null, list2, map));
-    List<String> list3 = new ArrayList<>();
-    list3.add(null);
-    println("忽略 null 和空元素和元素为 null：" + CollectionUtils.isAllEquals(false, CollectionUtils::isAllEmpty, list, list1.iterator(), null, list2, list3, map));
-    Vector<Integer> vector = new Vector<>();
-    vector.add(1);
-    List<Float> list4 = new ArrayList<>();
-    list4.add(1.0f);
-    List<BigDecimal> list5 = new ArrayList<>();
-    list5.add(new BigDecimal("1.0"));
-    println("忽略值类型、忽略 null 和空元素和元素为 null：" + CollectionUtils.isAllEquals(true, CollectionUtils::isAllEmpty, list, list1.iterator(), list2, list3, list4, list5, map, vector));
+    map.put("1", new BigDecimal("1"));
+    Object[] array = new Object[]{1.0};
+    Vector<Object> vector = new Vector<>();
+    vector.add(1.0f);
+    assertTrue(CollectionUtils.isAllEquals(true, CollectionUtils::sizeIsEmpty, list, null, list1.iterator(), jsonArray, map, array, vector.elements()));
+    // continueFunction 为 null，后续判断到 Iterator。数组排在第一个用于填充上一个元素。
+    assertTrue(CollectionUtils.isAllEquals(true, null, array, list1.iterator()));
+    // continueFunction 为 null，后续判断到 Enumeration。Enumeration 排在第一个用于填充上一个元素。
+    assertTrue(CollectionUtils.isAllEquals(true, null, vector.elements(), list));
+    // Iterable 元素不一致结束
+    list.set(0, 2);
+    assertFalse(CollectionUtils.isAllEquals(true, null, list, list1));
+    // 数组元素不一致结束
+    array[0] = 2;
+    assertFalse(CollectionUtils.isAllEquals(true, null, list1, array));
+    // Enumeration 元素不一致结束
+    vector.set(0, 2);
+    assertFalse(CollectionUtils.isAllEquals(true, null, list1, vector.elements()));
+    // isToString = false
+    assertFalse(CollectionUtils.isAllEquals(false, null, list, null));
+
+    /** {@link CollectionUtils#isAllEquals(Function, Object...)} */
+    assertThrows(NullPointerException.class, () -> CollectionUtils.isAllEquals(null, null));
+    assertFalse(CollectionUtils.isAllEquals(null, new ArrayList<>(), null));
+  }
+
+  @DisplayName("是否不满足 每个对象的每个元素都相等")
+  @Test
+  void isNotAllEquals() {
+    /** {@link CollectionUtils#isNotAllEquals(boolean, Function, Object...)} */
+    assertThrows(NullPointerException.class, () -> CollectionUtils.isNotAllEquals(true, null, null));
+
+    List<Object> list = new ArrayList<>();
+    list.add(1);
+    List<Object> list1 = new ArrayList<>();
+    list1.add(2);
+    assertTrue(CollectionUtils.isNotAllEquals(true, null, list, list1));
+
+    /** {@link CollectionUtils#isNotAllEquals(Function, Object...)} */
+    assertThrows(NullPointerException.class, () -> CollectionUtils.isNotAllEquals(null, null));
+    assertTrue(CollectionUtils.isNotAllEquals(null, new ArrayList<>(), null));
   }
 
   @DisplayName("是否 每个对象的同一位置的元素都相等")
   @Test
   void isAllEqualsSameIndex() {
+    /** {@link CollectionUtils#isAllEquals(boolean, Function, Object...)} */
     assertThrows(NullPointerException.class, () -> CollectionUtils.isAllEqualsSameIndex(true, null, null));
     assertThrows(IllegalArgumentException.class, () -> CollectionUtils.isAllEqualsSameIndex(true, null, new ArrayList<>()));
 
@@ -128,9 +164,9 @@ public class CollectionUtilsTest {
     vector.add(2.0);
     vector.add(3);
     assertTrue(CollectionUtils.isAllEqualsSameIndex(true, CollectionUtils::sizeIsEmpty, list, null, list1.iterator(), jsonArray, map, array, vector.elements()));
-    // 非可循环对象且长度不一致判断结束
+    // 长度不一致判断结束
     list.remove(2);
-    assertFalse(CollectionUtils.isAllEqualsSameIndex(true, null, "", list));
+    assertFalse(CollectionUtils.isAllEqualsSameIndex(true, null, new ArrayList<>(), list));
     // 列表元素不一致结束
     list.add(4);
     assertFalse(CollectionUtils.isAllEqualsSameIndex(true, null, list, list1.iterator()));
@@ -139,5 +175,30 @@ public class CollectionUtilsTest {
     // 数组元素不一致结束
     array[2] = 4;
     assertFalse(CollectionUtils.isAllEqualsSameIndex(true, CollectionUtils::sizeIsEmpty, list1, array));
+
+    /** {@link CollectionUtils#isAllEquals(Function, Object...)} */
+    assertThrows(NullPointerException.class, () -> CollectionUtils.isAllEqualsSameIndex(null, null));
+    assertFalse(CollectionUtils.isAllEqualsSameIndex(null, new ArrayList<>(), null));
+  }
+
+  @DisplayName("是否不满足 每个对象的同一位置的元素都相等")
+  @Test
+  void isNotAllEqualsSameIndex() {
+    /** {@link CollectionUtils#isNotAllEqualsSameIndex(boolean, Function, Object...)} */
+    assertThrows(NullPointerException.class, () -> CollectionUtils.isNotAllEqualsSameIndex(true, null, null));
+
+    List<Object> list = new ArrayList<>();
+    list.add("1");
+    list.add(2);
+    list.add(new BigDecimal("3.0"));
+    List<Object> list1 = new ArrayList<>();
+    list1.add(new BigInteger("1"));
+    list1.add(2.0f);
+    list1.add(3L);
+    assertFalse(CollectionUtils.isNotAllEqualsSameIndex(true, null, list, list1));
+
+    /** {@link CollectionUtils#isNotAllEqualsSameIndex(Function, Object...)} */
+    assertThrows(NullPointerException.class, () -> CollectionUtils.isNotAllEqualsSameIndex(null, null));
+    assertTrue(CollectionUtils.isNotAllEqualsSameIndex(null, new ArrayList<>(), null));
   }
 }

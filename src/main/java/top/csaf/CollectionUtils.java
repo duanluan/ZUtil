@@ -345,15 +345,15 @@ public class CollectionUtils {
   }
 
   /**
-   * 转为字符串，Float、Double、BigDecimal 小数点后多余的 0 会被去除
+   * 转为字符串，Number 小数点后多余的 0 会被去除
    *
    * @param object     需转换的对象
-   * @param isByString 是否转换
+   * @param isToString 是否转换
    * @return 字符串
    */
-  private static Object stripTrailingZerosToString(Object object, boolean isByString) {
-    if (isByString) {
-      if (object instanceof Float || object instanceof Double || object instanceof BigDecimal) {
+  private static Object stripTrailingZerosToString(Object object, final boolean isToString) {
+    if (isToString) {
+      if (object instanceof Number) {
         object = new BigDecimal(object.toString()).stripTrailingZeros().toPlainString();
       } else {
         object = object.toString();
@@ -365,129 +365,160 @@ public class CollectionUtils {
   /**
    * 是否 每个对象的每个元素都相等
    *
-   * @param isByString       是否根据 toString() 的值来判断是否相等，Float、Double、BigDecimal 小数点后多余的 0 会被去除
-   * @param continueFunction 对象何时不参与判断
-   * @param objects          多个对象
+   * @param isToString       是否根据 toString() 的值来判断是否相等，
+   *                         Number 会去除小数点后多余的 0。
+   * @param continueFunction 对象何时不参与判断。Iterator、Enumeration 会在判断前转换为 List。
+   * @param objects          多个对象。Iterator、Enumeration 会被使用掉。
    * @return 是否 每个对象的每个元素都相等
    */
-  public static boolean isAllEquals(boolean isByString, Function<Object, Boolean> continueFunction, final Object... objects) {
-    if (objects == null) {
-      return true;
+  public static boolean isAllEquals(final boolean isToString, final Function<Object, Boolean> continueFunction, @NonNull final Object... objects) {
+    if (objects.length < 2) {
+      throw new IllegalArgumentException("Objects: length must be greater than 1.");
     }
-    if (objects.length == 0) {
-      throw new IllegalArgumentException("Objects: length should be greater than 0");
-    }
+
     Object prevObj = null;
-    for (Object object : objects) {
-      // continueFunction 中可能已经使用了 Iterator，所以在调用前转换为 List
-      if (object instanceof Iterator<?>) {
-        object = IteratorUtils.toList((Iterator<?>) object);
+    boolean isAssigned = false;
+    for (int i = 0; i < objects.length; i++) {
+      Object object = objects[i];
+
+      // 满足条件时对象不参与判断
+      if (continueFunction != null) {
+        // Iterator、Enumeration 在 continueFunction 可能需要循环，所以先转换为 List，避免后续无法循环
+        if (object instanceof Iterator<?>) {
+          object = IteratorUtils.toList((Iterator<?>) object);
+          objects[i] = object;
+        } else if (object instanceof Enumeration<?>) {
+          object = EnumerationUtils.toList((Enumeration<?>) object);
+          objects[i] = object;
+        }
+
+        if (Boolean.TRUE.equals(continueFunction.apply(object))) {
+          continue;
+        }
       }
-      // 对象指定条件时不参与判断
-      if (continueFunction != null && continueFunction.apply(object)) {
-        continue;
-      }
-      if (object instanceof Collection<?> || object instanceof Map<?, ?>) {
+
+      if (object instanceof Iterable<?> || object instanceof Iterator<?> || object instanceof Map<?, ?>) {
         Iterator<?> iterator;
-        if (object instanceof Collection<?>) {
-          iterator = ((Collection<?>) object).iterator();
-        } else {
+        if (object instanceof Iterable<?>) {
+          iterator = ((Iterable<?>) object).iterator();
+        } else if (object instanceof Map<?, ?>) {
           iterator = (((Map<?, ?>) object).values()).iterator();
+        } else {
+          iterator = (Iterator<?>) object;
         }
-        int i = 0;
+
         while (iterator.hasNext()) {
-          // 基础类型转为 String
-          Object nextObj = stripTrailingZerosToString(iterator.next(), isByString);
+          Object nextObj = iterator.next();
+          /** {@link com.google.gson.JsonArray } 循环时需转换为 JsonPrimitive 后处理 */
+          if (nextObj instanceof JsonPrimitive) {
+            JsonPrimitive jsonPrimitive = (JsonPrimitive) nextObj;
+            nextObj = jsonPrimitive.isNumber() ? jsonPrimitive.getAsBigDecimal() : jsonPrimitive.getAsString();
+          }
+
+          // 转为字符串，Number 小数点后多余的 0 会被去除
+          nextObj = stripTrailingZerosToString(nextObj, isToString);
           // 首次判断前跳过第一次循环
-          if (prevObj == null && i == 0) {
+          if (prevObj == null && !isAssigned) {
+            // 上一次元素赋值
             prevObj = nextObj;
-            i = 1;
+            isAssigned = true;
             continue;
           }
           if (!Objects.equals(prevObj, nextObj)) {
             return false;
           }
-          prevObj = nextObj;
-        }
-      } else if (object instanceof Iterable<?>) {
-        int i = 0;
-        for (Object o : (Iterable<?>) object) {
-          Object nextObj = stripTrailingZerosToString(o, isByString);
-          if (prevObj == null && i == 0) {
-            prevObj = nextObj;
-            i = 1;
-            continue;
-          }
-          if (!Objects.equals(prevObj, nextObj)) {
-            return false;
-          }
-          prevObj = nextObj;
         }
       } else if (object instanceof Object[]) {
-        Object[] objects1 = (Object[]) object;
-        for (int i = 0; i < objects1.length; i++) {
-          Object nextObj = stripTrailingZerosToString(objects1[i], isByString);
-          if (prevObj == null && i == 0) {
+        Object[] array = (Object[]) object;
+        for (Object o : array) {
+          Object nextObj = stripTrailingZerosToString(o, isToString);
+          if (prevObj == null && !isAssigned) {
             prevObj = nextObj;
-            i = 1;
+            isAssigned = true;
             continue;
           }
           if (!Objects.equals(prevObj, nextObj)) {
             return false;
           }
-          prevObj = nextObj;
         }
       } else if (object instanceof Enumeration<?>) {
         Enumeration<?> enumeration = (Enumeration<?>) object;
-        int i = 0;
         while (enumeration.hasMoreElements()) {
-          Object nextObj = stripTrailingZerosToString(enumeration.nextElement(), isByString);
-          if (prevObj == null && i == 0) {
+          Object nextObj = stripTrailingZerosToString(enumeration.nextElement(), isToString);
+          if (prevObj == null && !isAssigned) {
             prevObj = nextObj;
-            i = 1;
+            isAssigned = true;
             continue;
           }
           if (!Objects.equals(prevObj, nextObj)) {
             return false;
           }
-          prevObj = nextObj;
         }
+      } else {
+        return false;
       }
     }
     return true;
   }
 
   /**
+   * 是否 每个对象的每个元素都相等
+   * <p>
+   * 会根据 toString() 的值来判断是否相等，Number 会去除小数点后多余的 0。
+   *
+   * @param continueFunction 对象何时不参与判断。Iterator、Enumeration 会在判断前转换为 List。
+   * @param objects          多个对象。Iterator、Enumeration 会被使用掉。
+   * @return 是否 每个对象的每个元素都相等
+   */
+  public static boolean isAllEquals(final Function<Object, Boolean> continueFunction, @NonNull final Object... objects) {
+    return isAllEquals(true, continueFunction, objects);
+  }
+
+  /**
    * 是否不满足 每个对象的每个元素都相等
    *
-   * @param isByString       是否根据 toString() 的值来判断是否相等，Float、Double、BigDecimal 小数点后多余的 0 会被去除
-   * @param continueFunction 对象何时不参与判断
-   * @param objects          多个对象
+   * @param isToString       是否根据 toString() 的值来判断是否相等，
+   *                         Number 会去除小数点后多余的 0。
+   * @param continueFunction 对象何时不参与判断。Iterator、Enumeration 会在判断前转换为 List。
+   * @param objects          多个对象。Iterator、Enumeration 会被使用掉。
    * @return 是否不满足 每个对象的每个元素都相等
    */
-  public static boolean isNotAllEquals(boolean isByString, Function<Object, Boolean> continueFunction, final Object... objects) {
-    return !isAllEquals(isByString, continueFunction, objects);
+  public static boolean isNotAllEquals(final boolean isToString, final Function<Object, Boolean> continueFunction, final Object... objects) {
+    return !isAllEquals(isToString, continueFunction, objects);
+  }
+
+  /**
+   * 是否不满足 每个对象的每个元素都相等
+   * <p>
+   * 会根据 toString() 的值来判断是否相等，Number 会去除小数点后多余的 0。
+   *
+   * @param continueFunction 对象何时不参与判断。Iterator、Enumeration 会在判断前转换为 List。
+   * @param objects          多个对象。Iterator、Enumeration 会被使用掉。
+   * @return 是否不满足 每个对象的每个元素都相等
+   */
+  public static boolean isNotAllEquals(final Function<Object, Boolean> continueFunction, @NonNull final Object... objects) {
+    return isNotAllEquals(true, continueFunction, objects);
   }
 
   /**
    * 是否 每个对象的同一位置的元素都相等
    *
-   * @param isByString       是否根据 toString() 的值来判断是否相等，
-   *                         Float、Double、BigDecimal 会去除小数点后多余的 0。
-   * @param continueFunction 对象何时不参与判断
+   * @param isToString       是否根据 toString() 的值来判断是否相等，
+   *                         Number 会去除小数点后多余的 0。
+   * @param continueFunction 对象何时不参与判断。Iterator、Enumeration 会在判断前转换为 List。
    * @param objects          多个对象。Iterator、Enumeration 会被使用掉。
    * @return 是否 每个对象的同一位置的元素都相等
    */
-  public static boolean isAllEqualsSameIndex(final boolean isByString, final Function<Object, Boolean> continueFunction, @NonNull final Object... objects) {
+  public static boolean isAllEqualsSameIndex(final boolean isToString, final Function<Object, Boolean> continueFunction, @NonNull final Object... objects) {
     if (objects.length < 2) {
-      throw new IllegalArgumentException("Objects: length must be greater than 1");
+      throw new IllegalArgumentException("Objects: length must be greater than 1.");
     }
 
     Integer prevObjSize = null;
     for (int i = 0; i < objects.length; i++) {
       Object object = objects[i];
 
-      // Iterator、Enumeration 获取对象元素长度时可能需要循环，所以先转换为 List，避免后续无法循环
+      // Iterator、Enumeration 在 continueFunction 或获取对象元素长度时可能需要循环，所以先转换为 List，避免后续无法循环
       if (object instanceof Iterator<?>) {
         object = IteratorUtils.toList((Iterator<?>) object);
         objects[i] = object;
@@ -516,6 +547,8 @@ public class CollectionUtils {
         objSize = ((Map<?, ?>) object).values().size();
       } else if (object instanceof Object[]) {
         objSize = ((Object[]) object).length;
+      } else {
+        return false;
       }
       // 当前对象元素长度和上一次循环的对象元素长度不一致时退出
       if (prevObjSize != null && !prevObjSize.equals(objSize)) {
@@ -532,7 +565,7 @@ public class CollectionUtils {
       }
 
       // Iterable、Map
-      if (object instanceof Iterable<?> || object instanceof Iterator<?> || object instanceof Map<?, ?>) {
+      if (object instanceof Iterable<?> || object instanceof Map<?, ?>) {
         // 不同类型获取 Iterator
         Iterator<?> iterator;
         if (object instanceof Iterable<?>) {
@@ -541,8 +574,7 @@ public class CollectionUtils {
           iterator = (((Map<?, ?>) object).values()).iterator();
         }
 
-        int i = 0;
-        for (; iterator.hasNext(); i++) {
+        for (int i = 0; iterator.hasNext(); i++) {
           Object nextObj = iterator.next();
           /** {@link com.google.gson.JsonArray } 循环时需转换为 JsonPrimitive 后处理 */
           if (nextObj instanceof JsonPrimitive) {
@@ -550,8 +582,8 @@ public class CollectionUtils {
             nextObj = jsonPrimitive.isNumber() ? jsonPrimitive.getAsBigDecimal() : jsonPrimitive.getAsString();
           }
 
-          // 基础类型转为 String
-          nextObj = stripTrailingZerosToString(nextObj, isByString);
+          // 转为字符串，Number 小数点后多余的 0 会被去除
+          nextObj = stripTrailingZerosToString(nextObj, isToString);
           // 如果上一次列表的长度 < i + 1，即 prevList（上一次列表）未填充完需要判断的第一个对象的所有元素
           if (prevList.size() < i + 1) {
             prevList.add(nextObj);
@@ -565,9 +597,9 @@ public class CollectionUtils {
       }
       // Object[]
       else if (object instanceof Object[]) {
-        Object[] objects1 = (Object[]) object;
-        for (int i = 0; i < objects1.length; i++) {
-          Object nextObj = stripTrailingZerosToString(objects1[i], isByString);
+        Object[] array = (Object[]) object;
+        for (int i = 0; i < array.length; i++) {
+          Object nextObj = stripTrailingZerosToString(array[i], isToString);
           if (prevList.size() < i + 1) {
             prevList.add(nextObj);
             continue;
@@ -582,14 +614,41 @@ public class CollectionUtils {
   }
 
   /**
+   * 是否 每个对象的同一位置的元素都相等
+   * <p>
+   * 会根据 toString() 的值来判断是否相等，Number 会去除小数点后多余的 0。
+   *
+   * @param continueFunction 对象何时不参与判断。Iterator、Enumeration 会在判断前转换为 List。
+   * @param objects          多个对象。Iterator、Enumeration 会被使用掉。
+   * @return 是否 每个对象的同一位置的元素都相等
+   */
+  public static boolean isAllEqualsSameIndex(final Function<Object, Boolean> continueFunction, @NonNull final Object... objects) {
+    return isAllEqualsSameIndex(true, continueFunction, objects);
+  }
+
+  /**
    * 是否不满足 每个对象的同一位置的元素都相等
    *
-   * @param isByString       是否根据 toString() 的值来判断是否相等，Float、Double、BigDecimal 小数点后多余的 0 会被去除
+   * @param isToString       是否根据 toString() 的值来判断是否相等，
+   *                         Number 会去除小数点后多余的 0。
    * @param continueFunction 对象何时不参与判断
-   * @param objects          多个对象
+   * @param objects          多个对象。Iterator、Enumeration 会被使用掉。
    * @return 是否不满足 每个对象的同一位置的元素都相等
    */
-  public static boolean isNotAllEqualsSameIndex(boolean isByString, Function<Object, Boolean> continueFunction, final Object... objects) {
-    return !isAllEqualsSameIndex(isByString, continueFunction, objects);
+  public static boolean isNotAllEqualsSameIndex(final boolean isToString, final Function<Object, Boolean> continueFunction, @NonNull final Object... objects) {
+    return !isAllEqualsSameIndex(isToString, continueFunction, objects);
+  }
+
+  /**
+   * 是否不满足 每个对象的同一位置的元素都相等
+   * <p>
+   * 会根据 toString() 的值来判断是否相等，Number 会去除小数点后多余的 0。
+   *
+   * @param continueFunction 对象何时不参与判断。Iterator、Enumeration 会在判断前转换为 List。
+   * @param objects          多个对象。Iterator、Enumeration 会被使用掉。
+   * @return 是否不满足 每个对象的同一位置的元素都相等
+   */
+  public static boolean isNotAllEqualsSameIndex(final Function<Object, Boolean> continueFunction, @NonNull final Object... objects) {
+    return isNotAllEqualsSameIndex(true, continueFunction, objects);
   }
 }
