@@ -6,6 +6,8 @@ import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.EnumerationUtils;
 import org.apache.commons.collections4.IteratorUtils;
+import org.apache.commons.collections4.Predicate;
+import org.apache.commons.collections4.Transformer;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -17,56 +19,94 @@ import java.util.function.Function;
 @Slf4j
 public class CollectionUtils {
 
+  public static java.lang.Object get(java.lang.Object object, int index) {
+    return org.apache.commons.collections4.CollectionUtils.get(object, index);
+  }
+
+  public static <K, V> java.util.Map.Entry<K, V> get(java.util.Map<K, V> map, int index) {
+    return org.apache.commons.collections4.CollectionUtils.get(map, index);
+  }
+
   /**
    * 是否 集合为 null 或 没有元素
    *
    * @param coll 集合
    * @return 是否 集合为 null 或 没有元素
    */
-  public static boolean isEmpty(final Collection<?> coll) {
-    return !org.apache.commons.collections4.CollectionUtils.isNotEmpty(coll);
+  public static boolean isEmpty(java.util.Collection<?> coll) {
+    return org.apache.commons.collections4.CollectionUtils.isEmpty(coll);
   }
 
-  /**
-   * 是否 集合不为 null 且 有元素
-   *
-   * @param coll 集合
-   * @return 是否 集合不为 null 且 有元素
-   */
-  public static boolean isNotEmpty(final Collection<?> coll) {
-    return !isEmpty(coll);
+  public static int size(java.lang.Object object) {
+    return org.apache.commons.collections4.CollectionUtils.size(object);
   }
 
-  /**
-   * 是否 每个集合都 (为 null 或 没有元素)
-   *
-   * @param colls 多个集合
-   * @return 是否 每个集合都 (为 null 或 没有元素)
-   */
-  public static boolean isEmptys(final Collection<?>... colls) {
-    if (colls == null) {
-      return true;
-    }
-    if (colls.length == 0) {
-      throw new IllegalArgumentException("Colls: length should be greater than 0");
-    }
-    for (Collection<?> coll : colls) {
-      // 如果 某个集合 (不为 null 且 有元素)
-      if (isEmpty(coll)) {
-        return false;
-      }
-    }
-    return true;
+  public static <C> boolean addAll(java.util.Collection<C> collection, java.lang.Iterable<? extends C> iterable) {
+    return org.apache.commons.collections4.CollectionUtils.addAll(collection, iterable);
   }
 
-  /**
-   * 是否 每个集合都 (不为 null 且 有元素)
-   *
-   * @param colls 多个集合
-   * @return 是否 每个集合都 (不为 null 且 有元素)
-   */
-  public static boolean isNotEmptys(final Collection<?>... colls) {
-    return !isEmptys(colls);
+  public static <C> boolean addAll(java.util.Collection<C> collection, java.util.Iterator<? extends C> iterator) {
+    return org.apache.commons.collections4.CollectionUtils.addAll(collection, iterator);
+  }
+
+  public static <C> boolean addAll(java.util.Collection<C> collection, java.util.Enumeration<? extends C> enumeration) {
+    return org.apache.commons.collections4.CollectionUtils.addAll(collection, enumeration);
+  }
+
+  public static <I, O> java.util.Collection<O> collect(java.util.Iterator<I> inputIterator, org.apache.commons.collections4.Transformer<? super I, ? extends O> transformer) {
+    return org.apache.commons.collections4.CollectionUtils.collect(inputIterator, transformer);
+  }
+
+  public static <I, O> java.util.Collection<O> collect(java.lang.Iterable<I> inputCollection, org.apache.commons.collections4.Transformer<? super I, ? extends O> transformer) {
+    return org.apache.commons.collections4.CollectionUtils.collect(inputCollection, transformer);
+  }
+
+  public static <I, O, R extends Collection<? super O>> R collect(final Iterator<? extends I> inputIterator, final Transformer<? super I, ? extends O> transformer, final R outputCollection) {
+    return org.apache.commons.collections4.CollectionUtils.collect(inputIterator, transformer, outputCollection);
+  }
+
+  public static <I, O, R extends Collection<? super O>> R collect(final Iterable<? extends I> inputCollection, final Transformer<? super I, ? extends O> transformer, final R outputCollection) {
+    return org.apache.commons.collections4.CollectionUtils.collect(inputCollection, transformer, outputCollection);
+  }
+
+  public static boolean containsAll(java.util.Collection<?> coll1, java.util.Collection<?> coll2) {
+    return org.apache.commons.collections4.CollectionUtils.containsAll(coll1, coll2);
+  }
+
+  public static <E> java.util.Collection<E> removeAll(java.util.Collection<E> collection, java.util.Collection<?> remove) {
+    return org.apache.commons.collections4.CollectionUtils.removeAll(collection, remove);
+  }
+
+  public static <E> java.util.Collection<E> removeAll(java.lang.Iterable<E> collection, java.lang.Iterable<? extends E> remove, org.apache.commons.collections4.Equator<? super E> equator) {
+    return org.apache.commons.collections4.CollectionUtils.removeAll(collection, remove, equator);
+  }
+
+  public static <E> java.util.Collection<E> retainAll(java.lang.Iterable<E> collection, java.lang.Iterable<? extends E> retain, org.apache.commons.collections4.Equator<? super E> equator) {
+    return org.apache.commons.collections4.CollectionUtils.retainAll(collection, retain, equator);
+  }
+
+  public static <C> java.util.Collection<C> retainAll(java.util.Collection<C> collection, java.util.Collection<?> retain) {
+    return org.apache.commons.collections4.CollectionUtils.retainAll(collection, retain);
+  }
+
+  public static <T> boolean filter(java.lang.Iterable<T> collection, org.apache.commons.collections4.Predicate<? super T> predicate) {
+    return org.apache.commons.collections4.CollectionUtils.filter(collection, predicate);
+  }
+
+  public static <C> void transform(java.util.Collection<C> collection, org.apache.commons.collections4.Transformer<? super C, ? extends C> transformer) {
+    org.apache.commons.collections4.CollectionUtils.transform(collection, transformer);
+  }
+
+  public static <O, R extends Collection<? super O>> R select(final Iterable<? extends O> inputCollection, final Predicate<? super O> predicate, final R outputCollection, final R rejectedCollection) {
+    return org.apache.commons.collections4.CollectionUtils.select(inputCollection, predicate, outputCollection, rejectedCollection);
+  }
+
+  public static <O, R extends Collection<? super O>> R select(final Iterable<? extends O> inputCollection, final Predicate<? super O> predicate, final R outputCollection) {
+    return org.apache.commons.collections4.CollectionUtils.select(inputCollection, predicate, outputCollection);
+  }
+
+  public static <O> Collection<O> select(final Iterable<? extends O> inputCollection, final Predicate<? super O> predicate) {
+    return org.apache.commons.collections4.CollectionUtils.select(inputCollection, predicate);
   }
 
   /**
@@ -83,8 +123,161 @@ public class CollectionUtils {
    * @param object 对象
    * @return 是否 对象为 null 或 没有元素
    */
-  public static boolean sizeIsEmpty(final Object object) {
+  public static boolean sizeIsEmpty(java.lang.Object object) {
     return org.apache.commons.collections4.CollectionUtils.sizeIsEmpty(object);
+  }
+
+  /**
+   * 是否 集合不为 null 且 有元素
+   *
+   * @param coll 集合
+   * @return 是否 集合不为 null 且 有元素
+   */
+  public static boolean isNotEmpty(java.util.Collection<?> coll) {
+    return org.apache.commons.collections4.CollectionUtils.isNotEmpty(coll);
+  }
+
+  public static <E> java.util.Collection<java.util.List<E>> permutations(java.util.Collection<E> collection) {
+    return org.apache.commons.collections4.CollectionUtils.permutations(collection);
+  }
+
+  public static <E> java.util.Collection<E> transformingCollection(java.util.Collection<E> collection, org.apache.commons.collections4.Transformer<? super E, ? extends E> transformer) {
+    return org.apache.commons.collections4.CollectionUtils.transformingCollection(collection, transformer);
+  }
+
+  public static <C> java.util.Collection<C> predicatedCollection(java.util.Collection<C> collection, org.apache.commons.collections4.Predicate<? super C> predicate) {
+    return org.apache.commons.collections4.CollectionUtils.predicatedCollection(collection, predicate);
+  }
+
+  public static boolean isFull(java.util.Collection<?> coll) {
+    return org.apache.commons.collections4.CollectionUtils.isFull(coll);
+  }
+
+  public static void reverseArray(java.lang.Object[] array) {
+    org.apache.commons.collections4.CollectionUtils.reverseArray(array);
+  }
+
+  public static int maxSize(java.util.Collection<?> coll) {
+    return org.apache.commons.collections4.CollectionUtils.maxSize(coll);
+  }
+
+  public static <O> java.util.List<O> collate(java.lang.Iterable<? extends O> a, java.lang.Iterable<? extends O> b, java.util.Comparator<? super O> c, boolean includeDuplicates) {
+    return org.apache.commons.collections4.CollectionUtils.collate(a, b, c, includeDuplicates);
+  }
+
+  public static <O> java.util.List<O> collate(java.lang.Iterable<? extends O> a, java.lang.Iterable<? extends O> b, java.util.Comparator<? super O> c) {
+    return org.apache.commons.collections4.CollectionUtils.collate(a, b, c);
+  }
+
+  public static <O extends Comparable<? super O>> List<O> collate(final Iterable<? extends O> a, final Iterable<? extends O> b) {
+    return org.apache.commons.collections4.CollectionUtils.collate(a, b);
+  }
+
+  public static <O extends Comparable<? super O>> List<O> collate(final Iterable<? extends O> a, final Iterable<? extends O> b, final boolean includeDuplicates) {
+    return org.apache.commons.collections4.CollectionUtils.collate(a, b, includeDuplicates);
+  }
+
+  public static <T> java.util.Collection<T> emptyCollection() {
+    return org.apache.commons.collections4.CollectionUtils.emptyCollection();
+  }
+
+  public static <O> java.util.Collection<O> intersection(java.lang.Iterable<? extends O> a, java.lang.Iterable<? extends O> b) {
+    return org.apache.commons.collections4.CollectionUtils.intersection(a, b);
+  }
+
+  public static <O> java.util.Collection<O> disjunction(java.lang.Iterable<? extends O> a, java.lang.Iterable<? extends O> b) {
+    return org.apache.commons.collections4.CollectionUtils.disjunction(a, b);
+  }
+
+  public static <O> java.util.Collection<O> subtract(java.lang.Iterable<? extends O> a, java.lang.Iterable<? extends O> b, org.apache.commons.collections4.Predicate<O> p) {
+    return org.apache.commons.collections4.CollectionUtils.subtract(a, b, p);
+  }
+
+  public static <O> java.util.Collection<O> subtract(java.lang.Iterable<? extends O> a, java.lang.Iterable<? extends O> b) {
+    return org.apache.commons.collections4.CollectionUtils.subtract(a, b);
+  }
+
+  public static <T> java.util.Collection<T> emptyIfNull(java.util.Collection<T> collection) {
+    return org.apache.commons.collections4.CollectionUtils.emptyIfNull(collection);
+  }
+
+  public static <O> java.util.Collection<O> union(java.lang.Iterable<? extends O> a, java.lang.Iterable<? extends O> b) {
+    return org.apache.commons.collections4.CollectionUtils.union(a, b);
+  }
+
+  public static <E> boolean isEqualCollection(java.util.Collection<? extends E> a, java.util.Collection<? extends E> b, org.apache.commons.collections4.Equator<? super E> equator) {
+    return org.apache.commons.collections4.CollectionUtils.isEqualCollection(a, b, equator);
+  }
+
+  public static boolean isEqualCollection(java.util.Collection<?> a, java.util.Collection<?> b) {
+    return org.apache.commons.collections4.CollectionUtils.isEqualCollection(a, b);
+  }
+
+  public static <O> java.util.Map<O, java.lang.Integer> getCardinalityMap(java.lang.Iterable<? extends O> coll) {
+    return org.apache.commons.collections4.CollectionUtils.getCardinalityMap(coll);
+  }
+
+  public static boolean isProperSubCollection(java.util.Collection<?> a, java.util.Collection<?> b) {
+    return org.apache.commons.collections4.CollectionUtils.isProperSubCollection(a, b);
+  }
+
+  public static boolean containsAny(java.util.Collection<?> coll1, java.util.Collection<?> coll2) {
+    return org.apache.commons.collections4.CollectionUtils.containsAny(coll1, coll2);
+  }
+
+  public static <T> boolean filterInverse(java.lang.Iterable<T> collection, org.apache.commons.collections4.Predicate<? super T> predicate) {
+    return org.apache.commons.collections4.CollectionUtils.filterInverse(collection, predicate);
+  }
+
+  public static <O, R extends Collection<? super O>> R selectRejected(final Iterable<? extends O> inputCollection, final Predicate<? super O> predicate, final R outputCollection) {
+    return org.apache.commons.collections4.CollectionUtils.selectRejected(inputCollection, predicate, outputCollection);
+  }
+
+  public static <O> java.util.Collection<O> selectRejected(java.lang.Iterable<? extends O> inputCollection, org.apache.commons.collections4.Predicate<? super O> predicate) {
+    return org.apache.commons.collections4.CollectionUtils.selectRejected(inputCollection, predicate);
+  }
+
+  public static <T> boolean addIgnoreNull(java.util.Collection<T> collection, T object) {
+    return org.apache.commons.collections4.CollectionUtils.addIgnoreNull(collection, object);
+  }
+
+  public static boolean isSubCollection(java.util.Collection<?> a, java.util.Collection<?> b) {
+    return org.apache.commons.collections4.CollectionUtils.isSubCollection(a, b);
+  }
+
+  public static <E> E extractSingleton(java.util.Collection<E> collection) {
+    return org.apache.commons.collections4.CollectionUtils.extractSingleton(collection);
+  }
+
+
+  /**
+   * 是否 每个集合都 (为 null 或 没有元素)
+   *
+   * @param colls 多个集合，只传一个数组请调用 {@link #isEmpty(Collection)}
+   * @return 是否 每个集合都 (为 null 或 没有元素)
+   */
+  public static boolean isEmptys(final Collection<?>... colls) {
+    if (colls.length < 2) {
+      throw new IllegalArgumentException("Objects: length must be greater than 1.");
+    }
+
+    for (Collection<?> coll : colls) {
+      // 如果 某个集合 (不为 null 且 有元素)
+      if (isEmpty(coll)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  /**
+   * 是否 每个集合都 (不为 null 且 有元素)
+   *
+   * @param colls 多个集合，只传一个数组请调用 {@link #isNotEmpty(Collection)}
+   * @return 是否 每个集合都 (不为 null 且 有元素)
+   */
+  public static boolean isNotEmptys(final Collection<?>... colls) {
+    return !isEmptys(colls);
   }
 
   /**
@@ -108,16 +301,14 @@ public class CollectionUtils {
    * <li>Enumeration - via hasMoreElements
    * </ul>
    *
-   * @param objects 多个对象
+   * @param objects 多个对象。只传一个数组请调用 {@link #sizeIsEmpty(Object)}
    * @return 是否 每个对象都 (为 null 或 没有元素)
    */
   public static boolean sizeIsEmptys(final Object... objects) {
-    if (objects == null) {
-      return true;
+    if (objects.length < 2) {
+      throw new IllegalArgumentException("Objects: length must be greater than 1.");
     }
-    if (objects.length == 0) {
-      throw new IllegalArgumentException("Objects: length should be greater than 0");
-    }
+
     for (Object object : objects) {
       // 如果 某个对象 (不为 null 且 有元素)
       if (sizeIsEmpty(object)) {
@@ -130,7 +321,7 @@ public class CollectionUtils {
   /**
    * 是否 每个对象都 (不为 null 且 有元素)
    *
-   * @param objects 多个对象
+   * @param objects 多个对象。只传一个数组请调用 {@link #sizeIsNotEmpty(Object)}
    * @return 是否 每个对象都 (不为 null 且 有元素)
    */
   public static boolean sizeIsNotEmptys(@NonNull final Object... objects) {
@@ -140,7 +331,7 @@ public class CollectionUtils {
   /**
    * 是否 对象所有元素都为 null 或 没有元素
    * <p>
-   * 注意：会遍历 Iterator，后续使用需重新创建，但是和 {@link CollectionUtils#isAllEquals(boolean, Function, Object...)}、{@link CollectionUtils#isAllEqualsSameIndex(boolean, Function, Object...)} 使用时却无须担心，因为其内部会在调用此方法前就将 Iterator 转换为 List
+   * 注意：会遍历 Iterator，后续使用需重新创建，但是和 {@link #isAllEquals(boolean, Function, Object...)}、{@link #isAllEqualsSameIndex(boolean, Function, Object...)} 使用时却无须担心，因为其内部会在调用此方法前就将 Iterator 转换为 List
    *
    * <ul>
    * <li>Collection - removeIf null, size() == 0
@@ -203,7 +394,7 @@ public class CollectionUtils {
   /**
    * 是否 每个对象的 (所有元素都为 null 或 没有元素)
    * <p>
-   * 注意：会遍历 Iterator，后续使用需重新创建，但是和 {@link CollectionUtils#isAllEquals(boolean, Function, Object...)}、{@link CollectionUtils#isAllEqualsSameIndex(boolean, Function, Object...)} 使用时却无须担心，因为其内部会在调用此方法前就将 Iterator 转换为 List
+   * 注意：会遍历 Iterator，后续使用需重新创建，但是和 {@link #isAllEquals(boolean, Function, Object...)}、{@link #isAllEqualsSameIndex(boolean, Function, Object...)} 使用时却无须担心，因为其内部会在调用此方法前就将 Iterator 转换为 List
    *
    * <ul>
    * <li>Collection - removeIf null, size() == 0
@@ -213,16 +404,14 @@ public class CollectionUtils {
    * <li>Enumeration - 同 Iterator
    * </ul>
    *
-   * @param objects 多个对象
+   * @param objects 多个对象，只传一个数组请调用 {@link #isAllEmpty(Object)}
    * @return 是否 每个对象的 (所有元素都为 null 或 没有元素)
    */
   public static boolean isAllEmptys(final Object... objects) {
-    if (objects == null) {
-      return true;
+    if (objects.length < 2) {
+      throw new IllegalArgumentException("Objects: length must be greater than 1.");
     }
-    if (objects.length == 0) {
-      throw new IllegalArgumentException("Objects: length should be greater than 0");
-    }
+
     for (Object object : objects) {
       if (!isAllEmpty(object)) {
         return false;
@@ -234,7 +423,7 @@ public class CollectionUtils {
   /**
    * 是否 每个对象的 (所有元素都不为 null 且 有元素)
    *
-   * @param objects 多个对象
+   * @param objects 多个对象，只传一个数组请调用 {@link #isNotAllEmpty(Object)}
    * @return 是否 每个对象的 (所有元素都不为 null 且 有元素)
    */
   public static boolean isNotAllEmptys(@NonNull final Object... objects) {
@@ -244,7 +433,7 @@ public class CollectionUtils {
   /**
    * 是否 任意对象为 null 或 没有元素 或 任意元素为 null
    * <p>
-   * 注意：会遍历 Iterator，后续使用需重新创建，但是和 {@link CollectionUtils#isAllEquals(boolean, Function, Object...)}、{@link CollectionUtils#isAllEqualsSameIndex(boolean, Function, Object...)} 使用时却无须担心，因为其内部会在调用此方法前就将 Iterator 转换为 List
+   * 注意：会遍历 Iterator，后续使用需重新创建，但是和 {@link #isAllEquals(boolean, Function, Object...)}、{@link #isAllEqualsSameIndex(boolean, Function, Object...)} 使用时却无须担心，因为其内部会在调用此方法前就将 Iterator 转换为 List
    *
    * <ul>
    * <li>Collection - contains null
@@ -306,7 +495,7 @@ public class CollectionUtils {
   /**
    * 是否 任意对象 (为 null 或 没有元素 或 任意元素为 null)
    * <p>
-   * 注意：会遍历 Iterator，后续使用需重新创建，但是和 {@link CollectionUtils#isAllEquals(boolean, Function, Object...)}、{@link CollectionUtils#isAllEqualsSameIndex(boolean, Function, Object...)} 使用时却无须担心，因为其内部会在调用此方法前就将 Iterator 转换为 List
+   * 注意：会遍历 Iterator，后续使用需重新创建，但是和 {@link #isAllEquals(boolean, Function, Object...)}、{@link #isAllEqualsSameIndex(boolean, Function, Object...)} 使用时却无须担心，因为其内部会在调用此方法前就将 Iterator 转换为 List
    *
    * <ul>
    * <li>Collection - contains null
@@ -316,16 +505,14 @@ public class CollectionUtils {
    * <li>Enumeration - 同 Iterator
    * </ul>
    *
-   * @param objects 多个对象
+   * @param objects 多个对象，只传一个数组请调用 {@link #isAnyEmpty(Object)}
    * @return 是否 任意对象 (为 null 或 没有元素 或 任意元素为 null)
    */
   public static boolean isAnyEmptys(final Object... objects) {
-    if (objects == null) {
-      return true;
+    if (objects.length < 2) {
+      throw new IllegalArgumentException("Objects: length must be greater than 1.");
     }
-    if (objects.length == 0) {
-      throw new IllegalArgumentException("Objects: length should be greater than 0");
-    }
+
     for (Object object : objects) {
       if (isAnyEmpty(object)) {
         return true;
@@ -337,7 +524,7 @@ public class CollectionUtils {
   /**
    * 是否 每个对象 (不为 null 且 有元素 且 每个元素都不为 null)
    *
-   * @param objects 多个对象
+   * @param objects 多个对象，只传一个数组请调用 {@link #isNotAnyEmpty(Object)}
    * @return 是否 每个对象 (不为 null 且 有元素 且 每个元素都不为 null)
    */
   public static boolean isNotAnyEmptys(final Object... objects) {

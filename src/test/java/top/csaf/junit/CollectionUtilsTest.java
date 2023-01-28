@@ -4,8 +4,12 @@ import com.google.gson.JsonArray;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.core.DefaultParameterNameDiscoverer;
 import top.csaf.CollectionUtils;
+import top.csaf.StringUtils;
 
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.*;
@@ -17,47 +21,88 @@ import static org.junit.jupiter.api.Assertions.*;
 @DisplayName("集合工具类测试")
 public class CollectionUtilsTest {
 
-  private void println(Object source) {
-    System.out.println(source);
+  public static void main(String[] args) {
+    genCollections4Fn();
   }
 
-  @DisplayName("isEmpty：是否 每个集合都 (为 null || 没有元素)")
-  @Test
-  void isEmpty() {
-    List<String> list = new ArrayList<>();
-    println("空列表：" + CollectionUtils.isEmpty(list));
-    list.add(null);
-    println("[0] 为 null 的列表：" + CollectionUtils.isEmpty(list));
+  /**
+   * 调用 {@link org.apache.commons.collections4.CollectionUtils } 的方法
+   */
+  static void genCollections4Fn() {
+    // 获取 org.apache.commons.collections4.CollectionUtils 中所有的方法名
+    Class<?> clazz = org.apache.commons.collections4.CollectionUtils.class;
+    Method[] methods = clazz.getDeclaredMethods();
+    // 根据方法生成调用方法代码
+    for (Method method : methods) {
+      // 修饰符不为 public static 时跳过
+      if (method.getModifiers() != (Modifier.PUBLIC | Modifier.STATIC)) {
+        continue;
+      }
+      // 有 @Deprecated 注解时跳过
+      if (method.getAnnotation(Deprecated.class) != null) {
+        continue;
+      }
+      // 参数名
+      String[] paramNames = new DefaultParameterNameDiscoverer().getParameterNames(method);
+
+      // 方法描述，比如 public static <K,V> java.util.Map$Entry<K, V> org.apache.commons.collections4.CollectionUtils.get(java.util.Map<K, V>,int)
+      String genericStr = method.toGenericString();
+      // TODO 获取方法返回值泛型的继承类，比如 public static <O extends Comparable<? super O>> List<O> collate(final Iterable<? extends O> a, final Iterable<? extends O> b) {
+      // 将 java.util.Map$Entry<K, V> 改为 java.util.Map.Entry<K, V>
+      genericStr = genericStr.replaceAll("\\$", ".");
+      // 去除 org.apache.commons.collections4.CollectionUtils
+      genericStr = genericStr.replace("org.apache.commons.collections4.CollectionUtils.", "");
+      // 给参数类型加上参数名
+      StringBuilder paramsStr = new StringBuilder();
+      String paramsType = genericStr.substring(genericStr.indexOf("(") + 1, genericStr.indexOf(")"));
+      if (StringUtils.isNotBlank(paramsType)) {
+        String[] paramTypes = paramsType.split(",");
+        int j = 0;
+        for (int i = 0; i < paramTypes.length; i++) {
+          String param = paramTypes[i];
+          // 如果为泛型，当前参数为当前参数 + 下一个参数
+          if (param.contains("<") && !param.contains(">")) {
+            param = param + "," + paramTypes[i + 1];
+            i++;
+          }
+          paramsStr.append(param).append(" ").append(paramNames[j]);
+          if (i != paramTypes.length - 1) {
+            paramsStr.append(", ");
+          }
+          j++;
+        }
+      }
+      // 生成代码
+      System.out.println(genericStr.replace(genericStr.substring(genericStr.indexOf("("), genericStr.indexOf(")") + 1), "(" + paramsStr + ")") + " {");
+      System.out.println("  " + (method.getReturnType().getSimpleName().equals("void") ? "" : "return ") + "org.apache.commons.collections4.CollectionUtils." + method.getName() + "(" + StringUtils.join(paramNames, ", ") + ");");
+      System.out.println("}\n");
+    }
   }
 
-  @DisplayName("sizeIsEmpty：是否 每个对象都 (为 null || 没有元素)")
+  @DisplayName("原样调用 org.apache.commons.collections4.CollectionUtils 的方法")
   @Test
-  void sizeIsEmpty() {
-    List<String> list = new ArrayList<>();
-    println("空列表：" + CollectionUtils.sizeIsEmpty(list));
-    list.add(null);
-    println("[0] = null 的列表：" + CollectionUtils.sizeIsEmpty(list));
-    Map<String, Object> map = new HashMap<>();
-    println("空键值对：" + CollectionUtils.sizeIsEmpty(map));
-    map.put(null, null);
-    println("{null, null} 的键值对：" + CollectionUtils.sizeIsEmpty(map));
-    // TODO ……
+  void collections4() {
+    List<Object> list = new ArrayList<>();
+    list.add(1);
+    assertEquals(1, CollectionUtils.get(list, 0));
+    // TODO 其他方法
   }
+
 
   @DisplayName("isAllEmpty：是否 每个对象的 (所有元素都为 null || 没有元素)")
   @Test
   void isAllEmpty() {
     List<String> list = new ArrayList<>();
     list.add(null);
-    println("[0] 为 null 的列表：" + CollectionUtils.isAllEmpty(list));
+    System.out.println("[0] 为 null 的列表：" + CollectionUtils.isAllEmpty(list));
     Map<String, Object> map = new HashMap<>();
     map.put("", null);
-    println("{\"\", null} 的键值对：" + CollectionUtils.isAllEmpty(map));
-    println("[null] 的数组：" + CollectionUtils.isAllEmpty(new Object[]{null}));
-    println("[0] 为 null 的迭代器（Iterator）：" + CollectionUtils.isAllEmpty(list.iterator()));
+    System.out.println("{\"\", null} 的键值对：" + CollectionUtils.isAllEmpty(map));
+    System.out.println("[null] 的数组：" + CollectionUtils.isAllEmpty(new Object[]{null}));
+    System.out.println("[0] 为 null 的迭代器（Iterator）：" + CollectionUtils.isAllEmpty(list.iterator()));
     Vector<String> vector = new Vector<>();
     vector.add(null);
-    println("[0] 为 null 的枚举：" + CollectionUtils.isAllEmpty(vector.elements()));
+    System.out.println("[0] 为 null 的枚举：" + CollectionUtils.isAllEmpty(vector.elements()));
   }
 
   @DisplayName("isAnyEmpty：是否 任意对象 (为 null || 没有元素 || 任意元素为 null)")
@@ -66,16 +111,16 @@ public class CollectionUtilsTest {
     List<String> list = new ArrayList<>();
     list.add(null);
     list.add("");
-    println("[0] 为 null 的列表：" + CollectionUtils.isAnyEmpty(list));
+    System.out.println("[0] 为 null 的列表：" + CollectionUtils.isAnyEmpty(list));
     Map<String, Object> map = new HashMap<>();
     map.put("", null);
-    println("{\"\", null} 的键值对：" + CollectionUtils.isAnyEmpty(map));
-    println("[null] 的数组：" + CollectionUtils.isAnyEmpty(new Object[]{null, 1}));
-    println("[0] 为 null 的迭代器（Iterator）：" + CollectionUtils.isAnyEmpty(list.iterator()));
+    System.out.println("{\"\", null} 的键值对：" + CollectionUtils.isAnyEmpty(map));
+    System.out.println("[null] 的数组：" + CollectionUtils.isAnyEmpty(new Object[]{null, 1}));
+    System.out.println("[0] 为 null 的迭代器（Iterator）：" + CollectionUtils.isAnyEmpty(list.iterator()));
     Vector<String> vector = new Vector<>();
     vector.add(null);
     vector.add("");
-    println("[0] 为 null 的枚举：" + CollectionUtils.isAnyEmpty(vector.elements()));
+    System.out.println("[0] 为 null 的枚举：" + CollectionUtils.isAnyEmpty(vector.elements()));
   }
 
   @DisplayName("是否 每个对象的每个元素都相等")
