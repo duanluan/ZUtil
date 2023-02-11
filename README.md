@@ -35,7 +35,7 @@
     <dependency>
       <groupId>top.csaf</groupId>
       <artifactId>ZUtil</artifactId>
-      <version>1.11.0</version>
+      <version>1.11.1</version>
     </dependency>
     ```
 
@@ -43,9 +43,9 @@
 
     ```groovy
     // groovy
-    implementation 'top.csaf:ZUtil:1.11.0'
+    implementation 'top.csaf:ZUtil:1.11.1'
     // kotlin
-    implementation("top.csaf:ZUtil:1.11.0")
+    implementation("top.csaf:ZUtil:1.11.1")
     ```
 
 
@@ -114,7 +114,7 @@ Mode 即为`org.openjdk.jmh.annotations.Mode`，分为：
       }
     }
     ```
-   * Maven`test`进行测试，测试后会在`target`下生成`jacoco.exec`。
-   * Maven`jacoco:report`生成代码覆盖率测试报告，在`target/site`目录下。
+   * `mvn test -Dtest=要测试的类名`进行测试，测试后会在`target`下生成`jacoco.exec`。
+   * `mvn jacoco:report`生成代码覆盖率测试报告，在`target/site`目录下。
    * 查看更新的类或方法，覆盖率在 **90%** 以上时提交。
 4. 提交时遵循 **[Angular 提交消息规范](https://github.com/angular/angular/blob/22b96b9/CONTRIBUTING.md#-commit-message-guidelines)**，提交后新建 **pull request** 即可。
