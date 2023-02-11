@@ -87,11 +87,11 @@ Mode 即为`org.openjdk.jmh.annotations.Mode`，分为：
 
 ### 参与开发
 
-1. **Fork** 并 **Clone** 项目到本地。
-2. 开发：
+1. **[Fork](https://github.com/duanluan/ZUtil/fork)** 并 **Clone** 项目到本地。
+2. 开发内容：
    * **新增类或方法**需提前[加群](https://jq.qq.com/?_wv=1027&k=pYzF0R18)沟通。
    * **修复 BUG**（fix）、**优化性能**（perf）或**新增/更正测试**（test）。
-3. 测试：
+3. 测试步骤：
    * 使用`org.junit.jupiter.api.Assertions`进行**代码覆盖率测试**：
     ```java
     ……
