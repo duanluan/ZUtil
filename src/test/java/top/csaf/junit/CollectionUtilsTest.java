@@ -88,45 +88,177 @@ public class CollectionUtilsTest {
     // TODO 其他方法
   }
 
-
-  @DisplayName("isAllEmpty：是否 每个对象的 (所有元素都为 null || 没有元素)")
+  @DisplayName("是否 每个集合 都为 null 或 没有元素")
   @Test
-  void isAllEmpty() {
-    List<String> list = new ArrayList<>();
-    list.add(null);
-    System.out.println("[0] 为 null 的列表：" + CollectionUtils.isAllEmpty(list));
-    Map<String, Object> map = new HashMap<>();
-    map.put("", null);
-    System.out.println("{\"\", null} 的键值对：" + CollectionUtils.isAllEmpty(map));
-    System.out.println("[null] 的数组：" + CollectionUtils.isAllEmpty(new Object[]{null}));
-    System.out.println("[0] 为 null 的迭代器（Iterator）：" + CollectionUtils.isAllEmpty(list.iterator()));
-    Vector<String> vector = new Vector<>();
-    vector.add(null);
-    System.out.println("[0] 为 null 的枚举：" + CollectionUtils.isAllEmpty(vector.elements()));
+  void isEmptys() {
+    assertThrows(NullPointerException.class, () -> CollectionUtils.isEmptys(null));
+    assertThrows(IllegalArgumentException.class, () -> CollectionUtils.isEmptys(new ArrayList<>()));
+
+    List<Object> list = new ArrayList<>();
+    List<Object> list1 = new ArrayList<>();
+    assertTrue(CollectionUtils.isEmptys(list, list1));
+    list1.add(1);
+    assertFalse(CollectionUtils.isEmptys(list, list1));
   }
 
-  @DisplayName("isAnyEmpty：是否 任意对象 (为 null || 没有元素 || 任意元素为 null)")
+  @DisplayName("是否不满足 每个集合 都为 null 或 没有元素")
+  @Test
+  void isNotEmptys() {
+    assertThrows(NullPointerException.class, () -> CollectionUtils.isNotEmptys(null));
+
+    List<Object> list = new ArrayList<>();
+    list.add(1);
+    List<Object> list1 = new ArrayList<>();
+    list1.add(1);
+    assertTrue(CollectionUtils.isNotEmptys(list, list1));
+  }
+
+  @DisplayName("是否不满足 对象为 null 或 没有元素")
+  @Test
+  void sizeIsNotEmpty() {
+    assertThrows(NullPointerException.class, () -> CollectionUtils.sizeIsNotEmpty(null));
+
+    List<Object> list = new ArrayList<>();
+    list.add(1);
+    assertTrue(CollectionUtils.sizeIsNotEmpty(list));
+  }
+
+  @DisplayName("是否 每个对象 都为 null 或 没有元素")
+  @Test
+  void sizeIsEmptys() {
+    assertThrows(NullPointerException.class, () -> CollectionUtils.sizeIsEmptys(null));
+    assertThrows(IllegalArgumentException.class, () -> CollectionUtils.sizeIsEmptys(new ArrayList<>()));
+
+    List<Object> list = new ArrayList<>();
+    List<Object> list1 = new ArrayList<>();
+    assertTrue(CollectionUtils.sizeIsEmptys(list, list1));
+    list1.add(1);
+    assertFalse(CollectionUtils.sizeIsEmptys(list, list1));
+  }
+
+  @DisplayName("是否不满足 每个对象 都为 null 或 没有元素")
+  @Test
+  void sizeIsNotEmptys() {
+    assertThrows(NullPointerException.class, () -> CollectionUtils.sizeIsNotEmptys(null));
+
+    List<Object> list = new ArrayList<>();
+    list.add(1);
+    List<Object> list1 = new ArrayList<>();
+    list1.add(1);
+    assertTrue(CollectionUtils.sizeIsNotEmptys(list, list1));
+  }
+
+  @DisplayName("是否 每个对象的 所有元素都为 null 或 没有元素")
+  @Test
+  void isAllEmpty() {
+    assertTrue(CollectionUtils.isAllEmpty(null));
+
+    List<Object> list = new ArrayList<>();
+    list.add(1);
+    assertFalse(CollectionUtils.isAllEmpty(list));
+    assertFalse(CollectionUtils.isAllEmpty(list.iterator()));
+    List<Object> emptyList = new ArrayList<>();
+    assertTrue(CollectionUtils.isAllEmpty(emptyList.iterator()));
+    emptyList.add(null);
+    assertTrue(CollectionUtils.isAllEmpty(emptyList));
+    assertTrue(CollectionUtils.isAllEmpty(emptyList.iterator()));
+
+    Map<String, Object> map = new HashMap<>();
+    map.put("1", 1);
+    assertFalse(CollectionUtils.isAllEmpty(map));
+    assertFalse(CollectionUtils.isAllEmpty(new Object[]{1}));
+
+    assertFalse(CollectionUtils.isAllEmpty(new Vector<>(list).elements()));
+    assertTrue(CollectionUtils.isAllEmpty(new Vector<>().elements()));
+    assertTrue(CollectionUtils.isAllEmpty(new Vector<>(emptyList).elements()));
+  }
+
+  @DisplayName("是否不满足 对象所有元素都为 null 或 没有元素")
+  @Test
+  void isNotAllEmpty() {
+    assertThrows(NullPointerException.class, () -> CollectionUtils.isNotAllEmpty(null));
+
+    List<Object> list1 = new ArrayList<>();
+    list1.add(1);
+    assertTrue(CollectionUtils.isNotAllEmpty(list1));
+
+  }
+
+  @DisplayName("是否 每个对象的 所有元素都为 null 或 没有元素")
+  @Test
+  void isAllEmptys() {
+    assertTrue(CollectionUtils.isAllEmptys(null));
+    assertThrows(IllegalArgumentException.class, () -> CollectionUtils.isAllEmptys(new ArrayList<>()));
+
+    List<Object> list = new ArrayList<>();
+    list.add(1);
+    Object[] array = {1};
+    assertFalse(CollectionUtils.isAllEmptys(list, array));
+    assertTrue(CollectionUtils.isAllEmptys(new ArrayList<>(), new Object[]{}));
+  }
+
+  @DisplayName("是否不满足 每个对象的 所有元素都为 null 或 没有元素")
+  @Test
+  void isNotAllEmptys() {
+    assertThrows(NullPointerException.class, () -> CollectionUtils.isNotAllEmptys(null));
+
+    List<Object> list = new ArrayList<>();
+    list.add(1);
+    Object[] array = {1};
+    assertTrue(CollectionUtils.isNotAllEmptys(list, array));
+    assertFalse(CollectionUtils.isNotAllEmptys(new ArrayList<>(), new Object[]{}));
+  }
+
+  @DisplayName("是否 任意对象 为 null 或 没有元素 或 任意元素为 null")
   @Test
   void isAnyEmpty() {
-    List<String> list = new ArrayList<>();
+    assertTrue(CollectionUtils.isAnyEmpty(null));
+
+    List<Object> list = new ArrayList<>();
+    list.add(1);
+    assertFalse(CollectionUtils.isAnyEmpty(list));
     list.add(null);
-    list.add("");
-    System.out.println("[0] 为 null 的列表：" + CollectionUtils.isAnyEmpty(list));
+    assertTrue(CollectionUtils.isAnyEmpty(list));
+    assertTrue(CollectionUtils.isAnyEmpty(list.iterator()));
     Map<String, Object> map = new HashMap<>();
-    map.put("", null);
-    System.out.println("{\"\", null} 的键值对：" + CollectionUtils.isAnyEmpty(map));
-    System.out.println("[null] 的数组：" + CollectionUtils.isAnyEmpty(new Object[]{null, 1}));
-    System.out.println("[0] 为 null 的迭代器（Iterator）：" + CollectionUtils.isAnyEmpty(list.iterator()));
-    Vector<String> vector = new Vector<>();
-    vector.add(null);
-    vector.add("");
-    System.out.println("[0] 为 null 的枚举：" + CollectionUtils.isAnyEmpty(vector.elements()));
+    map.put("1", 1);
+    map.put("2", null);
+    assertTrue(CollectionUtils.isAnyEmpty(map));
+    assertTrue(CollectionUtils.isAnyEmpty(new Object[]{null}));
+    assertTrue(CollectionUtils.isAnyEmpty(new Vector<>(list).elements()));
+  }
+
+  @DisplayName("是否不满足 任意对象 为 null 或 没有元素 或 任意元素为 null")
+  @Test
+  void isNotAnyEmpty() {
+    List<Object> list = new ArrayList<>();
+    assertFalse(CollectionUtils.isNotAnyEmpty(list));
+    list.add(1);
+    assertTrue(CollectionUtils.isNotAnyEmpty(list));
+  }
+
+  @DisplayName("是否 任意对象 为 null 或 没有元素 或 任意元素为 null")
+  @Test
+  void isAnyEmptys() {
+    assertTrue(CollectionUtils.isAnyEmptys(null));
+    List<Object> list = new ArrayList<>();
+    assertThrows(IllegalArgumentException.class, () -> CollectionUtils.isAnyEmptys(list));
+    list.add(1);
+    assertTrue(CollectionUtils.isAnyEmptys(list, new Object[]{}));
+    assertFalse(CollectionUtils.isAnyEmptys(list, new Object[]{1}));
+  }
+
+  @DisplayName("是否不满足 任意对象 为 null 或 没有元素 或 任意元素为 null")
+  @Test
+  void isNotAnyEmptys() {
+    assertTrue(CollectionUtils.isNotAnyEmptys(new Object[]{1}, new Object[]{1}));
+    assertFalse(CollectionUtils.isNotAnyEmptys(null));
   }
 
   @DisplayName("是否 每个对象的每个元素都相等")
   @Test
   void isAllEquals() {
-    /** {@link CollectionUtils#isAllEquals(boolean, Function, Object...)} */
+    /** {@link CollectionUtils#isAllEquals(boolean, Function, Object...) } */
     assertThrows(NullPointerException.class, () -> CollectionUtils.isAllEquals(true, null, null));
     assertThrows(IllegalArgumentException.class, () -> CollectionUtils.isAllEquals(true, null, new Object[]{}));
 
