@@ -791,9 +791,7 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
 
       int lCharIndex = ArrayUtils.indexOf(array, lChar, startIndex);
       // 如果找不到左边字符
-      if (lCharIndex == -1) {
-        return -1;
-      } else if (lCharIndex == charsLastElementIndex) {
+      if (lCharIndex == -1 || lCharIndex == charsLastElementIndex) {
         return -1;
       }
       int rCharIndex = ArrayUtils.indexOf(array, rChar, lCharIndex + 1);
