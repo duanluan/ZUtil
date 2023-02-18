@@ -154,54 +154,6 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param length     位数
    * @return 数组
    */
-  public static boolean[] moveForward(@NonNull final boolean[] array, final int startIndex, final int length) {
-    return (boolean[]) moveForward((Object) array, startIndex, length);
-  }
-
-  /**
-   * 从指定下标开始，将后面的元素往前复制指定位数
-   *
-   * @param array      数组
-   * @param startIndex 开始下标
-   * @param length     位数
-   * @return 数组
-   */
-  public static byte[] moveForward(@NonNull final byte[] array, final int startIndex, final int length) {
-    return (byte[]) moveForward((Object) array, startIndex, length);
-  }
-
-  /**
-   * 从指定下标开始，将后面的元素往前复制指定位数
-   *
-   * @param array      数组
-   * @param startIndex 开始下标
-   * @param length     位数
-   * @return 数组
-   */
-  public static char[] moveForward(@NonNull final char[] array, final int startIndex, final int length) {
-    return (char[]) moveForward((Object) array, startIndex, length);
-  }
-
-  /**
-   * 从指定下标开始，将后面的元素往前复制指定位数
-   *
-   * @param array      数组
-   * @param startIndex 开始下标
-   * @param length     位数
-   * @return 数组
-   */
-  public static short[] moveForward(@NonNull final short[] array, final int startIndex, final int length) {
-    return (short[]) moveForward((Object) array, startIndex, length);
-  }
-
-  /**
-   * 从指定下标开始，将后面的元素往前复制指定位数
-   *
-   * @param array      数组
-   * @param startIndex 开始下标
-   * @param length     位数
-   * @return 数组
-   */
   public static int[] moveForward(@NonNull final int[] array, final int startIndex, final int length) {
     return (int[]) moveForward((Object) array, startIndex, length);
   }
@@ -226,6 +178,18 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param length     位数
    * @return 数组
    */
+  public static double[] moveForward(@NonNull final double[] array, final int startIndex, final int length) {
+    return (double[]) moveForward((Object) array, startIndex, length);
+  }
+
+  /**
+   * 从指定下标开始，将后面的元素往前复制指定位数
+   *
+   * @param array      数组
+   * @param startIndex 开始下标
+   * @param length     位数
+   * @return 数组
+   */
   public static float[] moveForward(@NonNull final float[] array, final int startIndex, final int length) {
     return (float[]) moveForward((Object) array, startIndex, length);
   }
@@ -238,8 +202,44 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param length     位数
    * @return 数组
    */
-  public static double[] moveForward(@NonNull final double[] array, final int startIndex, final int length) {
-    return (double[]) moveForward((Object) array, startIndex, length);
+  public static char[] moveForward(@NonNull final char[] array, final int startIndex, final int length) {
+    return (char[]) moveForward((Object) array, startIndex, length);
+  }
+
+  /**
+   * 从指定下标开始，将后面的元素往前复制指定位数
+   *
+   * @param array      数组
+   * @param startIndex 开始下标
+   * @param length     位数
+   * @return 数组
+   */
+  public static byte[] moveForward(@NonNull final byte[] array, final int startIndex, final int length) {
+    return (byte[]) moveForward((Object) array, startIndex, length);
+  }
+
+  /**
+   * 从指定下标开始，将后面的元素往前复制指定位数
+   *
+   * @param array      数组
+   * @param startIndex 开始下标
+   * @param length     位数
+   * @return 数组
+   */
+  public static boolean[] moveForward(@NonNull final boolean[] array, final int startIndex, final int length) {
+    return (boolean[]) moveForward((Object) array, startIndex, length);
+  }
+
+  /**
+   * 从指定下标开始，将后面的元素往前复制指定位数
+   *
+   * @param array      数组
+   * @param startIndex 开始下标
+   * @param length     位数
+   * @return 数组
+   */
+  public static short[] moveForward(@NonNull final short[] array, final int startIndex, final int length) {
+    return (short[]) moveForward((Object) array, startIndex, length);
   }
 
   /**
@@ -300,54 +300,6 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param lastElementValue 最后一个元素的值
    * @return 数组
    */
-  public static boolean[] remove(@NonNull final boolean[] array, final int index, final boolean lastElementValue) {
-    return (boolean[]) remove((Object) array, index, lastElementValue);
-  }
-
-  /**
-   * 删除指定下标的元素
-   *
-   * @param array            数组
-   * @param index            下标
-   * @param lastElementValue 最后一个元素的值
-   * @return 数组
-   */
-  public static byte[] remove(@NonNull final byte[] array, final int index, final byte lastElementValue) {
-    return (byte[]) remove((Object) array, index, lastElementValue);
-  }
-
-  /**
-   * 删除指定下标的元素
-   *
-   * @param array            数组
-   * @param index            下标
-   * @param lastElementValue 最后一个元素的值
-   * @return 数组
-   */
-  public static char[] remove(@NonNull final char[] array, final int index, final char lastElementValue) {
-    return (char[]) remove((Object) array, index, lastElementValue);
-  }
-
-  /**
-   * 删除指定下标的元素
-   *
-   * @param array            数组
-   * @param index            下标
-   * @param lastElementValue 最后一个元素的值
-   * @return 数组
-   */
-  public static short[] remove(@NonNull final short[] array, final int index, final short lastElementValue) {
-    return (short[]) remove((Object) array, index, lastElementValue);
-  }
-
-  /**
-   * 删除指定下标的元素
-   *
-   * @param array            数组
-   * @param index            下标
-   * @param lastElementValue 最后一个元素的值
-   * @return 数组
-   */
   public static int[] remove(@NonNull final int[] array, final int index, final int lastElementValue) {
     return (int[]) remove((Object) array, index, lastElementValue);
   }
@@ -372,6 +324,18 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param lastElementValue 最后一个元素的值
    * @return 数组
    */
+  public static double[] remove(@NonNull final double[] array, final int index, final double lastElementValue) {
+    return (double[]) remove((Object) array, index, lastElementValue);
+  }
+
+  /**
+   * 删除指定下标的元素
+   *
+   * @param array            数组
+   * @param index            下标
+   * @param lastElementValue 最后一个元素的值
+   * @return 数组
+   */
   public static float[] remove(@NonNull final float[] array, final int index, final float lastElementValue) {
     return (float[]) remove((Object) array, index, lastElementValue);
   }
@@ -384,8 +348,44 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param lastElementValue 最后一个元素的值
    * @return 数组
    */
-  public static double[] remove(@NonNull final double[] array, final int index, final double lastElementValue) {
-    return (double[]) remove((Object) array, index, lastElementValue);
+  public static char[] remove(@NonNull final char[] array, final int index, final char lastElementValue) {
+    return (char[]) remove((Object) array, index, lastElementValue);
+  }
+
+  /**
+   * 删除指定下标的元素
+   *
+   * @param array            数组
+   * @param index            下标
+   * @param lastElementValue 最后一个元素的值
+   * @return 数组
+   */
+  public static byte[] remove(@NonNull final byte[] array, final int index, final byte lastElementValue) {
+    return (byte[]) remove((Object) array, index, lastElementValue);
+  }
+
+  /**
+   * 删除指定下标的元素
+   *
+   * @param array            数组
+   * @param index            下标
+   * @param lastElementValue 最后一个元素的值
+   * @return 数组
+   */
+  public static boolean[] remove(@NonNull final boolean[] array, final int index, final boolean lastElementValue) {
+    return (boolean[]) remove((Object) array, index, lastElementValue);
+  }
+
+  /**
+   * 删除指定下标的元素
+   *
+   * @param array            数组
+   * @param index            下标
+   * @param lastElementValue 最后一个元素的值
+   * @return 数组
+   */
+  public static short[] remove(@NonNull final short[] array, final int index, final short lastElementValue) {
+    return (short[]) remove((Object) array, index, lastElementValue);
   }
 
   /**
@@ -420,27 +420,7 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
       // 将内容 copy 到结果数组
       System.arraycopy(array, 0, result, 0, arrayLen);
     }
-    if (result instanceof boolean[]) {
-      if (!(value instanceof Boolean)) {
-        throw new IllegalArgumentException("Value: should be Boolean");
-      }
-      Arrays.fill((boolean[]) result, fromIndex, toIndex, (boolean) value);
-    } else if (result instanceof byte[]) {
-      if (!(value instanceof Byte)) {
-        throw new IllegalArgumentException("Value: should be Byte");
-      }
-      Arrays.fill((byte[]) result, fromIndex, toIndex, (byte) value);
-    } else if (result instanceof char[]) {
-      if (!(value instanceof Character)) {
-        throw new IllegalArgumentException("Value: should be Character");
-      }
-      Arrays.fill((char[]) result, fromIndex, toIndex, (char) value);
-    } else if (result instanceof short[]) {
-      if (!(value instanceof Short)) {
-        throw new IllegalArgumentException("Value: should be Short");
-      }
-      Arrays.fill((short[]) result, fromIndex, toIndex, (short) value);
-    } else if (result instanceof int[]) {
+    if (result instanceof int[]) {
       if (!(value instanceof Integer)) {
         throw new IllegalArgumentException("Value: should be Integer");
       }
@@ -450,72 +430,40 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
         throw new IllegalArgumentException("Value: should be Long");
       }
       Arrays.fill((long[]) result, fromIndex, toIndex, (long) value);
-    } else if (result instanceof float[]) {
-      if (!(value instanceof Float)) {
-        throw new IllegalArgumentException("Value: should be Float");
-      }
-      Arrays.fill((float[]) result, fromIndex, toIndex, (float) value);
     } else if (result instanceof double[]) {
       if (!(value instanceof Double)) {
         throw new IllegalArgumentException("Value: should be Double");
       }
       Arrays.fill((double[]) result, fromIndex, toIndex, (double) value);
+    } else if (result instanceof float[]) {
+      if (!(value instanceof Float)) {
+        throw new IllegalArgumentException("Value: should be Float");
+      }
+      Arrays.fill((float[]) result, fromIndex, toIndex, (float) value);
+    } else if (result instanceof char[]) {
+      if (!(value instanceof Character)) {
+        throw new IllegalArgumentException("Value: should be Character");
+      }
+      Arrays.fill((char[]) result, fromIndex, toIndex, (char) value);
+    } else if (result instanceof byte[]) {
+      if (!(value instanceof Byte)) {
+        throw new IllegalArgumentException("Value: should be Byte");
+      }
+      Arrays.fill((byte[]) result, fromIndex, toIndex, (byte) value);
+    } else if (result instanceof boolean[]) {
+      if (!(value instanceof Boolean)) {
+        throw new IllegalArgumentException("Value: should be Boolean");
+      }
+      Arrays.fill((boolean[]) result, fromIndex, toIndex, (boolean) value);
+    } else if (result instanceof short[]) {
+      if (!(value instanceof Short)) {
+        throw new IllegalArgumentException("Value: should be Short");
+      }
+      Arrays.fill((short[]) result, fromIndex, toIndex, (short) value);
     } else {
       Arrays.fill((Object[]) result, fromIndex, toIndex, value);
     }
     return result;
-  }
-
-  /**
-   * 填充，结束下标超出数组长度时，超出部分也填充
-   *
-   * @param array     数组
-   * @param fromIndex 开始下标
-   * @param toIndex   结束下标
-   * @param value     填充值
-   * @return 数组
-   */
-  public static boolean[] fill(@NonNull final boolean[] array, final int fromIndex, final int toIndex, final boolean value) {
-    return (boolean[]) fill((Object) array, fromIndex, toIndex, value);
-  }
-
-  /**
-   * 填充，结束下标超出数组长度时，超出部分也填充
-   *
-   * @param array     数组
-   * @param fromIndex 开始下标
-   * @param toIndex   结束下标
-   * @param value     填充值
-   * @return 数组
-   */
-  public static byte[] fill(@NonNull final byte[] array, final int fromIndex, final int toIndex, final byte value) {
-    return (byte[]) fill((Object) array, fromIndex, toIndex, value);
-  }
-
-  /**
-   * 填充，结束下标超出数组长度时，超出部分也填充
-   *
-   * @param array     数组
-   * @param fromIndex 开始下标
-   * @param toIndex   结束下标
-   * @param value     填充值
-   * @return 数组
-   */
-  public static char[] fill(@NonNull final char[] array, final int fromIndex, final int toIndex, final char value) {
-    return (char[]) fill((Object) array, fromIndex, toIndex, value);
-  }
-
-  /**
-   * 填充，结束下标超出数组长度时，超出部分也填充
-   *
-   * @param array     数组
-   * @param fromIndex 开始下标
-   * @param toIndex   结束下标
-   * @param value     填充值
-   * @return 数组
-   */
-  public static short[] fill(@NonNull final short[] array, final int fromIndex, final int toIndex, final short value) {
-    return (short[]) fill((Object) array, fromIndex, toIndex, value);
   }
 
   /**
@@ -553,6 +501,19 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param value     填充值
    * @return 数组
    */
+  public static double[] fill(@NonNull final double[] array, final int fromIndex, final int toIndex, final double value) {
+    return (double[]) fill((Object) array, fromIndex, toIndex, value);
+  }
+
+  /**
+   * 填充，结束下标超出数组长度时，超出部分也填充
+   *
+   * @param array     数组
+   * @param fromIndex 开始下标
+   * @param toIndex   结束下标
+   * @param value     填充值
+   * @return 数组
+   */
   public static float[] fill(@NonNull final float[] array, final int fromIndex, final int toIndex, final float value) {
     return (float[]) fill((Object) array, fromIndex, toIndex, value);
   }
@@ -566,8 +527,47 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param value     填充值
    * @return 数组
    */
-  public static double[] fill(@NonNull final double[] array, final int fromIndex, final int toIndex, final double value) {
-    return (double[]) fill((Object) array, fromIndex, toIndex, value);
+  public static char[] fill(@NonNull final char[] array, final int fromIndex, final int toIndex, final char value) {
+    return (char[]) fill((Object) array, fromIndex, toIndex, value);
+  }
+
+  /**
+   * 填充，结束下标超出数组长度时，超出部分也填充
+   *
+   * @param array     数组
+   * @param fromIndex 开始下标
+   * @param toIndex   结束下标
+   * @param value     填充值
+   * @return 数组
+   */
+  public static byte[] fill(@NonNull final byte[] array, final int fromIndex, final int toIndex, final byte value) {
+    return (byte[]) fill((Object) array, fromIndex, toIndex, value);
+  }
+
+  /**
+   * 填充，结束下标超出数组长度时，超出部分也填充
+   *
+   * @param array     数组
+   * @param fromIndex 开始下标
+   * @param toIndex   结束下标
+   * @param value     填充值
+   * @return 数组
+   */
+  public static boolean[] fill(@NonNull final boolean[] array, final int fromIndex, final int toIndex, final boolean value) {
+    return (boolean[]) fill((Object) array, fromIndex, toIndex, value);
+  }
+
+  /**
+   * 填充，结束下标超出数组长度时，超出部分也填充
+   *
+   * @param array     数组
+   * @param fromIndex 开始下标
+   * @param toIndex   结束下标
+   * @param value     填充值
+   * @return 数组
+   */
+  public static short[] fill(@NonNull final short[] array, final int fromIndex, final int toIndex, final short value) {
+    return (short[]) fill((Object) array, fromIndex, toIndex, value);
   }
 
   /**
@@ -625,18 +625,18 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
           result = removeElement((float[]) result, ((float[]) value)[0]);
         }
       }
-    } else if (array instanceof byte[]) {
-      result = ((byte[]) array).clone();
-      for (Object value : values) {
-        if (contains((byte[]) array, ((byte[]) value)[0])) {
-          result = removeElement((byte[]) result, ((byte[]) value)[0]);
-        }
-      }
     } else if (array instanceof char[]) {
       result = ((char[]) array).clone();
       for (Object value : values) {
         if (contains((char[]) array, ((char[]) value)[0])) {
           result = removeElement((char[]) result, ((char[]) value)[0]);
+        }
+      }
+    } else if (array instanceof byte[]) {
+      result = ((byte[]) array).clone();
+      for (Object value : values) {
+        if (contains((byte[]) array, ((byte[]) value)[0])) {
+          result = removeElement((byte[]) result, ((byte[]) value)[0]);
         }
       }
     } else if (array instanceof boolean[]) {
@@ -671,50 +671,6 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param values 需要删除的内容
    * @return 数组
    */
-  public static boolean[] removeAllElements(@NonNull final boolean[] array, @NonNull final boolean... values) {
-    return (boolean[]) removeAllElements(array, (Object) values);
-  }
-
-  /**
-   * 删除所有匹配项
-   *
-   * @param array  数组
-   * @param values 需要删除的内容
-   * @return 数组
-   */
-  public static byte[] removeAllElements(@NonNull final byte[] array, @NonNull final byte... values) {
-    return (byte[]) removeAllElements(array, (Object) values);
-  }
-
-  /**
-   * 删除所有匹配项
-   *
-   * @param array  数组
-   * @param values 需要删除的内容
-   * @return 数组
-   */
-  public static char[] removeAllElements(@NonNull final char[] array, @NonNull final char... values) {
-    return (char[]) removeAllElements(array, (Object) values);
-  }
-
-  /**
-   * 删除所有匹配项
-   *
-   * @param array  数组
-   * @param values 需要删除的内容
-   * @return 数组
-   */
-  public static short[] removeAllElements(@NonNull final short[] array, @NonNull final short... values) {
-    return (short[]) removeAllElements(array, (Object) values);
-  }
-
-  /**
-   * 删除所有匹配项
-   *
-   * @param array  数组
-   * @param values 需要删除的内容
-   * @return 数组
-   */
   public static int[] removeAllElements(@NonNull final int[] array, @NonNull final int... values) {
     return (int[]) removeAllElements(array, (Object) values);
   }
@@ -737,6 +693,17 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param values 需要删除的内容
    * @return 数组
    */
+  public static double[] removeAllElements(@NonNull final double[] array, @NonNull final double... values) {
+    return (double[]) removeAllElements(array, (Object) values);
+  }
+
+  /**
+   * 删除所有匹配项
+   *
+   * @param array  数组
+   * @param values 需要删除的内容
+   * @return 数组
+   */
   public static float[] removeAllElements(@NonNull final float[] array, @NonNull final float... values) {
     return (float[]) removeAllElements(array, (Object) values);
   }
@@ -748,8 +715,41 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param values 需要删除的内容
    * @return 数组
    */
-  public static double[] removeAllElements(@NonNull final double[] array, @NonNull final double... values) {
-    return (double[]) removeAllElements(array, (Object) values);
+  public static char[] removeAllElements(@NonNull final char[] array, @NonNull final char... values) {
+    return (char[]) removeAllElements(array, (Object) values);
+  }
+
+  /**
+   * 删除所有匹配项
+   *
+   * @param array  数组
+   * @param values 需要删除的内容
+   * @return 数组
+   */
+  public static byte[] removeAllElements(@NonNull final byte[] array, @NonNull final byte... values) {
+    return (byte[]) removeAllElements(array, (Object) values);
+  }
+
+  /**
+   * 删除所有匹配项
+   *
+   * @param array  数组
+   * @param values 需要删除的内容
+   * @return 数组
+   */
+  public static boolean[] removeAllElements(@NonNull final boolean[] array, @NonNull final boolean... values) {
+    return (boolean[]) removeAllElements(array, (Object) values);
+  }
+
+  /**
+   * 删除所有匹配项
+   *
+   * @param array  数组
+   * @param values 需要删除的内容
+   * @return 数组
+   */
+  public static short[] removeAllElements(@NonNull final short[] array, @NonNull final short... values) {
+    return (short[]) removeAllElements(array, (Object) values);
   }
 
   /**
@@ -867,46 +867,6 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param array 数组
    * @return 去重后的数组，保留第一个重复元素
    */
-  public static boolean[] deduplicate(@NonNull final boolean[] array) {
-    return (boolean[]) deduplicate((Object) array);
-  }
-
-  /**
-   * 去重
-   *
-   * @param array 数组
-   * @return 去重后的数组，保留第一个重复元素
-   */
-  public static byte[] deduplicate(@NonNull final byte[] array) {
-    return (byte[]) deduplicate((Object) array);
-  }
-
-  /**
-   * 去重
-   *
-   * @param array 数组
-   * @return 去重后的数组，保留第一个重复元素
-   */
-  public static char[] deduplicate(@NonNull final char[] array) {
-    return (char[]) deduplicate((Object) array);
-  }
-
-  /**
-   * 去重
-   *
-   * @param array 数组
-   * @return 去重后的数组，保留第一个重复元素
-   */
-  public static short[] deduplicate(@NonNull final short[] array) {
-    return (short[]) deduplicate((Object) array);
-  }
-
-  /**
-   * 去重
-   *
-   * @param array 数组
-   * @return 去重后的数组，保留第一个重复元素
-   */
   public static int[] deduplicate(@NonNull final int[] array) {
     return (int[]) deduplicate((Object) array);
   }
@@ -927,6 +887,16 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param array 数组
    * @return 去重后的数组，保留第一个重复元素
    */
+  public static double[] deduplicate(@NonNull final double[] array) {
+    return (double[]) deduplicate((Object) array);
+  }
+
+  /**
+   * 去重
+   *
+   * @param array 数组
+   * @return 去重后的数组，保留第一个重复元素
+   */
   public static float[] deduplicate(@NonNull final float[] array) {
     return (float[]) deduplicate((Object) array);
   }
@@ -937,8 +907,38 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param array 数组
    * @return 去重后的数组，保留第一个重复元素
    */
-  public static double[] deduplicate(@NonNull final double[] array) {
-    return (double[]) deduplicate((Object) array);
+  public static char[] deduplicate(@NonNull final char[] array) {
+    return (char[]) deduplicate((Object) array);
+  }
+
+  /**
+   * 去重
+   *
+   * @param array 数组
+   * @return 去重后的数组，保留第一个重复元素
+   */
+  public static byte[] deduplicate(@NonNull final byte[] array) {
+    return (byte[]) deduplicate((Object) array);
+  }
+
+  /**
+   * 去重
+   *
+   * @param array 数组
+   * @return 去重后的数组，保留第一个重复元素
+   */
+  public static boolean[] deduplicate(@NonNull final boolean[] array) {
+    return (boolean[]) deduplicate((Object) array);
+  }
+
+  /**
+   * 去重
+   *
+   * @param array 数组
+   * @return 去重后的数组，保留第一个重复元素
+   */
+  public static short[] deduplicate(@NonNull final short[] array) {
+    return (short[]) deduplicate((Object) array);
   }
 
   /**
@@ -998,46 +998,6 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param array 数组
    * @return 去重后的数组，保留最后一个重复元素
    */
-  public static boolean[] deduplicatePreceding(@NonNull final boolean[] array) {
-    return (boolean[]) deduplicatePreceding((Object) array);
-  }
-
-  /**
-   * 去重
-   *
-   * @param array 数组
-   * @return 去重后的数组，保留最后一个重复元素
-   */
-  public static byte[] deduplicatePreceding(@NonNull final byte[] array) {
-    return (byte[]) deduplicatePreceding((Object) array);
-  }
-
-  /**
-   * 去重
-   *
-   * @param array 数组
-   * @return 去重后的数组，保留最后一个重复元素
-   */
-  public static char[] deduplicatePreceding(@NonNull final char[] array) {
-    return (char[]) deduplicatePreceding((Object) array);
-  }
-
-  /**
-   * 去重
-   *
-   * @param array 数组
-   * @return 去重后的数组，保留最后一个重复元素
-   */
-  public static short[] deduplicatePreceding(@NonNull final short[] array) {
-    return (short[]) deduplicatePreceding((Object) array);
-  }
-
-  /**
-   * 去重
-   *
-   * @param array 数组
-   * @return 去重后的数组，保留最后一个重复元素
-   */
   public static int[] deduplicatePreceding(@NonNull final int[] array) {
     return (int[]) deduplicatePreceding((Object) array);
   }
@@ -1058,6 +1018,16 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param array 数组
    * @return 去重后的数组，保留最后一个重复元素
    */
+  public static double[] deduplicatePreceding(@NonNull final double[] array) {
+    return (double[]) deduplicatePreceding((Object) array);
+  }
+
+  /**
+   * 去重
+   *
+   * @param array 数组
+   * @return 去重后的数组，保留最后一个重复元素
+   */
   public static float[] deduplicatePreceding(@NonNull final float[] array) {
     return (float[]) deduplicatePreceding((Object) array);
   }
@@ -1068,8 +1038,38 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param array 数组
    * @return 去重后的数组，保留最后一个重复元素
    */
-  public static double[] deduplicatePreceding(@NonNull final double[] array) {
-    return (double[]) deduplicatePreceding((Object) array);
+  public static char[] deduplicatePreceding(@NonNull final char[] array) {
+    return (char[]) deduplicatePreceding((Object) array);
+  }
+
+  /**
+   * 去重
+   *
+   * @param array 数组
+   * @return 去重后的数组，保留最后一个重复元素
+   */
+  public static byte[] deduplicatePreceding(@NonNull final byte[] array) {
+    return (byte[]) deduplicatePreceding((Object) array);
+  }
+
+  /**
+   * 去重
+   *
+   * @param array 数组
+   * @return 去重后的数组，保留最后一个重复元素
+   */
+  public static boolean[] deduplicatePreceding(@NonNull final boolean[] array) {
+    return (boolean[]) deduplicatePreceding((Object) array);
+  }
+
+  /**
+   * 去重
+   *
+   * @param array 数组
+   * @return 去重后的数组，保留最后一个重复元素
+   */
+  public static short[] deduplicatePreceding(@NonNull final short[] array) {
+    return (short[]) deduplicatePreceding((Object) array);
   }
 
   /**
@@ -1100,46 +1100,6 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param array 数组
    * @return 去重后的数组，倒序
    */
-  public static boolean[] deduplicateReverse(@NonNull final boolean[] array) {
-    return (boolean[]) deduplicateReverse((Object) array);
-  }
-
-  /**
-   * 去重
-   *
-   * @param array 数组
-   * @return 去重后的数组，倒序
-   */
-  public static byte[] deduplicateReverse(@NonNull final byte[] array) {
-    return (byte[]) deduplicateReverse((Object) array);
-  }
-
-  /**
-   * 去重
-   *
-   * @param array 数组
-   * @return 去重后的数组，倒序
-   */
-  public static char[] deduplicateReverse(@NonNull final char[] array) {
-    return (char[]) deduplicateReverse((Object) array);
-  }
-
-  /**
-   * 去重
-   *
-   * @param array 数组
-   * @return 去重后的数组，倒序
-   */
-  public static short[] deduplicateReverse(@NonNull final short[] array) {
-    return (short[]) deduplicateReverse((Object) array);
-  }
-
-  /**
-   * 去重
-   *
-   * @param array 数组
-   * @return 去重后的数组，倒序
-   */
   public static int[] deduplicateReverse(@NonNull final int[] array) {
     return (int[]) deduplicateReverse((Object) array);
   }
@@ -1160,6 +1120,16 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param array 数组
    * @return 去重后的数组，倒序
    */
+  public static double[] deduplicateReverse(@NonNull final double[] array) {
+    return (double[]) deduplicateReverse((Object) array);
+  }
+
+  /**
+   * 去重
+   *
+   * @param array 数组
+   * @return 去重后的数组，倒序
+   */
   public static float[] deduplicateReverse(@NonNull final float[] array) {
     return (float[]) deduplicateReverse((Object) array);
   }
@@ -1170,8 +1140,38 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param array 数组
    * @return 去重后的数组，倒序
    */
-  public static double[] deduplicateReverse(@NonNull final double[] array) {
-    return (double[]) deduplicateReverse((Object) array);
+  public static char[] deduplicateReverse(@NonNull final char[] array) {
+    return (char[]) deduplicateReverse((Object) array);
+  }
+
+  /**
+   * 去重
+   *
+   * @param array 数组
+   * @return 去重后的数组，倒序
+   */
+  public static byte[] deduplicateReverse(@NonNull final byte[] array) {
+    return (byte[]) deduplicateReverse((Object) array);
+  }
+
+  /**
+   * 去重
+   *
+   * @param array 数组
+   * @return 去重后的数组，倒序
+   */
+  public static boolean[] deduplicateReverse(@NonNull final boolean[] array) {
+    return (boolean[]) deduplicateReverse((Object) array);
+  }
+
+  /**
+   * 去重
+   *
+   * @param array 数组
+   * @return 去重后的数组，倒序
+   */
+  public static short[] deduplicateReverse(@NonNull final short[] array) {
+    return (short[]) deduplicateReverse((Object) array);
   }
 
   /**
@@ -1208,46 +1208,6 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param array 数组
    * @return 去重后的数组，hash 排序
    */
-  public static boolean[] deduplicateHashSort(@NonNull final boolean[] array) {
-    return (boolean[]) deduplicateHashSort((Object) array);
-  }
-
-  /**
-   * 去重
-   *
-   * @param array 数组
-   * @return 去重后的数组，hash 排序
-   */
-  public static byte[] deduplicateHashSort(@NonNull final byte[] array) {
-    return (byte[]) deduplicateHashSort((Object) array);
-  }
-
-  /**
-   * 去重
-   *
-   * @param array 数组
-   * @return 去重后的数组，hash 排序
-   */
-  public static char[] deduplicateHashSort(@NonNull final char[] array) {
-    return (char[]) deduplicateHashSort((Object) array);
-  }
-
-  /**
-   * 去重
-   *
-   * @param array 数组
-   * @return 去重后的数组，hash 排序
-   */
-  public static short[] deduplicateHashSort(@NonNull final short[] array) {
-    return (short[]) deduplicateHashSort((Object) array);
-  }
-
-  /**
-   * 去重
-   *
-   * @param array 数组
-   * @return 去重后的数组，hash 排序
-   */
   public static int[] deduplicateHashSort(@NonNull final int[] array) {
     return (int[]) deduplicateHashSort((Object) array);
   }
@@ -1268,6 +1228,16 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param array 数组
    * @return 去重后的数组，hash 排序
    */
+  public static double[] deduplicateHashSort(@NonNull final double[] array) {
+    return (double[]) deduplicateHashSort((Object) array);
+  }
+
+  /**
+   * 去重
+   *
+   * @param array 数组
+   * @return 去重后的数组，hash 排序
+   */
   public static float[] deduplicateHashSort(@NonNull final float[] array) {
     return (float[]) deduplicateHashSort((Object) array);
   }
@@ -1278,8 +1248,38 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param array 数组
    * @return 去重后的数组，hash 排序
    */
-  public static double[] deduplicateHashSort(@NonNull final double[] array) {
-    return (double[]) deduplicateHashSort((Object) array);
+  public static char[] deduplicateHashSort(@NonNull final char[] array) {
+    return (char[]) deduplicateHashSort((Object) array);
+  }
+
+  /**
+   * 去重
+   *
+   * @param array 数组
+   * @return 去重后的数组，hash 排序
+   */
+  public static byte[] deduplicateHashSort(@NonNull final byte[] array) {
+    return (byte[]) deduplicateHashSort((Object) array);
+  }
+
+  /**
+   * 去重
+   *
+   * @param array 数组
+   * @return 去重后的数组，hash 排序
+   */
+  public static boolean[] deduplicateHashSort(@NonNull final boolean[] array) {
+    return (boolean[]) deduplicateHashSort((Object) array);
+  }
+
+  /**
+   * 去重
+   *
+   * @param array 数组
+   * @return 去重后的数组，hash 排序
+   */
+  public static short[] deduplicateHashSort(@NonNull final short[] array) {
+    return (short[]) deduplicateHashSort((Object) array);
   }
 
   /**
