@@ -9,6 +9,7 @@ import org.apache.commons.collections4.IteratorUtils;
 import org.apache.commons.collections4.Predicate;
 import org.apache.commons.collections4.Transformer;
 
+import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.function.Function;
@@ -566,6 +567,7 @@ public class CollectionUtils {
     }
 
     Object prevObj = null;
+    // 是否已分配 prevObj，因为虽然根据 prevObj == null 判断了是否为第一次循环，但有可能第一次循环时 prevObj 仍赋值为 null
     boolean isAssigned = false;
     for (int i = 0; i < objects.length; i++) {
       Object object = objects[i];
@@ -620,6 +622,110 @@ public class CollectionUtils {
       } else if (object instanceof Object[]) {
         Object[] array = (Object[]) object;
         for (Object o : array) {
+          Object nextObj = stripTrailingZerosToString(o, isToString);
+          if (prevObj == null && !isAssigned) {
+            prevObj = nextObj;
+            isAssigned = true;
+            continue;
+          }
+          if (!Objects.equals(prevObj, nextObj)) {
+            return false;
+          }
+        }
+      } else if (object instanceof int[]) {
+        int[] array = (int[]) object;
+        for (int o : array) {
+          Object nextObj = stripTrailingZerosToString(o, isToString);
+          if (prevObj == null && !isAssigned) {
+            prevObj = nextObj;
+            isAssigned = true;
+            continue;
+          }
+          if (!Objects.equals(prevObj, nextObj)) {
+            return false;
+          }
+        }
+      } else if (object instanceof long[]) {
+        long[] array = (long[]) object;
+        for (long o : array) {
+          Object nextObj = stripTrailingZerosToString(o, isToString);
+          if (prevObj == null && !isAssigned) {
+            prevObj = nextObj;
+            isAssigned = true;
+            continue;
+          }
+          if (!Objects.equals(prevObj, nextObj)) {
+            return false;
+          }
+        }
+      } else if (object instanceof double[]) {
+        double[] array = (double[]) object;
+        for (double o : array) {
+          Object nextObj = stripTrailingZerosToString(o, isToString);
+          if (prevObj == null && !isAssigned) {
+            prevObj = nextObj;
+            isAssigned = true;
+            continue;
+          }
+          if (!Objects.equals(prevObj, nextObj)) {
+            return false;
+          }
+        }
+      } else if (object instanceof float[]) {
+        float[] array = (float[]) object;
+        for (float o : array) {
+          Object nextObj = stripTrailingZerosToString(o, isToString);
+          if (prevObj == null && !isAssigned) {
+            prevObj = nextObj;
+            isAssigned = true;
+            continue;
+          }
+          if (!Objects.equals(prevObj, nextObj)) {
+            return false;
+          }
+        }
+      } else if (object instanceof char[]) {
+        char[] array = (char[]) object;
+        for (char o : array) {
+          Object nextObj = stripTrailingZerosToString(o, isToString);
+          if (prevObj == null && !isAssigned) {
+            prevObj = nextObj;
+            isAssigned = true;
+            continue;
+          }
+          if (!Objects.equals(prevObj, nextObj)) {
+            return false;
+          }
+        }
+      } else if (object instanceof byte[]) {
+        byte[] array = (byte[]) object;
+        for (byte o : array) {
+          Object nextObj = stripTrailingZerosToString(o, isToString);
+          if (prevObj == null && !isAssigned) {
+            prevObj = nextObj;
+            isAssigned = true;
+            continue;
+          }
+          if (!Objects.equals(prevObj, nextObj)) {
+            return false;
+          }
+        }
+      } else if (object instanceof boolean[]) {
+        boolean[] array = (boolean[]) object;
+        for (boolean o : array) {
+          Object nextObj = stripTrailingZerosToString(o, isToString);
+          if (prevObj == null && !isAssigned) {
+            prevObj = nextObj;
+            isAssigned = true;
+            continue;
+          }
+          if (!Objects.equals(prevObj, nextObj)) {
+            return false;
+          }
+        }
+      } else if (object instanceof short[]) {
+        short[] array = (short[]) object;
+        for (short o : array) {
           Object nextObj = stripTrailingZerosToString(o, isToString);
           if (prevObj == null && !isAssigned) {
             prevObj = nextObj;
@@ -727,15 +833,15 @@ public class CollectionUtils {
           objSize = ((Collection<?>) object).size();
         } else {
           int j = 0;
-          for (Object o : (Iterable<?>) object) {
+          for (Object ignored : (Iterable<?>) object) {
             j++;
           }
           objSize = j;
         }
       } else if (object instanceof Map<?, ?>) {
         objSize = ((Map<?, ?>) object).values().size();
-      } else if (object instanceof Object[]) {
-        objSize = ((Object[]) object).length;
+      } else if (object != null && object.getClass().isArray()) {
+        objSize = Array.getLength(object);
       } else {
         return false;
       }
@@ -787,6 +893,102 @@ public class CollectionUtils {
       // Object[]
       else if (object instanceof Object[]) {
         Object[] array = (Object[]) object;
+        for (int i = 0; i < array.length; i++) {
+          Object nextObj = stripTrailingZerosToString(array[i], isToString);
+          if (prevList.size() < i + 1) {
+            prevList.add(nextObj);
+            continue;
+          }
+          if (!Objects.equals(prevList.get(i), nextObj)) {
+            return false;
+          }
+        }
+      } else if (object instanceof int[]) {
+        int[] array = (int[]) object;
+        for (int i = 0; i < array.length; i++) {
+          Object nextObj = stripTrailingZerosToString(array[i], isToString);
+          if (prevList.size() < i + 1) {
+            prevList.add(nextObj);
+            continue;
+          }
+          if (!Objects.equals(prevList.get(i), nextObj)) {
+            return false;
+          }
+        }
+      } else if (object instanceof long[]) {
+        long[] array = (long[]) object;
+        for (int i = 0; i < array.length; i++) {
+          Object nextObj = stripTrailingZerosToString(array[i], isToString);
+          if (prevList.size() < i + 1) {
+            prevList.add(nextObj);
+            continue;
+          }
+          if (!Objects.equals(prevList.get(i), nextObj)) {
+            return false;
+          }
+        }
+      } else if (object instanceof double[]) {
+        double[] array = (double[]) object;
+        for (int i = 0; i < array.length; i++) {
+          Object nextObj = stripTrailingZerosToString(array[i], isToString);
+          if (prevList.size() < i + 1) {
+            prevList.add(nextObj);
+            continue;
+          }
+          if (!Objects.equals(prevList.get(i), nextObj)) {
+            return false;
+          }
+        }
+      } else if (object instanceof float[]) {
+        float[] array = (float[]) object;
+        for (int i = 0; i < array.length; i++) {
+          Object nextObj = stripTrailingZerosToString(array[i], isToString);
+          if (prevList.size() < i + 1) {
+            prevList.add(nextObj);
+            continue;
+          }
+          if (!Objects.equals(prevList.get(i), nextObj)) {
+            return false;
+          }
+        }
+      } else if (object instanceof char[]) {
+        char[] array = (char[]) object;
+        for (int i = 0; i < array.length; i++) {
+          Object nextObj = stripTrailingZerosToString(array[i], isToString);
+          if (prevList.size() < i + 1) {
+            prevList.add(nextObj);
+            continue;
+          }
+          if (!Objects.equals(prevList.get(i), nextObj)) {
+            return false;
+          }
+        }
+      } else if (object instanceof byte[]) {
+        byte[] array = (byte[]) object;
+        for (int i = 0; i < array.length; i++) {
+          Object nextObj = stripTrailingZerosToString(array[i], isToString);
+          if (prevList.size() < i + 1) {
+            prevList.add(nextObj);
+            continue;
+          }
+          if (!Objects.equals(prevList.get(i), nextObj)) {
+            return false;
+          }
+        }
+      } else if (object instanceof boolean[]) {
+        boolean[] array = (boolean[]) object;
+        for (int i = 0; i < array.length; i++) {
+          Object nextObj = stripTrailingZerosToString(array[i], isToString);
+          if (prevList.size() < i + 1) {
+            prevList.add(nextObj);
+            continue;
+          }
+          if (!Objects.equals(prevList.get(i), nextObj)) {
+            return false;
+          }
+        }
+      } else if (object instanceof short[]) {
+        short[] array = (short[]) object;
         for (int i = 0; i < array.length; i++) {
           Object nextObj = stripTrailingZerosToString(array[i], isToString);
           if (prevList.size() < i + 1) {

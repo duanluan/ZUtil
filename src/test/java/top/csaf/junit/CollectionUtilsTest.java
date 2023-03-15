@@ -111,6 +111,7 @@ public class CollectionUtilsTest {
     List<Object> list1 = new ArrayList<>();
     list1.add(1);
     assertTrue(CollectionUtils.isNotEmptys(list, list1));
+    assertFalse(CollectionUtils.isNotEmptys(new ArrayList<>(), new ArrayList<>()));
   }
 
   @DisplayName("是否不满足 对象为 null 或 没有元素")
@@ -121,6 +122,7 @@ public class CollectionUtilsTest {
     List<Object> list = new ArrayList<>();
     list.add(1);
     assertTrue(CollectionUtils.sizeIsNotEmpty(list));
+    assertFalse(CollectionUtils.sizeIsNotEmpty(new ArrayList<>()));
   }
 
   @DisplayName("是否 每个对象 都为 null 或 没有元素")
@@ -146,6 +148,7 @@ public class CollectionUtilsTest {
     List<Object> list1 = new ArrayList<>();
     list1.add(1);
     assertTrue(CollectionUtils.sizeIsNotEmptys(list, list1));
+    assertFalse(CollectionUtils.sizeIsNotEmptys(new ArrayList<>(), new ArrayList<>()));
   }
 
   @DisplayName("是否 每个对象的 所有元素都为 null 或 没有元素")
@@ -181,7 +184,7 @@ public class CollectionUtilsTest {
     List<Object> list1 = new ArrayList<>();
     list1.add(1);
     assertTrue(CollectionUtils.isNotAllEmpty(list1));
-
+    assertFalse(CollectionUtils.isNotAllEmpty(new ArrayList<>()));
   }
 
   @DisplayName("是否 每个对象的 所有元素都为 null 或 没有元素")
@@ -267,6 +270,7 @@ public class CollectionUtilsTest {
     List<Object> list1 = new ArrayList<>();
     list1.add(new BigInteger("1"));
     JsonArray jsonArray = new JsonArray();
+    jsonArray.add(1);
     jsonArray.add('1');
     Map<String, Object> map = new HashMap<>();
     map.put("1", new BigDecimal("1"));
@@ -287,6 +291,16 @@ public class CollectionUtilsTest {
     // Enumeration 元素不一致结束
     vector.set(0, 2);
     assertFalse(CollectionUtils.isAllEquals(true, null, list1, vector.elements()));
+    // 基础类型数组
+    assertFalse(CollectionUtils.isAllEquals(true, null, new int[]{1}, new long[]{2}));
+    assertFalse(CollectionUtils.isAllEquals(true, null, new long[]{1}, new int[]{2}));
+    assertFalse(CollectionUtils.isAllEquals(true, null, new double[]{1}, new float[]{2}));
+    assertFalse(CollectionUtils.isAllEquals(true, null, new float[]{1}, new double[]{2}));
+    assertFalse(CollectionUtils.isAllEquals(true, null, new char[]{'1'}, new byte[]{2}));
+    assertFalse(CollectionUtils.isAllEquals(true, null, new byte[]{1}, new char[]{'2'}));
+    assertFalse(CollectionUtils.isAllEquals(true, null, new boolean[]{true}, new short[]{1}));
+    assertFalse(CollectionUtils.isAllEquals(true, null, new short[]{1}, new boolean[]{true}));
+
     // isToString = false
     assertFalse(CollectionUtils.isAllEquals(false, null, list, null));
 
@@ -315,7 +329,7 @@ public class CollectionUtilsTest {
   @DisplayName("是否 每个对象的同一位置的元素都相等")
   @Test
   void isAllEqualsSameIndex() {
-    /** {@link CollectionUtils#isAllEquals(boolean, Function, Object...)} */
+    /** {@link CollectionUtils#isAllEqualsSameIndex(boolean, Function, Object...)} */
     assertThrows(NullPointerException.class, () -> CollectionUtils.isAllEqualsSameIndex(true, null, null));
     assertThrows(IllegalArgumentException.class, () -> CollectionUtils.isAllEqualsSameIndex(true, null, new ArrayList<>()));
 
@@ -352,8 +366,24 @@ public class CollectionUtilsTest {
     // 数组元素不一致结束
     array[2] = 4;
     assertFalse(CollectionUtils.isAllEqualsSameIndex(true, CollectionUtils::sizeIsEmpty, list1, array));
+    // 基础类型数组
+    assertFalse(CollectionUtils.isAllEqualsSameIndex(true, null, new int[]{1}, new long[]{2}));
+    assertFalse(CollectionUtils.isAllEqualsSameIndex(true, null, new long[]{1}, new int[]{2}));
+    assertFalse(CollectionUtils.isAllEqualsSameIndex(true, null, new double[]{1}, new float[]{2}));
+    assertFalse(CollectionUtils.isAllEqualsSameIndex(true, null, new float[]{1}, new double[]{2}));
+    assertFalse(CollectionUtils.isAllEqualsSameIndex(true, null, new char[]{'1'}, new byte[]{2}));
+    assertFalse(CollectionUtils.isAllEqualsSameIndex(true, null, new byte[]{1}, new char[]{'2'}));
+    assertFalse(CollectionUtils.isAllEqualsSameIndex(true, null, new boolean[]{true}, new short[]{1}));
+    assertFalse(CollectionUtils.isAllEqualsSameIndex(true, null, new short[]{1}, new boolean[]{true}));
+    // 基础类型数组元素相等
+    assertTrue(CollectionUtils.isAllEqualsSameIndex(true, null, new int[]{1}, new double[]{1}));
+    assertTrue(CollectionUtils.isAllEqualsSameIndex(true, null, new int[]{1}, new float[]{1}));
+    assertTrue(CollectionUtils.isAllEqualsSameIndex(true, null, new int[]{1}, new char[]{'1'}));
+    assertTrue(CollectionUtils.isAllEqualsSameIndex(true, null, new int[]{1}, new byte[]{1}));
+    assertTrue(CollectionUtils.isAllEqualsSameIndex(true, null, new boolean[]{true}, new boolean[]{true}));
+    assertTrue(CollectionUtils.isAllEqualsSameIndex(true, null, new int[]{1}, new short[]{1}));
 
-    /** {@link CollectionUtils#isAllEquals(Function, Object...)} */
+    /** {@link CollectionUtils#isAllEqualsSameIndex(Function, Object...)} */
     assertThrows(NullPointerException.class, () -> CollectionUtils.isAllEqualsSameIndex(null, null));
     assertFalse(CollectionUtils.isAllEqualsSameIndex(null, new ArrayList<>(), null));
   }
