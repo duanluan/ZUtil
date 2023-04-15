@@ -19,7 +19,7 @@ public class ObjectUtils extends org.apache.commons.lang3.ObjectUtils {
   private static Object toStringByBasic(Object object, boolean isByValue) {
     if (isByValue && (ClassUtils.isBasic(object) || object instanceof BigDecimal || object instanceof BigInteger)) {
       if (object instanceof Float || object instanceof Double || object instanceof BigDecimal) {
-        object = new BigDecimal(object.toString()).stripTrailingZeros().toPlainString();
+        object = new BigDecimal(String.valueOf(object)).stripTrailingZeros().toPlainString();
       } else {
         object = object.toString();
       }
