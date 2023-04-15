@@ -16,8 +16,8 @@ public class ObjectUtils extends org.apache.commons.lang3.ObjectUtils {
    * @param object 元素
    * @return 字符串
    */
-  private static Object toStringByBasic(Object object, boolean isByValue) {
-    if (isByValue && (ClassUtils.isBasic(object) || object instanceof BigDecimal || object instanceof BigInteger)) {
+  private static Object toStringByPrimitiveTypeAndNumber(Object object, boolean isByValue) {
+    if (isByValue && (ClassUtils.isPrimitiveType(object) || object instanceof BigDecimal || object instanceof BigInteger)) {
       if (object instanceof Float || object instanceof Double || object instanceof BigDecimal) {
         object = new BigDecimal(String.valueOf(object)).stripTrailingZeros().toPlainString();
       } else {
@@ -44,7 +44,7 @@ public class ObjectUtils extends org.apache.commons.lang3.ObjectUtils {
       if (isContinueNull && object == null) {
         continue;
       }
-      if (!toStringByBasic(object, isByValue).equals(toStringByBasic(objects[i - 1], isByValue))) {
+      if (!toStringByPrimitiveTypeAndNumber(object, isByValue).equals(toStringByPrimitiveTypeAndNumber(objects[i - 1], isByValue))) {
         return false;
       }
       if (i == objects.length - 2) {
