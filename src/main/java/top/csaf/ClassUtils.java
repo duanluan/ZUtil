@@ -6,7 +6,7 @@ package top.csaf;
 public class ClassUtils extends org.apache.commons.lang3.ClassUtils {
 
   /**
-   * 是否为基本数据类型
+   * 是否为基本数据类型及其包装类
    *
    * @param classes 多个类
    * @return 是否为基本数据类型
@@ -35,7 +35,7 @@ public class ClassUtils extends org.apache.commons.lang3.ClassUtils {
   }
 
   /**
-   * 是否为基本数据类型
+   * 是否为基本数据类型及其包装类
    *
    * @param objects 多个对象
    * @return 是否为基本数据类型
