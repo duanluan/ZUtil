@@ -28,11 +28,11 @@ public class BeanMapToMapTest {
     // 结果是否相等
     BeanMapToMapTest test = new BeanMapToMapTest();
     System.out.println(test.putAll().equals(test.beanMapAndConstructor()) && test.beanMapAndConstructor().equals(test.beanMapAndForeach()));
-    System.out.println(((List<BeanUtilsTest.TestBean>) (test.beanMapAndForeach().get("beanList"))).get(0).getName().equals(((List<Map<String, Object>>) (test.json().get("beanList"))).get(0).get("name")));
+    System.out.println(((List<BeanUtilsTest.TestBean>) (test.beanMapAndForeach().get("deepObject"))).get(0).getName().equals(((List<Map<String, Object>>) (test.json().get("deepObject"))).get(0).get("name")));
   }
 
   @Test
-  public void benchmark() throws Exception {
+  void benchmark() throws Exception {
     org.openjdk.jmh.Main.main(new String[]{BeanMapToMapTest.class.getName()});
   }
 
@@ -42,14 +42,12 @@ public class BeanMapToMapTest {
     testBean = new BeanUtilsTest.TestBean();
     List<BeanUtilsTest.TestBean> beanList = new ArrayList<>();
     beanList.add(new BeanUtilsTest.TestBean("1"));
-    testBean.setBeanList(beanList);
+    testBean.setDeepObject(beanList);
   }
 
   @Benchmark
   public Map<String, Object> putAll() {
-    HashMap<String, Object> map = new HashMap<>();
-    map.putAll(BeanMap.create(testBean));
-    return map;
+    return new HashMap<>(BeanMap.create(testBean));
   }
 
   @Benchmark

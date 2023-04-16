@@ -43,7 +43,7 @@ public class ToJsonTest {
     testBean = new BeanUtilsTest.TestBean();
     List<BeanUtilsTest.TestBean> beanList = new ArrayList<>();
     beanList.add(new BeanUtilsTest.TestBean("1"));
-    testBean.setBeanList(beanList);
+    testBean.setDeepObject(beanList);
   }
 
   private final static ObjectMapper objectMapper = new ObjectMapper();
