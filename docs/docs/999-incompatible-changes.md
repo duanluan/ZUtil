@@ -1,9 +1,15 @@
 # 不兼容变更
 
+* 1.12.0
+  * `ClassUtils.isBasic`重命名为`isPrimitiveType`。
+  * `BeanUtils`移至`bean`包下。
+  * `BeanUtils.FieldFunction`重命名为`PropertyFunction`并移至根包下。
+  * `BeanUtils.getFieldName(FieldFunction)`重命名为`getPropertyName(PropertyFunction)`。
+  * 删除`BeanUtils.deepToMap`。
 * 1.11.0
   * Group Id 由`top.zhogjianhao`重命名为`top.csaf`。
 * 1.10.1
-  * `id.NanoIDUtils`重命名为`id.NanoIdUtils`。
+  * `id.NanoIDUtils`重命名为`NanoIdUtils`。
 * 1.9.2
   * 删除`FileUtils.getClassRootPath`；
   * 删除`FileUtils.getClassPath`；

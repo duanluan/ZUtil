@@ -35,7 +35,7 @@
     <dependency>
       <groupId>top.csaf</groupId>
       <artifactId>ZUtil</artifactId>
-      <version>1.11.1</version>
+      <version>1.12.0</version>
     </dependency>
     ```
 
@@ -43,9 +43,9 @@
 
     ```groovy
     // groovy
-    implementation 'top.csaf:ZUtil:1.11.1'
+    implementation 'top.csaf:ZUtil:1.12.0'
     // kotlin
-    implementation("top.csaf:ZUtil:1.11.1")
+    implementation("top.csaf:ZUtil:1.12.0")
     ```
 
 
