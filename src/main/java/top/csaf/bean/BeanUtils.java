@@ -1,6 +1,7 @@
 package top.csaf.bean;
 
 
+import com.alibaba.fastjson2.JSON;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.beanutils.PropertyUtils;
@@ -355,5 +356,31 @@ public class BeanUtils extends org.springframework.beans.BeanUtils {
       targetList.add(target);
     }
     return targetList;
+  }
+
+  /**
+   * 深克隆
+   *
+   * @param source 源对象
+   * @param <T>    源对象类型
+   * @return 深克隆后的对象
+   */
+  public static <T> T deepClone(T source) {
+    return (T) JSON.parseObject(JSON.toJSONString(source), source.getClass());
+  }
+
+  /**
+   * 深克隆
+   *
+   * @param source 源集合
+   * @param <T>    源集合元素类型
+   * @return 深克隆后的集合
+   */
+  public static <T> List<T> deepClone(List<T> source) {
+    List<T> result = new ArrayList<>();
+    for (T t : source) {
+      result.add(deepClone(t));
+    }
+    return result;
   }
 }
