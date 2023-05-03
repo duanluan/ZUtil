@@ -12,7 +12,7 @@ import java.nio.charset.Charset;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("数组工具类测试")
-public class ArrayUtilsTest {
+class ArrayUtilsTest {
 
   @DisplayName("toBytesAndToString：转字节数组和转字符串")
   @Test

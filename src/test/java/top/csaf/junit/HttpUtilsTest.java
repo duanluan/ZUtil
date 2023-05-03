@@ -21,7 +21,7 @@ import java.util.Map;
 
 @Slf4j
 @DisplayName("HTTP 工具类测试")
-public class HttpUtilsTest {
+class HttpUtilsTest {
 
   @DisplayName("获取 Media Types")
   @Test

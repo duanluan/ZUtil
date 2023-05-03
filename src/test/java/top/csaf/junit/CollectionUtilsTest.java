@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @Slf4j
 @DisplayName("集合工具类测试")
-public class CollectionUtilsTest {
+class CollectionUtilsTest {
 
   public static void main(String[] args) {
     genCollections4Fn();

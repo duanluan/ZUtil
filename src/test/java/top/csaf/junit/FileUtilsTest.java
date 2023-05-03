@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @Slf4j
 @DisplayName("文件工具类测试")
-public class FileUtilsTest {
+class FileUtilsTest {
   private static final String PROJECT_PATH = FileUtils.getUserDir();
   private static final String PROJECT_PATH_SLASH = FileUtils.getUserDir().replace("\\", "/");
 

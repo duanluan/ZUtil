@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import top.csaf.id.SnowFlake;
 
 @DisplayName("雪花算法测试")
-public class SnowFlakeTest {
+class SnowFlakeTest {
 
   @DisplayName("简单实现")
   @Test

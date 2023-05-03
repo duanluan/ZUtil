@@ -19,7 +19,7 @@ public class ClassUtils extends org.apache.commons.lang3.ClassUtils {
       throw new IllegalArgumentException("Classes: length should be greater than 0");
     }
     for (Class<?> clazz : classes) {
-      if (!((Integer.class.equals(clazz)) ||
+      if (!(Integer.class.equals(clazz) ||
         Long.class.equals(clazz) ||
         Double.class.equals(clazz) ||
         Float.class.equals(clazz) ||
@@ -48,7 +48,7 @@ public class ClassUtils extends org.apache.commons.lang3.ClassUtils {
       throw new IllegalArgumentException("Objects: length should be greater than 0");
     }
     for (Object object : objects) {
-      if (!((object instanceof Integer) ||
+      if (!(object instanceof Integer ||
         object instanceof Long ||
         object instanceof Double ||
         object instanceof Float ||

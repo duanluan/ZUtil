@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Slf4j
 @DisplayName("YAML 工具类测试")
-public class YamlUtilsTest {
+class YamlUtilsTest {
 
   private static final String YML_FILE_PATH = FileUtils.getProjectPath() + "/src/test/java/top/csaf/assets/yaml/test.yml";
 

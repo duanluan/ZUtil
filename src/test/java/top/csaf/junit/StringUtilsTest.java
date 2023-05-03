@@ -9,7 +9,7 @@ import java.util.Collections;
 
 @Slf4j
 @DisplayName("字符串工具类测试")
-public class StringUtilsTest {
+class StringUtilsTest {
 
   private void println(Object source) {
     System.out.println(source);

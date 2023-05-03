@@ -7,7 +7,7 @@ import top.csaf.ClassUtils;
 
 @Slf4j
 @DisplayName("Class 工具类测试")
-public class ClassUtilsTest {
+class ClassUtilsTest {
 
   private void println(Object source) {
     System.out.println(source);

@@ -24,7 +24,7 @@ import java.util.regex.Pattern;
 
 @Slf4j
 @DisplayName("拼音工具类测试")
-public class PinyinUtilsTest {
+class PinyinUtilsTest {
 
   private static final Pattern PINYIN_PATTERN_A = Pattern.compile("[āáǎà]");
   private static final Pattern PINYIN_PATTERN_O = Pattern.compile("[ōóǒò]");

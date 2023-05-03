@@ -13,7 +13,7 @@ import top.csaf.io.FileUtils;
 
 @Slf4j
 @DisplayName("XML 工具类测试")
-public class XmlUtilsTest {
+class XmlUtilsTest {
 
   private void println(Object source) {
     System.out.println(source);

@@ -17,7 +17,7 @@ import java.util.Locale;
 
 @Slf4j
 @DisplayName("时间工具类测试")
-public class DateUtilsTest {
+class DateUtilsTest {
 
   private final ZonedDateTime nowZonedDateTime = ZonedDateTime.now();
   private final LocalDateTime nowLocalDateTime = LocalDateTime.now();

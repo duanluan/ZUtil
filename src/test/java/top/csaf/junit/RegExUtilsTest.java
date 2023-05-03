@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @Slf4j
 @DisplayName("正则工具类测试")
-public class RegExUtilsTest {
+class RegExUtilsTest {
 
   @Test
   void testCodeCoverage() {

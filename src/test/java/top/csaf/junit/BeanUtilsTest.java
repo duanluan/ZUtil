@@ -1,6 +1,7 @@
 package top.csaf.junit;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,7 +14,7 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("Bean 工具类测试")
-public class BeanUtilsTest {
+class BeanUtilsTest {
 
   @NoArgsConstructor
   @Data
@@ -21,6 +22,7 @@ public class BeanUtilsTest {
     private String superName;
   }
 
+  @EqualsAndHashCode(callSuper = true)
   @NoArgsConstructor
   @Data
   public static class TestBean extends TestSuperBean implements Serializable {

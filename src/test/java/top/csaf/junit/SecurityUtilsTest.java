@@ -13,7 +13,7 @@ import java.security.spec.InvalidKeySpecException;
 
 @Slf4j
 @DisplayName("加密解密工具类测试")
-public class SecurityUtilsTest {
+class SecurityUtilsTest {
 
   private void println(Object source) {
     System.out.println(source);
