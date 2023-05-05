@@ -248,6 +248,7 @@ public final class ArrayUtils extends org.apache.commons.lang3.ArrayUtils {
    * @param array      数组
    * @param startIndex 开始下标
    * @param length     位数
+   * @param <T>        数组类型
    * @return 数组
    */
   public static <T> T[] moveForward(@NonNull final T[] array, final int startIndex, final int length) {

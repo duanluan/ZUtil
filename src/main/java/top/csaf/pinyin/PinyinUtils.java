@@ -316,6 +316,7 @@ public class PinyinUtils {
   /**
    * 是否为多音字
    *
+   * @param c 字符
    * @return 是否为多音字
    */
   public static boolean isPolyphonicWord(final char c) {

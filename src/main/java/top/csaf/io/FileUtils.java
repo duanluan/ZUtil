@@ -97,7 +97,8 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
   /**
    * 获取 resources 目录下的文件输入流
    *
-   * @param path 文件路径
+   * @param clazz 类
+   * @param path  文件路径
    * @return 文件输入流
    */
   public static InputStream getResourceAsStream(@NonNull Class<?> clazz, @NonNull final String path) {

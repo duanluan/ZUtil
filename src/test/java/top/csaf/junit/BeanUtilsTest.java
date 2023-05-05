@@ -14,7 +14,7 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("Bean 工具类测试")
-class BeanUtilsTest {
+public class BeanUtilsTest {
 
   @NoArgsConstructor
   @Data

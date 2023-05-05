@@ -16,7 +16,7 @@ public class TreeUtils {
   /**
    * 构建树
    * <p>
-   * 如果节点的父级 ID 满足 {@link TreeConfig#getRootParentIdValues()} 中的值，则为顶级节点
+   * 如果节点的父级 ID 满足 TreeConfig#getRootParentIdValues() 中的值，则为顶级节点
    *
    * @param treeNodes 树节点列表
    * @return 树列表
@@ -52,7 +52,7 @@ public class TreeUtils {
   /**
    * 构建树
    *
-   * @param treeNodes 树节点列表
+   * @param treeNodes  树节点列表
    * @param treeConfig 树配置
    * @return 树列表
    */
