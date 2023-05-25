@@ -27,25 +27,25 @@
 
 ## 说明
 
-### 仓库
+### 安装
 
-* Maven：
+#### Maven
 
     ```xml
     <dependency>
       <groupId>top.csaf</groupId>
       <artifactId>ZUtil</artifactId>
-      <version>1.12.0</version>
+      <version>1.12.1</version>
     </dependency>
     ```
 
-* Gradle
+#### Gradle
 
     ```groovy
     // groovy
-    implementation 'top.csaf:ZUtil:1.12.0'
+    implementation 'top.csaf:ZUtil:1.12.1'
     // kotlin
-    implementation("top.csaf:ZUtil:1.12.0")
+    implementation("top.csaf:ZUtil:1.12.1")
     ```
 
 ### 安装注意
