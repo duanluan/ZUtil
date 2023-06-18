@@ -24,6 +24,8 @@ public class YamlFeature {
 
   /**
    * 设置值中的 ${xxx} 需要转义但是找不到时的替换值
+   *
+   * @param escapeNotFoundReplacement 值中的 ${xxx} 需要转义但是找不到时的替换值
    */
   public static void setEscapeNotFoundReplacement(final Object escapeNotFoundReplacement) {
     ESCAPE_NOT_FOUND_REPLACEMENT.set(escapeNotFoundReplacement);
@@ -31,6 +33,8 @@ public class YamlFeature {
 
   /**
    * 设置持久的设置值中的 ${xxx} 需要转义但是找不到时的替换值
+   *
+   * @param escapeNotFoundReplacement 值中的 ${xxx} 需要转义但是找不到时的替换值
    */
   public static void setEscapeNotFoundReplacementAlways(final Object escapeNotFoundReplacement) {
     ESCAPE_NOT_FOUND_REPLACEMENT_ALWAYS = escapeNotFoundReplacement;
@@ -102,6 +106,8 @@ public class YamlFeature {
 
   /**
    * 设置值中的 ${xxx} 需要转义但是找不到时是否抛出异常
+   *
+   * @param escapeNotFoundThrowException 值中的 ${xxx} 需要转义但是找不到时是否抛出异常
    */
   public static void setEscapeNotFoundThrowException(final Boolean escapeNotFoundThrowException) {
     ESCAPE_NOT_FOUND_THROW_EXCEPTION.set(escapeNotFoundThrowException);
@@ -109,6 +115,8 @@ public class YamlFeature {
 
   /**
    * 设置持久的设置值中的 ${xxx} 需要转义但是找不到时是否抛出异常
+   *
+   * @param escapeNotFoundThrowException 值中的 ${xxx} 需要转义但是找不到时是否抛出异常
    */
   public static void setEscapeNotFoundThrowExceptionAlways(final Boolean escapeNotFoundThrowException) {
     ESCAPE_NOT_FOUND_THROW_EXCEPTION_ALWAYS = escapeNotFoundThrowException;
