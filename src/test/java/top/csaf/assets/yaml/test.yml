@@ -1,7 +1,11 @@
-spring:
-  datasource:
-    hikari:
-      driver-class-name: com.mysql.cj.jdbc.Driver
-      jdbc-url: jdbc:mysql://localhost:3306/easy-blog
-      username: root
-      password: 123
+a:
+  a1:
+    a11: a
+c:
+  c1: ${b.b1.b11}${b.b1.b11}
+b:
+  b1:
+    b11: ${a.a1.a11}
+d:
+  d1: ${e.e1}
+

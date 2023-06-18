@@ -1,5 +1,7 @@
 # 不兼容变更
 
+* 1.13.0
+  * `YamlUtils`移至`yaml`包下。
 * 1.12.0
   * `ClassUtils.isBasic`重命名为`isPrimitiveType`。
   * `BeanUtils`移至`bean`包下。
