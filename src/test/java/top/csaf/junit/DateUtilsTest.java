@@ -3,6 +3,7 @@ package top.csaf.junit;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import top.csaf.date.DateFeature;
 import top.csaf.date.DateUtils;
 import top.csaf.date.constant.DateConstant;
 import top.csaf.date.constant.DatePattern;
@@ -14,6 +15,8 @@ import java.time.temporal.ChronoField;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.Locale;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @Slf4j
 @DisplayName("时间工具类测试")
@@ -143,6 +146,7 @@ class DateUtilsTest {
     println(ZoneId.of("America/Los_Angeles").getRules().getOffset(instant));
   }
 
+
   @DisplayName("getDefaultFormatter：获取 DateTimeFormatter 对象")
   @Test
   void getDefaultFormatter() {
@@ -155,13 +159,11 @@ class DateUtilsTest {
       log.warn(e.getMessage());
     }
 
+    assertThrows(IllegalArgumentException.class, ()->DateUtils.getDefaultFormatter("", null, null));
     // 使用 getDefaultFormatter() 时会赋默认值
-    dateTimeFormatter = DateUtils.getDefaultFormatter(DatePattern.MM_DD, Locale.ENGLISH, ZoneId.systemDefault());
-    println(dateTimeFormatter.parse("08-08").get(ChronoField.YEAR));
-
-    // 如果格式中已存在年，说明被转换的内容中已存在年，则不会赋默认值
-    dateTimeFormatter = DateUtils.getDefaultFormatter(DatePattern.UUUU_MM_DD, Locale.ENGLISH, ZoneId.systemDefault());
-    println(dateTimeFormatter.parse("2021-08-08").get(ChronoField.YEAR));
+    assertEquals(DateUtils.getDefaultFormatter(DatePattern.MM_DD, Locale.ENGLISH, ZoneId.systemDefault()).parse("08-08").get(ChronoField.YEAR), 0);
+    DateFeature.set((Locale) null);
+    assertEquals(DateUtils.getDefaultFormatter(DatePattern.MM_DD, null, ZoneId.systemDefault()).parse("08-08").get(ChronoField.YEAR), 0);
   }
 
   @DisplayName("convertMonthText：转换数字月到文本月")

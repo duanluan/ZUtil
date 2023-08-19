@@ -33,9 +33,9 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    * @param fieldValueMap 时间类型和值
    * @return 时间格式构造器
    */
-  public static DateTimeFormatterBuilder getFormatterBuilder(@NonNull final String pattern, final Map<TemporalField, Long> fieldValueMap) {
+  private static DateTimeFormatterBuilder getFormatterBuilder(@NonNull final String pattern, final Map<TemporalField, Long> fieldValueMap) {
     if (StringUtils.isBlank(pattern)) {
-      throw new IllegalArgumentException("Pattern: should not be blank");
+      throw new IllegalArgumentException("pattern must not be blank");
     }
     // 根据格式创建时间格式化构造器
     DateTimeFormatterBuilder formatterBuilder = new DateTimeFormatterBuilder().appendPattern(pattern);
@@ -72,16 +72,19 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
   }
 
   /**
-   * 获取默认的时间格式器（默认严格模式、区域英语），对应时间级别没有就赋默认值：0000-01-01 00:00:00.00000000
+   * 获取默认的时间格式器
+   * <p>
+   * 默认模式为 {@link DateConstant#DEFAULT_RESOLVER_STYLE}，默认区域为 {@link DateConstant#DEFAULT_LOCALE}<br>
+   * 对应时间级别没有就赋默认值：0000-01-01 00:00:00.00000000
    *
    * @param pattern 格式
-   * @param locale  区域
+   * @param locale  区域，null 时为 {@link DateFeature#getLocale()}，如果通过 {@link DateFeature#set(java.util.Locale)} 设置为了 null，则为 {@link DateTimeFormatterBuilder#toFormatter()}
    * @param zoneId  时区
    * @return 时间格式器
    */
   public static DateTimeFormatter getDefaultFormatter(@NonNull final String pattern, final Locale locale, final ZoneId zoneId) {
     if (StringUtils.isBlank(pattern)) {
-      throw new IllegalArgumentException("Pattern: should not be blank");
+      throw new IllegalArgumentException("pattern must not be blank");
     }
     Map<TemporalField, Long> fieldValueMap = new HashMap<>();
     fieldValueMap.put(ChronoField.YEAR_OF_ERA, 1L);
@@ -94,14 +97,9 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     if (locale != null) {
       dateTimeFormatter = formatterBuilder.toFormatter(DateFeature.get(locale));
     } else {
-      Locale locale1 = DateFeature.getLocale();
-      if (locale1 != null) {
-        dateTimeFormatter = formatterBuilder.toFormatter(locale1);
-      } else {
-        dateTimeFormatter = formatterBuilder.toFormatter();
-      }
+      dateTimeFormatter = formatterBuilder.toFormatter(DateFeature.getLocale());
     }
-    dateTimeFormatter.withResolverStyle(DateFeature.get(DateConstant.DEFAULT_RESOLVER_STYLE));
+    dateTimeFormatter.withResolverStyle(DateFeature.getResolverStyle());
     if (zoneId != null) {
       dateTimeFormatter = dateTimeFormatter.withZone(DateFeature.get(zoneId));
     }

@@ -1,5 +1,7 @@
 # 不兼容变更
 
+* 1.13.1
+  * `DateUtils`的`getFormatterBuilder`方法改为`private`。
 * 1.13.0
   * `YamlUtils`移至`yaml`包下。
 * 1.12.0

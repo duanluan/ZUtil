@@ -35,7 +35,7 @@
     <dependency>
       <groupId>top.csaf</groupId>
       <artifactId>ZUtil</artifactId>
-      <version>1.13.0</version>
+      <version>1.13.1</version>
     </dependency>
     ```
 
@@ -43,9 +43,9 @@
 
     ```groovy
     // groovy
-    implementation 'top.csaf:ZUtil:1.13.0'
+    implementation 'top.csaf:ZUtil:1.13.1'
     // kotlin
-    implementation("top.csaf:ZUtil:1.13.0")
+    implementation("top.csaf:ZUtil:1.13.1")
     ```
 
 ### 安装注意
@@ -59,7 +59,7 @@
 <dependency>
   <groupId>top.csaf</groupId>
   <artifactId>ZUtil</artifactId>
-  <version>1.13.0</version>
+  <version>1.13.1</version>
   <exclusions>
     <exclusion>
       <groupId>org.slf4j</groupId>
@@ -93,7 +93,7 @@
 // groovy
 dependencies {
   // 方式一：ZUtil 排除 slf4j
-  implementation('top.csaf:ZUtil:1.13.0') {
+  implementation('top.csaf:ZUtil:1.13.1') {
     exclude group: 'org.slf4j', module: 'slf4j-api'
     exclude group: 'org.slf4j', module: 'slf4j-simple'
   }
@@ -106,7 +106,7 @@ dependencies {
 // kotlin
 dependencies {
   // 方式一：ZUtil 排除 slf4j
-  implementation("top.csaf:ZUtil:1.13.0") {
+  implementation("top.csaf:ZUtil:1.13.1") {
     exclude(group = "org.slf4j", module = "slf4j-api")
     exclude(group = "org.slf4j", module = "slf4j-simple")
   }
@@ -185,4 +185,5 @@ Mode 即为`org.openjdk.jmh.annotations.Mode`，分为：
    * `mvn test -Dtest=要测试的类名`进行测试，测试后会在`target`下生成`jacoco.exec`。
    * `mvn jacoco:report`生成代码覆盖率测试报告，在`target/site`目录下。
    * 查看更新的类或方法，覆盖率在 **90%** 以上时提交。
+   * `lombok.NonNull`的参数校验可以忽略。
 4. 提交时遵循 **[Angular 提交消息规范](https://github.com/angular/angular/blob/22b96b9/CONTRIBUTING.md#-commit-message-guidelines)**，提交后新建 **pull request** 即可。
