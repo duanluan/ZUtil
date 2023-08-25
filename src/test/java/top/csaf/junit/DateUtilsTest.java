@@ -159,11 +159,16 @@ class DateUtilsTest {
       log.warn(e.getMessage());
     }
 
-    assertThrows(IllegalArgumentException.class, ()->DateUtils.getDefaultFormatter("", null, null));
+    assertThrows(IllegalArgumentException.class, () -> DateUtils.getDefaultFormatter("", null, null));
     // 使用 getDefaultFormatter() 时会赋默认值
     assertEquals(DateUtils.getDefaultFormatter(DatePattern.MM_DD, Locale.ENGLISH, ZoneId.systemDefault()).parse("08-08").get(ChronoField.YEAR), 0);
     DateFeature.set((Locale) null);
     assertEquals(DateUtils.getDefaultFormatter(DatePattern.MM_DD, null, ZoneId.systemDefault()).parse("08-08").get(ChronoField.YEAR), 0);
+
+    // 地区为简体中文，可以解析星期几
+    assertEquals(DateUtils.getDefaultFormatter("MM-dd EEE", Locale.SIMPLIFIED_CHINESE).parse("08-15 星期二").get(ChronoField.DAY_OF_WEEK), 2);
+    // ZonedDateTime.parse 后时区为 +8，但本地时区就是 +8，所以此时 getHour() 为 0，再 withZoneSameInstant 转换为 UTC 时区，少 8 小时，所以 getHour() 会 -8，就是 16
+    assertEquals(ZonedDateTime.parse("00", DateUtils.getDefaultFormatter("HH", ZoneOffset.ofHours(8))).withZoneSameInstant(ZoneOffset.UTC).getHour(), 16);
   }
 
   @DisplayName("convertMonthText：转换数字月到文本月")

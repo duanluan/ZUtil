@@ -63,6 +63,14 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
       if ((lowercasePattern.contains("h") || lowercasePattern.contains("k")) && fieldValueMap.containsKey(maybeExistTemporalField)) {
         fieldValueMap.remove(maybeExistTemporalField);
       }
+      maybeExistTemporalField = ChronoField.MINUTE_OF_HOUR;
+      if ((pattern.contains("m")) && fieldValueMap.containsKey(maybeExistTemporalField)) {
+        fieldValueMap.remove(maybeExistTemporalField);
+      }
+      maybeExistTemporalField = ChronoField.SECOND_OF_MINUTE;
+      if ((pattern.contains("s")) && fieldValueMap.containsKey(maybeExistTemporalField)) {
+        fieldValueMap.remove(maybeExistTemporalField);
+      }
     }
 
     for (Map.Entry<TemporalField, Long> fieldValueEntry : fieldValueMap.entrySet()) {
@@ -92,6 +100,8 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     fieldValueMap.put(ChronoField.MONTH_OF_YEAR, 1L);
     fieldValueMap.put(ChronoField.DAY_OF_MONTH, 1L);
     fieldValueMap.put(ChronoField.HOUR_OF_DAY, 0L);
+    fieldValueMap.put(ChronoField.MINUTE_OF_HOUR, 0L);
+    fieldValueMap.put(ChronoField.SECOND_OF_MINUTE, 0L);
     DateTimeFormatter dateTimeFormatter;
     DateTimeFormatterBuilder formatterBuilder = getFormatterBuilder(pattern, fieldValueMap);
     if (locale != null) {
