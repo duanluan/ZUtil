@@ -38,7 +38,7 @@ public class HttpUtils extends com.ejlchina.okhttps.HttpUtils {
    * @param params 参数
    * @return URL 参数
    */
-  public static String toUrlParams(@NonNull final String prefix, @NonNull final Map<String, Object> params) {
+  public static String toUrlParams(@NonNull final String prefix, final Map<String, Object> params) {
     if (MapUtils.isEmpty(params)) {
       return prefix;
     }
@@ -63,7 +63,7 @@ public class HttpUtils extends com.ejlchina.okhttps.HttpUtils {
    * @param params 参数
    * @return URL 参数
    */
-  public static String toUrlParams(@NonNull final Map<String, Object> params) {
+  public static String toUrlParams(final Map<String, Object> params) {
     return toUrlParams("?", params);
   }
 
@@ -182,7 +182,7 @@ public class HttpUtils extends com.ejlchina.okhttps.HttpUtils {
    * @param <T>         返回类型
    * @return 响应体
    */
-  public static <T> T getByHeader(@NonNull final String url, @NonNull final String contentType, @NonNull final Map<String, Object> params, @NonNull final Map<String, String> headers, @NonNull final Class<T> resultClass) {
+  public static <T> T getByHeader(@NonNull final String url, @NonNull final String contentType, final Map<String, Object> params, final Map<String, String> headers, @NonNull final Class<T> resultClass) {
     return sync(ReqMethodConstant.GET, url, contentType, params, headers, resultClass);
   }
 
@@ -196,7 +196,7 @@ public class HttpUtils extends com.ejlchina.okhttps.HttpUtils {
    * @param <T>         返回类型
    * @return 响应体
    */
-  public static <T> T getByHeader(@NonNull final String url, @NonNull final Map<String, Object> params, @NonNull final Map<String, String> headers, @NonNull final Class<T> resultClass) {
+  public static <T> T getByHeader(@NonNull final String url, final Map<String, Object> params, final Map<String, String> headers, @NonNull final Class<T> resultClass) {
     return sync(ReqMethodConstant.GET, url, null, params, headers, resultClass);
   }
 
@@ -209,7 +209,7 @@ public class HttpUtils extends com.ejlchina.okhttps.HttpUtils {
    * @param <T>         返回类型
    * @return 响应体
    */
-  public static <T> T getByHeader(@NonNull final String url, @NonNull final Map<String, String> headers, @NonNull final Class<T> resultClass) {
+  public static <T> T getByHeader(@NonNull final String url, final Map<String, String> headers, @NonNull final Class<T> resultClass) {
     return sync(ReqMethodConstant.GET, url, null, null, headers, resultClass);
   }
 
@@ -221,7 +221,7 @@ public class HttpUtils extends com.ejlchina.okhttps.HttpUtils {
    * @param headers 消息头
    * @return 响应体
    */
-  public static HttpResult.Body getByHeader(@NonNull final String url, @NonNull final Map<String, Object> params, @NonNull final Map<String, String> headers) {
+  public static HttpResult.Body getByHeader(@NonNull final String url, final Map<String, Object> params, final Map<String, String> headers) {
     return sync(ReqMethodConstant.GET, url, null, params, headers, HttpResult.Body.class);
   }
 
@@ -232,7 +232,7 @@ public class HttpUtils extends com.ejlchina.okhttps.HttpUtils {
    * @param headers 消息头
    * @return 响应体
    */
-  public static HttpResult.Body getByHeader(@NonNull final String url, @NonNull final Map<String, String> headers) {
+  public static HttpResult.Body getByHeader(@NonNull final String url, final Map<String, String> headers) {
     return sync(ReqMethodConstant.GET, url, null, null, headers, HttpResult.Body.class);
   }
 
@@ -246,7 +246,7 @@ public class HttpUtils extends com.ejlchina.okhttps.HttpUtils {
    * @param <T>         返回类型
    * @return 响应体
    */
-  public static <T> T get(@NonNull final String url, @NonNull final String contentType, @NonNull final Map<String, Object> params, @NonNull final Class<T> resultClass) {
+  public static <T> T get(@NonNull final String url, @NonNull final String contentType, final Map<String, Object> params, @NonNull final Class<T> resultClass) {
     return sync(ReqMethodConstant.GET, url, contentType, params, null, resultClass);
   }
 
@@ -259,7 +259,7 @@ public class HttpUtils extends com.ejlchina.okhttps.HttpUtils {
    * @param <T>         返回类型
    * @return 响应体
    */
-  public static <T> T get(@NonNull final String url, @NonNull final Map<String, Object> params, @NonNull final Class<T> resultClass) {
+  public static <T> T get(@NonNull final String url, final Map<String, Object> params, @NonNull final Class<T> resultClass) {
     return sync(ReqMethodConstant.GET, url, null, params, null, resultClass);
   }
 
@@ -282,7 +282,7 @@ public class HttpUtils extends com.ejlchina.okhttps.HttpUtils {
    * @param params 参数
    * @return 响应体
    */
-  public static HttpResult.Body get(@NonNull final String url, @NonNull final Map<String, Object> params) {
+  public static HttpResult.Body get(@NonNull final String url, final Map<String, Object> params) {
     return sync(ReqMethodConstant.GET, url, null, params, null, HttpResult.Body.class);
   }
 
@@ -307,7 +307,7 @@ public class HttpUtils extends com.ejlchina.okhttps.HttpUtils {
    * @param <T>         返回类型
    * @return 响应体
    */
-  public static <T> T postByHeader(@NonNull final String url, @NonNull final String contentType, @NonNull final Map<String, Object> params, @NonNull final Map<String, String> headers, @NonNull final Class<T> resultClass) {
+  public static <T> T postByHeader(@NonNull final String url, @NonNull final String contentType, final Map<String, Object> params, final Map<String, String> headers, @NonNull final Class<T> resultClass) {
     return sync(ReqMethodConstant.POST, url, contentType, params, headers, resultClass);
   }
 
@@ -321,7 +321,7 @@ public class HttpUtils extends com.ejlchina.okhttps.HttpUtils {
    * @param <T>         返回类型
    * @return 响应体
    */
-  public static <T> T postByHeader(@NonNull final String url, @NonNull final Map<String, Object> params, @NonNull final Map<String, String> headers, @NonNull final Class<T> resultClass) {
+  public static <T> T postByHeader(@NonNull final String url, final Map<String, Object> params, final Map<String, String> headers, @NonNull final Class<T> resultClass) {
     return sync(ReqMethodConstant.POST, url, null, params, headers, resultClass);
   }
 
@@ -334,7 +334,7 @@ public class HttpUtils extends com.ejlchina.okhttps.HttpUtils {
    * @param <T>         返回类型
    * @return 响应体
    */
-  public static <T> T postByHeader(@NonNull final String url, @NonNull final Map<String, String> headers, @NonNull final Class<T> resultClass) {
+  public static <T> T postByHeader(@NonNull final String url, final Map<String, String> headers, @NonNull final Class<T> resultClass) {
     return sync(ReqMethodConstant.POST, url, null, null, headers, resultClass);
   }
 
@@ -347,7 +347,7 @@ public class HttpUtils extends com.ejlchina.okhttps.HttpUtils {
    * @param headers     消息头
    * @return 响应体
    */
-  public static HttpResult.Body postByHeader(@NonNull final String url, @NonNull final String contentType, @NonNull final Map<String, Object> params, @NonNull final Map<String, String> headers) {
+  public static HttpResult.Body postByHeader(@NonNull final String url, @NonNull final String contentType, final Map<String, Object> params, final Map<String, String> headers) {
     return sync(ReqMethodConstant.POST, url, contentType, params, headers, HttpResult.Body.class);
   }
 
@@ -359,7 +359,7 @@ public class HttpUtils extends com.ejlchina.okhttps.HttpUtils {
    * @param headers 消息头
    * @return 响应体
    */
-  public static HttpResult.Body postByHeader(@NonNull final String url, @NonNull final Map<String, Object> params, @NonNull final Map<String, String> headers) {
+  public static HttpResult.Body postByHeader(@NonNull final String url, final Map<String, Object> params, final Map<String, String> headers) {
     return sync(ReqMethodConstant.POST, url, null, params, headers, HttpResult.Body.class);
   }
 
@@ -370,7 +370,7 @@ public class HttpUtils extends com.ejlchina.okhttps.HttpUtils {
    * @param headers 消息头
    * @return 响应体
    */
-  public static HttpResult.Body postByHeader(@NonNull final String url, @NonNull final Map<String, String> headers) {
+  public static HttpResult.Body postByHeader(@NonNull final String url, final Map<String, String> headers) {
     return sync(ReqMethodConstant.POST, url, null, null, headers, HttpResult.Body.class);
   }
 
@@ -384,7 +384,7 @@ public class HttpUtils extends com.ejlchina.okhttps.HttpUtils {
    * @param <T>         返回类型
    * @return 响应体
    */
-  public static <T> T post(@NonNull final String url, @NonNull final String contentType, @NonNull final Map<String, Object> params, @NonNull final Class<T> resultClass) {
+  public static <T> T post(@NonNull final String url, @NonNull final String contentType, final Map<String, Object> params, @NonNull final Class<T> resultClass) {
     return sync(ReqMethodConstant.POST, url, contentType, params, null, resultClass);
   }
 
@@ -397,7 +397,7 @@ public class HttpUtils extends com.ejlchina.okhttps.HttpUtils {
    * @param <T>         返回类型
    * @return 响应体
    */
-  public static <T> T post(@NonNull final String url, @NonNull final Map<String, Object> params, @NonNull final Class<T> resultClass) {
+  public static <T> T post(@NonNull final String url, final Map<String, Object> params, @NonNull final Class<T> resultClass) {
     return sync(ReqMethodConstant.POST, url, null, params, null, resultClass);
   }
 
@@ -421,7 +421,7 @@ public class HttpUtils extends com.ejlchina.okhttps.HttpUtils {
    * @param params      参数
    * @return 响应体
    */
-  public static HttpResult.Body post(@NonNull final String url, @NonNull final String contentType, @NonNull final Map<String, Object> params) {
+  public static HttpResult.Body post(@NonNull final String url, @NonNull final String contentType, final Map<String, Object> params) {
     return sync(ReqMethodConstant.POST, url, contentType, params, null, HttpResult.Body.class);
   }
 
@@ -432,7 +432,7 @@ public class HttpUtils extends com.ejlchina.okhttps.HttpUtils {
    * @param params 参数
    * @return 响应体
    */
-  public static HttpResult.Body post(@NonNull final String url, @NonNull final Map<String, Object> params) {
+  public static HttpResult.Body post(@NonNull final String url, final Map<String, Object> params) {
     return sync(ReqMethodConstant.POST, url, null, params, null, HttpResult.Body.class);
   }
 
@@ -457,7 +457,7 @@ public class HttpUtils extends com.ejlchina.okhttps.HttpUtils {
    * @param <T>         返回类型
    * @return 响应体
    */
-  public static <T> T putByHeader(@NonNull final String url, @NonNull final String contentType, @NonNull final Map<String, Object> params, @NonNull final Map<String, String> headers, @NonNull final Class<T> resultClass) {
+  public static <T> T putByHeader(@NonNull final String url, @NonNull final String contentType, final Map<String, Object> params, final Map<String, String> headers, @NonNull final Class<T> resultClass) {
     return sync(ReqMethodConstant.PUT, url, contentType, params, headers, resultClass);
   }
 
@@ -471,7 +471,7 @@ public class HttpUtils extends com.ejlchina.okhttps.HttpUtils {
    * @param <T>         返回类型
    * @return 响应体
    */
-  public static <T> T putByHeader(@NonNull final String url, @NonNull final Map<String, Object> params, @NonNull final Map<String, String> headers, @NonNull final Class<T> resultClass) {
+  public static <T> T putByHeader(@NonNull final String url, final Map<String, Object> params, final Map<String, String> headers, @NonNull final Class<T> resultClass) {
     return sync(ReqMethodConstant.PUT, url, null, params, headers, resultClass);
   }
 
@@ -484,7 +484,7 @@ public class HttpUtils extends com.ejlchina.okhttps.HttpUtils {
    * @param <T>         返回类型
    * @return 响应体
    */
-  public static <T> T putByHeader(@NonNull final String url, @NonNull final Map<String, String> headers, @NonNull final Class<T> resultClass) {
+  public static <T> T putByHeader(@NonNull final String url, final Map<String, String> headers, @NonNull final Class<T> resultClass) {
     return sync(ReqMethodConstant.PUT, url, null, null, headers, resultClass);
   }
 
@@ -497,7 +497,7 @@ public class HttpUtils extends com.ejlchina.okhttps.HttpUtils {
    * @param headers     消息头
    * @return 响应体
    */
-  public static HttpResult.Body putByHeader(@NonNull final String url, @NonNull final String contentType, @NonNull final Map<String, Object> params, @NonNull final Map<String, String> headers) {
+  public static HttpResult.Body putByHeader(@NonNull final String url, @NonNull final String contentType, final Map<String, Object> params, final Map<String, String> headers) {
     return sync(ReqMethodConstant.PUT, url, contentType, params, headers, HttpResult.Body.class);
   }
 
@@ -509,7 +509,7 @@ public class HttpUtils extends com.ejlchina.okhttps.HttpUtils {
    * @param headers 消息头
    * @return 响应体
    */
-  public static HttpResult.Body putByHeader(@NonNull final String url, @NonNull final Map<String, Object> params, @NonNull final Map<String, String> headers) {
+  public static HttpResult.Body putByHeader(@NonNull final String url, final Map<String, Object> params, final Map<String, String> headers) {
     return sync(ReqMethodConstant.PUT, url, null, params, headers, HttpResult.Body.class);
   }
 
@@ -520,7 +520,7 @@ public class HttpUtils extends com.ejlchina.okhttps.HttpUtils {
    * @param headers 消息头
    * @return 响应体
    */
-  public static HttpResult.Body putByHeader(@NonNull final String url, @NonNull final Map<String, String> headers) {
+  public static HttpResult.Body putByHeader(@NonNull final String url, final Map<String, String> headers) {
     return sync(ReqMethodConstant.PUT, url, null, null, headers, HttpResult.Body.class);
   }
 
@@ -534,7 +534,7 @@ public class HttpUtils extends com.ejlchina.okhttps.HttpUtils {
    * @param <T>         返回类型
    * @return 响应体
    */
-  public static <T> T put(@NonNull final String url, @NonNull final String contentType, @NonNull final Map<String, Object> params, @NonNull final Class<T> resultClass) {
+  public static <T> T put(@NonNull final String url, @NonNull final String contentType, final Map<String, Object> params, @NonNull final Class<T> resultClass) {
     return sync(ReqMethodConstant.PUT, url, contentType, params, null, resultClass);
   }
 
@@ -547,7 +547,7 @@ public class HttpUtils extends com.ejlchina.okhttps.HttpUtils {
    * @param <T>         返回类型
    * @return 响应体
    */
-  public static <T> T put(@NonNull final String url, @NonNull final Map<String, Object> params, @NonNull final Class<T> resultClass) {
+  public static <T> T put(@NonNull final String url, final Map<String, Object> params, @NonNull final Class<T> resultClass) {
     return sync(ReqMethodConstant.PUT, url, null, params, null, resultClass);
   }
 
@@ -571,7 +571,7 @@ public class HttpUtils extends com.ejlchina.okhttps.HttpUtils {
    * @param params      参数
    * @return 响应体
    */
-  public static HttpResult.Body put(@NonNull final String url, @NonNull final String contentType, @NonNull final Map<String, Object> params) {
+  public static HttpResult.Body put(@NonNull final String url, @NonNull final String contentType, final Map<String, Object> params) {
     return sync(ReqMethodConstant.PUT, url, contentType, params, null, HttpResult.Body.class);
   }
 
@@ -582,7 +582,7 @@ public class HttpUtils extends com.ejlchina.okhttps.HttpUtils {
    * @param params 参数
    * @return 响应体
    */
-  public static HttpResult.Body put(@NonNull final String url, @NonNull final Map<String, Object> params) {
+  public static HttpResult.Body put(@NonNull final String url, final Map<String, Object> params) {
     return sync(ReqMethodConstant.PUT, url, null, params, null, HttpResult.Body.class);
   }
 
@@ -607,7 +607,7 @@ public class HttpUtils extends com.ejlchina.okhttps.HttpUtils {
    * @param <T>         返回类型
    * @return 响应体
    */
-  public static <T> T patchByHeader(@NonNull final String url, @NonNull final String contentType, @NonNull final Map<String, Object> params, @NonNull final Map<String, String> headers, @NonNull final Class<T> resultClass) {
+  public static <T> T patchByHeader(@NonNull final String url, @NonNull final String contentType, final Map<String, Object> params, final Map<String, String> headers, @NonNull final Class<T> resultClass) {
     return sync(ReqMethodConstant.PATCH, url, contentType, params, headers, resultClass);
   }
 
@@ -621,7 +621,7 @@ public class HttpUtils extends com.ejlchina.okhttps.HttpUtils {
    * @param <T>         返回类型
    * @return 响应体
    */
-  public static <T> T patchByHeader(@NonNull final String url, @NonNull final Map<String, Object> params, @NonNull final Map<String, String> headers, @NonNull final Class<T> resultClass) {
+  public static <T> T patchByHeader(@NonNull final String url, final Map<String, Object> params, final Map<String, String> headers, @NonNull final Class<T> resultClass) {
     return sync(ReqMethodConstant.PATCH, url, null, params, headers, resultClass);
   }
 
@@ -634,7 +634,7 @@ public class HttpUtils extends com.ejlchina.okhttps.HttpUtils {
    * @param <T>         返回类型
    * @return 响应体
    */
-  public static <T> T patchByHeader(@NonNull final String url, @NonNull final Map<String, String> headers, @NonNull final Class<T> resultClass) {
+  public static <T> T patchByHeader(@NonNull final String url, final Map<String, String> headers, @NonNull final Class<T> resultClass) {
     return sync(ReqMethodConstant.PATCH, url, null, null, headers, resultClass);
   }
 
@@ -647,7 +647,7 @@ public class HttpUtils extends com.ejlchina.okhttps.HttpUtils {
    * @param headers     消息头
    * @return 响应体
    */
-  public static HttpResult.Body patchByHeader(@NonNull final String url, @NonNull final String contentType, @NonNull final Map<String, Object> params, @NonNull final Map<String, String> headers) {
+  public static HttpResult.Body patchByHeader(@NonNull final String url, @NonNull final String contentType, final Map<String, Object> params, final Map<String, String> headers) {
     return sync(ReqMethodConstant.PATCH, url, contentType, params, headers, HttpResult.Body.class);
   }
 
@@ -660,7 +660,7 @@ public class HttpUtils extends com.ejlchina.okhttps.HttpUtils {
    * @param headers 消息头
    * @return 响应体
    */
-  public static HttpResult.Body patchByHeader(@NonNull final String url, @NonNull final Map<String, Object> params, @NonNull final Map<String, String> headers) {
+  public static HttpResult.Body patchByHeader(@NonNull final String url, final Map<String, Object> params, final Map<String, String> headers) {
     return sync(ReqMethodConstant.PATCH, url, null, params, headers, HttpResult.Body.class);
   }
 
@@ -671,7 +671,7 @@ public class HttpUtils extends com.ejlchina.okhttps.HttpUtils {
    * @param headers 消息头
    * @return 响应体
    */
-  public static HttpResult.Body patchByHeader(@NonNull final String url, @NonNull final Map<String, String> headers) {
+  public static HttpResult.Body patchByHeader(@NonNull final String url, final Map<String, String> headers) {
     return sync(ReqMethodConstant.PATCH, url, null, null, headers, HttpResult.Body.class);
   }
 
@@ -685,7 +685,7 @@ public class HttpUtils extends com.ejlchina.okhttps.HttpUtils {
    * @param <T>         返回类型
    * @return 响应体
    */
-  public static <T> T patch(@NonNull final String url, @NonNull final String contentType, @NonNull final Map<String, Object> params, @NonNull final Class<T> resultClass) {
+  public static <T> T patch(@NonNull final String url, @NonNull final String contentType, final Map<String, Object> params, @NonNull final Class<T> resultClass) {
     return sync(ReqMethodConstant.PATCH, url, contentType, params, null, resultClass);
   }
 
@@ -698,7 +698,7 @@ public class HttpUtils extends com.ejlchina.okhttps.HttpUtils {
    * @param <T>         返回类型
    * @return 响应体
    */
-  public static <T> T patch(@NonNull final String url, @NonNull final Map<String, Object> params, @NonNull final Class<T> resultClass) {
+  public static <T> T patch(@NonNull final String url, final Map<String, Object> params, @NonNull final Class<T> resultClass) {
     return sync(ReqMethodConstant.PATCH, url, null, params, null, resultClass);
   }
 
@@ -722,7 +722,7 @@ public class HttpUtils extends com.ejlchina.okhttps.HttpUtils {
    * @param params      参数
    * @return 响应体
    */
-  public static HttpResult.Body patch(@NonNull final String url, @NonNull final String contentType, @NonNull final Map<String, Object> params) {
+  public static HttpResult.Body patch(@NonNull final String url, @NonNull final String contentType, final Map<String, Object> params) {
     return sync(ReqMethodConstant.PATCH, url, contentType, params, null, HttpResult.Body.class);
   }
 
@@ -733,7 +733,7 @@ public class HttpUtils extends com.ejlchina.okhttps.HttpUtils {
    * @param params 参数
    * @return 响应体
    */
-  public static HttpResult.Body patch(@NonNull final String url, @NonNull final Map<String, Object> params) {
+  public static HttpResult.Body patch(@NonNull final String url, final Map<String, Object> params) {
     return sync(ReqMethodConstant.PATCH, url, null, params, null, HttpResult.Body.class);
   }
 
@@ -758,7 +758,7 @@ public class HttpUtils extends com.ejlchina.okhttps.HttpUtils {
    * @param <T>         返回类型
    * @return 响应体
    */
-  public static <T> T deleteByHeader(@NonNull final String url, @NonNull final String contentType, @NonNull final Map<String, Object> params, @NonNull final Map<String, String> headers, @NonNull final Class<T> resultClass) {
+  public static <T> T deleteByHeader(@NonNull final String url, @NonNull final String contentType, final Map<String, Object> params, final Map<String, String> headers, @NonNull final Class<T> resultClass) {
     return sync(ReqMethodConstant.DELETE, url, contentType, params, headers, resultClass);
   }
 
@@ -772,7 +772,7 @@ public class HttpUtils extends com.ejlchina.okhttps.HttpUtils {
    * @param <T>         返回类型
    * @return 响应体
    */
-  public static <T> T deleteByHeader(@NonNull final String url, @NonNull final Map<String, Object> params, @NonNull final Map<String, String> headers, @NonNull final Class<T> resultClass) {
+  public static <T> T deleteByHeader(@NonNull final String url, final Map<String, Object> params, final Map<String, String> headers, @NonNull final Class<T> resultClass) {
     return sync(ReqMethodConstant.DELETE, url, null, params, headers, resultClass);
   }
 
@@ -785,7 +785,7 @@ public class HttpUtils extends com.ejlchina.okhttps.HttpUtils {
    * @param <T>         返回类型
    * @return 响应体
    */
-  public static <T> T deleteByHeader(@NonNull final String url, @NonNull final Map<String, String> headers, @NonNull final Class<T> resultClass) {
+  public static <T> T deleteByHeader(@NonNull final String url, final Map<String, String> headers, @NonNull final Class<T> resultClass) {
     return sync(ReqMethodConstant.DELETE, url, null, null, headers, resultClass);
   }
 
@@ -798,7 +798,7 @@ public class HttpUtils extends com.ejlchina.okhttps.HttpUtils {
    * @param headers 消息头
    * @return 响应体
    */
-  public static HttpResult.Body deleteByHeader(@NonNull final String url, @NonNull final Map<String, Object> params, @NonNull final Map<String, String> headers) {
+  public static HttpResult.Body deleteByHeader(@NonNull final String url, final Map<String, Object> params, final Map<String, String> headers) {
     return sync(ReqMethodConstant.DELETE, url, null, params, headers, HttpResult.Body.class);
   }
 
@@ -809,7 +809,7 @@ public class HttpUtils extends com.ejlchina.okhttps.HttpUtils {
    * @param headers 消息头
    * @return 响应体
    */
-  public static HttpResult.Body deleteByHeader(@NonNull final String url, @NonNull final Map<String, String> headers) {
+  public static HttpResult.Body deleteByHeader(@NonNull final String url, final Map<String, String> headers) {
     return sync(ReqMethodConstant.DELETE, url, null, null, headers, HttpResult.Body.class);
   }
 
@@ -823,7 +823,7 @@ public class HttpUtils extends com.ejlchina.okhttps.HttpUtils {
    * @param <T>         返回类型
    * @return 响应体
    */
-  public static <T> T delete(@NonNull final String url, @NonNull final String contentType, @NonNull final Map<String, Object> params, @NonNull final Class<T> resultClass) {
+  public static <T> T delete(@NonNull final String url, @NonNull final String contentType, final Map<String, Object> params, @NonNull final Class<T> resultClass) {
     return sync(ReqMethodConstant.DELETE, url, contentType, params, null, resultClass);
   }
 
@@ -836,7 +836,7 @@ public class HttpUtils extends com.ejlchina.okhttps.HttpUtils {
    * @param <T>         返回类型
    * @return 响应体
    */
-  public static <T> T delete(@NonNull final String url, @NonNull final Map<String, Object> params, @NonNull final Class<T> resultClass) {
+  public static <T> T delete(@NonNull final String url, final Map<String, Object> params, @NonNull final Class<T> resultClass) {
     return sync(ReqMethodConstant.DELETE, url, null, params, null, resultClass);
   }
 
@@ -859,7 +859,7 @@ public class HttpUtils extends com.ejlchina.okhttps.HttpUtils {
    * @param params 参数
    * @return 响应体
    */
-  public static HttpResult.Body delete(@NonNull final String url, @NonNull final Map<String, Object> params) {
+  public static HttpResult.Body delete(@NonNull final String url, final Map<String, Object> params) {
     return sync(ReqMethodConstant.DELETE, url, null, params, null, HttpResult.Body.class);
   }
 
