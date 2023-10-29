@@ -1,10 +1,10 @@
 package top.csaf.http;
 
+import cn.zhxu.okhttps.HttpResult;
+import cn.zhxu.okhttps.SHttpTask;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
-import com.ejlchina.okhttps.HttpResult;
-import com.ejlchina.okhttps.SHttpTask;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -29,7 +29,7 @@ import java.util.Set;
  * HTTP 工具类
  */
 @Slf4j
-public class HttpUtils extends com.ejlchina.okhttps.HttpUtils {
+public class HttpUtils extends cn.zhxu.okhttps.HttpUtils {
 
   /**
    * 键值对参数转换为 URL 参数

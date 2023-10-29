@@ -4,7 +4,7 @@
 
   <groupId>top.csaf</groupId>
   <artifactId>ZUtil</artifactId>
-  <version>1.13.2</version>
+  <version>1.13.3</version>
 
   <name>ZUtil</name>
   <url>https://github.com/duanluan/ZUtil</url>
@@ -43,7 +43,7 @@
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
-      <version>1.18.22</version>
+      <version>1.18.30</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -60,7 +60,7 @@
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
-      <version>3.12.0</version>
+      <version>3.13.0</version>
     </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
@@ -81,7 +81,7 @@
     <dependency>
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
-      <version>2.11.0</version>
+      <version>2.15.0</version>
     </dependency>
     <dependency>
       <groupId>commons-beanutils</groupId>
@@ -91,34 +91,34 @@
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-beans</artifactId>
-      <version>5.3.21</version>
+      <version>5.3.30</version>
     </dependency>
     <!-- 加密算法 -->
     <dependency>
       <groupId>org.bouncycastle</groupId>
-      <artifactId>bcprov-jdk15on</artifactId>
-      <version>1.70</version>
+      <artifactId>bcprov-jdk18on</artifactId>
+      <version>1.76</version>
     </dependency>
     <!-- HTTP、WebSocket、Stomp 请求 -->
     <dependency>
-      <groupId>com.ejlchina</groupId>
-      <artifactId>okhttps-jackson</artifactId>
-      <version>3.5.3</version>
+      <groupId>cn.zhxu</groupId>
+      <artifactId>okhttps-fastjson2-jsonb</artifactId>
+      <version>4.0.1</version>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-core</artifactId>
-      <version>2.13.2</version>
+      <artifactId>jackson-databind</artifactId>
+      <version>2.15.3</version>
     </dependency>
     <dependency>
       <groupId>com.alibaba.fastjson2</groupId>
       <artifactId>fastjson2</artifactId>
-      <version>2.0.4</version>
+      <version>2.0.14</version>
     </dependency>
     <dependency>
       <groupId>com.google.code.gson</groupId>
       <artifactId>gson</artifactId>
-      <version>2.9.0</version>
+      <version>2.10.1</version>
     </dependency>
     <!-- XML -->
     <dependency>
@@ -130,7 +130,7 @@
     <dependency>
       <groupId>org.yaml</groupId>
       <artifactId>snakeyaml</artifactId>
-      <version>2.0</version>
+      <version>2.2</version>
     </dependency>
 
 
@@ -138,41 +138,41 @@
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter</artifactId>
-      <version>5.8.2</version>
+      <version>5.10.0</version>
       <scope>test</scope>
     </dependency>
     <!-- JUnit 测试套件 -->
     <dependency>
       <groupId>org.junit.platform</groupId>
       <artifactId>junit-platform-suite</artifactId>
-      <version>1.8.2</version>
+      <version>1.10.0</version>
       <scope>test</scope>
     </dependency>
     <!-- Spring Test，此处主要用于调用 private 方法用于覆盖率测试 -->
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-test</artifactId>
-      <version>5.3.19</version>
+      <version>5.3.30</version>
       <scope>test</scope>
     </dependency>
     <!-- JMH -->
     <dependency>
       <groupId>org.openjdk.jmh</groupId>
       <artifactId>jmh-core</artifactId>
-      <version>1.34</version>
+      <version>1.37</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.openjdk.jmh</groupId>
       <artifactId>jmh-generator-annprocess</artifactId>
-      <version>1.34</version>
+      <version>1.37</version>
       <scope>test</scope>
     </dependency>
 
     <dependency>
       <groupId>cn.hutool</groupId>
       <artifactId>hutool-all</artifactId>
-      <version>5.8.11</version>
+      <version>5.8.22</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -184,7 +184,7 @@
     <dependency>
       <groupId>org.jsoup</groupId>
       <artifactId>jsoup</artifactId>
-      <version>1.15.3</version>
+      <version>1.16.2</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -196,7 +196,7 @@
     <dependency>
       <groupId>org.wicketstuff</groupId>
       <artifactId>wicketstuff-serializer-fast2</artifactId>
-      <version>9.13.0</version>
+      <version>9.15.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -295,7 +295,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-javadoc-plugin</artifactId>
-          <version>3.4.1</version>
+          <version>3.6.0</version>
           <executions>
             <execution>
               <id>attach-javadocs</id>
@@ -348,7 +348,7 @@
         <plugin>
           <groupId>org.jacoco</groupId>
           <artifactId>jacoco-maven-plugin</artifactId>
-          <version>0.8.8</version>
+          <version>0.8.11</version>
           <configuration>
             <!-- 指定包含 JaCoCo 代理的属性名 https://www.eclemma.org/jacoco/trunk/doc/prepare-agent-mojo.html#propertyName -->
             <!-- 使用 maven-surefire-plugin 时会覆盖 VM 参数，所以需要取名并配置到 maven-surefire-plugin 的 argLine 中 -->

@@ -9,7 +9,7 @@ import org.bouncycastle.crypto.paddings.BlockCipherPadding;
 import org.bouncycastle.crypto.paddings.PaddedBufferedBlockCipher;
 import org.bouncycastle.crypto.params.KeyParameter;
 import org.bouncycastle.crypto.params.ParametersWithIV;
-import org.bouncycastle.pqc.math.linearalgebra.ByteUtils;
+import org.bouncycastle.util.encoders.Hex;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.DESKeySpec;
@@ -88,9 +88,9 @@ public class SecurityUtils {
     keys = secretKeySpec.getEncoded();
 
     if (encrypting) {
-      return ByteUtils.toHexString(desEcb(keys, ArrayUtils.toBytes(in.toCharArray()), encrypting, padding));
+      return Hex.toHexString(desEcb(keys, ArrayUtils.toBytes(in.toCharArray()), encrypting, padding));
     }
-    byte[] bytes = desEcb(keys, ByteUtils.fromHexString(in), encrypting, padding);
+    byte[] bytes = desEcb(keys, Hex.decode(in), encrypting, padding);
     return new String(ArrayUtils.toChars(bytes));
   }
 
@@ -167,9 +167,9 @@ public class SecurityUtils {
     keys = secretKeySpec.getEncoded();
 
     if (encrypting) {
-      return ByteUtils.toHexString(desCbc(keys, ivs, ArrayUtils.toBytes(in.toCharArray()), encrypting, padding));
+      return Hex.toHexString(desCbc(keys, ivs, ArrayUtils.toBytes(in.toCharArray()), encrypting, padding));
     }
-    byte[] bytes = desCbc(keys, ivs, ByteUtils.fromHexString(in), encrypting, padding);
+    byte[] bytes = desCbc(keys, ivs, Hex.decode(in), encrypting, padding);
     return new String(ArrayUtils.toChars(bytes));
   }
 }

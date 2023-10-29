@@ -1,7 +1,7 @@
 package top.csaf.junit;
 
+import cn.zhxu.okhttps.HttpResult;
 import com.alibaba.fastjson2.JSONArray;
-import com.ejlchina.okhttps.HttpResult;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

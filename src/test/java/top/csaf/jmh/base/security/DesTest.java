@@ -3,12 +3,12 @@ package top.csaf.jmh.base.security;
 import org.bouncycastle.crypto.InvalidCipherTextException;
 import org.bouncycastle.crypto.paddings.ZeroBytePadding;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.bouncycastle.pqc.math.linearalgebra.ByteUtils;
+import org.bouncycastle.util.encoders.Hex;
 import org.junit.jupiter.api.Test;
 import org.openjdk.jmh.annotations.*;
 import top.csaf.ArrayUtils;
-import top.csaf.junit.BeanUtilsTest;
 import top.csaf.SecurityUtils;
+import top.csaf.junit.BeanUtilsTest;
 
 import javax.crypto.*;
 import javax.crypto.spec.DESKeySpec;
@@ -63,13 +63,13 @@ public class DesTest {
     Cipher cipher = Cipher.getInstance("DES/ECB/ZeroBytePadding", "BC");
     cipher.init(Cipher.ENCRYPT_MODE, securekey, new SecureRandom());
     byte[] bytes = cipher.doFinal(in);
-    return ByteUtils.toHexString(bytes);
+    return Hex.toHexString(bytes);
   }
 
   @Benchmark
   public String bouncyCastle() throws InvalidCipherTextException {
     byte[] bytes = SecurityUtils.desEcb(key, in, true, new ZeroBytePadding());
-    return ByteUtils.toHexString(bytes);
+    return Hex.toHexString(bytes);
   }
 }
 
