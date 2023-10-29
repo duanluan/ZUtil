@@ -4,7 +4,7 @@
 
   <groupId>top.csaf</groupId>
   <artifactId>ZUtil</artifactId>
-  <version>1.13.3</version>
+  <version>1.13.4</version>
 
   <name>ZUtil</name>
   <url>https://github.com/duanluan/ZUtil</url>
@@ -104,7 +104,20 @@
       <groupId>cn.zhxu</groupId>
       <artifactId>okhttps-fastjson2-jsonb</artifactId>
       <version>4.0.1</version>
+      <exclusions>
+        <!-- 解决 okhttp 和 okio 版本不兼容导致的 java.lang.NoSuchFieldError: Companion 错误 -->
+        <exclusion>
+          <groupId>com.squareup.okio</groupId>
+          <artifactId>okio</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
+    <dependency>
+      <groupId>com.squareup.okio</groupId>
+      <artifactId>okio</artifactId>
+      <version>3.6.0</version>
+    </dependency>
+
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
