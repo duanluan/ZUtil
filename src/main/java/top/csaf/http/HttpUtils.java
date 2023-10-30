@@ -97,10 +97,9 @@ public class HttpUtils extends cn.zhxu.okhttps.HttpUtils {
    * @param params        参数
    * @param headers       消息头
    * @param resultClass   响应体需要转换的类型
-   * @param <T>           返回类型
    * @return 响应体
    */
-  protected static <T> T sync(@NonNull final String requestMethod, @NonNull final String url, final String contentType, final Map<String, Object> params, final Map<String, String> headers, @NonNull final Class<T> resultClass) {
+  protected static Object sync(@NonNull final String requestMethod, @NonNull final String url, final String contentType, final Map<String, Object> params, final Map<String, String> headers, final Class resultClass) {
     if (StringUtils.isBlank(url)) {
       throw new IllegalArgumentException("Url: should not be blank");
     }
@@ -132,41 +131,44 @@ public class HttpUtils extends cn.zhxu.okhttps.HttpUtils {
       log.error(error.getMessage(), error);
       return null;
     }
+    if (resultClass == null) {
+      return result;
+    }
     HttpResult.Body body = result.getBody();
 
     // 根据不同返回类型返回结果
     if (HttpResult.Body.class.equals(resultClass)) {
-      return (T) body;
+      return body;
     }
     // String
     else if (String.class.equals(resultClass)) {
-      return (T) body.toString();
+      return body.toString();
     }
     // jackson
     else if (ObjectNode.class.equals(resultClass) || JsonNode.class.equals(resultClass) || ArrayNode.class.equals(resultClass)) {
       try {
-        return (T) new ObjectMapper().readTree(body.toString());
+        return new ObjectMapper().readTree(body.toString());
       } catch (JsonProcessingException e) {
         log.error(e.getMessage(), e);
       }
     }
     // fastjson
     else if (JSON.class.equals(resultClass)) {
-      return (T) JSON.parseObject(body.toString());
+      return JSON.parseObject(body.toString());
     } else if (JSONObject.class.equals(resultClass)) {
-      return (T) JSON.parseObject(body.toString());
+      return JSON.parseObject(body.toString());
     } else if (JSONArray.class.equals(resultClass)) {
-      return (T) JSON.parseArray(body.toString());
+      return JSON.parseArray(body.toString());
     }
     // gson
     else if (JsonElement.class.equals(resultClass)) {
-      return (T) JsonParser.parseString(body.toString());
+      return JsonParser.parseString(body.toString());
     } else if (JsonObject.class.equals(resultClass)) {
       JsonElement jsonElement = JsonParser.parseString(body.toString());
-      return (T) jsonElement.getAsJsonObject();
+      return jsonElement.getAsJsonObject();
     } else if (JsonArray.class.equals(resultClass)) {
       JsonElement jsonElement = JsonParser.parseString(body.toString());
-      return (T) jsonElement.getAsJsonArray();
+      return jsonElement.getAsJsonArray();
     }
     return body.toBean(resultClass);
   }
@@ -183,7 +185,7 @@ public class HttpUtils extends cn.zhxu.okhttps.HttpUtils {
    * @return 响应体
    */
   public static <T> T getByHeader(@NonNull final String url, @NonNull final String contentType, final Map<String, Object> params, final Map<String, String> headers, @NonNull final Class<T> resultClass) {
-    return sync(ReqMethodConstant.GET, url, contentType, params, headers, resultClass);
+    return (T) sync(ReqMethodConstant.GET, url, contentType, params, headers, resultClass);
   }
 
   /**
@@ -197,7 +199,7 @@ public class HttpUtils extends cn.zhxu.okhttps.HttpUtils {
    * @return 响应体
    */
   public static <T> T getByHeader(@NonNull final String url, final Map<String, Object> params, final Map<String, String> headers, @NonNull final Class<T> resultClass) {
-    return sync(ReqMethodConstant.GET, url, null, params, headers, resultClass);
+    return (T) sync(ReqMethodConstant.GET, url, null, params, headers, resultClass);
   }
 
   /**
@@ -210,7 +212,7 @@ public class HttpUtils extends cn.zhxu.okhttps.HttpUtils {
    * @return 响应体
    */
   public static <T> T getByHeader(@NonNull final String url, final Map<String, String> headers, @NonNull final Class<T> resultClass) {
-    return sync(ReqMethodConstant.GET, url, null, null, headers, resultClass);
+    return (T) sync(ReqMethodConstant.GET, url, null, null, headers, resultClass);
   }
 
   /**
@@ -221,8 +223,8 @@ public class HttpUtils extends cn.zhxu.okhttps.HttpUtils {
    * @param headers 消息头
    * @return 响应体
    */
-  public static HttpResult.Body getByHeader(@NonNull final String url, final Map<String, Object> params, final Map<String, String> headers) {
-    return sync(ReqMethodConstant.GET, url, null, params, headers, HttpResult.Body.class);
+  public static HttpResult getByHeader(@NonNull final String url, final Map<String, Object> params, final Map<String, String> headers) {
+    return (HttpResult) sync(ReqMethodConstant.GET, url, null, params, headers, null);
   }
 
   /**
@@ -232,8 +234,8 @@ public class HttpUtils extends cn.zhxu.okhttps.HttpUtils {
    * @param headers 消息头
    * @return 响应体
    */
-  public static HttpResult.Body getByHeader(@NonNull final String url, final Map<String, String> headers) {
-    return sync(ReqMethodConstant.GET, url, null, null, headers, HttpResult.Body.class);
+  public static HttpResult getByHeader(@NonNull final String url, final Map<String, String> headers) {
+    return (HttpResult) sync(ReqMethodConstant.GET, url, null, null, headers, null);
   }
 
   /**
@@ -247,7 +249,7 @@ public class HttpUtils extends cn.zhxu.okhttps.HttpUtils {
    * @return 响应体
    */
   public static <T> T get(@NonNull final String url, @NonNull final String contentType, final Map<String, Object> params, @NonNull final Class<T> resultClass) {
-    return sync(ReqMethodConstant.GET, url, contentType, params, null, resultClass);
+    return (T) sync(ReqMethodConstant.GET, url, contentType, params, null, resultClass);
   }
 
   /**
@@ -260,7 +262,7 @@ public class HttpUtils extends cn.zhxu.okhttps.HttpUtils {
    * @return 响应体
    */
   public static <T> T get(@NonNull final String url, final Map<String, Object> params, @NonNull final Class<T> resultClass) {
-    return sync(ReqMethodConstant.GET, url, null, params, null, resultClass);
+    return (T) sync(ReqMethodConstant.GET, url, null, params, null, resultClass);
   }
 
   /**
@@ -272,7 +274,7 @@ public class HttpUtils extends cn.zhxu.okhttps.HttpUtils {
    * @return 响应体
    */
   public static <T> T get(@NonNull final String url, @NonNull final Class<T> resultClass) {
-    return sync(ReqMethodConstant.GET, url, null, null, null, resultClass);
+    return (T) sync(ReqMethodConstant.GET, url, null, null, null, resultClass);
   }
 
   /**
@@ -282,8 +284,8 @@ public class HttpUtils extends cn.zhxu.okhttps.HttpUtils {
    * @param params 参数
    * @return 响应体
    */
-  public static HttpResult.Body get(@NonNull final String url, final Map<String, Object> params) {
-    return sync(ReqMethodConstant.GET, url, null, params, null, HttpResult.Body.class);
+  public static HttpResult get(@NonNull final String url, final Map<String, Object> params) {
+    return (HttpResult) sync(ReqMethodConstant.GET, url, null, params, null, null);
   }
 
   /**
@@ -292,8 +294,8 @@ public class HttpUtils extends cn.zhxu.okhttps.HttpUtils {
    * @param url 请求地址
    * @return 响应体
    */
-  public static HttpResult.Body get(@NonNull final String url) {
-    return sync(ReqMethodConstant.GET, url, null, null, null, HttpResult.Body.class);
+  public static HttpResult get(@NonNull final String url) {
+    return (HttpResult) sync(ReqMethodConstant.GET, url, null, null, null, null);
   }
 
   /**
@@ -308,7 +310,7 @@ public class HttpUtils extends cn.zhxu.okhttps.HttpUtils {
    * @return 响应体
    */
   public static <T> T postByHeader(@NonNull final String url, @NonNull final String contentType, final Map<String, Object> params, final Map<String, String> headers, @NonNull final Class<T> resultClass) {
-    return sync(ReqMethodConstant.POST, url, contentType, params, headers, resultClass);
+    return (T) sync(ReqMethodConstant.POST, url, contentType, params, headers, resultClass);
   }
 
   /**
@@ -322,7 +324,7 @@ public class HttpUtils extends cn.zhxu.okhttps.HttpUtils {
    * @return 响应体
    */
   public static <T> T postByHeader(@NonNull final String url, final Map<String, Object> params, final Map<String, String> headers, @NonNull final Class<T> resultClass) {
-    return sync(ReqMethodConstant.POST, url, null, params, headers, resultClass);
+    return (T) sync(ReqMethodConstant.POST, url, null, params, headers, resultClass);
   }
 
   /**
@@ -335,7 +337,7 @@ public class HttpUtils extends cn.zhxu.okhttps.HttpUtils {
    * @return 响应体
    */
   public static <T> T postByHeader(@NonNull final String url, final Map<String, String> headers, @NonNull final Class<T> resultClass) {
-    return sync(ReqMethodConstant.POST, url, null, null, headers, resultClass);
+    return (T) sync(ReqMethodConstant.POST, url, null, null, headers, resultClass);
   }
 
   /**
@@ -347,8 +349,8 @@ public class HttpUtils extends cn.zhxu.okhttps.HttpUtils {
    * @param headers     消息头
    * @return 响应体
    */
-  public static HttpResult.Body postByHeader(@NonNull final String url, @NonNull final String contentType, final Map<String, Object> params, final Map<String, String> headers) {
-    return sync(ReqMethodConstant.POST, url, contentType, params, headers, HttpResult.Body.class);
+  public static HttpResult postByHeader(@NonNull final String url, @NonNull final String contentType, final Map<String, Object> params, final Map<String, String> headers) {
+    return (HttpResult) sync(ReqMethodConstant.POST, url, contentType, params, headers, null);
   }
 
   /**
@@ -359,8 +361,8 @@ public class HttpUtils extends cn.zhxu.okhttps.HttpUtils {
    * @param headers 消息头
    * @return 响应体
    */
-  public static HttpResult.Body postByHeader(@NonNull final String url, final Map<String, Object> params, final Map<String, String> headers) {
-    return sync(ReqMethodConstant.POST, url, null, params, headers, HttpResult.Body.class);
+  public static HttpResult postByHeader(@NonNull final String url, final Map<String, Object> params, final Map<String, String> headers) {
+    return (HttpResult) sync(ReqMethodConstant.POST, url, null, params, headers, null);
   }
 
   /**
@@ -370,8 +372,8 @@ public class HttpUtils extends cn.zhxu.okhttps.HttpUtils {
    * @param headers 消息头
    * @return 响应体
    */
-  public static HttpResult.Body postByHeader(@NonNull final String url, final Map<String, String> headers) {
-    return sync(ReqMethodConstant.POST, url, null, null, headers, HttpResult.Body.class);
+  public static HttpResult postByHeader(@NonNull final String url, final Map<String, String> headers) {
+    return (HttpResult) sync(ReqMethodConstant.POST, url, null, null, headers, null);
   }
 
   /**
@@ -385,7 +387,7 @@ public class HttpUtils extends cn.zhxu.okhttps.HttpUtils {
    * @return 响应体
    */
   public static <T> T post(@NonNull final String url, @NonNull final String contentType, final Map<String, Object> params, @NonNull final Class<T> resultClass) {
-    return sync(ReqMethodConstant.POST, url, contentType, params, null, resultClass);
+    return (T) sync(ReqMethodConstant.POST, url, contentType, params, null, resultClass);
   }
 
   /**
@@ -398,7 +400,7 @@ public class HttpUtils extends cn.zhxu.okhttps.HttpUtils {
    * @return 响应体
    */
   public static <T> T post(@NonNull final String url, final Map<String, Object> params, @NonNull final Class<T> resultClass) {
-    return sync(ReqMethodConstant.POST, url, null, params, null, resultClass);
+    return (T) sync(ReqMethodConstant.POST, url, null, params, null, resultClass);
   }
 
   /**
@@ -410,7 +412,7 @@ public class HttpUtils extends cn.zhxu.okhttps.HttpUtils {
    * @return 响应体
    */
   public static <T> T post(@NonNull final String url, @NonNull final Class<T> resultClass) {
-    return sync(ReqMethodConstant.POST, url, null, null, null, resultClass);
+    return (T) sync(ReqMethodConstant.POST, url, null, null, null, resultClass);
   }
 
   /**
@@ -421,8 +423,8 @@ public class HttpUtils extends cn.zhxu.okhttps.HttpUtils {
    * @param params      参数
    * @return 响应体
    */
-  public static HttpResult.Body post(@NonNull final String url, @NonNull final String contentType, final Map<String, Object> params) {
-    return sync(ReqMethodConstant.POST, url, contentType, params, null, HttpResult.Body.class);
+  public static HttpResult post(@NonNull final String url, @NonNull final String contentType, final Map<String, Object> params) {
+    return (HttpResult) sync(ReqMethodConstant.POST, url, contentType, params, null, null);
   }
 
   /**
@@ -432,8 +434,8 @@ public class HttpUtils extends cn.zhxu.okhttps.HttpUtils {
    * @param params 参数
    * @return 响应体
    */
-  public static HttpResult.Body post(@NonNull final String url, final Map<String, Object> params) {
-    return sync(ReqMethodConstant.POST, url, null, params, null, HttpResult.Body.class);
+  public static HttpResult post(@NonNull final String url, final Map<String, Object> params) {
+    return (HttpResult) sync(ReqMethodConstant.POST, url, null, params, null, null);
   }
 
   /**
@@ -442,8 +444,8 @@ public class HttpUtils extends cn.zhxu.okhttps.HttpUtils {
    * @param url 请求地址
    * @return 响应体
    */
-  public static HttpResult.Body post(@NonNull final String url) {
-    return sync(ReqMethodConstant.POST, url, null, null, null, HttpResult.Body.class);
+  public static HttpResult post(@NonNull final String url) {
+    return (HttpResult) sync(ReqMethodConstant.POST, url, null, null, null, null);
   }
 
   /**
@@ -458,7 +460,7 @@ public class HttpUtils extends cn.zhxu.okhttps.HttpUtils {
    * @return 响应体
    */
   public static <T> T putByHeader(@NonNull final String url, @NonNull final String contentType, final Map<String, Object> params, final Map<String, String> headers, @NonNull final Class<T> resultClass) {
-    return sync(ReqMethodConstant.PUT, url, contentType, params, headers, resultClass);
+    return (T) sync(ReqMethodConstant.PUT, url, contentType, params, headers, resultClass);
   }
 
   /**
@@ -472,7 +474,7 @@ public class HttpUtils extends cn.zhxu.okhttps.HttpUtils {
    * @return 响应体
    */
   public static <T> T putByHeader(@NonNull final String url, final Map<String, Object> params, final Map<String, String> headers, @NonNull final Class<T> resultClass) {
-    return sync(ReqMethodConstant.PUT, url, null, params, headers, resultClass);
+    return (T) sync(ReqMethodConstant.PUT, url, null, params, headers, resultClass);
   }
 
   /**
@@ -485,7 +487,7 @@ public class HttpUtils extends cn.zhxu.okhttps.HttpUtils {
    * @return 响应体
    */
   public static <T> T putByHeader(@NonNull final String url, final Map<String, String> headers, @NonNull final Class<T> resultClass) {
-    return sync(ReqMethodConstant.PUT, url, null, null, headers, resultClass);
+    return (T) sync(ReqMethodConstant.PUT, url, null, null, headers, resultClass);
   }
 
   /**
@@ -497,8 +499,8 @@ public class HttpUtils extends cn.zhxu.okhttps.HttpUtils {
    * @param headers     消息头
    * @return 响应体
    */
-  public static HttpResult.Body putByHeader(@NonNull final String url, @NonNull final String contentType, final Map<String, Object> params, final Map<String, String> headers) {
-    return sync(ReqMethodConstant.PUT, url, contentType, params, headers, HttpResult.Body.class);
+  public static HttpResult putByHeader(@NonNull final String url, @NonNull final String contentType, final Map<String, Object> params, final Map<String, String> headers) {
+    return (HttpResult) sync(ReqMethodConstant.PUT, url, contentType, params, headers, null);
   }
 
   /**
@@ -509,8 +511,8 @@ public class HttpUtils extends cn.zhxu.okhttps.HttpUtils {
    * @param headers 消息头
    * @return 响应体
    */
-  public static HttpResult.Body putByHeader(@NonNull final String url, final Map<String, Object> params, final Map<String, String> headers) {
-    return sync(ReqMethodConstant.PUT, url, null, params, headers, HttpResult.Body.class);
+  public static HttpResult putByHeader(@NonNull final String url, final Map<String, Object> params, final Map<String, String> headers) {
+    return (HttpResult) sync(ReqMethodConstant.PUT, url, null, params, headers, null);
   }
 
   /**
@@ -520,8 +522,8 @@ public class HttpUtils extends cn.zhxu.okhttps.HttpUtils {
    * @param headers 消息头
    * @return 响应体
    */
-  public static HttpResult.Body putByHeader(@NonNull final String url, final Map<String, String> headers) {
-    return sync(ReqMethodConstant.PUT, url, null, null, headers, HttpResult.Body.class);
+  public static HttpResult putByHeader(@NonNull final String url, final Map<String, String> headers) {
+    return (HttpResult) sync(ReqMethodConstant.PUT, url, null, null, headers, null);
   }
 
   /**
@@ -535,7 +537,7 @@ public class HttpUtils extends cn.zhxu.okhttps.HttpUtils {
    * @return 响应体
    */
   public static <T> T put(@NonNull final String url, @NonNull final String contentType, final Map<String, Object> params, @NonNull final Class<T> resultClass) {
-    return sync(ReqMethodConstant.PUT, url, contentType, params, null, resultClass);
+    return (T) sync(ReqMethodConstant.PUT, url, contentType, params, null, resultClass);
   }
 
   /**
@@ -548,7 +550,7 @@ public class HttpUtils extends cn.zhxu.okhttps.HttpUtils {
    * @return 响应体
    */
   public static <T> T put(@NonNull final String url, final Map<String, Object> params, @NonNull final Class<T> resultClass) {
-    return sync(ReqMethodConstant.PUT, url, null, params, null, resultClass);
+    return (T) sync(ReqMethodConstant.PUT, url, null, params, null, resultClass);
   }
 
   /**
@@ -560,7 +562,7 @@ public class HttpUtils extends cn.zhxu.okhttps.HttpUtils {
    * @return 响应体
    */
   public static <T> T put(@NonNull final String url, @NonNull final Class<T> resultClass) {
-    return sync(ReqMethodConstant.PUT, url, null, null, null, resultClass);
+    return (T) sync(ReqMethodConstant.PUT, url, null, null, null, resultClass);
   }
 
   /**
@@ -571,8 +573,8 @@ public class HttpUtils extends cn.zhxu.okhttps.HttpUtils {
    * @param params      参数
    * @return 响应体
    */
-  public static HttpResult.Body put(@NonNull final String url, @NonNull final String contentType, final Map<String, Object> params) {
-    return sync(ReqMethodConstant.PUT, url, contentType, params, null, HttpResult.Body.class);
+  public static HttpResult put(@NonNull final String url, @NonNull final String contentType, final Map<String, Object> params) {
+    return (HttpResult) sync(ReqMethodConstant.PUT, url, contentType, params, null, null);
   }
 
   /**
@@ -582,8 +584,8 @@ public class HttpUtils extends cn.zhxu.okhttps.HttpUtils {
    * @param params 参数
    * @return 响应体
    */
-  public static HttpResult.Body put(@NonNull final String url, final Map<String, Object> params) {
-    return sync(ReqMethodConstant.PUT, url, null, params, null, HttpResult.Body.class);
+  public static HttpResult put(@NonNull final String url, final Map<String, Object> params) {
+    return (HttpResult) sync(ReqMethodConstant.PUT, url, null, params, null, null);
   }
 
   /**
@@ -592,8 +594,8 @@ public class HttpUtils extends cn.zhxu.okhttps.HttpUtils {
    * @param url 请求地址
    * @return 响应体
    */
-  public static HttpResult.Body put(@NonNull final String url) {
-    return sync(ReqMethodConstant.PUT, url, null, null, null, HttpResult.Body.class);
+  public static HttpResult put(@NonNull final String url) {
+    return (HttpResult) sync(ReqMethodConstant.PUT, url, null, null, null, null);
   }
 
   /**
@@ -608,7 +610,7 @@ public class HttpUtils extends cn.zhxu.okhttps.HttpUtils {
    * @return 响应体
    */
   public static <T> T patchByHeader(@NonNull final String url, @NonNull final String contentType, final Map<String, Object> params, final Map<String, String> headers, @NonNull final Class<T> resultClass) {
-    return sync(ReqMethodConstant.PATCH, url, contentType, params, headers, resultClass);
+    return (T) sync(ReqMethodConstant.PATCH, url, contentType, params, headers, resultClass);
   }
 
   /**
@@ -622,7 +624,7 @@ public class HttpUtils extends cn.zhxu.okhttps.HttpUtils {
    * @return 响应体
    */
   public static <T> T patchByHeader(@NonNull final String url, final Map<String, Object> params, final Map<String, String> headers, @NonNull final Class<T> resultClass) {
-    return sync(ReqMethodConstant.PATCH, url, null, params, headers, resultClass);
+    return (T) sync(ReqMethodConstant.PATCH, url, null, params, headers, resultClass);
   }
 
   /**
@@ -635,7 +637,7 @@ public class HttpUtils extends cn.zhxu.okhttps.HttpUtils {
    * @return 响应体
    */
   public static <T> T patchByHeader(@NonNull final String url, final Map<String, String> headers, @NonNull final Class<T> resultClass) {
-    return sync(ReqMethodConstant.PATCH, url, null, null, headers, resultClass);
+    return (T) sync(ReqMethodConstant.PATCH, url, null, null, headers, resultClass);
   }
 
   /**
@@ -647,8 +649,8 @@ public class HttpUtils extends cn.zhxu.okhttps.HttpUtils {
    * @param headers     消息头
    * @return 响应体
    */
-  public static HttpResult.Body patchByHeader(@NonNull final String url, @NonNull final String contentType, final Map<String, Object> params, final Map<String, String> headers) {
-    return sync(ReqMethodConstant.PATCH, url, contentType, params, headers, HttpResult.Body.class);
+  public static HttpResult patchByHeader(@NonNull final String url, @NonNull final String contentType, final Map<String, Object> params, final Map<String, String> headers) {
+    return (HttpResult) sync(ReqMethodConstant.PATCH, url, contentType, params, headers, null);
   }
 
 
@@ -660,8 +662,8 @@ public class HttpUtils extends cn.zhxu.okhttps.HttpUtils {
    * @param headers 消息头
    * @return 响应体
    */
-  public static HttpResult.Body patchByHeader(@NonNull final String url, final Map<String, Object> params, final Map<String, String> headers) {
-    return sync(ReqMethodConstant.PATCH, url, null, params, headers, HttpResult.Body.class);
+  public static HttpResult patchByHeader(@NonNull final String url, final Map<String, Object> params, final Map<String, String> headers) {
+    return (HttpResult) sync(ReqMethodConstant.PATCH, url, null, params, headers, null);
   }
 
   /**
@@ -671,8 +673,8 @@ public class HttpUtils extends cn.zhxu.okhttps.HttpUtils {
    * @param headers 消息头
    * @return 响应体
    */
-  public static HttpResult.Body patchByHeader(@NonNull final String url, final Map<String, String> headers) {
-    return sync(ReqMethodConstant.PATCH, url, null, null, headers, HttpResult.Body.class);
+  public static HttpResult patchByHeader(@NonNull final String url, final Map<String, String> headers) {
+    return (HttpResult) sync(ReqMethodConstant.PATCH, url, null, null, headers, null);
   }
 
   /**
@@ -686,7 +688,7 @@ public class HttpUtils extends cn.zhxu.okhttps.HttpUtils {
    * @return 响应体
    */
   public static <T> T patch(@NonNull final String url, @NonNull final String contentType, final Map<String, Object> params, @NonNull final Class<T> resultClass) {
-    return sync(ReqMethodConstant.PATCH, url, contentType, params, null, resultClass);
+    return (T) sync(ReqMethodConstant.PATCH, url, contentType, params, null, resultClass);
   }
 
   /**
@@ -699,7 +701,7 @@ public class HttpUtils extends cn.zhxu.okhttps.HttpUtils {
    * @return 响应体
    */
   public static <T> T patch(@NonNull final String url, final Map<String, Object> params, @NonNull final Class<T> resultClass) {
-    return sync(ReqMethodConstant.PATCH, url, null, params, null, resultClass);
+    return (T) sync(ReqMethodConstant.PATCH, url, null, params, null, resultClass);
   }
 
   /**
@@ -711,7 +713,7 @@ public class HttpUtils extends cn.zhxu.okhttps.HttpUtils {
    * @return 响应体
    */
   public static <T> T patch(@NonNull final String url, @NonNull final Class<T> resultClass) {
-    return sync(ReqMethodConstant.PATCH, url, null, null, null, resultClass);
+    return (T) sync(ReqMethodConstant.PATCH, url, null, null, null, resultClass);
   }
 
   /**
@@ -722,8 +724,8 @@ public class HttpUtils extends cn.zhxu.okhttps.HttpUtils {
    * @param params      参数
    * @return 响应体
    */
-  public static HttpResult.Body patch(@NonNull final String url, @NonNull final String contentType, final Map<String, Object> params) {
-    return sync(ReqMethodConstant.PATCH, url, contentType, params, null, HttpResult.Body.class);
+  public static HttpResult patch(@NonNull final String url, @NonNull final String contentType, final Map<String, Object> params) {
+    return (HttpResult) sync(ReqMethodConstant.PATCH, url, contentType, params, null, null);
   }
 
   /**
@@ -733,8 +735,8 @@ public class HttpUtils extends cn.zhxu.okhttps.HttpUtils {
    * @param params 参数
    * @return 响应体
    */
-  public static HttpResult.Body patch(@NonNull final String url, final Map<String, Object> params) {
-    return sync(ReqMethodConstant.PATCH, url, null, params, null, HttpResult.Body.class);
+  public static HttpResult patch(@NonNull final String url, final Map<String, Object> params) {
+    return (HttpResult) sync(ReqMethodConstant.PATCH, url, null, params, null, null);
   }
 
   /**
@@ -743,8 +745,8 @@ public class HttpUtils extends cn.zhxu.okhttps.HttpUtils {
    * @param url 请求地址
    * @return 响应体
    */
-  public static HttpResult.Body patch(@NonNull final String url) {
-    return sync(ReqMethodConstant.PATCH, url, null, null, null, HttpResult.Body.class);
+  public static HttpResult patch(@NonNull final String url) {
+    return (HttpResult) sync(ReqMethodConstant.PATCH, url, null, null, null, null);
   }
 
   /**
@@ -759,7 +761,7 @@ public class HttpUtils extends cn.zhxu.okhttps.HttpUtils {
    * @return 响应体
    */
   public static <T> T deleteByHeader(@NonNull final String url, @NonNull final String contentType, final Map<String, Object> params, final Map<String, String> headers, @NonNull final Class<T> resultClass) {
-    return sync(ReqMethodConstant.DELETE, url, contentType, params, headers, resultClass);
+    return (T) sync(ReqMethodConstant.DELETE, url, contentType, params, headers, resultClass);
   }
 
   /**
@@ -773,7 +775,7 @@ public class HttpUtils extends cn.zhxu.okhttps.HttpUtils {
    * @return 响应体
    */
   public static <T> T deleteByHeader(@NonNull final String url, final Map<String, Object> params, final Map<String, String> headers, @NonNull final Class<T> resultClass) {
-    return sync(ReqMethodConstant.DELETE, url, null, params, headers, resultClass);
+    return (T) sync(ReqMethodConstant.DELETE, url, null, params, headers, resultClass);
   }
 
   /**
@@ -786,7 +788,7 @@ public class HttpUtils extends cn.zhxu.okhttps.HttpUtils {
    * @return 响应体
    */
   public static <T> T deleteByHeader(@NonNull final String url, final Map<String, String> headers, @NonNull final Class<T> resultClass) {
-    return sync(ReqMethodConstant.DELETE, url, null, null, headers, resultClass);
+    return (T) sync(ReqMethodConstant.DELETE, url, null, null, headers, resultClass);
   }
 
 
@@ -798,8 +800,8 @@ public class HttpUtils extends cn.zhxu.okhttps.HttpUtils {
    * @param headers 消息头
    * @return 响应体
    */
-  public static HttpResult.Body deleteByHeader(@NonNull final String url, final Map<String, Object> params, final Map<String, String> headers) {
-    return sync(ReqMethodConstant.DELETE, url, null, params, headers, HttpResult.Body.class);
+  public static HttpResult deleteByHeader(@NonNull final String url, final Map<String, Object> params, final Map<String, String> headers) {
+    return (HttpResult) sync(ReqMethodConstant.DELETE, url, null, params, headers, null);
   }
 
   /**
@@ -809,8 +811,8 @@ public class HttpUtils extends cn.zhxu.okhttps.HttpUtils {
    * @param headers 消息头
    * @return 响应体
    */
-  public static HttpResult.Body deleteByHeader(@NonNull final String url, final Map<String, String> headers) {
-    return sync(ReqMethodConstant.DELETE, url, null, null, headers, HttpResult.Body.class);
+  public static HttpResult deleteByHeader(@NonNull final String url, final Map<String, String> headers) {
+    return (HttpResult) sync(ReqMethodConstant.DELETE, url, null, null, headers, null);
   }
 
   /**
@@ -824,7 +826,7 @@ public class HttpUtils extends cn.zhxu.okhttps.HttpUtils {
    * @return 响应体
    */
   public static <T> T delete(@NonNull final String url, @NonNull final String contentType, final Map<String, Object> params, @NonNull final Class<T> resultClass) {
-    return sync(ReqMethodConstant.DELETE, url, contentType, params, null, resultClass);
+    return (T) sync(ReqMethodConstant.DELETE, url, contentType, params, null, resultClass);
   }
 
   /**
@@ -837,7 +839,7 @@ public class HttpUtils extends cn.zhxu.okhttps.HttpUtils {
    * @return 响应体
    */
   public static <T> T delete(@NonNull final String url, final Map<String, Object> params, @NonNull final Class<T> resultClass) {
-    return sync(ReqMethodConstant.DELETE, url, null, params, null, resultClass);
+    return (T) sync(ReqMethodConstant.DELETE, url, null, params, null, resultClass);
   }
 
   /**
@@ -849,7 +851,7 @@ public class HttpUtils extends cn.zhxu.okhttps.HttpUtils {
    * @return 响应体
    */
   public static <T> T delete(@NonNull final String url, @NonNull final Class<T> resultClass) {
-    return sync(ReqMethodConstant.DELETE, url, null, null, null, resultClass);
+    return (T) sync(ReqMethodConstant.DELETE, url, null, null, null, resultClass);
   }
 
   /**
@@ -859,8 +861,8 @@ public class HttpUtils extends cn.zhxu.okhttps.HttpUtils {
    * @param params 参数
    * @return 响应体
    */
-  public static HttpResult.Body delete(@NonNull final String url, final Map<String, Object> params) {
-    return sync(ReqMethodConstant.DELETE, url, null, params, null, HttpResult.Body.class);
+  public static HttpResult delete(@NonNull final String url, final Map<String, Object> params) {
+    return (HttpResult) sync(ReqMethodConstant.DELETE, url, null, params, null, null);
   }
 
   /**
@@ -869,7 +871,7 @@ public class HttpUtils extends cn.zhxu.okhttps.HttpUtils {
    * @param url 请求地址
    * @return 响应体
    */
-  public static HttpResult.Body delete(@NonNull final String url) {
-    return sync(ReqMethodConstant.DELETE, url, null, null, null, HttpResult.Body.class);
+  public static HttpResult delete(@NonNull final String url) {
+    return (HttpResult) sync(ReqMethodConstant.DELETE, url, null, null, null, null);
   }
 }

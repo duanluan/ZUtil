@@ -26,7 +26,7 @@ class HttpUtilsTest {
   @DisplayName("获取 Media Types")
   @Test
   void getMediaTypes() {
-    HttpResult.Body body = HttpUtils.get("https://www.iana.org/assignments/media-types/media-types.xhtml");
+    HttpResult.Body body = HttpUtils.get("https://www.iana.org/assignments/media-types/media-types.xhtml").getBody();
     if (body == null) {
       log.error("请求失败");
       return;

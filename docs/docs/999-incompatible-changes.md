@@ -1,5 +1,7 @@
 # 不兼容变更
 
+* 1.13.5
+  * `HttpUtils`返回`HttpResult.Body`的方法改为返回`HttpResult`。
 * 1.13.2
   * `DateFormat`的 final 属性名后缀由国家替换为语言。
 * 1.13.1
