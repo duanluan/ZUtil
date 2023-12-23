@@ -252,6 +252,26 @@ public class CollectionUtils {
 
 
   /**
+   * 获取第一个元素
+   *
+   * @param object 对象
+   * @return 第一个元素
+   */
+  public static Object getFirst(Object object) {
+    return get(object, 0);
+  }
+
+  /**
+   * 获取最后一个元素
+   *
+   * @param object 对象
+   * @return 最后一个元素
+   */
+  public static Object getLast(Object object) {
+    return get(object, size(object) - 1);
+  }
+
+  /**
    * 是否 每个集合 都为 null 或 没有元素
    *
    * @param colls 多个集合，只传一个数组请调用 {@link #isEmpty(Collection)}
