@@ -258,10 +258,9 @@ public class CollectionUtils {
    * @return 是否 每个集合都 (为 null 或 没有元素)
    */
   public static boolean isEmptys(final Collection<?>... colls) {
-    if (colls.length < 2) {
-      throw new IllegalArgumentException("Objects: length must be greater than 1.");
+    if (colls == null) {
+      return true;
     }
-
     for (Collection<?> coll : colls) {
       // 如果 某个集合 不为 null 且 有元素
       if (!isEmpty(coll)) {
@@ -277,7 +276,7 @@ public class CollectionUtils {
    * @param colls 多个集合，只传一个数组请调用 {@link #isNotEmpty(Collection)}
    * @return 是否不满足 每个集合 都为 null 或 没有元素
    */
-  public static boolean isNotEmptys(@NonNull final Collection<?>... colls) {
+  public static boolean isNotEmptys(final Collection<?>... colls) {
     return !isEmptys(colls);
   }
 
@@ -287,7 +286,7 @@ public class CollectionUtils {
    * @param object 对象
    * @return 是否不满足 对象为 null 或 没有元素
    */
-  public static boolean sizeIsNotEmpty(@NonNull final Object object) {
+  public static boolean sizeIsNotEmpty(final Object object) {
     return !sizeIsEmpty(object);
   }
 
@@ -305,11 +304,10 @@ public class CollectionUtils {
    * @param objects 多个对象。只传一个数组请调用 {@link #sizeIsEmpty(Object)}
    * @return 是否 每个对象 都为 null 或 没有元素
    */
-  public static boolean sizeIsEmptys(@NonNull final Object... objects) {
-    if (objects.length < 2) {
-      throw new IllegalArgumentException("Objects: length must be greater than 1.");
+  public static boolean sizeIsEmptys(final Object... objects) {
+    if (objects == null) {
+      return true;
     }
-
     for (Object object : objects) {
       // 如果 某个对象 不为 null 且 有元素
       if (!sizeIsEmpty(object)) {
@@ -325,7 +323,7 @@ public class CollectionUtils {
    * @param objects 多个对象。只传一个数组请调用 {@link #sizeIsNotEmpty(Object)}
    * @return 是否不满足 每个对象 都为 null 或 没有元素
    */
-  public static boolean sizeIsNotEmptys(@NonNull final Object... objects) {
+  public static boolean sizeIsNotEmptys(final Object... objects) {
     return !sizeIsEmptys(objects);
   }
 
@@ -386,7 +384,7 @@ public class CollectionUtils {
    * @param object 对象
    * @return 是否不满足 对象所有元素都为 null 或 没有元素
    */
-  public static boolean isNotAllEmpty(@NonNull final Object object) {
+  public static boolean isNotAllEmpty(final Object object) {
     return !isAllEmpty(object);
   }
 
@@ -410,10 +408,6 @@ public class CollectionUtils {
     if (objects == null) {
       return true;
     }
-    if (objects.length < 2) {
-      throw new IllegalArgumentException("Objects: length must be greater than 1.");
-    }
-
     for (Object object : objects) {
       if (!isAllEmpty(object)) {
         return false;
@@ -428,7 +422,7 @@ public class CollectionUtils {
    * @param objects 多个对象，只传一个数组请调用 {@link #isNotAllEmpty(Object)}
    * @return 是否不满足 每个对象的 所有元素都为 null 或 没有元素
    */
-  public static boolean isNotAllEmptys(@NonNull final Object... objects) {
+  public static boolean isNotAllEmptys(final Object... objects) {
     return !isAllEmptys(objects);
   }
 
@@ -512,10 +506,6 @@ public class CollectionUtils {
     if (objects == null) {
       return true;
     }
-    if (objects.length < 2) {
-      throw new IllegalArgumentException("Objects: length must be greater than 1.");
-    }
-
     for (Object object : objects) {
       if (isAnyEmpty(object)) {
         return true;
@@ -778,7 +768,7 @@ public class CollectionUtils {
    * @param objects          多个对象。Iterator、Enumeration 会被使用掉。
    * @return 是否不满足 每个对象的每个元素都相等
    */
-  public static boolean isNotAllEquals(final boolean isToString, final Function<Object, Boolean> continueFunction, final Object... objects) {
+  public static boolean isNotAllEquals(final boolean isToString, final Function<Object, Boolean> continueFunction, @NonNull final Object... objects) {
     return !isAllEquals(isToString, continueFunction, objects);
   }
 
