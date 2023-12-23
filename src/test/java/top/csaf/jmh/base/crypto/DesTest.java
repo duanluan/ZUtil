@@ -1,4 +1,4 @@
-package top.csaf.jmh.base.security;
+package top.csaf.jmh.base.crypto;
 
 import org.bouncycastle.crypto.InvalidCipherTextException;
 import org.bouncycastle.crypto.paddings.ZeroBytePadding;
@@ -7,7 +7,7 @@ import org.bouncycastle.util.encoders.Hex;
 import org.junit.jupiter.api.Test;
 import org.openjdk.jmh.annotations.*;
 import top.csaf.ArrayUtils;
-import top.csaf.SecurityUtils;
+import top.csaf.crypto.SecurityUtils;
 import top.csaf.junit.BeanUtilsTest;
 
 import javax.crypto.*;

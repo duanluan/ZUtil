@@ -1,4 +1,4 @@
-package top.csaf;
+package top.csaf.crypto;
 
 import lombok.NonNull;
 import org.bouncycastle.crypto.BufferedBlockCipher;
@@ -10,6 +10,7 @@ import org.bouncycastle.crypto.paddings.PaddedBufferedBlockCipher;
 import org.bouncycastle.crypto.params.KeyParameter;
 import org.bouncycastle.crypto.params.ParametersWithIV;
 import org.bouncycastle.util.encoders.Hex;
+import top.csaf.ArrayUtils;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.DESKeySpec;
@@ -34,7 +35,7 @@ public class SecurityUtils {
    * @param padding    填充类型
    * @return 加解密的字节数组
    */
-  public static byte[] desEcb(@NonNull final byte[] key, @NonNull final byte[] in, final boolean encrypting, final BlockCipherPadding padding) {
+  public static byte[] desEcb(final byte @NonNull [] key, final byte @NonNull [] in, final boolean encrypting, final BlockCipherPadding padding) {
     if (key.length != 8) {
       throw new IllegalArgumentException("Key: should be 8 bytes");
     }
@@ -104,7 +105,7 @@ public class SecurityUtils {
    * @param padding    填充类型
    * @return 加解密的字节数组
    */
-  public static byte[] desCbc(@NonNull final byte[] key, @NonNull final byte[] iv, @NonNull final byte[] in, final boolean encrypting, final BlockCipherPadding padding) {
+  public static byte[] desCbc(final byte @NonNull [] key, final byte @NonNull [] iv, final byte @NonNull [] in, final boolean encrypting, final BlockCipherPadding padding) {
     if (key.length != 8) {
       throw new IllegalArgumentException("Key: should be 8 bytes");
     }

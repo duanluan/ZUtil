@@ -5,7 +5,7 @@ import org.bouncycastle.crypto.InvalidCipherTextException;
 import org.bouncycastle.crypto.paddings.PKCS7Padding;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import top.csaf.SecurityUtils;
+import top.csaf.crypto.SecurityUtils;
 
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
