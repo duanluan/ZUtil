@@ -1783,6 +1783,20 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
   }
 
   /**
+   * 加减指定时间类型数量的时间
+   *
+   * @param temporal        被加减的时间对象
+   * @param augendOrMinuend 加减数量
+   * @param pattern         格式
+   * @param chronoUnits     多个时间类型
+   * @param <T>             时间类
+   * @return 加减后的时间对象
+   */
+  public static <T extends Temporal> String plusOrMinus(@NonNull T temporal, final long augendOrMinuend, @NonNull String pattern, @NonNull final ChronoUnit... chronoUnits) {
+    return format(plusOrMinus(temporal, augendOrMinuend, chronoUnits), pattern);
+  }
+
+  /**
    * 加减指定数量的时间，时间周期为毫秒
    *
    * @param temporal        被加减的时间对象
@@ -1792,6 +1806,19 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
    */
   public static <T extends Temporal> T plusOrMinus(@NonNull final T temporal, final long augendOrMinuend) {
     return plusOrMinus(temporal, augendOrMinuend, ChronoUnit.MILLIS);
+  }
+
+  /**
+   * 加减指定数量的时间，时间周期为毫秒
+   *
+   * @param temporal        被加减的时间对象
+   * @param augendOrMinuend 加减数量
+   * @param pattern         格式
+   * @param <T>             时间类
+   * @return 加减后的时间对象
+   */
+  public static <T extends Temporal> String plusOrMinus(@NonNull final T temporal, final long augendOrMinuend, @NonNull String pattern) {
+    return format(plusOrMinus(temporal, augendOrMinuend, ChronoUnit.MILLIS), pattern);
   }
 
   /**
