@@ -4,7 +4,7 @@ import java.time.format.DateTimeFormatterBuilder;
 
 /**
  * 时间格式
- *
+ * <p>
  * 参考 {@link DateTimeFormatterBuilder#appendPattern(String)}
  */
 public class DatePattern {
@@ -21,7 +21,7 @@ public class DatePattern {
   public static final String UUUU_MM_DD_DOT = "uuuu.MM.dd";
   public static final String UUUU_MM = "uuuu-MM";
   public static final String UUUU_MM_SLASH = "uuuu/MM";
-  public static final String UUUU_MM_DOT= "uuuu.MM";
+  public static final String UUUU_MM_DOT = "uuuu.MM";
 
   public static final String YYYY_MM_DD_HH_MM_SS = "yyyy-MM-dd HH:mm:ss";
   public static final String YYYY_MM_DD_SLASH_HH_MM_SS = "yyyy/MM/dd HH:mm:ss";

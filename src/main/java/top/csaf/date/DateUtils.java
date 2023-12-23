@@ -185,25 +185,34 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     if (monthNumberLen != 1 && monthNumberLen != 2) {
       throw new IllegalArgumentException("monthNumber length must be 1 or 2");
     }
-    try {
-      FastDateFormat formatMmm;
-      FastDateFormat formatMm;
-      String localeLanguage = locale.getLanguage();
-      if (Locale.ENGLISH.getLanguage().equals(localeLanguage)) {
-        formatMmm = DateFormat.MMM_EN;
-        formatMm = DateFormat.MM_EN;
-      } else if (Locale.CHINESE.getLanguage().equals(localeLanguage)) {
-        formatMmm = DateFormat.MMM_ZH;
-        formatMm = DateFormat.MM_ZH;
-      } else {
-        formatMmm = FastDateFormat.getInstance("MMM", DateFeature.get(locale));
-        formatMm = FastDateFormat.getInstance("MM", DateFeature.get(locale));
-      }
-      return formatMmm.format(formatMm.parse(monthNumber));
-    } catch (ParseException e) {
-      log.warn(e.getMessage());
+    DateTimeFormatter formatM;
+    DateTimeFormatter formatMm;
+    DateTimeFormatter formatMmm;
+    String localeLanguage = locale.getLanguage();
+    if (Locale.ENGLISH.getLanguage().equals(localeLanguage)) {
+      formatM = DateFormatter.M_EN;
+      formatMm = DateFormatter.MM_EN;
+      formatMmm = DateFormatter.MMM_EN;
+    } else if (Locale.CHINESE.getLanguage().equals(localeLanguage)) {
+      formatM = DateFormatter.M_ZH;
+      formatMm = DateFormatter.MM_ZH;
+      formatMmm = DateFormatter.MMM_ZH;
+    } else {
+      formatM = DateTimeFormatter.ofPattern("M", DateFeature.get(locale));
+      formatMm = DateTimeFormatter.ofPattern("MM", DateFeature.get(locale));
+      formatMmm = DateTimeFormatter.ofPattern("MMM", DateFeature.get(locale));
+    }
+    String result;
+    if (monthNumberLen == 1) {
+      result = formatMmm.format(formatM.parse(monthNumber));
+    } else {
+      result = formatMmm.format(formatMm.parse(monthNumber));
+    }
+    if (result.equals(monthNumber)) {
+      // TODO 不确定是否有用数字月作为文本月的地区国家
       return null;
     }
+    return result;
   }
 
   /**
@@ -231,25 +240,34 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     if (monthNumberLen != 1 && monthNumberLen != 2) {
       throw new IllegalArgumentException("monthNumber length must be 1 or 2");
     }
-    try {
-      FastDateFormat formatMmm;
-      FastDateFormat formatMm;
-      String localeLanguage = locale.getLanguage();
-      if (Locale.ENGLISH.getLanguage().equals(localeLanguage)) {
-        formatMmm = DateFormat.MMMM_EN;
-        formatMm = DateFormat.MM_EN;
-      } else if (Locale.CHINESE.getLanguage().equals(localeLanguage)) {
-        formatMmm = DateFormat.MMM_ZH;
-        formatMm = DateFormat.MM_ZH;
-      } else {
-        formatMmm = FastDateFormat.getInstance("MMMM", DateFeature.get(locale));
-        formatMm = FastDateFormat.getInstance("MM", DateFeature.get(locale));
-      }
-      return formatMmm.format(formatMm.parse(monthNumber));
-    } catch (ParseException e) {
-      log.warn(e.getMessage());
+    DateTimeFormatter formatM;
+    DateTimeFormatter formatMm;
+    DateTimeFormatter formatMmm;
+    String localeLanguage = locale.getLanguage();
+    if (Locale.ENGLISH.getLanguage().equals(localeLanguage)) {
+      formatM = DateFormatter.M_EN;
+      formatMm = DateFormatter.MM_EN;
+      formatMmm = DateFormatter.MMMM_EN;
+    } else if (Locale.CHINESE.getLanguage().equals(localeLanguage)) {
+      formatM = DateFormatter.M_ZH;
+      formatMm = DateFormatter.MM_ZH;
+      formatMmm = DateFormatter.MMMM_ZH;
+    } else {
+      formatM = DateTimeFormatter.ofPattern("M", DateFeature.get(locale));
+      formatMm = DateTimeFormatter.ofPattern("MM", DateFeature.get(locale));
+      formatMmm = DateTimeFormatter.ofPattern("MMMM", DateFeature.get(locale));
+    }
+    String result;
+    if (monthNumberLen == 1) {
+      result = formatMmm.format(formatM.parse(monthNumber));
+    } else {
+      result = formatMmm.format(formatMm.parse(monthNumber));
+    }
+    if (result.equals(monthNumber)) {
+      // TODO 不确定是否有用数字月作为文本月的地区国家
       return null;
     }
+    return result;
   }
 
   /**
@@ -288,7 +306,6 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
         break;
       default:
         dateTimeFormatter = getDefaultFormatter(pattern);
-        break;
     }
     ZoneId zoneId1 = DateFeature.get(zoneId);
     if (zoneId1 != null) {
@@ -380,23 +397,22 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
       zonedDateTime = zonedDateTime.withZoneSameInstant(DateFeature.get(zoneId));
       return format(zonedDateTime.toLocalDateTime(), pattern);
     } else {
-      FastDateFormat format = null;
+      DateTimeFormatter format;
       // 使用已存在的格式转换器
       switch (pattern) {
         case DateConstant.DEFAULT_LOCAL_DATE_TIME_PATTERN:
-          format = DateFormat.YYYY_MM_DD_HH_MM_SS;
+          format = DateFormatter.YYYY_MM_DD_HH_MM_SS;
           break;
         case DateConstant.DEFAULT_LOCAL_DATE_PATTERN:
-          format = DateFormat.YYYY_MM_DD;
+          format = DateFormatter.YYYY_MM_DD;
           break;
         case DateConstant.DEFAULT_LOCAL_TIME_PATTERN:
-          format = DateFormat.HH_MM_SS;
+          format = DateFormatter.HH_MM_SS;
           break;
+        default:
+          format = getDefaultFormatter(pattern);
       }
-      if (format == null) {
-        format = FastDateFormat.getInstance(pattern);
-      }
-      return format.format(date);
+      return format.format(date.toInstant());
     }
   }
 
@@ -2478,7 +2494,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     }
     // 2. 获取第二周周一，即下周一
     dayOfMonth = dayOfMonth.plusDays(8 - dayOfMonth.getDayOfWeek().getValue());
-    if(weekOfMonth == 2) {
+    if (weekOfMonth == 2) {
       return dayOfMonth;
     }
     // 因为上面已经是第二周了，加上循环中是先加减日期再 week++，所以从第三周开始

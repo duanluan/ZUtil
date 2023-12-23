@@ -7,6 +7,7 @@ import top.csaf.date.DateFeature;
 import top.csaf.date.DateUtils;
 import top.csaf.date.constant.DateConstant;
 import top.csaf.date.constant.DatePattern;
+import top.csaf.util.ReflectionTestUtils;
 
 import java.time.*;
 import java.time.format.DateTimeFormatter;
@@ -169,15 +170,32 @@ class DateUtilsTest {
     assertEquals(DateUtils.getDefaultFormatter("MM-dd EEE", Locale.SIMPLIFIED_CHINESE).parse("08-15 星期二").get(ChronoField.DAY_OF_WEEK), 2);
     // ZonedDateTime.parse 后时区为 +8，但本地时区就是 +8，所以此时 getHour() 为 0，再 withZoneSameInstant 转换为 UTC 时区，少 8 小时，所以 getHour() 会 -8，就是 16
     assertEquals(ZonedDateTime.parse("00", DateUtils.getDefaultFormatter("HH", ZoneOffset.ofHours(8))).withZoneSameInstant(ZoneOffset.UTC).getHour(), 16);
+
+    assertEquals(DateUtils.getDefaultFormatter(DatePattern.MM_DD).parse("08-26").get(ChronoField.YEAR), 0);
   }
 
-  @DisplayName("convertMonthText：转换数字月到文本月")
+  @DisplayName("convertByPattern：转换需要格式化的字符串，比如英文月份转换为首字母大写")
+  @Test
+  void convertByPattern() {
+    assertThrows(IllegalArgumentException.class, () -> ReflectionTestUtils.invokeMethod(DateUtils.class, "convertByPattern", "mon", ""));
+    assertEquals(ReflectionTestUtils.invokeMethod(DateUtils.class, "convertByPattern", "mon", "MMM"), "Mon");
+  }
+
+  @DisplayName("convertMonth[Short]Text：转换数字月到[短]文本月")
   @Test
   void convertMonthText() {
-    println(DateUtils.convertMonthShortText("03", Locale.SIMPLIFIED_CHINESE));
-    println(DateUtils.convertMonthShortText("3"));
-    println(DateUtils.convertMonthText("03", Locale.SIMPLIFIED_CHINESE));
-    println(DateUtils.convertMonthText("3"));
+    assertThrows(IllegalArgumentException.class, () -> DateUtils.convertMonthShortText("", Locale.SIMPLIFIED_CHINESE));
+    assertThrows(IllegalArgumentException.class, () -> DateUtils.convertMonthShortText("000", Locale.SIMPLIFIED_CHINESE));
+
+    assertEquals(DateUtils.convertMonthShortText("9"),"Sep");
+    assertEquals(DateUtils.convertMonthShortText("09", Locale.CHINESE),"9月");
+    assertEquals(DateUtils.convertMonthShortText("9", Locale.FRENCH),"sept.");
+    assertNull(DateUtils.convertMonthShortText("13", Locale.US));
+
+    assertEquals(DateUtils.convertMonthText("9"),"September");
+    assertEquals(DateUtils.convertMonthText("09", Locale.CHINESE),"九月");
+    assertEquals(DateUtils.convertMonthText("9", Locale.FRENCH),"septembre");
+    assertNull(DateUtils.convertMonthText("13", Locale.US));
   }
 
   @DisplayName("format：格式化为字符串")
