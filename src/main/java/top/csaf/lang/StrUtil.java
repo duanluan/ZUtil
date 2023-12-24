@@ -8,6 +8,82 @@ import lombok.NonNull;
 public class StrUtil extends org.apache.commons.lang3.StringUtils {
 
   /**
+   * 判断是否为空
+   *
+   * @param obj 对象
+   * @return 是否为空
+   */
+  public static boolean isEmpty(final Object obj) {
+    return obj == null || isEmpty(obj.toString());
+  }
+
+  /**
+   * 判断是否不为空
+   *
+   * @param obj 对象
+   * @return 是否不为空
+   */
+  public static boolean isNotEmpty(final Object obj) {
+    return !isEmpty(obj);
+  }
+
+  /**
+   * 判断是否任意一个为空
+   *
+   * @param objs 对象数组
+   * @return 是否任意一个为空
+   */
+  public static boolean isAnyEmpty(final Object... objs) {
+    if (objs == null) {
+      return true;
+    }
+    for (Object obj : objs) {
+      if (isEmpty(obj)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /**
+   * 判断是否为空或空字符串
+   *
+   * @param obj 对象
+   * @return 是否为空或空字符串
+   */
+  public static boolean isBlank(final Object obj) {
+    return obj == null || isBlank(obj.toString());
+  }
+
+  /**
+   * 判断是否不为空且不为空字符串
+   *
+   * @param obj 对象
+   * @return 是否不为空且不为空字符串
+   */
+  public static boolean isNotBlank(final Object obj) {
+    return !isBlank(obj);
+  }
+
+  /**
+   * 判断是否任意一个为空或空字符串
+   *
+   * @param objs 对象数组
+   * @return 是否任意一个为空或空字符串
+   */
+  public static boolean isAnyBlank(final Object... objs) {
+    if (objs == null) {
+      return true;
+    }
+    for (Object obj : objs) {
+      if (isBlank(obj)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /**
    * 查找 seq 中 searchSeq 的第一个索引位置，找不到返回 -1
    *
    * @param seq       被查找的字符串
