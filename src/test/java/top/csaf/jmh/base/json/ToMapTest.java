@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import org.junit.jupiter.api.Test;
 import org.openjdk.jmh.annotations.*;
-import top.csaf.ObjectUtils;
+import top.csaf.lang.ObjUtil;
 
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -27,7 +27,7 @@ public class ToMapTest {
   public static void main(String[] args) throws JsonProcessingException {
     // 结果是否相等
     ToMapTest test = new ToMapTest();
-    System.out.println(ObjectUtils.isAllEquals(false, false, test.jackson(), test.fastjson(), test.gson(), test.hutool()));
+    System.out.println(ObjUtil.isAllEquals(false, false, test.jackson(), test.fastjson(), test.gson(), test.hutool()));
   }
 
   @Test

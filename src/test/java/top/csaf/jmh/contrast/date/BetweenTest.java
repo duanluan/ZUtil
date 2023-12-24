@@ -1,10 +1,9 @@
 package top.csaf.jmh.contrast.date;
 
 import cn.hutool.core.date.DateUnit;
-import cn.hutool.core.date.DateUtil;
 import org.junit.jupiter.api.Test;
 import org.openjdk.jmh.annotations.*;
-import top.csaf.date.DateUtils;
+import top.csaf.date.DateUtil;
 
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
@@ -30,17 +29,17 @@ public class BetweenTest {
     org.openjdk.jmh.Main.main(new String[]{BetweenTest.class.getName()});
   }
 
-  private static final Date date1 = DateUtils.parseDate("2017-03-01 22:33:23");
-  private static final Date date2 = DateUtils.parseDate("2017-04-01 23:33:23");
+  private static final Date date1 = DateUtil.parseDate("2017-03-01 22:33:23");
+  private static final Date date2 = DateUtil.parseDate("2017-04-01 23:33:23");
 
   @Benchmark
   public long betweenByHutool() {
-    return DateUtil.between(date1, date2, DateUnit.DAY);
+    return cn.hutool.core.date.DateUtil.between(date1, date2, DateUnit.DAY);
   }
 
   @Benchmark
   public long betweenByZUtil() {
-    return Math.abs(DateUtils.between(date1, date2, ChronoUnit.DAYS));
+    return Math.abs(DateUtil.between(date1, date2, ChronoUnit.DAYS));
   }
 }
 

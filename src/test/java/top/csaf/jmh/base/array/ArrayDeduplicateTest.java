@@ -2,7 +2,7 @@ package top.csaf.jmh.base.array;
 
 import org.junit.jupiter.api.Test;
 import org.openjdk.jmh.annotations.*;
-import top.csaf.ArrayUtils;
+import top.csaf.lang.ArrayUtil;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -46,20 +46,20 @@ public class ArrayDeduplicateTest {
     System.out.println("test20" + Arrays.toString(test.test20()));
     System.out.println("test21" + Arrays.toString(test.test21()));
     System.out.println("test22" + Arrays.toString(test.test22()));
-    System.out.println("ArrayUtils.deduplicate：" + Arrays.toString(ArrayUtils.deduplicate(ARRAY)));
+    System.out.println("ArrayUtils.deduplicate：" + Arrays.toString(ArrayUtil.deduplicate(ARRAY)));
     System.out.println("保留最后一个重复元素：");
     System.out.println("test1" + Arrays.toString(test.test1()));
-    System.out.println("ArrayUtils.deduplicatePreceding：" + Arrays.toString(ArrayUtils.deduplicatePreceding(ARRAY)));
+    System.out.println("ArrayUtils.deduplicatePreceding：" + Arrays.toString(ArrayUtil.deduplicatePreceding(ARRAY)));
     System.out.println("倒序：");
     System.out.println("test14" + Arrays.toString(test.test14()));
     System.out.println("test16" + Arrays.toString(test.test16()));
-    System.out.println("ArrayUtils.deduplicateReverse：" + Arrays.toString(ArrayUtils.deduplicateReverse(ARRAY)));
+    System.out.println("ArrayUtils.deduplicateReverse：" + Arrays.toString(ArrayUtil.deduplicateReverse(ARRAY)));
     System.out.println("hash 值排序：");
     System.out.println("test4" + Arrays.toString(test.test4()));
     System.out.println("test10" + Arrays.toString(test.test10()));
     System.out.println("test12" + Arrays.toString(test.test12()));
     System.out.println("test15" + Arrays.toString(test.test15()));
-    System.out.println("ArrayUtils.deduplicateHashSort：" + Arrays.toString(ArrayUtils.deduplicateHashSort(ARRAY)));
+    System.out.println("ArrayUtils.deduplicateHashSort：" + Arrays.toString(ArrayUtil.deduplicateHashSort(ARRAY)));
   }
 
   @Test

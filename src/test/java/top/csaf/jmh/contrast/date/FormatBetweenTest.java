@@ -1,10 +1,9 @@
 package top.csaf.jmh.contrast.date;
 
 import cn.hutool.core.date.BetweenFormatter;
-import cn.hutool.core.date.DateUtil;
 import org.junit.jupiter.api.Test;
 import org.openjdk.jmh.annotations.*;
-import top.csaf.date.DateUtils;
+import top.csaf.date.DateUtil;
 
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -29,22 +28,22 @@ public class FormatBetweenTest {
     org.openjdk.jmh.Main.main(new String[]{FormatBetweenTest.class.getName()});
   }
 
-  private static final Date date1 = DateUtils.parseDate("2016-03-01 22:33:23");
-  private static final Date date2 = DateUtils.parseDate("2016-04-01 23:33:23");
+  private static final Date date1 = DateUtil.parseDate("2016-03-01 22:33:23");
+  private static final Date date2 = DateUtil.parseDate("2016-04-01 23:33:23");
 
   @Benchmark
   public String fromBetweenByHutool() {
-    return DateUtil.formatBetween(date1, date2, BetweenFormatter.Level.SECOND);
+    return cn.hutool.core.date.DateUtil.formatBetween(date1, date2, BetweenFormatter.Level.SECOND);
   }
 
   @Benchmark
   public String fromBetweenByZUtil() {
-    return DateUtils.formatBetween(date1, date2, "dd天H小时");
+    return DateUtil.formatBetween(date1, date2, "dd天H小时");
   }
 
   @Benchmark
   public String fromBetweenByZUtil1() {
-    return DateUtils.formatBetween(date1, date2, true, null, "天", "小时", "分", "秒", "毫秒");
+    return DateUtil.formatBetween(date1, date2, true, null, "天", "小时", "分", "秒", "毫秒");
   }
 }
 

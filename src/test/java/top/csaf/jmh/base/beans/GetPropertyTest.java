@@ -2,7 +2,7 @@ package top.csaf.jmh.base.beans;
 
 import org.junit.jupiter.api.Test;
 import org.openjdk.jmh.annotations.*;
-import top.csaf.junit.BeanUtilsTest;
+import top.csaf.junit.BeanUtilTest;
 
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
@@ -36,10 +36,10 @@ public class GetPropertyTest {
     org.openjdk.jmh.Main.main(new String[]{GetPropertyTest.class.getName()});
   }
 
-  private static final BeanUtilsTest.TestBean testBean;
+  private static final BeanUtilTest.TestBean testBean;
 
   static {
-    testBean = new BeanUtilsTest.TestBean();
+    testBean = new BeanUtilTest.TestBean();
     testBean.setName("张三");
   }
 

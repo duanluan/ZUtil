@@ -1,9 +1,8 @@
 package top.csaf.jmh.contrast.str;
 
-import cn.hutool.core.util.StrUtil;
 import org.junit.jupiter.api.Test;
 import org.openjdk.jmh.annotations.*;
-import top.csaf.StringUtils;
+import top.csaf.lang.StrUtil;
 
 import java.util.concurrent.TimeUnit;
 
@@ -31,12 +30,12 @@ public class RemoveSuffixTest {
 
   @Benchmark
   public String removeSuffixByHutool() {
-    return StrUtil.removeSuffix(str, "gpj");
+    return cn.hutool.core.util.StrUtil.removeSuffix(str, "gpj");
   }
 
   @Benchmark
   public String removeSuffixByZUtil() {
-    return StringUtils.removeEnd(str, "gpj");
+    return StrUtil.removeEnd(str, "gpj");
   }
 }
 

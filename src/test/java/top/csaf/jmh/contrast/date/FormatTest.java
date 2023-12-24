@@ -1,9 +1,8 @@
 package top.csaf.jmh.contrast.date;
 
-import cn.hutool.core.date.DateUtil;
 import org.junit.jupiter.api.Test;
 import org.openjdk.jmh.annotations.*;
-import top.csaf.date.DateUtils;
+import top.csaf.date.DateUtil;
 
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -32,12 +31,12 @@ public class FormatTest {
 
   @Benchmark
   public String formatByHutool() {
-    return DateUtil.formatDateTime(nowDate);
+    return cn.hutool.core.date.DateUtil.formatDateTime(nowDate);
   }
 
   @Benchmark
   public String formatByZUtil() {
-    return DateUtils.format(nowDate);
+    return DateUtil.format(nowDate);
   }
 }
 

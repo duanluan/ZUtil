@@ -4,7 +4,7 @@ import com.alibaba.fastjson2.JSON;
 import org.junit.jupiter.api.Test;
 import org.openjdk.jmh.annotations.*;
 import org.springframework.cglib.beans.BeanMap;
-import top.csaf.junit.BeanUtilsTest;
+import top.csaf.junit.BeanUtilTest;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,7 +28,7 @@ public class BeanMapToMapTest {
     // 结果是否相等
     BeanMapToMapTest test = new BeanMapToMapTest();
     System.out.println(test.putAll().equals(test.beanMapAndConstructor()) && test.beanMapAndConstructor().equals(test.beanMapAndForeach()));
-    System.out.println(((List<BeanUtilsTest.TestBean>) (test.beanMapAndForeach().get("deepObject"))).get(0).getName().equals(((List<Map<String, Object>>) (test.json().get("deepObject"))).get(0).get("name")));
+    System.out.println(((List<BeanUtilTest.TestBean>) (test.beanMapAndForeach().get("deepObject"))).get(0).getName().equals(((List<Map<String, Object>>) (test.json().get("deepObject"))).get(0).get("name")));
   }
 
   @Test
@@ -36,12 +36,12 @@ public class BeanMapToMapTest {
     org.openjdk.jmh.Main.main(new String[]{BeanMapToMapTest.class.getName()});
   }
 
-  private static final BeanUtilsTest.TestBean testBean;
+  private static final BeanUtilTest.TestBean testBean;
 
   static {
-    testBean = new BeanUtilsTest.TestBean();
-    List<BeanUtilsTest.TestBean> beanList = new ArrayList<>();
-    beanList.add(new BeanUtilsTest.TestBean("1"));
+    testBean = new BeanUtilTest.TestBean();
+    List<BeanUtilTest.TestBean> beanList = new ArrayList<>();
+    beanList.add(new BeanUtilTest.TestBean("1"));
     testBean.setDeepObject(beanList);
   }
 

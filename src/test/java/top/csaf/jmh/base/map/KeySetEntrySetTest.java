@@ -3,7 +3,7 @@ package top.csaf.jmh.base.map;
 import org.junit.jupiter.api.Test;
 import org.openjdk.jmh.annotations.*;
 import org.springframework.cglib.beans.BeanMap;
-import top.csaf.junit.BeanUtilsTest;
+import top.csaf.junit.BeanUtilTest;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -66,7 +66,7 @@ public class KeySetEntrySetTest {
 
   @Benchmark
   public String beanMapKeySet() {
-    BeanUtilsTest.TestBean testBean = new BeanUtilsTest.TestBean();
+    BeanUtilTest.TestBean testBean = new BeanUtilTest.TestBean();
     testBean.setName("1");
 
     Map<String, Object> map = new HashMap<>();
@@ -79,7 +79,7 @@ public class KeySetEntrySetTest {
 
   @Benchmark
   public String beanMapEntrySet() {
-    BeanUtilsTest.TestBean testBean = new BeanUtilsTest.TestBean();
+    BeanUtilTest.TestBean testBean = new BeanUtilTest.TestBean();
     testBean.setName("1");
 
     Map<String, Object> map = new HashMap<>();

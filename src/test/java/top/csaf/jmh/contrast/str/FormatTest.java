@@ -1,9 +1,8 @@
 package top.csaf.jmh.contrast.str;
 
-import cn.hutool.core.util.StrUtil;
 import org.junit.jupiter.api.Test;
 import org.openjdk.jmh.annotations.*;
-import top.csaf.StringUtils;
+import top.csaf.lang.StrUtil;
 
 import java.util.concurrent.TimeUnit;
 
@@ -34,12 +33,12 @@ public class FormatTest {
 
   @Benchmark
   public String formatByHutool() {
-    return StrUtil.format(format, arg1, arg2);
+    return cn.hutool.core.util.StrUtil.format(format, arg1, arg2);
   }
 
   @Benchmark
   public String formatByZUtil() {
-    return StringUtils.format(format, arg1, arg2);
+    return StrUtil.format(format, arg1, arg2);
   }
 }
 

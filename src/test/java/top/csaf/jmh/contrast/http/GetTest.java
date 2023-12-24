@@ -1,9 +1,8 @@
 package top.csaf.jmh.contrast.http;
 
-import cn.hutool.http.HttpUtil;
 import org.junit.jupiter.api.Test;
 import org.openjdk.jmh.annotations.*;
-import top.csaf.http.HttpUtils;
+import top.csaf.http.HttpUtil;
 
 import java.util.concurrent.TimeUnit;
 
@@ -30,12 +29,12 @@ public class GetTest {
 
   @Benchmark
   public String getByHutool() {
-    return HttpUtil.get(url);
+    return cn.hutool.http.HttpUtil.get(url);
   }
 
   @Benchmark
   public String getByZUtil() {
-    return HttpUtils.get(url).toString();
+    return HttpUtil.get(url).toString();
   }
 }
 

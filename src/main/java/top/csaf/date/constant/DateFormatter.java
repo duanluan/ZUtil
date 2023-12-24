@@ -1,6 +1,6 @@
 package top.csaf.date.constant;
 
-import top.csaf.date.DateFeature;
+import top.csaf.date.DateFeat;
 
 import java.time.format.DateTimeFormatter;
 import java.time.format.ResolverStyle;
@@ -21,7 +21,7 @@ public class DateFormatter {
   public static final DateTimeFormatter MMMM_ZH;
 
   static {
-    ResolverStyle resolverStyle = DateFeature.get(DateConstant.DEFAULT_RESOLVER_STYLE);
+    ResolverStyle resolverStyle = DateFeat.get(DateConst.DEFAULT_RESOLVER_STYLE);
 
     YYYY_MM_DD_HH_MM_SS = DateTimeFormatter.ofPattern(DatePattern.YYYY_MM_DD_HH_MM_SS).withResolverStyle(resolverStyle);
     YYYY_MM_DD = DateTimeFormatter.ofPattern(DatePattern.YYYY_MM_DD).withResolverStyle(resolverStyle);

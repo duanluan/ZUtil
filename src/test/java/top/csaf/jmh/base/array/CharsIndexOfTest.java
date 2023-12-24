@@ -2,8 +2,8 @@ package top.csaf.jmh.base.array;
 
 import org.junit.jupiter.api.Test;
 import org.openjdk.jmh.annotations.*;
-import top.csaf.ArrayUtils;
-import top.csaf.ObjectUtils;
+import top.csaf.lang.ArrayUtil;
+import top.csaf.lang.ObjUtil;
 
 import java.util.concurrent.TimeUnit;
 
@@ -22,7 +22,7 @@ public class CharsIndexOfTest {
   public static void main(String[] args) {
     // 结果是否相等
     CharsIndexOfTest test = new CharsIndexOfTest();
-    System.out.println(ObjectUtils.isAllEquals(true, false, test.test1(), test.test2()));
+    System.out.println(ObjUtil.isAllEquals(true, false, test.test1(), test.test2()));
   }
 
   @Test
@@ -43,7 +43,7 @@ public class CharsIndexOfTest {
     char rChar = valChars[1];
     int index = -1;
     while (true) {
-      int lCharIndex = ArrayUtils.indexOf(array, lChar, startIndex);
+      int lCharIndex = ArrayUtil.indexOf(array, lChar, startIndex);
       // 如果找不到左边字符
       if (lCharIndex == -1) {
         break;
@@ -52,7 +52,7 @@ public class CharsIndexOfTest {
       } else {
         startIndex = lCharIndex + 1;
       }
-      int rCharIndex = ArrayUtils.indexOf(array, rChar, lCharIndex + 1);
+      int rCharIndex = ArrayUtil.indexOf(array, rChar, lCharIndex + 1);
       // 如果找不到右边字符 则 -1
       if (rCharIndex == -1) {
         break;
@@ -71,7 +71,7 @@ public class CharsIndexOfTest {
     int startIndex = 1;
 
     for (int i = 0; i < valChars.length; i++) {
-      int index = ArrayUtils.indexOf(array, valChars[i], startIndex);
+      int index = ArrayUtil.indexOf(array, valChars[i], startIndex);
       if (index == -1) {
         return -1;
       }

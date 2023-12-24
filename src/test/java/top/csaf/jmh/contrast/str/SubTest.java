@@ -1,9 +1,8 @@
 package top.csaf.jmh.contrast.str;
 
-import cn.hutool.core.util.StrUtil;
 import org.junit.jupiter.api.Test;
 import org.openjdk.jmh.annotations.*;
-import top.csaf.StringUtils;
+import top.csaf.lang.StrUtil;
 
 import java.util.concurrent.TimeUnit;
 
@@ -31,12 +30,12 @@ public class SubTest {
 
   @Benchmark
   public String subByHutool() {
-    return StrUtil.sub(str, 2, -3);
+    return cn.hutool.core.util.StrUtil.sub(str, 2, -3);
   }
 
   @Benchmark
   public String subByZUtil() {
-    return StringUtils.substring(str, 2, -3);
+    return StrUtil.substring(str, 2, -3);
   }
 }
 

@@ -1,9 +1,8 @@
 package top.csaf.jmh.contrast.pinyin;
 
-import cn.hutool.extra.pinyin.PinyinUtil;
 import org.junit.jupiter.api.Test;
 import org.openjdk.jmh.annotations.*;
-import top.csaf.pinyin.PinyinUtils;
+import top.csaf.pinyin.PinyinUtil;
 
 import java.util.concurrent.TimeUnit;
 
@@ -21,14 +20,14 @@ public class ToPinyinTest {
   public static void main(String[] args) {
     long time1 = System.currentTimeMillis();
     for (int i = 0; i < 1000000; i++) {
-      PinyinUtil.getPinyin(STR, " ");
+      cn.hutool.extra.pinyin.PinyinUtil.getPinyin(STR, " ");
     }
     long time2 = System.currentTimeMillis();
     System.out.println("hutool耗时：" + (time2 - time1));
 
     long time3 = System.currentTimeMillis();
     for (int i = 0; i < 1000000; i++) {
-      PinyinUtils.getAll(STR, false, " ");
+      PinyinUtil.getAll(STR, false, " ");
     }
     long time4 = System.currentTimeMillis();
     System.out.println("zUtil耗时：" + (time4 - time3));
@@ -41,13 +40,13 @@ public class ToPinyinTest {
 
   @Benchmark
   public String toPinyinByHutool() {
-    return PinyinUtil.getPinyin(STR, " ");
+    return cn.hutool.extra.pinyin.PinyinUtil.getPinyin(STR, " ");
   }
 
   @Benchmark
   public String toPinyinByZUtil() {
     // PinyinFeature.setHasSeparatorByNotPinyinAround(true);
-    return PinyinUtils.getAll(STR, false, " ");
+    return PinyinUtil.getAll(STR, false, " ");
   }
 }
 

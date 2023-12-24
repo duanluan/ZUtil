@@ -2,7 +2,7 @@ package top.csaf.jmh.base.tree;
 
 import org.junit.jupiter.api.Test;
 import org.openjdk.jmh.annotations.*;
-import top.csaf.CollectionUtils;
+import top.csaf.coll.CollUtil;
 import top.csaf.tree.TreeNode;
 
 import java.util.*;
@@ -22,7 +22,7 @@ public class BuildTreeNodeListTest {
 
   public static void main(String[] args) {
     BuildTreeNodeListTest buildTreeNodeListTest = new BuildTreeNodeListTest();
-    System.out.println(CollectionUtils.isAllEqualsSameIndex(true, null,
+    System.out.println(CollUtil.isAllEqualsSameIndex(true, null,
       buildTreeNodeListTest.build(),
       buildTreeNodeListTest.buildByRecursive(),
       buildTreeNodeListTest.buildByMap()

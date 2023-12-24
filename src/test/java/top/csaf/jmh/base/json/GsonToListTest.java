@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.openjdk.jmh.annotations.*;
-import top.csaf.CollectionUtils;
+import top.csaf.coll.CollUtil;
 
 import java.io.IOException;
 import java.lang.reflect.ParameterizedType;
@@ -33,7 +33,7 @@ public class GsonToListTest {
   public static void main(String[] args) throws IOException, ClassNotFoundException {
     // 结果是否相等
     GsonToListTest test = new GsonToListTest();
-    System.out.println(CollectionUtils.isAllEqualsSameIndex(false, null, test.test1(), test.test2(), test.test3()));
+    System.out.println(CollUtil.isAllEqualsSameIndex(false, null, test.test1(), test.test2(), test.test3()));
     ;
   }
 

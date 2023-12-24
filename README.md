@@ -163,16 +163,17 @@ Mode 即为`org.openjdk.jmh.annotations.Mode`，分为：
    * 使用`org.junit.jupiter.api.Assertions`进行**代码覆盖率测试**：
     ```java
     ……
+    import top.csaf.id.NanoIdUtil;
     import static org.junit.jupiter.api.Assertions.*;
     
     @Slf4j
     @DisplayName("NanoId 工具类测试")
-    class NanoIdUtilsTest {
+    class NanoIdUtilTest {
     
       @DisplayName("生成 NanoID")
       @Test
       void randomNanoId() {
-        /** {@link top.csaf.id.NanoIdUtils#randomNanoId(int, char[], java.util.Random) } */
+        /** {@link NanoIdUtil#randomNanoId(int, char[], java.util.Random) } */
         assertThrows(NullPointerException.class, () -> NanoIdUtils.randomNanoId(0, (char[]) null, NanoIdUtils.DEFAULT_ID_GENERATOR));
         assertThrows(NullPointerException.class, () -> NanoIdUtils.randomNanoId(0, new char[0], null));
         assertThrows(IllegalArgumentException.class, () -> NanoIdUtils.randomNanoId(0, new char[0], NanoIdUtils.DEFAULT_ID_GENERATOR));

@@ -1,9 +1,8 @@
 package top.csaf.jmh.contrast.str;
 
-import cn.hutool.core.util.StrUtil;
 import org.junit.jupiter.api.Test;
 import org.openjdk.jmh.annotations.*;
-import top.csaf.StringUtils;
+import top.csaf.lang.StrUtil;
 
 import java.util.concurrent.TimeUnit;
 
@@ -31,12 +30,12 @@ public class RemovePrefixIgnoreCaseTest {
 
   @Benchmark
   public String removePrefixIgnoreCaseByHutool() {
-    return StrUtil.removePrefixIgnoreCase(str, "JPG");
+    return cn.hutool.core.util.StrUtil.removePrefixIgnoreCase(str, "JPG");
   }
 
   @Benchmark
   public String removePrefixIgnoreCaseByZUtil() {
-    return StringUtils.removeStartIgnoreCase(str, "JPG");
+    return StrUtil.removeStartIgnoreCase(str, "JPG");
   }
 }
 

@@ -1,9 +1,8 @@
 package top.csaf.jmh.contrast.date;
 
-import cn.hutool.core.date.DateUtil;
 import org.junit.jupiter.api.Test;
 import org.openjdk.jmh.annotations.*;
-import top.csaf.date.DateUtils;
+import top.csaf.date.DateUtil;
 
 import java.util.concurrent.TimeUnit;
 
@@ -29,12 +28,12 @@ public class TodayStrTest {
 
   @Benchmark
   public String todayStrByHutool() {
-    return DateUtil.today();
+    return cn.hutool.core.date.DateUtil.today();
   }
 
   @Benchmark
   public String todayStrByZUtil() {
-    return DateUtils.today();
+    return DateUtil.today();
   }
 }
 

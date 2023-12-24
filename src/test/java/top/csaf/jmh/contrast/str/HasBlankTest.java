@@ -1,9 +1,8 @@
 package top.csaf.jmh.contrast.str;
 
-import cn.hutool.core.util.StrUtil;
 import org.junit.jupiter.api.Test;
 import org.openjdk.jmh.annotations.*;
-import top.csaf.StringUtils;
+import top.csaf.lang.StrUtil;
 
 import java.util.concurrent.TimeUnit;
 
@@ -31,12 +30,12 @@ public class HasBlankTest {
 
   @Benchmark
   public boolean hasBlankByHutool() {
-    return StrUtil.hasBlank(strs);
+    return cn.hutool.core.util.StrUtil.hasBlank(strs);
   }
 
   @Benchmark
   public boolean hasBlankByZUtil() {
-    return StringUtils.isAnyBlank(strs);
+    return StrUtil.isAnyBlank(strs);
   }
 }
 

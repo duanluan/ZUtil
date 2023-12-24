@@ -1,10 +1,9 @@
 package top.csaf.jmh.contrast.date;
 
 import cn.hutool.core.date.DateField;
-import cn.hutool.core.date.DateUtil;
 import org.junit.jupiter.api.Test;
 import org.openjdk.jmh.annotations.*;
-import top.csaf.date.DateUtils;
+import top.csaf.date.DateUtil;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -32,16 +31,16 @@ public class OffsetTest {
   }
 
   private static final LocalDateTime nowDateTime = LocalDateTime.now();
-  private static final Date nowDate = DateUtils.toDate(nowDateTime);
+  private static final Date nowDate = DateUtil.toDate(nowDateTime);
 
   @Benchmark
   public Date offsetByHutool() {
-    return DateUtil.offset(nowDate, DateField.DAY_OF_MONTH, 2).toJdkDate();
+    return cn.hutool.core.date.DateUtil.offset(nowDate, DateField.DAY_OF_MONTH, 2).toJdkDate();
   }
 
   @Benchmark
   public Date offsetByZUtil() {
-    return DateUtils.toDate(DateUtils.plusOrMinus(nowDateTime, 2, ChronoUnit.DAYS));
+    return DateUtil.toDate(DateUtil.plusOrMinus(nowDateTime, 2, ChronoUnit.DAYS));
   }
 }
 

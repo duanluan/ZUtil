@@ -1,9 +1,8 @@
 package top.csaf.jmh.contrast.date;
 
-import cn.hutool.core.date.DateUtil;
 import org.junit.jupiter.api.Test;
 import org.openjdk.jmh.annotations.*;
-import top.csaf.date.DateUtils;
+import top.csaf.date.DateUtil;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoField;
@@ -32,26 +31,26 @@ public class BeginEndTimeTest {
   }
 
   private static final LocalDateTime nowDateTime = LocalDateTime.now();
-  private static final Date nowDate= DateUtils.toDate(nowDateTime);
+  private static final Date nowDate = DateUtil.toDate(nowDateTime);
 
   @Benchmark
   public Date beginTimeByHutool() {
-    return DateUtil.beginOfDay(nowDate).toJdkDate();
+    return cn.hutool.core.date.DateUtil.beginOfDay(nowDate).toJdkDate();
   }
 
   @Benchmark
   public Date beginTimeByZUtil() {
-    return DateUtils.minDate(nowDateTime, ChronoField.MICRO_OF_DAY);
+    return DateUtil.minDate(nowDateTime, ChronoField.MICRO_OF_DAY);
   }
 
   @Benchmark
   public Date endTimeByHutool() {
-    return DateUtil.endOfDay(nowDate).toJdkDate();
+    return cn.hutool.core.date.DateUtil.endOfDay(nowDate).toJdkDate();
   }
 
   @Benchmark
   public Date endTimeByZUtil() {
-    return DateUtils.maxDate(nowDateTime, ChronoField.MICRO_OF_DAY);
+    return DateUtil.maxDate(nowDateTime, ChronoField.MICRO_OF_DAY);
   }
 }
 

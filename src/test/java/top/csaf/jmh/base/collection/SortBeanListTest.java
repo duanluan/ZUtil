@@ -5,7 +5,7 @@ import org.apache.commons.collections.comparators.ComparableComparator;
 import org.apache.commons.collections4.ComparatorUtils;
 import org.junit.jupiter.api.Test;
 import org.openjdk.jmh.annotations.*;
-import top.csaf.CollectionUtils;
+import top.csaf.coll.CollUtil;
 import top.csaf.tree.TreeNode;
 
 import java.util.ArrayList;
@@ -27,8 +27,8 @@ public class SortBeanListTest {
 
   public static void main(String[] args) {
     SortBeanListTest sortBeanListTest = new SortBeanListTest();
-    System.out.println(CollectionUtils.isAllEqualsSameIndex(true, null, sortBeanListTest.ascByBeanComparator(), sortBeanListTest.ascByComparator()));
-    System.out.println(CollectionUtils.isAllEqualsSameIndex(true, null, sortBeanListTest.descByBeanComparator(), sortBeanListTest.descByComparator()));
+    System.out.println(CollUtil.isAllEqualsSameIndex(true, null, sortBeanListTest.ascByBeanComparator(), sortBeanListTest.ascByComparator()));
+    System.out.println(CollUtil.isAllEqualsSameIndex(true, null, sortBeanListTest.descByBeanComparator(), sortBeanListTest.descByComparator()));
   }
 
   @Test

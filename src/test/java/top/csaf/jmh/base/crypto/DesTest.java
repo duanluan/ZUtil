@@ -6,9 +6,9 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.util.encoders.Hex;
 import org.junit.jupiter.api.Test;
 import org.openjdk.jmh.annotations.*;
-import top.csaf.ArrayUtils;
-import top.csaf.crypto.SecurityUtils;
-import top.csaf.junit.BeanUtilsTest;
+import top.csaf.crypto.SecurityUtil;
+import top.csaf.junit.BeanUtilTest;
+import top.csaf.lang.ArrayUtil;
 
 import javax.crypto.*;
 import javax.crypto.spec.DESKeySpec;
@@ -43,15 +43,15 @@ public class DesTest {
     org.openjdk.jmh.Main.main(new String[]{DesTest.class.getName()});
   }
 
-  private static final BeanUtilsTest.TestBean testBean;
+  private static final BeanUtilTest.TestBean testBean;
 
   static {
-    testBean = new BeanUtilsTest.TestBean();
+    testBean = new BeanUtilTest.TestBean();
     testBean.setName("张三");
   }
 
-  byte[] key = ArrayUtils.toBytes(new char[]{'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'});
-  byte[] in = ArrayUtils.toBytes(new char[]{'中'});
+  byte[] key = ArrayUtil.toBytes(new char[]{'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'});
+  byte[] in = ArrayUtil.toBytes(new char[]{'中'});
 
   @Benchmark
   public String jdk() throws InvalidKeyException, NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPaddingException, NoSuchProviderException, IllegalBlockSizeException, BadPaddingException {
@@ -68,7 +68,7 @@ public class DesTest {
 
   @Benchmark
   public String bouncyCastle() throws InvalidCipherTextException {
-    byte[] bytes = SecurityUtils.desEcb(key, in, true, new ZeroBytePadding());
+    byte[] bytes = SecurityUtil.desEcb(key, in, true, new ZeroBytePadding());
     return Hex.toHexString(bytes);
   }
 }

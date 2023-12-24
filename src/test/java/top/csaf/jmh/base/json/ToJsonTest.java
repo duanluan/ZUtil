@@ -7,8 +7,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import org.junit.jupiter.api.Test;
 import org.openjdk.jmh.annotations.*;
-import top.csaf.ObjectUtils;
-import top.csaf.junit.BeanUtilsTest;
+import top.csaf.junit.BeanUtilTest;
+import top.csaf.lang.ObjUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +29,7 @@ public class ToJsonTest {
   public static void main(String[] args) throws JsonProcessingException {
     // 结果是否相等
     ToJsonTest test = new ToJsonTest();
-    System.out.println(ObjectUtils.isAllEquals(false, false, test.jackson(), test.fastjson(), test.gson(), test.hutool()));
+    System.out.println(ObjUtil.isAllEquals(false, false, test.jackson(), test.fastjson(), test.gson(), test.hutool()));
   }
 
   @Test
@@ -37,12 +37,12 @@ public class ToJsonTest {
     org.openjdk.jmh.Main.main(new String[]{ToJsonTest.class.getName()});
   }
 
-  private static final BeanUtilsTest.TestBean testBean;
+  private static final BeanUtilTest.TestBean testBean;
 
   static {
-    testBean = new BeanUtilsTest.TestBean();
-    List<BeanUtilsTest.TestBean> beanList = new ArrayList<>();
-    beanList.add(new BeanUtilsTest.TestBean("1"));
+    testBean = new BeanUtilTest.TestBean();
+    List<BeanUtilTest.TestBean> beanList = new ArrayList<>();
+    beanList.add(new BeanUtilTest.TestBean("1"));
     testBean.setDeepObject(beanList);
   }
 

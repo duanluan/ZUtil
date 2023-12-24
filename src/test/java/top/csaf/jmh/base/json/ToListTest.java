@@ -7,8 +7,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import org.junit.jupiter.api.Test;
 import org.openjdk.jmh.annotations.*;
-import top.csaf.CollectionUtils;
-import top.csaf.junit.BeanUtilsTest;
+import top.csaf.coll.CollUtil;
+import top.csaf.junit.BeanUtilTest;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,7 +30,7 @@ public class ToListTest {
   public static void main(String[] args) throws JsonProcessingException {
     // 结果是否相等
     ToListTest test = new ToListTest();
-    System.out.println(CollectionUtils.isAllEqualsSameIndex(false, null, test.jackson(), test.fastjson(), test.gson()));
+    System.out.println(CollUtil.isAllEqualsSameIndex(false, null, test.jackson(), test.fastjson(), test.gson()));
   }
 
   @Test
@@ -43,25 +43,25 @@ public class ToListTest {
   private final static ObjectMapper objectMapper = new ObjectMapper();
 
   @Benchmark
-  public List<BeanUtilsTest.TestBean> jackson() throws JsonProcessingException {
-    return new ArrayList<>(Arrays.asList(objectMapper.readValue(JSON_STR, BeanUtilsTest.TestBean[].class)));
+  public List<BeanUtilTest.TestBean> jackson() throws JsonProcessingException {
+    return new ArrayList<>(Arrays.asList(objectMapper.readValue(JSON_STR, BeanUtilTest.TestBean[].class)));
   }
 
   @Benchmark
-  public List<BeanUtilsTest.TestBean> fastjson() {
-    return JSON.parseArray(JSON_STR, BeanUtilsTest.TestBean.class);
+  public List<BeanUtilTest.TestBean> fastjson() {
+    return JSON.parseArray(JSON_STR, BeanUtilTest.TestBean.class);
   }
 
   private final static Gson gson = new Gson();
 
   @Benchmark
-  public List<BeanUtilsTest.TestBean> gson() {
-    return new ArrayList<>(Arrays.asList(gson.fromJson(JSON_STR, BeanUtilsTest.TestBean[].class)));
+  public List<BeanUtilTest.TestBean> gson() {
+    return new ArrayList<>(Arrays.asList(gson.fromJson(JSON_STR, BeanUtilTest.TestBean[].class)));
   }
 
   @Benchmark
-  public List<BeanUtilsTest.TestBean> hutool() {
-    return JSONUtil.toList(JSON_STR, BeanUtilsTest.TestBean.class);
+  public List<BeanUtilTest.TestBean> hutool() {
+    return JSONUtil.toList(JSON_STR, BeanUtilTest.TestBean.class);
   }
 }
 

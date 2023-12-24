@@ -2,7 +2,7 @@ package top.csaf.jmh.base.beans;
 
 import org.junit.jupiter.api.Test;
 import org.openjdk.jmh.annotations.*;
-import top.csaf.junit.BeanUtilsTest;
+import top.csaf.junit.BeanUtilTest;
 
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
@@ -36,21 +36,21 @@ public class SetPropertyTest {
     org.openjdk.jmh.Main.main(new String[]{SetPropertyTest.class.getName()});
   }
 
-  private static final BeanUtilsTest.TestBean testBean;
+  private static final BeanUtilTest.TestBean testBean;
 
   static {
-    testBean = new BeanUtilsTest.TestBean();
+    testBean = new BeanUtilTest.TestBean();
     testBean.setName("张三");
   }
 
   @Benchmark
-  public BeanUtilsTest.TestBean apache() throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
+  public BeanUtilTest.TestBean apache() throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
     org.apache.commons.beanutils.BeanUtils.setProperty(testBean, "name", "张三");
     return testBean;
   }
 
   @Benchmark
-  public BeanUtilsTest.TestBean spring() throws InvocationTargetException, IllegalAccessException {
+  public BeanUtilTest.TestBean spring() throws InvocationTargetException, IllegalAccessException {
     PropertyDescriptor propertyDescriptor = org.springframework.beans.BeanUtils.getPropertyDescriptor(testBean.getClass(), "name");
     propertyDescriptor.getWriteMethod().invoke(testBean, "张三");
     return testBean;

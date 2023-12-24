@@ -1,9 +1,8 @@
 package top.csaf.jmh.contrast.str;
 
-import cn.hutool.core.util.StrUtil;
 import org.junit.jupiter.api.Test;
 import org.openjdk.jmh.annotations.*;
-import top.csaf.StringUtils;
+import top.csaf.lang.StrUtil;
 
 import java.util.concurrent.TimeUnit;
 
@@ -31,12 +30,12 @@ public class RemovePrefixTest {
 
   @Benchmark
   public String removePrefixByHutool() {
-    return StrUtil.removePrefix(str, "jpg");
+    return cn.hutool.core.util.StrUtil.removePrefix(str, "jpg");
   }
 
   @Benchmark
   public String removePrefixByZUtil() {
-    return StringUtils.removeStart(str, "jpg");
+    return StrUtil.removeStart(str, "jpg");
   }
 }
 

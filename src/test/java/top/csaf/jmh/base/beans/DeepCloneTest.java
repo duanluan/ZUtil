@@ -7,7 +7,7 @@ import org.nustaq.serialization.FSTConfiguration;
 import org.openjdk.jmh.annotations.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.ReflectionUtils;
-import top.csaf.ObjectUtils;
+import top.csaf.lang.ObjUtil;
 import top.csaf.tree.TreeNode;
 
 import java.io.*;
@@ -51,7 +51,7 @@ public class DeepCloneTest {
 
   public static void main(String[] args) throws InvocationTargetException, IllegalAccessException, InstantiationException, NoSuchMethodException {
     DeepCloneTest test = new DeepCloneTest();
-    System.out.println(ObjectUtils.isAllEquals(false, false,
+    System.out.println(ObjUtil.isAllEquals(false, false,
       test.useApache(),
       test.useSpring(),
       test.useFastjson(),

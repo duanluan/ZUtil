@@ -1,9 +1,8 @@
 package top.csaf.jmh.contrast.str;
 
-import cn.hutool.core.util.StrUtil;
 import org.junit.jupiter.api.Test;
 import org.openjdk.jmh.annotations.*;
-import top.csaf.StringUtils;
+import top.csaf.lang.StrUtil;
 
 import java.util.concurrent.TimeUnit;
 
@@ -31,12 +30,12 @@ public class RemoveSuffixIgnoreCaseTest {
 
   @Benchmark
   public String removeSuffixIgnoreCaseByHutool() {
-    return StrUtil.removeSuffixIgnoreCase(str, "GPJ");
+    return cn.hutool.core.util.StrUtil.removeSuffixIgnoreCase(str, "GPJ");
   }
 
   @Benchmark
   public String removeSuffixIgnoreCaseByZUtil() {
-    return StringUtils.removeEndIgnoreCase(str, "GPJ");
+    return StrUtil.removeEndIgnoreCase(str, "GPJ");
   }
 }
 

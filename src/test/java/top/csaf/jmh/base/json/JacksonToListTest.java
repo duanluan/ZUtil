@@ -9,7 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.openjdk.jmh.annotations.*;
-import top.csaf.CollectionUtils;
+import top.csaf.coll.CollUtil;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -34,7 +34,7 @@ public class JacksonToListTest {
   public static void main(String[] args) throws IOException, ClassNotFoundException {
     // 结果是否相等
     JacksonToListTest test = new JacksonToListTest();
-    System.out.println(CollectionUtils.isAllEqualsSameIndex(false, null, test.test1(), test.test2(), test.test3(), test.test4(), test.test5(), test.test6()));
+    System.out.println(CollUtil.isAllEqualsSameIndex(false, null, test.test1(), test.test2(), test.test3(), test.test4(), test.test5(), test.test6()));
   }
 
   @Test
