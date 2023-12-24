@@ -2,7 +2,7 @@
 
 ## 简介
 
-追求更快更全的 Java 工具类。
+**追求更快更全的 Java 工具类**。
 
 本文档只会介绍常用及特色功能，具体使用请查看 [javadoc](https://apidoc.gitee.com/duanluan/ZUtil)。
 

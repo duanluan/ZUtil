@@ -1,10 +1,10 @@
 # constant 常量
 
-## DateConstant - 时间常量
+## DateConst - 时间常量
 
 时间工具类默认值。
 
-如需修改，见 [DateFeature](./dateFeature)。
+如需修改，见 [DateFeat](./dateFeat)。
 
 ## DateDuration - 持续时间
 
@@ -12,7 +12,7 @@
 
 ## 其他
 
-- **DateFormat** - FastDateFormat 对象
-- **DateFormatter** - DateTimeFormatter 对象
+- **DateFormat** - `FastDateFormat`对象
+- **DateFormatter** - `DateTimeFormatter`对象
 - **DatePattern** - 时间格式
 - **DateRegexPattern** - 时间格式正则

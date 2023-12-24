@@ -23,7 +23,7 @@ implementation("top.csaf:ZUtil:1.14.0")
 
 ## 安装注意
 
-工具包中已使用 slf4j-api 和 slf4j-simple，和 spring-boot-starter-web 同时使用时会冲突，需要手动排除。
+工具包中已使用`slf4j-api`和`slf4j-simple`，和`spring-boot-starter-web`同时使用时会**冲突**，需要手动排除。
 
 ### Maven
 
