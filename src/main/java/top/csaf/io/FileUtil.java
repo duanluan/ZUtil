@@ -78,7 +78,7 @@ public class FileUtil extends org.apache.commons.io.FileUtils {
    * @return 文件扩展名
    */
   public static String getFileExtension(@NonNull final String filePath) {
-    return new StringBuffer(RegExUtil.match(new StringBuffer(filePath).reverse().toString(), PATTERN_REVERSE_FILE_EXTENSION, 0, 1)).reverse().toString();
+    return new StringBuffer(RegExUtil.match(new StringBuffer(filePath).reverse().toString(), PATTERN_REVERSE_FILE_EXTENSION.pattern(), 0, 1)).reverse().toString();
   }
 
   /**
@@ -133,7 +133,7 @@ public class FileUtil extends org.apache.commons.io.FileUtils {
    * @return 文件名
    */
   public static String getNameByPath(@NonNull final String filePath) {
-    return new StringBuffer(RegExUtil.matchFirst(new StringBuffer(filePath).reverse().append("/").toString(), PATTERN_REVERSE_SLASH_FILE_NAME, 1)).reverse().toString();
+    return new StringBuffer(RegExUtil.matchFirst(new StringBuffer(filePath).reverse().append("/").toString(), PATTERN_REVERSE_SLASH_FILE_NAME.pattern(), 1)).reverse().toString();
   }
 
   /**
