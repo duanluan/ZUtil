@@ -1,5 +1,10 @@
 # 不兼容变更
 
+* 1.14.0
+  * `RegExUtils` 删除有 Pattern 形参的方法。
+  * 所有类名含`Utils`的重命名为`Util`，含`String`的重命名为`Str`，含`Collection`的重命名为`Coll`，含`Feature`的重命名为`Feat`，含`Constant`的重命名为`Const`，含`Property`的重命名为`Prop`，含`Function`的重命名为`Func`。
+  * `date.constant.DateRegexPattern`重命名为`DateRegExPattern`。
+  * `ArrayUtil`、`ClassUtil`、`NumberUtil`、`ObjUtil`、`RandomStrUtil`、`RandomUtil`、`StrUtil`、`SysUtil`移至`lang`包下，`CollUtil`、`MapUtil`移至`coll`包下，`JsonUtil`移至`json`包下，`XmlUtil`移至`xml`包下，`PropFunc`移至`bean`包下。
 * 1.13.5
   * `HttpUtils`返回`HttpResult.Body`的方法改为返回`HttpResult`。
 * 1.13.2
