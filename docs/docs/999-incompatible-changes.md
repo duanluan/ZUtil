@@ -1,5 +1,7 @@
 # 不兼容变更
 
+* 1.14.1
+  * 删除`crypto.SecurityUtil`。
 * 1.14.0
   * `RegExUtils` 删除有 Pattern 形参的方法。
   * 所有类名含`Utils`的重命名为`Util`，含`String`的重命名为`Str`，含`Collection`的重命名为`Coll`，含`Feature`的重命名为`Feat`，含`Constant`的重命名为`Const`，含`Property`的重命名为`Prop`，含`Function`的重命名为`Func`。
