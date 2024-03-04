@@ -6,6 +6,11 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.ResolverStyle;
 import java.util.Locale;
 
+/**
+ * 日期格式，主要返回 {@link DateTimeFormatter}
+ * <p>
+ * 成员变量和 {@link DateFeat} 无关
+ */
 public class DateFormatter {
 
   public static final DateTimeFormatter YYYY_MM_DD_HH_MM_SS;

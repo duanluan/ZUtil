@@ -80,7 +80,7 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
   }
 
   /**
-   * 获取默认的时间格式器
+   * 获取时间格式器
    * <p>
    * 默认模式为 {@link DateConst#DEFAULT_RESOLVER_STYLE}，默认区域为 {@link DateConst#DEFAULT_LOCALE}<br>
    * 对应时间级别没有就赋默认值：0000-01-01 00:00:00.00000000
@@ -88,14 +88,20 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
    * @param pattern 格式
    * @param locale  区域，null 时为 {@link DateFeat#getLocale()}，如果通过 {@link DateFeat#set(java.util.Locale)} 设置为了 null，则为 {@link DateTimeFormatterBuilder#toFormatter()}
    * @param zoneId  时区
+   * @param isDate  是否为 Date 类型，为 true 时不赋值 YearOfEra
    * @return 时间格式器
    */
-  public static DateTimeFormatter getDefaultFormatter(@NonNull final String pattern, final Locale locale, final ZoneId zoneId) {
+  public static DateTimeFormatter getFormatter(@NonNull final String pattern, final Locale locale, final ZoneId zoneId, final Boolean isDate) {
     if (StrUtil.isBlank(pattern)) {
       throw new IllegalArgumentException("pattern must not be blank");
     }
-    Map<TemporalField, Long> fieldValueMap = new HashMap<>();
-    fieldValueMap.put(ChronoField.YEAR_OF_ERA, 1L);
+    Map<TemporalField, Long> fieldValueMap;
+    if (Boolean.TRUE.equals(isDate)) {
+      fieldValueMap = new HashMap<>(7);
+    } else {
+      fieldValueMap = new HashMap<>(8);
+      fieldValueMap.put(ChronoField.YEAR_OF_ERA, 1L);
+    }
     fieldValueMap.put(ChronoField.YEAR, 0L);
     fieldValueMap.put(ChronoField.MONTH_OF_YEAR, 1L);
     fieldValueMap.put(ChronoField.DAY_OF_MONTH, 1L);
@@ -112,40 +118,93 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
     dateTimeFormatter.withResolverStyle(DateFeat.getResolverStyle());
     if (zoneId != null) {
       dateTimeFormatter = dateTimeFormatter.withZone(DateFeat.get(zoneId));
+    } else {
+      dateTimeFormatter = dateTimeFormatter.withZone(DateFeat.getZoneId());
     }
     return dateTimeFormatter;
   }
 
   /**
-   * 获取默认的时间格式器（默认严格模式、区域英语），对应时间级别没有就赋默认值：0000-01-01 00:00:00.00000000
+   * 获取时间格式器
+   * <p>
+   * 默认模式为 {@link DateConst#DEFAULT_RESOLVER_STYLE}，默认区域为 {@link DateConst#DEFAULT_LOCALE}<br>
+   * 对应时间级别没有就赋默认值：0000-01-01 00:00:00.00000000
+   *
+   * @param pattern 格式
+   * @param locale  区域，null 时为 {@link DateFeat#getLocale()}，如果通过 {@link DateFeat#set(java.util.Locale)} 设置为了 null，则为 {@link DateTimeFormatterBuilder#toFormatter()}
+   * @param zoneId  时区
+   * @return 时间格式器
+   */
+  public static DateTimeFormatter getFormatter(@NonNull final String pattern, final Locale locale, final ZoneId zoneId) {
+    return getFormatter(pattern, locale, zoneId, null);
+  }
+
+  /**
+   * 获取时间格式器（默认严格模式、区域英语），对应时间级别没有就赋默认值：0000-01-01 00:00:00.00000000
+   *
+   * @param pattern 格式
+   * @param locale  区域
+   * @param isDate  是否为 Date 类型，为 true 时不赋值 YearOfEra
+   * @return 时间格式器
+   */
+  public static DateTimeFormatter getFormatter(@NonNull final String pattern, final Locale locale, final Boolean isDate) {
+    return getFormatter(pattern, locale, null, isDate);
+  }
+
+  /**
+   * 获取时间格式器（默认严格模式、区域英语），对应时间级别没有就赋默认值：0000-01-01 00:00:00.00000000
    *
    * @param pattern 格式
    * @param locale  区域
    * @return 时间格式器
    */
-  public static DateTimeFormatter getDefaultFormatter(@NonNull final String pattern, @NonNull final Locale locale) {
-    return getDefaultFormatter(pattern, locale, null);
+  public static DateTimeFormatter getFormatter(@NonNull final String pattern, final Locale locale) {
+    return getFormatter(pattern, locale, null, null);
+  }
+
+
+  /**
+   * 获取时间格式器（默认严格模式、区域英语），对应时间级别没有就赋默认值：0000-01-01 00:00:00.00000000
+   *
+   * @param pattern 格式
+   * @param zoneId  时区
+   * @param isDate  是否为 Date 类型，为 true 时不赋值 YearOfEra
+   * @return 时间格式器
+   */
+  public static DateTimeFormatter getFormatter(@NonNull final String pattern, final ZoneId zoneId, final Boolean isDate) {
+    return getFormatter(pattern, null, zoneId, isDate);
   }
 
   /**
-   * 获取默认的时间格式器（默认严格模式、区域英语），对应时间级别没有就赋默认值：0000-01-01 00:00:00.00000000
+   * 获取时间格式器（默认严格模式、区域英语），对应时间级别没有就赋默认值：0000-01-01 00:00:00.00000000
    *
    * @param pattern 格式
    * @param zoneId  时区
    * @return 时间格式器
    */
-  public static DateTimeFormatter getDefaultFormatter(@NonNull final String pattern, @NonNull final ZoneId zoneId) {
-    return getDefaultFormatter(pattern, null, zoneId);
+  public static DateTimeFormatter getFormatter(@NonNull final String pattern, final ZoneId zoneId) {
+    return getFormatter(pattern, null, zoneId, null);
   }
 
   /**
-   * 获取默认的时间格式器（默认严格模式、区域英语），对应时间级别没有就赋默认值：0000-01-01 00:00:00.00000000
+   * 获取时间格式器（默认严格模式、区域英语），对应时间级别没有就赋默认值：0000-01-01 00:00:00.00000000
+   *
+   * @param pattern 格式
+   * @param isDate  是否为 Date 类型，为 true 时不赋值 YearOfEra
+   * @return 时间格式器
+   */
+  public static DateTimeFormatter getFormatter(@NonNull final String pattern, final Boolean isDate) {
+    return getFormatter(pattern, null, null, isDate);
+  }
+
+  /**
+   * 获取时间格式器（默认严格模式、区域英语），对应时间级别没有就赋默认值：0000-01-01 00:00:00.00000000
    *
    * @param pattern 格式
    * @return 时间格式器
    */
-  public static DateTimeFormatter getDefaultFormatter(@NonNull final String pattern) {
-    return getDefaultFormatter(pattern, null, null);
+  public static DateTimeFormatter getFormatter(@NonNull final String pattern) {
+    return getFormatter(pattern, null, null, null);
   }
 
   /**
@@ -292,21 +351,7 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
     if (StrUtil.isBlank(pattern)) {
       throw new IllegalArgumentException("pattern must not be blank");
     }
-    DateTimeFormatter dateTimeFormatter;
-    // 使用已存在的格式转换器
-    switch (pattern) {
-      case DateConst.DEFAULT_LOCAL_DATE_TIME_PATTERN:
-        dateTimeFormatter = DateFormatter.YYYY_MM_DD_HH_MM_SS;
-        break;
-      case DateConst.DEFAULT_LOCAL_DATE_PATTERN:
-        dateTimeFormatter = DateFormatter.YYYY_MM_DD;
-        break;
-      case DateConst.DEFAULT_LOCAL_TIME_PATTERN:
-        dateTimeFormatter = DateFormatter.HH_MM_SS;
-        break;
-      default:
-        dateTimeFormatter = getDefaultFormatter(pattern);
-    }
+    DateTimeFormatter dateTimeFormatter = getFormatter(pattern);
     ZoneId zoneId1 = DateFeat.get(zoneId);
     if (zoneId1 != null) {
       if (temporal instanceof LocalDateTime || temporal instanceof LocalDate || temporal instanceof LocalTime) {
@@ -839,7 +884,7 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
     }
     for (String pattern : patterns) {
       source = convertByPattern(source, pattern);
-      ZonedDateTime zonedDateTime = LocalDateTime.parse(source, getDefaultFormatter(pattern)).atZone(DateConst.SYSTEM_ZONE_ID);
+      ZonedDateTime zonedDateTime = LocalDateTime.parse(source, getFormatter(pattern)).atZone(DateConst.SYSTEM_ZONE_ID);
       if (zoneId != null) {
         zonedDateTime = zonedDateTime.withZoneSameInstant(DateFeat.get(zoneId));
       }
@@ -987,7 +1032,7 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
     }
     for (String pattern : patterns) {
       source = convertByPattern(source, pattern);
-      LocalDate localDate = LocalDate.parse(source, getDefaultFormatter(pattern));
+      LocalDate localDate = LocalDate.parse(source, getFormatter(pattern));
       if (zoneId != null) {
         return localDate.atTime(LocalTime.MIN).atZone(DateConst.SYSTEM_ZONE_ID).withZoneSameInstant(DateFeat.get(zoneId)).toLocalDate();
       }
@@ -1115,7 +1160,7 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
     }
     for (String pattern : patterns) {
       source = convertByPattern(source, pattern);
-      LocalTime localTime = LocalTime.parse(source, getDefaultFormatter(pattern));
+      LocalTime localTime = LocalTime.parse(source, getFormatter(pattern));
       if (zoneId != null) {
         return localTime.atDate(LocalDate.now()).atZone(DateConst.SYSTEM_ZONE_ID).withZoneSameInstant(DateFeat.get(zoneId)).toLocalTime();
       }
