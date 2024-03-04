@@ -437,28 +437,7 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
     if (StrUtil.isBlank(pattern)) {
       throw new IllegalArgumentException("pattern must not be blank");
     }
-    if (zoneId != null) {
-      ZonedDateTime zonedDateTime = date.toInstant().atZone(DateConst.SYSTEM_ZONE_ID);
-      zonedDateTime = zonedDateTime.withZoneSameInstant(DateFeat.get(zoneId));
-      return format(zonedDateTime.toLocalDateTime(), pattern);
-    } else {
-      DateTimeFormatter format;
-      // 使用已存在的格式转换器
-      switch (pattern) {
-        case DateConst.DEFAULT_LOCAL_DATE_TIME_PATTERN:
-          format = DateFormatter.YYYY_MM_DD_HH_MM_SS;
-          break;
-        case DateConst.DEFAULT_LOCAL_DATE_PATTERN:
-          format = DateFormatter.YYYY_MM_DD;
-          break;
-        case DateConst.DEFAULT_LOCAL_TIME_PATTERN:
-          format = DateFormatter.HH_MM_SS;
-          break;
-        default:
-          format = getDefaultFormatter(pattern);
-      }
-      return format.format(date.toInstant());
-    }
+    return getFormatter(pattern, zoneId, true).format(date.toInstant());
   }
 
   /**
