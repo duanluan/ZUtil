@@ -155,6 +155,8 @@ Mode 即为`org.openjdk.jmh.annotations.Mode`，分为：
 
 ### 参与开发
 
+福利：***JetBrains* 全系列许可证**。
+
 1. **[Fork](https://github.com/duanluan/ZUtil/fork)** 并 **Clone** 项目到本地。
 2. 开发内容：
    * **新增类或方法**需提前[加群](https://jq.qq.com/?_wv=1027&k=pYzF0R18)沟通。
