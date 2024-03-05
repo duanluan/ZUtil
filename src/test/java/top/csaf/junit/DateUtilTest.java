@@ -148,9 +148,9 @@ class DateUtilTest {
   }
 
 
-  @DisplayName("getDefaultFormatter：获取 DateTimeFormatter 对象")
+  @DisplayName("getFormatter：获取 DateTimeFormatter 对象")
   @Test
-  void getDefaultFormatter() {
+  void getFormatter() {
     // 格式中不含年
     DateTimeFormatter dateTimeFormatter = new DateTimeFormatterBuilder().appendPattern(DatePattern.MM_DD).toFormatter();
     // 获取年报错：Unsupported field: Year
@@ -160,18 +160,18 @@ class DateUtilTest {
       log.warn(e.getMessage());
     }
 
-    assertThrows(IllegalArgumentException.class, () -> DateUtil.getDefaultFormatter("", null, null));
-    // 使用 getDefaultFormatter() 时会赋默认值
-    assertEquals(DateUtil.getDefaultFormatter(DatePattern.MM_DD, Locale.ENGLISH, ZoneId.systemDefault()).parse("08-08").get(ChronoField.YEAR), 0);
+    assertThrows(IllegalArgumentException.class, () -> DateUtil.getFormatter("", null, null,null));
+    // 使用 getFormatter() 时会赋默认值
+    assertEquals(DateUtil.getFormatter(DatePattern.MM_DD, Locale.ENGLISH, ZoneId.systemDefault()).parse("08-08").get(ChronoField.YEAR), 0);
     DateFeat.set((Locale) null);
-    assertEquals(DateUtil.getDefaultFormatter(DatePattern.MM_DD, null, ZoneId.systemDefault()).parse("08-08").get(ChronoField.YEAR), 0);
+    assertEquals(DateUtil.getFormatter(DatePattern.MM_DD, null, ZoneId.systemDefault()).parse("08-08").get(ChronoField.YEAR), 0);
 
     // 地区为简体中文，可以解析星期几
-    assertEquals(DateUtil.getDefaultFormatter("MM-dd EEE", Locale.SIMPLIFIED_CHINESE).parse("08-15 星期二").get(ChronoField.DAY_OF_WEEK), 2);
+    assertEquals(DateUtil.getFormatter("MM-dd EEE", Locale.SIMPLIFIED_CHINESE).parse("08-15 星期二").get(ChronoField.DAY_OF_WEEK), 2);
     // ZonedDateTime.parse 后时区为 +8，但本地时区就是 +8，所以此时 getHour() 为 0，再 withZoneSameInstant 转换为 UTC 时区，少 8 小时，所以 getHour() 会 -8，就是 16
-    assertEquals(ZonedDateTime.parse("00", DateUtil.getDefaultFormatter("HH", ZoneOffset.ofHours(8))).withZoneSameInstant(ZoneOffset.UTC).getHour(), 16);
+    assertEquals(ZonedDateTime.parse("00", DateUtil.getFormatter("HH", ZoneOffset.ofHours(8))).withZoneSameInstant(ZoneOffset.UTC).getHour(), 16);
 
-    assertEquals(DateUtil.getDefaultFormatter(DatePattern.MM_DD).parse("08-26").get(ChronoField.YEAR), 0);
+    assertEquals(DateUtil.getFormatter(DatePattern.MM_DD).parse("08-26").get(ChronoField.YEAR), 0);
   }
 
   @DisplayName("convertByPattern：转换需要格式化的字符串，比如英文月份转换为首字母大写")
