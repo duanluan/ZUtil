@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * @Date 2024/5/29 10:34
  **/
 @Slf4j
-@DisplayName("NUMBER 工具类测试")
+@DisplayName("ObjUtil 工具类测试")
 public class ObjUtilTest {
 
     @DisplayName("isAllEquals：小于 0，数字为 null 时返回 false")
