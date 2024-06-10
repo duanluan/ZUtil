@@ -2,8 +2,8 @@ package top.csaf.regex;
 
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import top.csaf.constant.CommonPattern;
+import top.csaf.lang.StrUtil;
 import top.csaf.regex.enums.FlagsEnum;
 
 import java.util.ArrayList;
@@ -238,7 +238,7 @@ public class RegExUtil extends org.apache.commons.lang3.RegExUtils {
    * @return 是否能匹配
    */
   public static boolean isMatch(@NonNull final CharSequence text, @NonNull final String regex, final int flags) {
-    return StringUtils.isNotBlank(matchFirst(text, regex, 0, flags));
+    return StrUtil.isNotBlank(matchFirst(text, regex, 0, flags));
   }
 
   /**

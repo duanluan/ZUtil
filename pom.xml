@@ -2,11 +2,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
+  <packaging>pom</packaging>
+
   <groupId>top.csaf</groupId>
   <artifactId>ZUtil</artifactId>
-  <version>1.14.2</version>
-
-  <name>ZUtil</name>
+  <version>2.0.0-alpha1</version>
+  <name>${project.artifactId}</name>
   <url>https://github.com/duanluan/ZUtil</url>
   <description>Java Util</description>
   <licenses>
@@ -15,15 +16,11 @@
       <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
     </license>
   </licenses>
-
-  <!-- Software Configuration Management -->
-  <scm>
-    <url>https://github.com/duanluan/ZUtil</url>
-    <connection>scm:git:https://github.com/duanluan/ZUtil.git</connection>
-    <developerConnection>scm:git:https://github.com/duanluan/ZUtil.git</developerConnection>
-  </scm>
-
-  <!-- 开发者信息 -->
+  <issueManagement>
+    <system>GitHub Issues</system>
+    <url>https://github.com/duanluan/ZUtil/issues</url>
+  </issueManagement>
+  <!-- 开发者：https://central.sonatype.org/publish/requirements/#developer-information -->
   <developers>
     <developer>
       <name>duanluan</name>
@@ -33,11 +30,28 @@
       <timezone>+8</timezone>
     </developer>
   </developers>
+  <!-- SCM：https://central.sonatype.org/publish/requirements/#scm-information -->
+  <scm>
+    <url>https://github.com/duanluan/ZUtil/tree/main</url>
+    <connection>scm:git:git://github.com/duanluan/ZUtil.git</connection>
+    <developerConnection>scm:git:ssh://github.com:duanluan/ZUtil.git</developerConnection>
+  </scm>
 
   <properties>
     <java.version>1.8</java.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <jacocoArgLine/>
+    <serverId>central</serverId>
   </properties>
+
+  <modules>
+    <module>zutil-all</module>
+    <module>zutil-core</module>
+    <module>zutil-regex</module>
+    <module>zutil-io</module>
+    <module>zutil-pinyin</module>
+    <module>zutil-date</module>
+  </modules>
 
   <dependencies>
     <dependency>
@@ -56,96 +70,6 @@
       <artifactId>slf4j-simple</artifactId>
       <version>1.7.36</version>
     </dependency>
-
-    <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-lang3</artifactId>
-      <version>3.14.0</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-text</artifactId>
-      <version>1.11.0</version>
-      <exclusions>
-        <exclusion>
-          <groupId>org.apache.commons</groupId>
-          <artifactId>commons-lang3</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-collections4</artifactId>
-      <version>4.4</version>
-    </dependency>
-    <dependency>
-      <groupId>commons-io</groupId>
-      <artifactId>commons-io</artifactId>
-      <version>2.15.1</version>
-    </dependency>
-    <dependency>
-      <groupId>commons-beanutils</groupId>
-      <artifactId>commons-beanutils</artifactId>
-      <version>1.9.4</version>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-beans</artifactId>
-      <version>5.3.31</version>
-    </dependency>
-    <!-- 加密算法 -->
-    <dependency>
-      <groupId>org.bouncycastle</groupId>
-      <artifactId>bcprov-jdk18on</artifactId>
-      <version>1.77</version>
-    </dependency>
-    <!-- HTTP、WebSocket、Stomp 请求 -->
-    <dependency>
-      <groupId>cn.zhxu</groupId>
-      <artifactId>okhttps-fastjson2-jsonb</artifactId>
-      <version>4.0.2</version>
-      <exclusions>
-        <!-- 解决 okhttp 和 okio 版本不兼容导致的 java.lang.NoSuchFieldError: Companion 错误：https://ok.zhxu.cn/v4/questions.html#java-lang-nosuchfielderror-companion -->
-        <exclusion>
-          <groupId>com.squareup.okio</groupId>
-          <artifactId>okio</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>com.squareup.okio</groupId>
-      <artifactId>okio</artifactId>
-      <version>3.7.0</version>
-    </dependency>
-
-    <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-databind</artifactId>
-      <version>2.16.0</version>
-    </dependency>
-    <dependency>
-      <groupId>com.alibaba.fastjson2</groupId>
-      <artifactId>fastjson2</artifactId>
-      <version>2.0.43</version>
-    </dependency>
-    <dependency>
-      <groupId>com.google.code.gson</groupId>
-      <artifactId>gson</artifactId>
-      <version>2.10.1</version>
-    </dependency>
-    <!-- XML -->
-    <dependency>
-      <groupId>org.dom4j</groupId>
-      <artifactId>dom4j</artifactId>
-      <version>2.1.4</version>
-    </dependency>
-    <!-- YAML -->
-    <dependency>
-      <groupId>org.yaml</groupId>
-      <artifactId>snakeyaml</artifactId>
-      <version>2.2</version>
-    </dependency>
-
 
     <!-- JUnit：https://junit.org/junit5/docs/current/api/index.html -->
     <dependency>
@@ -188,66 +112,6 @@
       <version>5.8.22</version>
       <scope>test</scope>
     </dependency>
-    <dependency>
-      <groupId>io.github.biezhi</groupId>
-      <artifactId>TinyPinyin</artifactId>
-      <version>2.0.3.RELEASE</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.jsoup</groupId>
-      <artifactId>jsoup</artifactId>
-      <version>1.16.2</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.esotericsoftware</groupId>
-      <artifactId>kryo</artifactId>
-      <version>5.5.0</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.wicketstuff</groupId>
-      <artifactId>wicketstuff-serializer-fast2</artifactId>
-      <version>9.16.0</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.caucho</groupId>
-      <artifactId>hessian</artifactId>
-      <version>4.0.66</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>io.protostuff</groupId>
-      <artifactId>protostuff-core</artifactId>
-      <version>1.8.0</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>io.protostuff</groupId>
-      <artifactId>protostuff-runtime</artifactId>
-      <version>1.8.0</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.dyuproject.protostuff</groupId>
-      <artifactId>protostuff-core</artifactId>
-      <version>1.3.0</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.dyuproject.protostuff</groupId>
-      <artifactId>protostuff-runtime</artifactId>
-      <version>1.3.0</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.objenesis</groupId>
-      <artifactId>objenesis</artifactId>
-      <version>3.3</version>
-      <scope>test</scope>
-    </dependency>
   </dependencies>
 
   <build>
@@ -284,72 +148,8 @@
               <exclude>**/jmh/**</exclude>
             </excludes>
             <argLine>${jacocoArgLine}</argLine>
-          </configuration>
-        </plugin>
-
-        <!-- Javadoc and Sources Attachments - The Central Repository Documentation https://central.sonatype.org/publish/publish-maven/#javadoc-and-sources-attachments -->
-        <!-- Apache Maven Source Plugin：创建源码 jar https://maven.apache.org/plugins/maven-source-plugin/ -->
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-source-plugin</artifactId>
-          <version>3.2.1</version>
-          <executions>
-            <execution>
-              <id>attach-sources</id>
-              <goals>
-                <!-- 默认生命周期阶段为 package。其他插件绑定到它的生命周期阶段时，用 jar 会重复打包，jar-no-fork 可以避免 https://stackoverflow.com/a/10568004 -->
-                <!-- https://maven.apache.org/plugins/maven-source-plugin/jar-no-fork-mojo.html -->
-                <goal>jar-no-fork</goal>
-              </goals>
-            </execution>
-          </executions>
-        </plugin>
-        <!-- Maven Javadoc Plugin：生成 Javadoc https://maven.apache.org/plugins/maven-javadoc-plugin/ -->
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-javadoc-plugin</artifactId>
-          <version>3.6.0</version>
-          <executions>
-            <execution>
-              <id>attach-javadocs</id>
-              <goals>
-                <!-- 默认生命周期阶段为 package。用于创建 Javadoc jar https://maven.apache.org/plugins/maven-javadoc-plugin/jar-mojo.html -->
-                <goal>jar</goal>
-              </goals>
-            </execution>
-          </executions>
-        </plugin>
-
-        <!-- GPG Signed Components - The Central Repository Documentation https://central.sonatype.org/publish/publish-maven/#gpg-signed-components -->
-        <!-- Apache Maven GPG Plugin：使用 GPG 对项目 Artifacts（发行版文件）进行签名 https://maven.apache.org/plugins/maven-gpg-plugin/ -->
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-gpg-plugin</artifactId>
-          <version>1.6</version>
-          <executions>
-            <execution>
-              <id>sign-artifacts</id>
-              <goals>
-                <!-- 签名项目 Artifact、POM、附加 artifacts（源码、Javadoc、本地 jar 等） https://maven.apache.org/plugins/maven-gpg-plugin/sign-mojo.html -->
-                <goal>sign</goal>
-              </goals>
-            </execution>
-          </executions>
-        </plugin>
-        <!-- Nexus Staging Maven Plugin for Deployment and Release - The Central Repository Documentation https://central.sonatype.org/publish/publish-maven/#nexus-staging-maven-plugin-for-deployment-and-release -->
-        <!-- Nexus Staging Maven Plugin：Nexus 流程 https://github.com/sonatype/nexus-maven-plugins/tree/main/staging/maven-plugin -->
-        <plugin>
-          <groupId>org.sonatype.plugins</groupId>
-          <artifactId>nexus-staging-maven-plugin</artifactId>
-          <version>1.6.13</version>
-          <extensions>true</extensions>
-          <configuration>
-            <!-- Maven setting.xml 中 <server> 的 ID，用于获取身份验证信息 https://github.com/sonatype/nexus-maven-plugins/tree/main/staging/maven-plugin#configuring-the-plugin -->
-            <serverId>ossrh</serverId>
-            <!-- 目标 Nexus URL -->
-            <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
-            <!-- deploy、close、rc-close 执行成功后自动 release -->
-            <autoReleaseAfterClose>true</autoReleaseAfterClose>
+            <!-- 跳过测试 -->
+            <skipTests>true</skipTests>
           </configuration>
         </plugin>
 
@@ -377,6 +177,87 @@
             </execution>
           </executions>
         </plugin>
+
+        <!-- Javadoc and Sources Attachments - The Central Repository Documentation https://central.sonatype.org/publish/publish-maven/#javadoc-and-sources-attachments -->
+        <!-- Apache Maven Source Plugin：创建源码 jar https://maven.apache.org/plugins/maven-source-plugin/ -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-source-plugin</artifactId>
+          <version>3.2.1</version>
+          <executions>
+            <execution>
+              <id>attach-sources</id>
+              <goals>
+                <!-- 默认生命周期阶段为 package。其他插件绑定到它的生命周期阶段时，用 jar 会重复打包，jar-no-fork 可以避免 https://stackoverflow.com/a/10568004 -->
+                <!-- https://maven.apache.org/plugins/maven-source-plugin/jar-no-fork-mojo.html -->
+                <goal>jar-no-fork</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+        <!-- Maven Javadoc Plugin：生成 Javadoc https://maven.apache.org/plugins/maven-javadoc-plugin/ -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-javadoc-plugin</artifactId>
+          <version>3.6.0</version>
+          <configuration>
+            <!-- 关闭 doclint，避免因为 Javadoc 格式问题导致构建失败 https://maven.apache.org/plugins/maven-javadoc-plugin/javadoc-mojo.html#doclint -->
+            <doclint>none</doclint>
+          </configuration>
+          <executions>
+            <execution>
+              <id>attach-javadocs</id>
+              <goals>
+                <!-- 默认生命周期阶段为 package。用于创建 Javadoc jar https://maven.apache.org/plugins/maven-javadoc-plugin/jar-mojo.html -->
+                <goal>jar</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+
+        <!-- GPG Signed Components - The Central Repository Documentation https://central.sonatype.org/publish/publish-maven/#gpg-signed-components -->
+        <!-- Apache Maven GPG Plugin：使用 GPG 对项目 Artifacts（发行版文件）进行签名 https://maven.apache.org/plugins/maven-gpg-plugin/ -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-gpg-plugin</artifactId>
+          <version>1.6</version>
+          <executions>
+            <execution>
+              <id>sign-artifacts</id>
+              <goals>
+                <!-- 签名项目 Artifact、POM、附加 artifacts（源码、Javadoc、本地 jar 等） https://maven.apache.org/plugins/maven-gpg-plugin/sign-mojo.html -->
+                <goal>sign</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+        <!--&lt;!&ndash; 旧平台 Nexus Staging Maven Plugin for Deployment and Release - The Central Repository Documentation https://central.sonatype.org/publish/publish-maven/#nexus-staging-maven-plugin-for-deployment-and-release &ndash;&gt;-->
+        <!--&lt;!&ndash; Nexus Staging Maven Plugin：Nexus 流程 https://github.com/sonatype/nexus-maven-plugins/tree/main/staging/maven-plugin &ndash;&gt;-->
+        <!--<plugin>-->
+        <!--  <groupId>org.sonatype.plugins</groupId>-->
+        <!--  <artifactId>nexus-staging-maven-plugin</artifactId>-->
+        <!--  <version>1.6.13</version>-->
+        <!--  <extensions>true</extensions>-->
+        <!--  <configuration>-->
+        <!--    &lt;!&ndash; Maven setting.xml 中 <server> 的 ID，用于获取身份验证信息 https://github.com/sonatype/nexus-maven-plugins/tree/main/staging/maven-plugin#configuring-the-plugin &ndash;&gt;-->
+        <!--    <serverId>ossrh</serverId>-->
+        <!--    &lt;!&ndash; 目标 Nexus URL &ndash;&gt;-->
+        <!--    <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>-->
+        <!--    &lt;!&ndash; deploy、close、rc-close 执行成功后自动 release &ndash;&gt;-->
+        <!--    <autoReleaseAfterClose>true</autoReleaseAfterClose>-->
+        <!--  </configuration>-->
+        <!--</plugin>-->
+        <!-- 新平台 Publishing By Using the Maven Plugin：https://central.sonatype.org/publish/publish-portal-maven/ -->
+        <plugin>
+          <groupId>org.sonatype.central</groupId>
+          <artifactId>central-publishing-maven-plugin</artifactId>
+          <version>0.4.0</version>
+          <extensions>true</extensions>
+          <configuration>
+            <publishingServerId>central</publishingServerId>
+            <tokenAuth>true</tokenAuth>
+          </configuration>
+        </plugin>
       </plugins>
     </pluginManagement>
 
@@ -390,6 +271,11 @@
         <artifactId>maven-surefire-plugin</artifactId>
       </plugin>
       <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+      </plugin>
+
+      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-source-plugin</artifactId>
       </plugin>
@@ -399,42 +285,45 @@
       </plugin>
 
       <plugin>
-        <groupId>org.sonatype.plugins</groupId>
-        <artifactId>nexus-staging-maven-plugin</artifactId>
-      </plugin>
-      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-gpg-plugin</artifactId>
       </plugin>
-
+      <!--<plugin>-->
+      <!--  <groupId>org.sonatype.plugins</groupId>-->
+      <!--  <artifactId>nexus-staging-maven-plugin</artifactId>-->
+      <!--</plugin>-->
       <plugin>
-        <groupId>org.jacoco</groupId>
-        <artifactId>jacoco-maven-plugin</artifactId>
+        <groupId>org.sonatype.central</groupId>
+        <artifactId>central-publishing-maven-plugin</artifactId>
       </plugin>
     </plugins>
   </build>
 
   <!-- id 和 settings.xml 中设置用户名、密码的保持一致 -->
   <distributionManagement>
+    <!--<snapshotRepository>-->
+    <!--  <id>ossrh</id>-->
+    <!--  <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>-->
+    <!--</snapshotRepository>-->
+    <!--<repository>-->
+    <!--  <id>ossrh</id>-->
+    <!--  <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>-->
+    <!--</repository>-->
     <snapshotRepository>
-      <id>ossrh</id>
-      <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+      <id>central</id>
+      <url>https://central.sonatype.com/</url>
     </snapshotRepository>
-    <repository>
-      <id>ossrh</id>
-      <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-    </repository>
   </distributionManagement>
 
   <repositories>
-    <repository>
-      <id>huaweicloud</id>
-      <url>https://repo.huaweicloud.com/repository/maven/</url>
-    </repository>
-    <repository>
-      <id>aliyunmaven</id>
-      <url>https://maven.aliyun.com/repository/public</url>
-    </repository>
+    <!--<repository>-->
+    <!--  <id>huaweicloud</id>-->
+    <!--  <url>https://repo.huaweicloud.com/repository/maven/</url>-->
+    <!--</repository>-->
+    <!--<repository>-->
+    <!--  <id>aliyunmaven</id>-->
+    <!--  <url>https://maven.aliyun.com/repository/public</url>-->
+    <!--</repository>-->
     <repository>
       <id>maven_central</id>
       <name>Maven Central</name>
