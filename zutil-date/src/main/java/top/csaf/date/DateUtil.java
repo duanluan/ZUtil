@@ -8,7 +8,6 @@ import org.apache.commons.text.WordUtils;
 import top.csaf.coll.CollUtil;
 import top.csaf.date.constant.*;
 import top.csaf.lang.StrUtil;
-import top.csaf.regex.RegExUtil;
 
 import java.text.ParseException;
 import java.time.*;
@@ -18,6 +17,7 @@ import java.time.format.DateTimeParseException;
 import java.time.format.ResolverStyle;
 import java.time.temporal.*;
 import java.util.*;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 /**
@@ -2250,6 +2250,8 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
   // endregion 交集差集并集
 
 
+  private static final Pattern WEEKS_PATTERN = Pattern.compile("[^,1-7]*");
+
   /**
    * 转换星期字符串为星期数组
    *
@@ -2259,7 +2261,7 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
    */
   public static String[] convertWeeks(@NonNull String weeks, @NonNull final String splitRegex) {
     // 去除星期字符串中除了 1-7 和 , 之外的字符
-    if (RegExUtil.isMatch("[^,1-7]*", weeks)) {
+    if (WEEKS_PATTERN.matcher(weeks).find()) {     // if (RegExUtil.isMatch("[^,1-7]*", weeks)) {
       weeks = weeks.replaceAll("[^,1-7]*", "");
     }
     if (StrUtil.isBlank(weeks)) {
