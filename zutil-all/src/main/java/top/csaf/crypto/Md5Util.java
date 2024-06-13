@@ -1,8 +1,11 @@
 package top.csaf.crypto;
 
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
+import java.security.Security;
 
 /**
  * MD5 工具类
@@ -17,6 +20,7 @@ public class Md5Util {
    * @return 加密后的字符串
    */
   public static String to(String in, boolean isUpperCase) {
+    Security.addProvider(new BouncyCastleProvider());
     MessageDigest md;
     try {
       md = MessageDigest.getInstance("MD5", "BC");
