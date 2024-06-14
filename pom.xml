@@ -256,6 +256,8 @@
           <configuration>
             <publishingServerId>central</publishingServerId>
             <tokenAuth>true</tokenAuth>
+            <!-- 不发布父项目 -->
+            <excludeArtifacts>ZUtil</excludeArtifacts>
           </configuration>
         </plugin>
       </plugins>
