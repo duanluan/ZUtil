@@ -40,7 +40,6 @@
   <properties>
     <java.version>1.8</java.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <jacocoArgLine/>
     <serverId>central</serverId>
   </properties>
 
@@ -147,9 +146,10 @@
               <!-- JMH 性能测试 -->
               <exclude>**/jmh/**</exclude>
             </excludes>
+            <!-- 传递 JaCoCo 代理参数，在测试执行期间收集代码覆盖率数据 -->
             <argLine>${jacocoArgLine}</argLine>
             <!-- 跳过测试 -->
-            <skipTests>true</skipTests>
+            <!--<skipTests>true</skipTests>-->
           </configuration>
         </plugin>
 
@@ -171,7 +171,7 @@
             <execution>
               <id>jacoco-initialize</id>
               <goals>
-                <!-- 默认生命周期阶段为 initialize。此代理通过 VM 参数传递给测试程序，在执行阶段收集覆盖率信息，在结束时写入文件。https://www.eclemma.org/jacoco/trunk/doc/prepare-agent-mojo.html -->
+                <!-- 默认生命周期阶段为 initialize。修改 JVM 参数，注入 JaCoCo 代理（agent），在测试执行期间收集代码覆盖率数据。https://www.eclemma.org/jacoco/trunk/doc/prepare-agent-mojo.html -->
                 <goal>prepare-agent</goal>
               </goals>
             </execution>
