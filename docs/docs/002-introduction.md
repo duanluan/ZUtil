@@ -92,5 +92,5 @@ dependencies {
 
 ## 资源
 
-* [Maven 中央库](https://search.maven.org/artifact/top.csaf/ZUtil)
-* [Maven Repository](https://mvnrepository.com/artifact/top.csaf/ZUtil)
+* [Maven 中央库](https://central.sonatype.com/artifact/top.csaf/zutil-all)
+* [Maven Repository](https://mvnrepository.com/artifact/top.csaf/zutil-all)

@@ -2,7 +2,7 @@
 
 # ZUtil
 
-[![](https://img.shields.io/maven-central/v/top.csaf/ZUtil?style=flat-square)](https://search.maven.org/artifact/top.csaf/ZUtil)
+[![](https://img.shields.io/maven-central/v/top.csaf/ZUtil?style=flat-square)](https://central.sonatype.com/artifact/top.csaf/zutil-all)
 [![](https://img.shields.io/hexpm/l/plug?style=flat-square)](./LICENSE)
 [![](https://img.shields.io/badge/JDK-8%2B-orange?style=flat-square)]()
 [![](https://img.shields.io/badge/273743748-加%20Q%20群-388adc.svg?style=flat-square)](https://jq.qq.com/?_wv=1027&k=pYzF0R18)
@@ -13,13 +13,13 @@
 
 工具类使用请查看<a href='https://duanluan.github.io/ZUtil' target='_blank' style='font-size:25px'>文档</a>、[javadoc](https://apidoc.gitee.com/duanluan/ZUtil)。
 
-和 Hutool 的性能对比测试请查看 [jmh.contrast](src/test/java/top/csaf/jmh/contrast)。
+和 Hutool 的性能对比测试请查看 [jmh.contrast](zutil-all/src/test/java/top/csaf/jmh/contrast)。
 
 ## 特性
 
-* 更快：使用 JMH 进行[性能测试](https://github.com/duanluan/ZUtil/tree/main/src/test/java/top/csaf/jmh)。
-* 更全：[时间工具类](https://github.com/duanluan/ZUtil/blob/main/src/main/java/top/csaf/date/DateUtils.java)近 120 个方法，2500+ 行；[正则工具类](https://github.com/duanluan/ZUtil/blob/main/src/main/java/top/csaf/regex/RegExUtils.java)近 50 个方法，750+ 行。其他工具类也在持续更新中……
-* 更安全：使用 JUnit 进行[套件测试](https://github.com/duanluan/ZUtil/tree/main/src/test/java/top/csaf/junit)，JaCoCo 进行[代码覆盖率测试](https://github.com/duanluan/ZUtil/tree/main/src/test/java/top/csaf/junit)，保证每行代码都符合预期，更少出 BUG。
+* 更快：使用 JMH 进行[性能测试](https://github.com/duanluan/ZUtil/tree/main/zutil-all/src/test/java/top/csaf/jmh)。
+* 更全：[时间工具类](https://github.com/duanluan/ZUtil/blob/main/zutil-date/src/main/java/top/csaf/date/DateUtil.java)近 120 个方法，2500+ 行；[正则工具类](https://github.com/duanluan/ZUtil/blob/main/zutil-regex/src/main/java/top/csaf/regex/RegExUtil.java)近 50 个方法，750+ 行。其他工具类也在持续更新中……
+* 更安全：使用 JUnit 进行[套件测试](https://github.com/duanluan/ZUtil/tree/main/zutil-all/src/test/java/top/csaf/junit)，JaCoCo 进行[代码覆盖率测试](https://github.com/duanluan/ZUtil/tree/main/zutil-all/src/test/java/top/csaf/junit)，保证每行代码都符合预期，更少出 BUG。
 
 ## Stargazers over time
 
