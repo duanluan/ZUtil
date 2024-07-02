@@ -235,12 +235,12 @@ public class IdCardUtilTest {
     // 直接通过
     String validIdCard = "110101199001019642";
     boolean expectedGender = true;
-    boolean isMale = Boolean.TRUE.equals(IdCardUtil.isFemale(validIdCard, true));
-    assertEquals(expectedGender, isMale);
+    boolean isFeMale = Boolean.TRUE.equals(IdCardUtil.isFemale(validIdCard, true));
+    assertEquals(expectedGender, isFeMale);
     // 带校验，且校验不通过
     String LongIdCard = "3307219880923456789";
-    boolean isMaleLong = Boolean.TRUE.equals(IdCardUtil.isFemale(LongIdCard, true));
-    assertNotNull(isMaleLong);
-    assertEquals(isMaleLong, expectedGender);
+    boolean isFeMaleLong = Boolean.TRUE.equals(IdCardUtil.isFemale(LongIdCard, true));
+    assertNotNull(isFeMaleLong);
+    assertEquals(isFeMaleLong, expectedGender);
   }
 }
