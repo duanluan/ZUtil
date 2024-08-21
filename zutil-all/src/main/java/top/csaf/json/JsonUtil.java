@@ -5,12 +5,13 @@ import com.alibaba.fastjson2.JSONReader;
 import com.alibaba.fastjson2.JSONWriter;
 import lombok.NonNull;
 import top.csaf.coll.CollUtil;
-import top.csaf.lang.ArrayUtil;
 
 import java.util.List;
 
 /**
  * JSON 工具类
+ * <p>
+ * {@link JSONWriter.Feature}、{@link JSONReader.Feature}：<a href="https://alibaba.github.io/fastjson2/features_cn.html">序列化和反序列化行为</a>
  */
 public class JsonUtil {
 
@@ -18,16 +19,26 @@ public class JsonUtil {
    * 对象转 JSON 字符串
    *
    * @param object   对象
-   * @param features 序列化行为
+   * @param features 序列化行为，为空时默认输出值为 null 的字段
    * @return JSON 字符串
    */
   public static String toJson(@NonNull final Object object, final JSONWriter.Feature... features) {
     // 设置输出行为
     if (CollUtil.sizeIsNotEmpty(features)) {
       // 输出值为 null 的字段
-      return JSON.toJSONString(object, ArrayUtil.addFirst(features, JSONWriter.Feature.WriteMapNullValue));
+      return JSON.toJSONString(object, features);
     }
     return JSON.toJSONString(object, JSONWriter.Feature.WriteMapNullValue);
+  }
+
+  /**
+   * 对象转 JSON 字符串，不含序列化特性
+   *
+   * @param object 对象
+   * @return JSON 字符串
+   */
+  public static String toJsonNoFeature(@NonNull final Object object) {
+    return JSON.toJSONString(object);
   }
 
   /**
