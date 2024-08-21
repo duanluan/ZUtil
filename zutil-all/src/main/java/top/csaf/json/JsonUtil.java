@@ -51,7 +51,7 @@ public class JsonUtil {
    * @return 对象
    */
   public static <T> T parseObject(@NonNull final String json, @NonNull final Class<T> clazz, final JSONReader.Feature... features) {
-    if (features != null) {
+    if (CollUtil.sizeIsNotEmpty(features)) {
       return JSON.parseObject(json, clazz, features);
     }
     return JSON.parseObject(json, clazz);
@@ -67,7 +67,7 @@ public class JsonUtil {
    * @return 集合
    */
   public static <T> List<T> parseArray(@NonNull final String json, @NonNull final Class<T> clazz, final JSONReader.Feature... features) {
-    if (features != null) {
+    if (CollUtil.sizeIsNotEmpty(features)) {
       return JSON.parseArray(json, clazz, features);
     }
     return JSON.parseArray(json, clazz);
