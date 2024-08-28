@@ -863,7 +863,13 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
     }
     for (String pattern : patterns) {
       source = convertByPattern(source, pattern);
-      ZonedDateTime zonedDateTime = LocalDateTime.parse(source, getFormatter(pattern)).atZone(DateConst.SYSTEM_ZONE_ID);
+      LocalDateTime localDateTime;
+      try {
+        localDateTime = LocalDateTime.parse(source, getFormatter(pattern));
+      } catch (DateTimeParseException e) {
+        continue;
+      }
+      ZonedDateTime zonedDateTime = localDateTime.atZone(DateConst.SYSTEM_ZONE_ID);
       if (zoneId != null) {
         zonedDateTime = zonedDateTime.withZoneSameInstant(DateFeat.get(zoneId));
       }
@@ -1011,7 +1017,12 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
     }
     for (String pattern : patterns) {
       source = convertByPattern(source, pattern);
-      LocalDate localDate = LocalDate.parse(source, getFormatter(pattern));
+      LocalDate localDate;
+      try {
+        localDate = LocalDate.parse(source, getFormatter(pattern));
+      } catch (DateTimeParseException e) {
+        continue;
+      }
       if (zoneId != null) {
         return localDate.atTime(LocalTime.MIN).atZone(DateConst.SYSTEM_ZONE_ID).withZoneSameInstant(DateFeat.get(zoneId)).toLocalDate();
       }
@@ -1139,7 +1150,12 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
     }
     for (String pattern : patterns) {
       source = convertByPattern(source, pattern);
-      LocalTime localTime = LocalTime.parse(source, getFormatter(pattern));
+      LocalTime localTime;
+      try {
+        localTime = LocalTime.parse(source, getFormatter(pattern));
+      } catch (DateTimeParseException e) {
+        continue;
+      }
       if (zoneId != null) {
         return localTime.atDate(LocalDate.now()).atZone(DateConst.SYSTEM_ZONE_ID).withZoneSameInstant(DateFeat.get(zoneId)).toLocalTime();
       }
