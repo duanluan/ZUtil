@@ -5,8 +5,8 @@
   <packaging>pom</packaging>
 
   <groupId>top.csaf</groupId>
-  <artifactId>ZUtil</artifactId>
-  <version>2.0.0-alpha2</version>
+  <artifactId>zutil-parent</artifactId>
+  <version>2.0.0-alpha4</version>
   <name>${project.artifactId}</name>
   <url>https://github.com/duanluan/ZUtil</url>
   <description>Java Util</description>
@@ -256,8 +256,8 @@
           <configuration>
             <publishingServerId>central</publishingServerId>
             <tokenAuth>true</tokenAuth>
-            <!-- 不发布父项目 -->
-            <excludeArtifacts>ZUtil</excludeArtifacts>
+            <!-- 不发布指定模块 -->
+            <!--<excludeArtifacts></excludeArtifacts>-->
           </configuration>
         </plugin>
       </plugins>
