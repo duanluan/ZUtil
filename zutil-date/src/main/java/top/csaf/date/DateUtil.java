@@ -1922,6 +1922,55 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
   }
 
   /**
+   * 时间差
+   *
+   * @param startInclusive 开始时间
+   * @param endExclusive   结束时间
+   * @param patterns       开始时间或结束时间的格式
+   * @return 时间量
+   */
+  public static Duration between(@NonNull final String startInclusive, @NonNull final String endExclusive, @NonNull final String... patterns) {
+    return between(parseLocalDateTime(startInclusive, patterns), parseLocalDateTime(endExclusive, patterns));
+  }
+
+  /**
+   * 时间差
+   *
+   * @param startInclusive 开始时间
+   * @param endExclusive   结束时间
+   * @param chronoUnit     时间周期
+   * @param patterns       开始时间或结束时间的格式
+   * @return 指定时间周期的时间差
+   */
+  public static long between(@NonNull final String startInclusive, @NonNull final String endExclusive, @NonNull final ChronoUnit chronoUnit, @NonNull final String... patterns) {
+    return between(parseLocalDateTime(startInclusive, patterns), parseLocalDateTime(endExclusive, patterns), chronoUnit);
+  }
+
+  /**
+   * 时间差
+   *
+   * @param startInclusive 开始时间
+   * @param endExclusive   结束时间
+   * @return 时间量
+   */
+  public static Duration between(@NonNull final String startInclusive, @NonNull final String endExclusive) {
+    return between(parseLocalDateTime(startInclusive), parseLocalDateTime(endExclusive));
+  }
+
+  /**
+   * 时间差
+   *
+   * @param startInclusive 开始时间
+   * @param endExclusive   结束时间
+   * @param chronoUnit     时间周期
+   * @return 指定时间周期的时间差
+   */
+  public static long between(@NonNull final String startInclusive, @NonNull final String endExclusive, @NonNull final ChronoUnit chronoUnit) {
+    return between(parseLocalDateTime(startInclusive), parseLocalDateTime(endExclusive), chronoUnit);
+  }
+
+
+  /**
    * 格式化时间差
    *
    * @param startInclusive 开始时间
