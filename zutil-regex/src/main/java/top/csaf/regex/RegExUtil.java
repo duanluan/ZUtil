@@ -4,10 +4,8 @@ import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import top.csaf.constant.CommonPattern;
 import top.csaf.lang.StrUtil;
-import top.csaf.regex.enums.FlagsEnum;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -48,18 +46,6 @@ public class RegExUtil extends org.apache.commons.lang3.RegExUtils {
   /**
    * 获取 Matcher 对象
    *
-   * @param text       需要匹配的内容
-   * @param regex      正则
-   * @param flagsEnums 匹配模式
-   * @return Matcher 对象
-   */
-  public static Matcher getMatcher(@NonNull final CharSequence text, @NonNull final String regex, @NonNull final FlagsEnum... flagsEnums) {
-    return getMatcher(text, regex, Arrays.stream(flagsEnums).map(FlagsEnum::getValue).reduce(0, (a, b) -> a | b));
-  }
-
-  /**
-   * 获取 Matcher 对象
-   *
    * @param text  需要匹配的内容
    * @param regex 正则
    * @return Matcher 对象
@@ -82,18 +68,6 @@ public class RegExUtil extends org.apache.commons.lang3.RegExUtils {
       return matcher.start();
     }
     return -1;
-  }
-
-  /**
-   * 获取下标
-   *
-   * @param text       需要匹配的内容
-   * @param regex      正则
-   * @param flagsEnums 匹配模式
-   * @return 匹配的下标
-   */
-  public static int indexOf(@NonNull final CharSequence text, @NonNull final String regex, final FlagsEnum... flagsEnums) {
-    return indexOf(text, regex, Arrays.stream(flagsEnums).map(FlagsEnum::getValue).reduce(0, (a, b) -> a | b));
   }
 
   /**
@@ -143,20 +117,6 @@ public class RegExUtil extends org.apache.commons.lang3.RegExUtils {
   /**
    * 获取指定匹配项的指定捕获组的匹配值
    *
-   * @param regex      正则
-   * @param text       需要匹配的内容
-   * @param item       匹配项
-   * @param group      捕获组
-   * @param flagsEnums 匹配模式
-   * @return 匹配值
-   */
-  public static String match(@NonNull final CharSequence text, @NonNull final String regex, final int item, final int group, final FlagsEnum... flagsEnums) {
-    return match(text, regex, item, group, Arrays.stream(flagsEnums).map(FlagsEnum::getValue).reduce(0, (a, b) -> a | b));
-  }
-
-  /**
-   * 获取指定匹配项的指定捕获组的匹配值
-   *
    * @param text  需要匹配的内容
    * @param regex 正则
    * @param item  匹配项
@@ -190,20 +150,6 @@ public class RegExUtil extends org.apache.commons.lang3.RegExUtils {
    */
   public static String matchFirst(@NonNull final CharSequence text, @NonNull final String regex, final int group, final int flags) {
     return match(text, regex, 0, group, flags);
-  }
-
-
-  /**
-   * 获取第一个匹配项的指定捕获组的匹配值
-   *
-   * @param text       需要匹配的内容
-   * @param regex      正则
-   * @param group      捕获组
-   * @param flagsEnums 匹配模式
-   * @return 匹配值
-   */
-  public static String matchFirst(@NonNull final CharSequence text, @NonNull final String regex, final int group, final FlagsEnum... flagsEnums) {
-    return matchFirst(text, regex, group, Arrays.stream(flagsEnums).map(FlagsEnum::getValue).reduce(0, (a, b) -> a | b));
   }
 
   /**
@@ -244,18 +190,6 @@ public class RegExUtil extends org.apache.commons.lang3.RegExUtils {
   /**
    * 是否能匹配
    *
-   * @param text       需要匹配的内容
-   * @param regex      正则
-   * @param flagsEnums 匹配模式
-   * @return 是否能匹配
-   */
-  public static boolean isMatch(@NonNull final CharSequence text, @NonNull final String regex, final FlagsEnum... flagsEnums) {
-    return isMatch(text, regex, Arrays.stream(flagsEnums).map(FlagsEnum::getValue).reduce(0, (a, b) -> a | b));
-  }
-
-  /**
-   * 是否能匹配
-   *
    * @param text  需要匹配的内容
    * @param regex 正则
    * @return 是否能匹配
@@ -285,19 +219,6 @@ public class RegExUtil extends org.apache.commons.lang3.RegExUtils {
   /**
    * 获取指定捕获组的匹配项集合
    *
-   * @param text       需要匹配的内容
-   * @param regex      正则
-   * @param group      捕获组
-   * @param flagsEnums 匹配模式
-   * @return 匹配集合
-   */
-  public static List<String> matches(@NonNull final CharSequence text, @NonNull final String regex, final int group, final FlagsEnum... flagsEnums) {
-    return matches(text, regex, group, Arrays.stream(flagsEnums).map(FlagsEnum::getValue).reduce(0, (a, b) -> a | b));
-  }
-
-  /**
-   * 获取指定捕获组的匹配项集合
-   *
    * @param text  需要匹配的内容
    * @param regex 正则
    * @param group 捕获组
@@ -319,7 +240,7 @@ public class RegExUtil extends org.apache.commons.lang3.RegExUtils {
   }
 
   /**
-   * 替换所有匹配项的指定捕获组的匹配值
+   * 替换指定匹配项的指定捕获组的匹配值
    *
    * @param text        需要替换的内容
    * @param regex       正则
@@ -349,21 +270,6 @@ public class RegExUtil extends org.apache.commons.lang3.RegExUtils {
   }
 
   /**
-   * 替换所有匹配项的指定捕获组的匹配值
-   *
-   * @param text        需要替换的内容
-   * @param regex       正则
-   * @param replacement 替换值
-   * @param item        匹配项
-   * @param group       捕获组
-   * @param flagsEnums  匹配模式
-   * @return 替换后的内容
-   */
-  public static String replace(@NonNull final String text, @NonNull final String regex, @NonNull final String replacement, final int item, final int group, final FlagsEnum... flagsEnums) {
-    return replace(text, regex, replacement, item, group, Arrays.stream(flagsEnums).map(FlagsEnum::getValue).reduce(0, (a, b) -> a | b));
-  }
-
-  /**
    * 替换指定匹配项的第一个捕获组的匹配值
    *
    * @param text        需要替换的内容
@@ -375,20 +281,6 @@ public class RegExUtil extends org.apache.commons.lang3.RegExUtils {
    */
   public static String replace(@NonNull final String text, @NonNull final String regex, @NonNull final String replacement, final int item, final int flags) {
     return replace(text, regex, replacement, item, 0, flags);
-  }
-
-  /**
-   * 替换指定匹配项的第一个捕获组的匹配值
-   *
-   * @param text        需要替换的内容
-   * @param regex       正则
-   * @param replacement 替换值
-   * @param item        匹配项
-   * @param flagsEnums  匹配模式
-   * @return 替换后的内容
-   */
-  public static String replace(@NonNull final String text, @NonNull final String regex, @NonNull final String replacement, final int item, final FlagsEnum... flagsEnums) {
-    return replace(text, regex, replacement, item, 0, flagsEnums);
   }
 
   /**
@@ -416,20 +308,6 @@ public class RegExUtil extends org.apache.commons.lang3.RegExUtils {
    */
   public static String replaceFirst(@NonNull final String text, @NonNull final String regex, @NonNull final String replacement, final int group, final int flags) {
     return replace(text, regex, replacement, 0, group, flags);
-  }
-
-  /**
-   * 替换第一个匹配项的指定捕获组的匹配值
-   *
-   * @param text        需要替换的内容
-   * @param regex       正则
-   * @param replacement 替换值
-   * @param group       捕获组
-   * @param flagsEnums  匹配模式
-   * @return 替换后的内容
-   */
-  public static String replaceFirst(@NonNull final String text, @NonNull final String regex, @NonNull final String replacement, final int group, final FlagsEnum... flagsEnums) {
-    return replace(text, regex, replacement, 0, group, Arrays.stream(flagsEnums).map(FlagsEnum::getValue).reduce(0, (a, b) -> a | b));
   }
 
   /**
@@ -509,20 +387,6 @@ public class RegExUtil extends org.apache.commons.lang3.RegExUtils {
       }
     }
     return result.toString();
-  }
-
-  /**
-   * 替换所有匹配项的指定捕获组的匹配值
-   *
-   * @param text        需要替换的内容
-   * @param regex       正则
-   * @param replacement 替换值
-   * @param group       捕获组
-   * @param flagsEnums  匹配模式
-   * @return 替换后的内容
-   */
-  public static String replaceAll(@NonNull final String text, @NonNull final String regex, @NonNull final String replacement, final int group, final FlagsEnum... flagsEnums) {
-    return replaceAll(text, regex, replacement, group, Arrays.stream(flagsEnums).map(FlagsEnum::getValue).reduce(0, (a, b) -> a | b));
   }
 
   /**
