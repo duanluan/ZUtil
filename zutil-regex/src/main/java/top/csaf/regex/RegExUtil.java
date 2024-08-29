@@ -262,7 +262,11 @@ public class RegExUtil extends org.apache.commons.lang3.RegExUtils {
     while (matcher.find()) {
       if (i == item) {
         int startIndex = matcher.start(group);
-        return text.substring(0, startIndex) + replacement + text.substring(startIndex + matcher.group(group).length());
+        if (startIndex == -1) {
+          continue;
+        }
+        int endIndex = matcher.end(group);
+        return text.substring(0, startIndex) + replacement + text.substring(endIndex);
       }
       i++;
     }
