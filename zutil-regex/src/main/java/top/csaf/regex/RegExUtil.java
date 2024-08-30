@@ -3,7 +3,6 @@ package top.csaf.regex;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import top.csaf.constant.CommonPattern;
-import top.csaf.lang.StrUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -176,29 +175,6 @@ public class RegExUtil extends org.apache.commons.lang3.RegExUtils {
   }
 
   /**
-   * 是否能匹配
-   *
-   * @param text  需要匹配的内容
-   * @param regex 正则
-   * @param flags 匹配模式
-   * @return 是否能匹配
-   */
-  public static boolean isMatch(@NonNull final CharSequence text, @NonNull final String regex, final int flags) {
-    return StrUtil.isNotBlank(matchFirst(text, regex, 1, flags));
-  }
-
-  /**
-   * 是否能匹配
-   *
-   * @param text  需要匹配的内容
-   * @param regex 正则
-   * @return 是否能匹配
-   */
-  public static boolean isMatch(@NonNull final CharSequence text, @NonNull final String regex) {
-    return Pattern.compile(regex).matcher(text).find();
-  }
-
-  /**
    * 获取所有匹配项的指定捕获组的匹配值集合
    *
    * @param text  需要匹配的内容
@@ -207,7 +183,7 @@ public class RegExUtil extends org.apache.commons.lang3.RegExUtils {
    * @param flags 匹配模式
    * @return 匹配集合
    */
-  public static List<String> matches(@NonNull final CharSequence text, @NonNull final String regex, final int group, final int flags) {
+  public static List<String> matcheAll(@NonNull final CharSequence text, @NonNull final String regex, final int group, final int flags) {
     if (group < 0) {
       throw new IllegalArgumentException("Group: should be greater than 0");
     }
@@ -227,8 +203,8 @@ public class RegExUtil extends org.apache.commons.lang3.RegExUtils {
    * @param group 捕获组，从 1 开始
    * @return 匹配集合
    */
-  public static List<String> matches(@NonNull final CharSequence text, @NonNull final String regex, final int group) {
-    return matches(text, regex, group, 0);
+  public static List<String> matcheAll(@NonNull final CharSequence text, @NonNull final String regex, final int group) {
+    return matcheAll(text, regex, group, 0);
   }
 
   /**
@@ -238,8 +214,31 @@ public class RegExUtil extends org.apache.commons.lang3.RegExUtils {
    * @param regex 正则
    * @return 匹配集合
    */
-  public static List<String> matches(@NonNull final CharSequence text, @NonNull final String regex) {
-    return matches(text, regex, 1);
+  public static List<String> matcheAll(@NonNull final CharSequence text, @NonNull final String regex) {
+    return matcheAll(text, regex, 1);
+  }
+
+  /**
+   * 是否能匹配
+   *
+   * @param text  需要匹配的内容
+   * @param regex 正则
+   * @param flags 匹配模式
+   * @return 是否能匹配
+   */
+  public static boolean isMatch(@NonNull final CharSequence text, @NonNull final String regex, final int flags) {
+    return getMatcher(text, regex, flags).find();
+  }
+
+  /**
+   * 是否能匹配
+   *
+   * @param text  需要匹配的内容
+   * @param regex 正则
+   * @return 是否能匹配
+   */
+  public static boolean isMatch(@NonNull final CharSequence text, @NonNull final String regex) {
+    return getMatcher(text, regex).find();
   }
 
   /**
