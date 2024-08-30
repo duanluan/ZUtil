@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import top.csaf.regex.RegExUtil;
-import top.csaf.regex.enums.FlagsEnum;
 
 import java.util.regex.Pattern;
 
@@ -16,48 +15,45 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class RegExUtilTest {
 
   @Test
-  void testCodeCoverage() {
-    // region replaceAllSpecialChar
-    assertThrows(NullPointerException.class, () -> RegExUtil.replaceAllSpecialChar(null));
+  void replaceAllSpecialChar() {
     assertEquals("\\/\\\\\\(\\)\\[\\]\\{\\}\\.\\?\\+\\*\\|\\^\\$", RegExUtil.replaceAllSpecialChar("/\\()[]{}.?+*|^$"));
-    // endregion
-
-
-    // region getMatcher
-    assertEquals(Pattern.compile("", 0).matcher("").toString(), RegExUtil.getMatcher("", "", 0).toString());
-    assertEquals(Pattern.compile("", Pattern.MULTILINE).matcher("").toString(), RegExUtil.getMatcher("", "", FlagsEnum.MULTILINE).toString());
-    assertEquals(Pattern.compile("").matcher("").toString(), RegExUtil.getMatcher("", "").toString());
-    // endregion
-
-
-    // region indexOf
-    assertEquals(0, RegExUtil.indexOf("", "", 0));
-    assertEquals(0, RegExUtil.indexOf("", "", FlagsEnum.MULTILINE));
-    assertEquals(0, RegExUtil.indexOf("", ""));
-    // endregion
-
-
-    // region match
-    assertThrows(IllegalArgumentException.class, () -> RegExUtil.match("", "", -1, 0, 0));
-    assertThrows(IllegalArgumentException.class, () -> RegExUtil.match("", "", 0, -1, 0));
-    assertEquals("1", RegExUtil.match("11", "1", 1, 0, 0));
-    // endregion
   }
 
-  @DisplayName("替换所有匹配项指定捕获组的匹配值")
   @Test
-  void testReplaceAll() {
-    // 替换所有匹配项，第二个捕获组的匹配值
-    System.out.println(
-      RegExUtil.replaceAll(
-        "{\"a\":[\"123\"],\"az\":123,\"d\":\"123\"}",
-        // Match 2："az":
-        // Group 1：az
-        // Group 2：z
-        "\\\"(((?!\\\").)*)\\\":",
-        "XXX",
-        2,
-        Pattern.MULTILINE)
-    );
+  void getMatcher() {
+    assertEquals(Pattern.compile("", Pattern.MULTILINE).matcher("").toString(), RegExUtil.getMatcher("", "", Pattern.MULTILINE).toString());
+    assertEquals(Pattern.compile("").matcher("").toString(), RegExUtil.getMatcher("", "").toString());
+  }
+
+  @Test
+  void indexOf() {
+    assertEquals(4, RegExUtil.indexOf("123\n456", "4", Pattern.MULTILINE));
+    assertEquals(2, RegExUtil.indexOf("123", "3"));
+  }
+
+  @Test
+  void match() {
+    assertThrows(IllegalArgumentException.class, () -> RegExUtil.match("", "", -1, 1, 0));
+    assertThrows(IllegalArgumentException.class, () -> RegExUtil.match("", "", 0, -1, 0));
+
+    assertEquals("6", RegExUtil.match("123\n456", "\\d+(\\d)", 1, 1, 0));
+  }
+
+  @Test
+  void matches() {
+    assertEquals("6", RegExUtil.matches("123\n456", "\\d+(\\d)", 1, 0).get(1));
+  }
+
+
+  @Test
+  void replace() {
+    assertEquals("123|467", RegExUtil.replace("123|567", "(\\d)\\d+(\\d)", "4", 1, 1, 0));
+    assertEquals("1223|4667", RegExUtil.replace("1223|5667", "(\\d)\\d+(\\d)", "4", 1, 1, 0));
+  }
+
+  @Test
+  void replaceAll() {
+    assertEquals("423|467", RegExUtil.replaceAll("123|567", "(\\d)\\d+(\\d)", "4", 1, 0));
+    assertEquals("{\"b\":[\"123\"],\"ab\":123,\"b\":\"123\"}", RegExUtil.replaceAll("{\"a\":[\"123\"],\"az\":123,\"d\":\"123\"}", "\\\"(((?!\\\").)*)\\\":", "b", 2, 0));
   }
 }
