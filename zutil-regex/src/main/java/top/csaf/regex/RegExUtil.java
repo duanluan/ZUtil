@@ -356,43 +356,29 @@ public class RegExUtil extends org.apache.commons.lang3.RegExUtils {
     if (group < 0) {
       throw new IllegalArgumentException("Group: should be greater than 0");
     }
-    StringBuilder result = new StringBuilder();
-
+    // 每个匹配项的指定捕获组的匹配值的起始和结束下标
+    List<long[]> startEndIndexList = new ArrayList<>();
     Matcher matcher = getMatcher(text, regex, flags);
-    if (matcher.find()) {
-      // 首次匹配
-      int startIndex = matcher.start(group);
-      String firstMatchText = text.substring(0, startIndex) + replacement + text.substring(startIndex + matcher.group(group).length());
-      result.append(firstMatchText, 0, startIndex + replacement.length());
-      int i = 0;
-
-      while (true) {
-        // 先截取掉已经替换过内容的捕获组
-        String text1 = firstMatchText.substring(result.toString().length());
-        // 然后再去匹配
-        Matcher matcher1 = getMatcher(text1, regex, flags);
-        if (matcher1.find()) {
-          int startIndex1 = matcher1.start(group);
-          String nextMatchText = text1.substring(0, startIndex1) + replacement + text1.substring(startIndex1 + matcher1.group(group).length());
-          // 匹配后更新条件，以便下一次循环
-          firstMatchText = result + nextMatchText;
-          result.append(nextMatchText, 0, startIndex1 + replacement.length());
-          i++;
-        } else {
-          break;
-        }
-      }
-
-      // 获取最后一次匹配的结尾文本
-      matcher = getMatcher(text, regex, flags);
-      int j = 0;
-      while (matcher.find()) {
-        if (i == j) {
-          result.append(text.substring(matcher.start(group) + 1));
-        }
-        j++;
-      }
+    while (matcher.find()) {
+      long start = matcher.start(group);
+      long end = matcher.end(group);
+      startEndIndexList.add(new long[]{start, end});
     }
+    // 构建替换后的字符串
+    StringBuilder result = new StringBuilder();
+    int lastEnd = 0;
+    for (long[] indices : startEndIndexList) {
+      int start = (int) indices[0];
+      int end = (int) indices[1];
+      // 将前面部分（从 lastEnd 到 start）添加到结果中
+      result.append(text, lastEnd, start);
+      // 添加替换内容
+      result.append(replacement);
+      // 更新 lastEnd
+      lastEnd = end;
+    }
+    // 将剩余部分添加到结果中
+    result.append(text.substring(lastEnd));
     return result.toString();
   }
 
