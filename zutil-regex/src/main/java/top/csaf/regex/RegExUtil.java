@@ -208,6 +208,9 @@ public class RegExUtil extends org.apache.commons.lang3.RegExUtils {
    * @return 匹配集合
    */
   public static List<String> matches(@NonNull final CharSequence text, @NonNull final String regex, final int group, final int flags) {
+    if (group < 0) {
+      throw new IllegalArgumentException("Group: should be greater than 0");
+    }
     List<String> resultList = new ArrayList<>();
     Matcher matcher = getMatcher(text, regex, flags);
     while (matcher.find()) {
