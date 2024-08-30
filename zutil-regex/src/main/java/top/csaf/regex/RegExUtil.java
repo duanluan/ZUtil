@@ -90,8 +90,8 @@ public class RegExUtil extends org.apache.commons.lang3.RegExUtils {
    *
    * @param regex 正则
    * @param text  需要匹配的内容
-   * @param item  匹配项
-   * @param group 捕获组
+   * @param item  匹配项，从 0 开始
+   * @param group 捕获组，从 1 开始
    * @param flags 匹配模式
    * @return 匹配值
    */
@@ -119,8 +119,8 @@ public class RegExUtil extends org.apache.commons.lang3.RegExUtils {
    *
    * @param text  需要匹配的内容
    * @param regex 正则
-   * @param item  匹配项
-   * @param group 捕获组
+   * @param item  匹配项，从 0 开始
+   * @param group 捕获组，从 1 开始
    * @return 匹配值
    */
   public static String match(@NonNull final CharSequence text, @NonNull final String regex, final int item, final int group) {
@@ -132,11 +132,11 @@ public class RegExUtil extends org.apache.commons.lang3.RegExUtils {
    *
    * @param text  需要匹配的内容
    * @param regex 正则
-   * @param item  匹配项
+   * @param item  匹配项，从 0 开始
    * @return 匹配值
    */
   public static String match(@NonNull final CharSequence text, @NonNull final String regex, final int item) {
-    return match(text, regex, item, 0);
+    return match(text, regex, item, 1);
   }
 
   /**
@@ -144,7 +144,7 @@ public class RegExUtil extends org.apache.commons.lang3.RegExUtils {
    *
    * @param text  需要匹配的内容
    * @param regex 正则
-   * @param group 捕获组
+   * @param group 捕获组，从 1 开始
    * @param flags 匹配模式
    * @return 匹配值
    */
@@ -157,7 +157,7 @@ public class RegExUtil extends org.apache.commons.lang3.RegExUtils {
    *
    * @param text  需要匹配的内容
    * @param regex 正则
-   * @param group 捕获组
+   * @param group 捕获组，从 1 开始
    * @return 匹配值
    */
   public static String matchFirst(@NonNull final CharSequence text, @NonNull final String regex, final int group) {
@@ -172,7 +172,7 @@ public class RegExUtil extends org.apache.commons.lang3.RegExUtils {
    * @return 匹配值
    */
   public static String matchFirst(@NonNull final CharSequence text, @NonNull final String regex) {
-    return matchFirst(text, regex, 0);
+    return matchFirst(text, regex, 1);
   }
 
   /**
@@ -184,7 +184,7 @@ public class RegExUtil extends org.apache.commons.lang3.RegExUtils {
    * @return 是否能匹配
    */
   public static boolean isMatch(@NonNull final CharSequence text, @NonNull final String regex, final int flags) {
-    return StrUtil.isNotBlank(matchFirst(text, regex, 0, flags));
+    return StrUtil.isNotBlank(matchFirst(text, regex, 1, flags));
   }
 
   /**
@@ -199,11 +199,11 @@ public class RegExUtil extends org.apache.commons.lang3.RegExUtils {
   }
 
   /**
-   * 获取指定捕获组的匹配项集合
+   * 获取所有匹配项的指定捕获组的匹配值集合
    *
    * @param text  需要匹配的内容
    * @param regex 正则
-   * @param group 捕获组
+   * @param group 捕获组，从 1 开始
    * @param flags 匹配模式
    * @return 匹配集合
    */
@@ -217,11 +217,11 @@ public class RegExUtil extends org.apache.commons.lang3.RegExUtils {
   }
 
   /**
-   * 获取指定捕获组的匹配项集合
+   * 获取所有匹配项的指定捕获组的匹配值集合
    *
    * @param text  需要匹配的内容
    * @param regex 正则
-   * @param group 捕获组
+   * @param group 捕获组，从 1 开始
    * @return 匹配集合
    */
   public static List<String> matches(@NonNull final CharSequence text, @NonNull final String regex, final int group) {
@@ -229,14 +229,14 @@ public class RegExUtil extends org.apache.commons.lang3.RegExUtils {
   }
 
   /**
-   * 获取第一个捕获组的匹配项集合
+   * 获取所有匹配项的第一个捕获组的匹配值集合
    *
    * @param text  需要匹配的内容
    * @param regex 正则
    * @return 匹配集合
    */
   public static List<String> matches(@NonNull final CharSequence text, @NonNull final String regex) {
-    return matches(text, regex, 0);
+    return matches(text, regex, 1);
   }
 
   /**
@@ -245,8 +245,8 @@ public class RegExUtil extends org.apache.commons.lang3.RegExUtils {
    * @param text        需要替换的内容
    * @param regex       正则
    * @param replacement 替换值
-   * @param item        匹配项
-   * @param group       捕获组
+   * @param item        匹配项，从 0 开始
+   * @param group       捕获组，从 1 开始
    * @param flags       匹配模式
    * @return 替换后的内容
    */
@@ -279,12 +279,12 @@ public class RegExUtil extends org.apache.commons.lang3.RegExUtils {
    * @param text        需要替换的内容
    * @param regex       正则
    * @param replacement 替换值
-   * @param item        匹配项
+   * @param item        匹配项，从 0 开始
    * @param flags       匹配模式
    * @return 替换后的内容
    */
   public static String replace(@NonNull final String text, @NonNull final String regex, @NonNull final String replacement, final int item, final int flags) {
-    return replace(text, regex, replacement, item, 0, flags);
+    return replace(text, regex, replacement, item, 1, flags);
   }
 
   /**
@@ -293,7 +293,7 @@ public class RegExUtil extends org.apache.commons.lang3.RegExUtils {
    * @param text        需要替换的内容
    * @param regex       正则
    * @param replacement 替换值
-   * @param item        匹配项
+   * @param item        匹配项，从 0 开始
    * @return 替换后的内容
    */
   public static String replace(@NonNull final String text, @NonNull final String regex, @NonNull final String replacement, final int item) {
@@ -306,7 +306,7 @@ public class RegExUtil extends org.apache.commons.lang3.RegExUtils {
    * @param text        需要替换的内容
    * @param regex       正则
    * @param replacement 替换值
-   * @param group       捕获组
+   * @param group       捕获组，从 1 开始
    * @param flags       匹配模式
    * @return 替换后的内容
    */
@@ -320,7 +320,7 @@ public class RegExUtil extends org.apache.commons.lang3.RegExUtils {
    * @param text        需要替换的内容
    * @param regex       正则
    * @param replacement 替换值
-   * @param group       捕获组
+   * @param group       捕获组，从 1 开始
    * @return 替换后的内容
    */
   public static String replaceFirst(@NonNull final String text, @NonNull final String regex, @NonNull final String replacement, final int group) {
@@ -336,7 +336,7 @@ public class RegExUtil extends org.apache.commons.lang3.RegExUtils {
    * @return 替换后的内容
    */
   public static String replaceFirst(@NonNull final String text, @NonNull final String regex, @NonNull final String replacement) {
-    return replaceFirst(text, regex, replacement, 0, 0);
+    return replaceFirst(text, regex, replacement, 1, 0);
   }
 
   /**
@@ -345,7 +345,7 @@ public class RegExUtil extends org.apache.commons.lang3.RegExUtils {
    * @param text        需要替换的内容
    * @param regex       正则
    * @param replacement 替换值
-   * @param group       捕获组
+   * @param group       捕获组，从 1 开始
    * @param flags       匹配模式
    * @return 替换后的内容
    */
@@ -399,7 +399,7 @@ public class RegExUtil extends org.apache.commons.lang3.RegExUtils {
    * @param text        需要替换的内容
    * @param regex       正则
    * @param replacement 替换值
-   * @param group       捕获组
+   * @param group       捕获组，从 1 开始
    * @return 替换后的内容
    */
   public static String replaceAll(@NonNull final String text, @NonNull final String regex, @NonNull final String replacement, final int group) {
@@ -415,7 +415,7 @@ public class RegExUtil extends org.apache.commons.lang3.RegExUtils {
    * @return 替换后的内容
    */
   public static String replaceAll(@NonNull final String text, @NonNull final String regex, @NonNull final String replacement) {
-    return replaceAll(text, regex, replacement, 0, 0);
+    return replaceAll(text, regex, replacement, 1, 0);
   }
 
   /**
