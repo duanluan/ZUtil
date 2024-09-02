@@ -133,7 +133,7 @@ public class FileUtil extends org.apache.commons.io.FileUtils {
    * @return 文件名
    */
   public static String getNameByPath(@NonNull final String filePath) {
-    return new StringBuffer(RegExUtil.matchFirst(new StringBuffer(filePath).reverse().append("/").toString(), PATTERN_REVERSE_SLASH_FILE_NAME.pattern(), 1)).reverse().toString();
+    return new StringBuffer(RegExUtil.matchFirstItem(new StringBuffer(filePath).reverse().append("/").toString(), PATTERN_REVERSE_SLASH_FILE_NAME.pattern(), 1)).reverse().toString();
   }
 
   /**

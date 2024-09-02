@@ -54,6 +54,29 @@ public class RegExUtil extends org.apache.commons.lang3.RegExUtils {
   }
 
   /**
+   * 是否能匹配
+   *
+   * @param text  需要匹配的内容
+   * @param regex 正则
+   * @param flags 匹配模式
+   * @return 是否能匹配
+   */
+  public static boolean isMatch(@NonNull final CharSequence text, @NonNull final String regex, final int flags) {
+    return getMatcher(text, regex, flags).find();
+  }
+
+  /**
+   * 是否能匹配
+   *
+   * @param text  需要匹配的内容
+   * @param regex 正则
+   * @return 是否能匹配
+   */
+  public static boolean isMatch(@NonNull final CharSequence text, @NonNull final String regex) {
+    return getMatcher(text, regex).find();
+  }
+
+  /**
    * 获取下标
    *
    * @param text  需要匹配的内容
@@ -90,7 +113,7 @@ public class RegExUtil extends org.apache.commons.lang3.RegExUtils {
    * @param regex 正则
    * @param text  需要匹配的内容
    * @param item  匹配项，从 0 开始
-   * @param group 捕获组，从 1 开始
+   * @param group 捕获组，从 1 开始，0 为所在匹配项所有捕获组
    * @param flags 匹配模式
    * @return 匹配值
    */
@@ -101,7 +124,6 @@ public class RegExUtil extends org.apache.commons.lang3.RegExUtils {
     if (group < 0) {
       throw new IllegalArgumentException("Group: should be greater than 0");
     }
-    String result = null;
     Matcher matcher = getMatcher(text, regex, flags);
     int i = 0;
     while (matcher.find()) {
@@ -110,7 +132,7 @@ public class RegExUtil extends org.apache.commons.lang3.RegExUtils {
       }
       i++;
     }
-    return result;
+    return null;
   }
 
   /**
@@ -119,7 +141,7 @@ public class RegExUtil extends org.apache.commons.lang3.RegExUtils {
    * @param text  需要匹配的内容
    * @param regex 正则
    * @param item  匹配项，从 0 开始
-   * @param group 捕获组，从 1 开始
+   * @param group 捕获组，从 1 开始，0 为所在匹配项所有捕获组
    * @return 匹配值
    */
   public static String match(@NonNull final CharSequence text, @NonNull final String regex, final int item, final int group) {
@@ -127,27 +149,15 @@ public class RegExUtil extends org.apache.commons.lang3.RegExUtils {
   }
 
   /**
-   * 获取指定匹配项的第一个捕获组的匹配值
-   *
-   * @param text  需要匹配的内容
-   * @param regex 正则
-   * @param item  匹配项，从 0 开始
-   * @return 匹配值
-   */
-  public static String match(@NonNull final CharSequence text, @NonNull final String regex, final int item) {
-    return match(text, regex, item, 1);
-  }
-
-  /**
    * 获取第一个匹配项的指定捕获组的匹配值
    *
    * @param text  需要匹配的内容
    * @param regex 正则
-   * @param group 捕获组，从 1 开始
+   * @param group 捕获组，从 1 开始，0 为所在匹配项所有捕获组
    * @param flags 匹配模式
    * @return 匹配值
    */
-  public static String matchFirst(@NonNull final CharSequence text, @NonNull final String regex, final int group, final int flags) {
+  public static String matchFirstItem(@NonNull final CharSequence text, @NonNull final String regex, final int group, final int flags) {
     return match(text, regex, 0, group, flags);
   }
 
@@ -156,11 +166,37 @@ public class RegExUtil extends org.apache.commons.lang3.RegExUtils {
    *
    * @param text  需要匹配的内容
    * @param regex 正则
-   * @param group 捕获组，从 1 开始
+   * @param group 捕获组，从 1 开始，0 为所在匹配项所有捕获组
    * @return 匹配值
    */
-  public static String matchFirst(@NonNull final CharSequence text, @NonNull final String regex, final int group) {
-    return matchFirst(text, regex, group, 0);
+  public static String matchFirstItem(@NonNull final CharSequence text, @NonNull final String regex, final int group) {
+    return matchFirstItem(text, regex, group, 0);
+  }
+
+
+  /**
+   * 获取指定匹配项的第一个捕获组的匹配值
+   *
+   * @param text  需要匹配的内容
+   * @param regex 正则
+   * @param item  匹配项，从 0 开始
+   * @param flags 匹配模式
+   * @return 匹配集合
+   */
+  public static String matchFirstGroup(@NonNull final CharSequence text, @NonNull final String regex, final int item, final int flags) {
+    return match(text, regex, item, 1, flags);
+  }
+
+  /**
+   * 获取指定匹配项的第一个捕获组的匹配值
+   *
+   * @param text  需要匹配的内容
+   * @param regex 正则
+   * @param item  匹配项，从 0 开始
+   * @return 匹配集合
+   */
+  public static String matchFirstGroup(@NonNull final CharSequence text, @NonNull final String regex, final int item) {
+    return match(text, regex, item, 1, 0);
   }
 
   /**
@@ -168,10 +204,22 @@ public class RegExUtil extends org.apache.commons.lang3.RegExUtils {
    *
    * @param text  需要匹配的内容
    * @param regex 正则
-   * @return 匹配值
+   * @param flags 匹配模式
+   * @return 匹配集合
    */
-  public static String matchFirst(@NonNull final CharSequence text, @NonNull final String regex) {
-    return matchFirst(text, regex, 1);
+  public static String matchFirstItemGroup(@NonNull final CharSequence text, @NonNull final String regex, final int flags) {
+    return match(text, regex, 0, 1, flags);
+  }
+
+  /**
+   * 获取第一个匹配项的第一个捕获组的匹配值
+   *
+   * @param text  需要匹配的内容
+   * @param regex 正则
+   * @return 匹配集合
+   */
+  public static String matchFirstItemGroup(@NonNull final CharSequence text, @NonNull final String regex) {
+    return match(text, regex, 0, 1, 0);
   }
 
   /**
@@ -179,11 +227,11 @@ public class RegExUtil extends org.apache.commons.lang3.RegExUtils {
    *
    * @param text  需要匹配的内容
    * @param regex 正则
-   * @param group 捕获组，从 1 开始
+   * @param group 捕获组，从 1 开始，0 为所在匹配项所有捕获组
    * @param flags 匹配模式
    * @return 匹配集合
    */
-  public static List<String> matcheAll(@NonNull final CharSequence text, @NonNull final String regex, final int group, final int flags) {
+  public static List<String> matchAllItems(@NonNull final CharSequence text, @NonNull final String regex, final int group, final int flags) {
     if (group < 0) {
       throw new IllegalArgumentException("Group: should be greater than 0");
     }
@@ -200,11 +248,11 @@ public class RegExUtil extends org.apache.commons.lang3.RegExUtils {
    *
    * @param text  需要匹配的内容
    * @param regex 正则
-   * @param group 捕获组，从 1 开始
+   * @param group 捕获组，从 1 开始，0 为所在匹配项所有捕获组
    * @return 匹配集合
    */
-  public static List<String> matcheAll(@NonNull final CharSequence text, @NonNull final String regex, final int group) {
-    return matcheAll(text, regex, group, 0);
+  public static List<String> matchAllItems(@NonNull final CharSequence text, @NonNull final String regex, final int group) {
+    return matchAllItems(text, regex, group, 0);
   }
 
   /**
@@ -214,31 +262,91 @@ public class RegExUtil extends org.apache.commons.lang3.RegExUtils {
    * @param regex 正则
    * @return 匹配集合
    */
-  public static List<String> matcheAll(@NonNull final CharSequence text, @NonNull final String regex) {
-    return matcheAll(text, regex, 1);
+  public static List<String> matchAllItemsFirstGroup(@NonNull final CharSequence text, @NonNull final String regex, final int flags) {
+    return matchAllItems(text, regex, 1, flags);
   }
 
   /**
-   * 是否能匹配
+   * 获取所有匹配项的第一个捕获组的匹配值集合
+   *
+   * @param text  需要匹配的内容
+   * @param regex 正则
+   * @return 匹配集合
+   */
+  public static List<String> matchAllItemsFirstGroup(@NonNull final CharSequence text, @NonNull final String regex) {
+    return matchAllItems(text, regex, 1, 0);
+  }
+
+  /**
+   * 获取指定匹配项的所有捕获组的匹配值集合
+   *
+   * @param text  需要匹配的内容
+   * @param regex 正则
+   * @param item  匹配项，从 0 开始
+   * @param flags 匹配模式
+   * @return 匹配集合
+   */
+  public static List<String> matchAllGroups(@NonNull final CharSequence text, @NonNull final String regex, final int item, final int flags) {
+    if (item < 0) {
+      throw new IllegalArgumentException("Item: should be greater than 0");
+    }
+    List<String> resultList = new ArrayList<>();
+    Matcher matcher = getMatcher(text, regex, flags);
+    int i = 0;
+    while (matcher.find()) {
+      if (item == i) {
+        for (int j = 1; j <= matcher.groupCount(); j++) {
+          resultList.add(matcher.group(j));
+        }
+        return resultList;
+      }
+      i++;
+    }
+    return resultList;
+  }
+
+  /**
+   * 获取指定匹配项的所有捕获组的匹配值集合
+   *
+   * @param text  需要匹配的内容
+   * @param regex 正则
+   * @param item  匹配项，从 0 开始
+   * @return 匹配集合
+   */
+  public static List<String> matchAllGroups(@NonNull final CharSequence text, @NonNull final String regex, final int item) {
+    return matchAllGroups(text, regex, item, 0);
+  }
+
+  /**
+   * 获取所有匹配项的所有捕获组的匹配值集合
    *
    * @param text  需要匹配的内容
    * @param regex 正则
    * @param flags 匹配模式
-   * @return 是否能匹配
+   * @return 匹配集合
    */
-  public static boolean isMatch(@NonNull final CharSequence text, @NonNull final String regex, final int flags) {
-    return getMatcher(text, regex, flags).find();
+  public static List<String> matchAll(@NonNull final CharSequence text, @NonNull final String regex, final int flags) {
+    List<String> resultList = new ArrayList<>();
+    Matcher matcher = getMatcher(text, regex, flags);
+    while (matcher.find()) {
+      int group = 1;
+      while (group <= matcher.groupCount()) {
+        resultList.add(matcher.group(group));
+        group++;
+      }
+    }
+    return resultList;
   }
 
   /**
-   * 是否能匹配
+   * 获取所有匹配项的所有捕获组的匹配值集合
    *
    * @param text  需要匹配的内容
    * @param regex 正则
-   * @return 是否能匹配
+   * @return 匹配集合
    */
-  public static boolean isMatch(@NonNull final CharSequence text, @NonNull final String regex) {
-    return getMatcher(text, regex).find();
+  public static List<String> matchAll(@NonNull final CharSequence text, @NonNull final String regex) {
+    return matchAll(text, regex, 0);
   }
 
   /**
@@ -248,7 +356,7 @@ public class RegExUtil extends org.apache.commons.lang3.RegExUtils {
    * @param regex       正则
    * @param replacement 替换值
    * @param item        匹配项，从 0 开始
-   * @param group       捕获组，从 1 开始
+   * @param group       捕获组，从 1 开始，0 为所在匹配项所有捕获组
    * @param flags       匹配模式
    * @return 替换后的内容
    */
@@ -264,9 +372,6 @@ public class RegExUtil extends org.apache.commons.lang3.RegExUtils {
     while (matcher.find()) {
       if (i == item) {
         int startIndex = matcher.start(group);
-        if (startIndex == -1) {
-          continue;
-        }
         int endIndex = matcher.end(group);
         return text.substring(0, startIndex) + replacement + text.substring(endIndex);
       }
@@ -282,10 +387,51 @@ public class RegExUtil extends org.apache.commons.lang3.RegExUtils {
    * @param regex       正则
    * @param replacement 替换值
    * @param item        匹配项，从 0 开始
+   * @param group       捕获组，从 1 开始，0 为所在匹配项所有捕获组
+   * @return 替换后的内容
+   */
+  public static String replace(@NonNull final String text, @NonNull final String regex, @NonNull final String replacement, final int item, final int group) {
+    return replace(text, regex, replacement, item, group, 0);
+  }
+
+  /**
+   * 替换第一个匹配项的指定捕获组的匹配值
+   *
+   * @param text        需要替换的内容
+   * @param regex       正则
+   * @param replacement 替换值
+   * @param group       捕获组，从 1 开始，0 为所在匹配项所有捕获组
    * @param flags       匹配模式
    * @return 替换后的内容
    */
-  public static String replace(@NonNull final String text, @NonNull final String regex, @NonNull final String replacement, final int item, final int flags) {
+  public static String replaceFirstItem(@NonNull final String text, @NonNull final String regex, @NonNull final String replacement, final int group, final int flags) {
+    return replace(text, regex, replacement, 0, group, flags);
+  }
+
+  /**
+   * 替换第一个匹配项的指定捕获组的匹配值
+   *
+   * @param text        需要替换的内容
+   * @param regex       正则
+   * @param replacement 替换值
+   * @param group       捕获组，从 1 开始，0 为所在匹配项所有捕获组
+   * @return 替换后的内容
+   */
+  public static String replaceFirstItem(@NonNull final String text, @NonNull final String regex, @NonNull final String replacement, final int group) {
+    return replace(text, regex, replacement, 0, group, 0);
+  }
+
+  /**
+   * 替换指定匹配项的第一个捕获组的匹配值
+   *
+   * @param text        需要替换的内容
+   * @param regex       正则
+   * @param replacement 替换值
+   * @param item        匹配项，从 0 开始
+   * @param flags       匹配模式
+   * @return 替换后的内容
+   */
+  public static String replaceFirstGroup(@NonNull final String text, @NonNull final String regex, @NonNull final String replacement, final int item, final int flags) {
     return replace(text, regex, replacement, item, 1, flags);
   }
 
@@ -298,35 +444,21 @@ public class RegExUtil extends org.apache.commons.lang3.RegExUtils {
    * @param item        匹配项，从 0 开始
    * @return 替换后的内容
    */
-  public static String replace(@NonNull final String text, @NonNull final String regex, @NonNull final String replacement, final int item) {
-    return replace(text, regex, replacement, item, 0);
+  public static String replaceFirstGroup(@NonNull final String text, @NonNull final String regex, @NonNull final String replacement, final int item) {
+    return replace(text, regex, replacement, item, 1, 0);
   }
 
   /**
-   * 替换第一个匹配项的指定捕获组的匹配值
+   * 替换第一个匹配项的第一个捕获组的匹配值
    *
    * @param text        需要替换的内容
    * @param regex       正则
    * @param replacement 替换值
-   * @param group       捕获组，从 1 开始
    * @param flags       匹配模式
    * @return 替换后的内容
    */
-  public static String replaceFirst(@NonNull final String text, @NonNull final String regex, @NonNull final String replacement, final int group, final int flags) {
-    return replace(text, regex, replacement, 0, group, flags);
-  }
-
-  /**
-   * 替换第一个匹配项的指定捕获组的匹配值
-   *
-   * @param text        需要替换的内容
-   * @param regex       正则
-   * @param replacement 替换值
-   * @param group       捕获组，从 1 开始
-   * @return 替换后的内容
-   */
-  public static String replaceFirst(@NonNull final String text, @NonNull final String regex, @NonNull final String replacement, final int group) {
-    return replaceFirst(text, regex, replacement, group, 0);
+  public static String replaceFirstItemGroup(@NonNull final String text, @NonNull final String regex, @NonNull final String replacement, final int flags) {
+    return replace(text, regex, replacement, 0, 1, flags);
   }
 
   /**
@@ -337,8 +469,8 @@ public class RegExUtil extends org.apache.commons.lang3.RegExUtils {
    * @param replacement 替换值
    * @return 替换后的内容
    */
-  public static String replaceFirst(@NonNull final String text, @NonNull final String regex, @NonNull final String replacement) {
-    return replaceFirst(text, regex, replacement, 1, 0);
+  public static String replaceFirstItemGroup(@NonNull final String text, @NonNull final String regex, @NonNull final String replacement) {
+    return replace(text, regex, replacement, 0, 1, 0);
   }
 
   /**
@@ -347,11 +479,11 @@ public class RegExUtil extends org.apache.commons.lang3.RegExUtils {
    * @param text        需要替换的内容
    * @param regex       正则
    * @param replacement 替换值
-   * @param group       捕获组，从 1 开始
+   * @param group       捕获组，从 1 开始，0 为所在匹配项所有捕获组
    * @param flags       匹配模式
    * @return 替换后的内容
    */
-  public static String replaceAll(@NonNull final String text, @NonNull final String regex, @NonNull final String replacement, final int group, final int flags) {
+  public static String replaceAllItems(@NonNull final String text, @NonNull final String regex, @NonNull final String replacement, final int group, final int flags) {
     if (group < 0) {
       throw new IllegalArgumentException("Group: should be greater than 0");
     }
@@ -387,11 +519,24 @@ public class RegExUtil extends org.apache.commons.lang3.RegExUtils {
    * @param text        需要替换的内容
    * @param regex       正则
    * @param replacement 替换值
-   * @param group       捕获组，从 1 开始
+   * @param group       捕获组，从 1 开始，0 为所在匹配项所有捕获组
    * @return 替换后的内容
    */
-  public static String replaceAll(@NonNull final String text, @NonNull final String regex, @NonNull final String replacement, final int group) {
-    return replaceAll(text, regex, replacement, group, 0);
+  public static String replaceAllItems(@NonNull final String text, @NonNull final String regex, @NonNull final String replacement, final int group) {
+    return replaceAllItems(text, regex, replacement, group, 0);
+  }
+
+  /**
+   * 替换所有匹配项的第一个捕获组的匹配值
+   *
+   * @param text        需要替换的内容
+   * @param regex       正则
+   * @param replacement 替换值
+   * @param flags       匹配模式
+   * @return 替换后的内容
+   */
+  public static String replaceAllItemsFirstGroup(@NonNull final String text, @NonNull final String regex, @NonNull final String replacement, final int flags) {
+    return replaceAllItems(text, regex, replacement, 1, flags);
   }
 
   /**
@@ -402,8 +547,117 @@ public class RegExUtil extends org.apache.commons.lang3.RegExUtils {
    * @param replacement 替换值
    * @return 替换后的内容
    */
+  public static String replaceAllItemsFirstGroup(@NonNull final String text, @NonNull final String regex, @NonNull final String replacement) {
+    return replaceAllItems(text, regex, replacement, 1, 0);
+  }
+
+  /**
+   * 替换指定匹配项的所有捕获组的匹配值
+   *
+   * @param text        需要替换的内容
+   * @param regex       正则
+   * @param replacement 替换值
+   * @param flags       匹配模式
+   * @return 替换后的内容
+   */
+  public static String replaceAllGroups(@NonNull final String text, @NonNull final String regex, @NonNull final String replacement, final int item, final int flags) {
+    if (item < 0) {
+      throw new IllegalArgumentException("Item: should be greater than 0");
+    }
+    // 每个匹配项的所有捕获组的匹配值的起始和结束下标
+    List<long[]> startEndIndexList = new ArrayList<>();
+    Matcher matcher = getMatcher(text, regex, flags);
+    int i = 0;
+    while (matcher.find()) {
+      if (item == i) {
+        for (int j = 1; j <= matcher.groupCount(); j++) {
+          long start = matcher.start(j);
+          long end = matcher.end(j);
+          startEndIndexList.add(new long[]{start, end});
+        }
+        break;
+      }
+      i++;
+    }
+    // 构建替换后的字符串
+    StringBuilder result = new StringBuilder();
+    int lastEnd = 0;
+    for (long[] indices : startEndIndexList) {
+      int start = (int) indices[0];
+      int end = (int) indices[1];
+      // 将前面部分（从 lastEnd 到 start）添加到结果中
+      result.append(text, lastEnd, start);
+      // 添加替换内容
+      result.append(replacement);
+      // 更新 lastEnd
+      lastEnd = end;
+    }
+    // 将剩余部分添加到结果中
+    result.append(text.substring(lastEnd));
+    return result.toString();
+  }
+
+  /**
+   * 替换指定匹配项的所有捕获组的匹配值
+   *
+   * @param text        需要替换的内容
+   * @param regex       正则
+   * @param replacement 替换值
+   * @param item        匹配项，从 0 开始
+   * @return 替换后的内容
+   */
+  public static String replaceAllGroups(@NonNull final String text, @NonNull final String regex, @NonNull final String replacement, final int item) {
+    return replaceAllGroups(text, regex, replacement, item, 0);
+  }
+
+  /**
+   * 替换所有匹配项的所有捕获组的匹配值
+   *
+   * @param text        需要替换的内容
+   * @param regex       正则
+   * @param replacement 替换值
+   * @param flags       匹配模式
+   * @return 替换后的内容
+   */
+  public static String replaceAll(@NonNull final String text, @NonNull final String regex, @NonNull final String replacement, final int flags) {
+    // 每个匹配项的所有捕获组的匹配值的起始和结束下标
+    List<long[]> startEndIndexList = new ArrayList<>();
+    Matcher matcher = getMatcher(text, regex, flags);
+    while (matcher.find()) {
+      for (int j = 1; j <= matcher.groupCount(); j++) {
+        long start = matcher.start(j);
+        long end = matcher.end(j);
+        startEndIndexList.add(new long[]{start, end});
+      }
+    }
+    // 构建替换后的字符串
+    StringBuilder result = new StringBuilder();
+    int lastEnd = 0;
+    for (long[] indices : startEndIndexList) {
+      int start = (int) indices[0];
+      int end = (int) indices[1];
+      // 将前面部分（从 lastEnd 到 start）添加到结果中
+      result.append(text, lastEnd, start);
+      // 添加替换内容
+      result.append(replacement);
+      // 更新 lastEnd
+      lastEnd = end;
+    }
+    // 将剩余部分添加到结果中
+    result.append(text.substring(lastEnd));
+    return result.toString();
+  }
+
+  /**
+   * 替换所有匹配项的所有捕获组的匹配值
+   *
+   * @param text        需要替换的内容
+   * @param regex       正则
+   * @param replacement 替换值
+   * @return 替换后的内容
+   */
   public static String replaceAll(@NonNull final String text, @NonNull final String regex, @NonNull final String replacement) {
-    return replaceAll(text, regex, replacement, 1, 0);
+    return replaceAll(text, regex, replacement, 0);
   }
 
   /**
