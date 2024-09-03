@@ -24,10 +24,10 @@ public class PinyinUtil {
 
   static {
     try {
-      byte[] fileBytes = IOUtil.toByteArray(FileUtil.getResourceAsStream(PinyinUtil.class, "zutil-pinyin/src/main/resources/pinyin/pinyinDataWithTone.dat"));
+      byte[] fileBytes = IOUtil.toByteArray(FileUtil.getResourceAsStream(PinyinUtil.class, "pinyin/pinyinDataWithTone.dat"));
       PINYIN_DATA_WITH_TONE = (Map<String, String>) new ObjectInputStream(new ByteArrayInputStream(fileBytes)).readObject();
 
-      fileBytes = IOUtil.toByteArray(FileUtil.getResourceAsStream(PinyinUtil.class, "zutil-pinyin/src/main/resources/pinyin/pinyinData.dat"));
+      fileBytes = IOUtil.toByteArray(FileUtil.getResourceAsStream(PinyinUtil.class, "pinyin/pinyinData.dat"));
       PINYIN_DATA = (Map<String, String>) new ObjectInputStream(new ByteArrayInputStream(fileBytes)).readObject();
     } catch (IOException | ClassNotFoundException e) {
       throw new RuntimeException(e);
