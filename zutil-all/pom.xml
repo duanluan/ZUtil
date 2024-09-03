@@ -113,6 +113,11 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>de.ruedigermoeller</groupId>
+      <artifactId>fst</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>com.caucho</groupId>
       <artifactId>hessian</artifactId>
       <scope>test</scope>

@@ -78,6 +78,7 @@
     <jsoup.version>1.18.1</jsoup.version>
     <tinypinyin.version>2.0.3.RELEASE</tinypinyin.version>
     <kryo.version>5.6.0</kryo.version>
+    <fst.version>2.57</fst.version>
     <wicketstuff.serializer.version>10.1.1</wicketstuff.serializer.version>
     <hessian.version>4.0.66</hessian.version>
     <protostuff.version>1.8.0</protostuff.version>
@@ -218,7 +219,7 @@
       <dependency>
         <groupId>io.github.biezhi</groupId>
         <artifactId>TinyPinyin</artifactId>
-        <version>${tinypinyin.version}}</version>
+        <version>${tinypinyin.version}</version>
         <scope>test</scope>
       </dependency>
       <dependency>
@@ -231,6 +232,18 @@
         <groupId>org.wicketstuff</groupId>
         <artifactId>wicketstuff-serializer-fast2</artifactId>
         <version>${wicketstuff.serializer.version}</version>
+        <scope>test</scope>
+        <exclusions>
+          <exclusion>
+            <groupId>de.ruedigermoeller</groupId>
+            <artifactId>fst</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+      <dependency>
+        <groupId>de.ruedigermoeller</groupId>
+        <artifactId>fst</artifactId>
+        <version>${fst.version}</version>
         <scope>test</scope>
       </dependency>
       <dependency>
