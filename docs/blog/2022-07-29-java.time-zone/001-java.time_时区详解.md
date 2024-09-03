@@ -5,6 +5,8 @@ authors: [duanluan]
 tags: [time,zone,时区,时间]
 ---
 
+<!--truncate-->
+
 `LocalDateTime`类是不包含时区信息的，可以通过`atZone`方法来设置`ZoneId`，返回`ZonedDateTime`类实例，通过`atOffset`方法来设置`ZoneOffset`，返回`OffsetDateTime`类实例。
 
 ![](java.time.drawio.png)

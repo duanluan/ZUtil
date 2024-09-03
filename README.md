@@ -17,9 +17,9 @@
 
 ## 特性
 
-* 更快：使用 JMH 进行[性能测试](https://github.com/duanluan/ZUtil/tree/main/zutil-all/src/test/java/top/csaf/jmh)。
-* 更全：[时间工具类](https://github.com/duanluan/ZUtil/blob/main/zutil-date/src/main/java/top/csaf/date/DateUtil.java)近 120 个方法，2500+ 行；[正则工具类](https://github.com/duanluan/ZUtil/blob/main/zutil-regex/src/main/java/top/csaf/regex/RegExUtil.java)近 50 个方法，750+ 行。其他工具类也在持续更新中……
-* 更安全：使用 JUnit 进行[套件测试](https://github.com/duanluan/ZUtil/tree/main/zutil-all/src/test/java/top/csaf/junit)，JaCoCo 进行[代码覆盖率测试](https://github.com/duanluan/ZUtil/tree/main/zutil-all/src/test/java/top/csaf/junit)，保证每行代码都符合预期，更少出 BUG。
+* 更快：使用 [JMH](https://openjdk.org/projects/code-tools/jmh/) 进行[性能测试](https://github.com/duanluan/ZUtil/tree/main/zutil-all/src/test/java/top/csaf/jmh)。
+* 更全：[时间工具类](https://github.com/duanluan/ZUtil/blob/main/zutil-date/src/main/java/top/csaf/date/DateUtil.java) 130+ 个方法，2700+ 行；[正则工具类](https://github.com/duanluan/ZUtil/blob/main/zutil-regex/src/main/java/top/csaf/regex/RegExUtil.java) 80+ 个方法，1100+ 行。
+* 更安全：使用 [JUnit](https://junit.org/junit5) 进行套件测试，[JaCoCo](https://www.jacoco.org/jacoco/index.html) 进行[代码覆盖率测试](https://github.com/duanluan/ZUtil/tree/main/zutil-all/src/test/java/top/csaf/junit)，保证每行代码都符合预期，更少出 BUG。
 
 ## Stargazers over time
 
@@ -35,7 +35,7 @@
     <dependency>
       <groupId>top.csaf</groupId>
       <artifactId>ZUtil</artifactId>
-      <version>1.14.2</version>
+      <version>2.0.0-alpha6</version>
     </dependency>
     ```
 
@@ -43,9 +43,9 @@
 
     ```groovy
     // groovy
-    implementation 'top.csaf:ZUtil:1.14.2'
+    implementation 'top.csaf:ZUtil:2.0.0-alpha6'
     // kotlin
-    implementation("top.csaf:ZUtil:1.14.2")
+    implementation("top.csaf:ZUtil:2.0.0-alpha6")
     ```
 
 ### 安装注意
@@ -59,7 +59,7 @@
 <dependency>
   <groupId>top.csaf</groupId>
   <artifactId>ZUtil</artifactId>
-   <version>1.14.2</version>
+   <version>2.0.0-alpha6</version>
   <exclusions>
     <exclusion>
       <groupId>org.slf4j</groupId>
@@ -93,7 +93,7 @@
 // groovy
 dependencies {
   // 方式一：ZUtil 排除 slf4j
-   implementation('top.csaf:ZUtil:1.14.2') {
+   implementation('top.csaf:ZUtil:2.0.0-alpha6') {
     exclude group: 'org.slf4j', module: 'slf4j-api'
     exclude group: 'org.slf4j', module: 'slf4j-simple'
   }
@@ -106,7 +106,7 @@ dependencies {
 // kotlin
 dependencies {
   // 方式一：ZUtil 排除 slf4j
-   implementation("top.csaf:ZUtil:1.14.2") {
+   implementation("top.csaf:ZUtil:2.0.0-alpha6") {
     exclude(group = "org.slf4j", module = "slf4j-api")
     exclude(group = "org.slf4j", module = "slf4j-simple")
   }

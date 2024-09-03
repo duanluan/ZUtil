@@ -7,6 +7,8 @@ tags: [hello]
 
 Hello, World!
 
+<!--truncate-->
+
 欢迎访问我的博客：[欲穷三千界的博客](http://blog.zhjh.top/)
 
 # 更快
