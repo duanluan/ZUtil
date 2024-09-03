@@ -37,12 +37,6 @@
     <developerConnection>scm:git:ssh://github.com:duanluan/ZUtil.git</developerConnection>
   </scm>
 
-  <properties>
-    <java.version>1.8</java.version>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <serverId>central</serverId>
-  </properties>
-
   <modules>
     <module>zutil-all</module>
     <module>zutil-core</module>
@@ -54,63 +48,278 @@
     <module>zutil-date</module>
   </modules>
 
+  <properties>
+    <java.version>1.8</java.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <serverId>central</serverId>
+
+    <lombok.version>1.18.34</lombok.version>
+    <slf4j.version>1.7.36</slf4j.version>
+    <gson.version>2.11.0</gson.version>
+    <jackson.version>2.17.2</jackson.version>
+    <fastjson.version>2.0.52</fastjson.version>
+    <commons.lang.version>3.17.0</commons.lang.version>
+    <commons.text.version>1.12.0</commons.text.version>
+    <commons.collections.version>4.5.0-M2</commons.collections.version>
+    <commons.io.version>2.16.1</commons.io.version>
+    <commons.beanutils.version>1.9.4</commons.beanutils.version>
+    <okhttps.version>4.0.3</okhttps.version>
+    <okio.version>3.9.0</okio.version>
+    <spring.beans.version>5.3.39</spring.beans.version>
+    <bouncycastle.version>1.78.1</bouncycastle.version>
+    <dom4j.version>2.1.4</dom4j.version>
+    <snakeyaml.version>2.3</snakeyaml.version>
+
+    <junit.version>5.11.0</junit.version>
+    <junit.platform.version>1.11.0</junit.platform.version>
+    <spring.test.version>5.3.39</spring.test.version>
+    <jmh.version>1.37</jmh.version>
+    <hutool.version>5.8.32</hutool.version>
+    <jsoup.version>1.18.1</jsoup.version>
+    <tinypinyin.version>2.0.3.RELEASE</tinypinyin.version>
+    <kryo.version>5.6.0</kryo.version>
+    <wicketstuff.serializer.version>10.1.1</wicketstuff.serializer.version>
+    <hessian.version>4.0.66</hessian.version>
+    <protostuff.version>1.8.0</protostuff.version>
+    <dyuproject.protostuff.version>1.3.0</dyuproject.protostuff.version>
+    <objenesis.version>3.4</objenesis.version>
+  </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.projectlombok</groupId>
+        <artifactId>lombok</artifactId>
+        <version>${lombok.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>${slf4j.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-simple</artifactId>
+        <version>${slf4j.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.google.code.gson</groupId>
+        <artifactId>gson</artifactId>
+        <version>${gson.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-databind</artifactId>
+        <version>${jackson.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.alibaba.fastjson2</groupId>
+        <artifactId>fastjson2</artifactId>
+        <version>${fastjson.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-lang3</artifactId>
+        <version>${commons.lang.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-text</artifactId>
+        <version>${commons.text.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-collections4</artifactId>
+        <version>${commons.collections.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>commons-io</groupId>
+        <artifactId>commons-io</artifactId>
+        <version>${commons.io.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>commons-beanutils</groupId>
+        <artifactId>commons-beanutils</artifactId>
+        <version>${commons.beanutils.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>cn.zhxu</groupId>
+        <artifactId>okhttps-fastjson2-jsonb</artifactId>
+        <version>${okhttps.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.squareup.okio</groupId>
+        <artifactId>okio</artifactId>
+        <version>${okio.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-beans</artifactId>
+        <version>${spring.beans.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.bouncycastle</groupId>
+        <artifactId>bcprov-jdk18on</artifactId>
+        <version>${bouncycastle.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.dom4j</groupId>
+        <artifactId>dom4j</artifactId>
+        <version>${dom4j.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.yaml</groupId>
+        <artifactId>snakeyaml</artifactId>
+        <version>${snakeyaml.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter</artifactId>
+        <version>${junit.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.junit.platform</groupId>
+        <artifactId>junit-platform-suite</artifactId>
+        <version>${junit.platform.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-test</artifactId>
+        <version>${spring.test.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.openjdk.jmh</groupId>
+        <artifactId>jmh-core</artifactId>
+        <version>${jmh.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.openjdk.jmh</groupId>
+        <artifactId>jmh-generator-annprocess</artifactId>
+        <version>${jmh.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>cn.hutool</groupId>
+        <artifactId>hutool-all</artifactId>
+        <version>${hutool.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.jsoup</groupId>
+        <artifactId>jsoup</artifactId>
+        <version>${jsoup.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>io.github.biezhi</groupId>
+        <artifactId>TinyPinyin</artifactId>
+        <version>${tinypinyin.version}}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>com.esotericsoftware</groupId>
+        <artifactId>kryo</artifactId>
+        <version>${kryo.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.wicketstuff</groupId>
+        <artifactId>wicketstuff-serializer-fast2</artifactId>
+        <version>${wicketstuff.serializer.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>com.caucho</groupId>
+        <artifactId>hessian</artifactId>
+        <version>${hessian.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>io.protostuff</groupId>
+        <artifactId>protostuff-core</artifactId>
+        <version>${protostuff.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>io.protostuff</groupId>
+        <artifactId>protostuff-runtime</artifactId>
+        <version>${protostuff.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>com.dyuproject.protostuff</groupId>
+        <artifactId>protostuff-core</artifactId>
+        <version>${dyuproject.protostuff.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>com.dyuproject.protostuff</groupId>
+        <artifactId>protostuff-runtime</artifactId>
+        <version>${dyuproject.protostuff.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.objenesis</groupId>
+        <artifactId>objenesis</artifactId>
+        <version>${objenesis.version}</version>
+        <scope>test</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
   <dependencies>
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
-      <version>1.18.30</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
-      <version>1.7.36</version>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-simple</artifactId>
-      <version>1.7.36</version>
     </dependency>
 
     <!-- JUnit：https://junit.org/junit5/docs/current/api/index.html -->
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter</artifactId>
-      <version>5.10.0</version>
       <scope>test</scope>
     </dependency>
     <!-- JUnit 测试套件 -->
     <dependency>
       <groupId>org.junit.platform</groupId>
       <artifactId>junit-platform-suite</artifactId>
-      <version>1.10.0</version>
       <scope>test</scope>
     </dependency>
     <!-- Spring Test，此处主要用于调用 private 方法用于覆盖率测试 -->
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-test</artifactId>
-      <version>5.3.30</version>
       <scope>test</scope>
     </dependency>
     <!-- JMH -->
     <dependency>
       <groupId>org.openjdk.jmh</groupId>
       <artifactId>jmh-core</artifactId>
-      <version>1.37</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.openjdk.jmh</groupId>
       <artifactId>jmh-generator-annprocess</artifactId>
-      <version>1.37</version>
       <scope>test</scope>
     </dependency>
 
     <dependency>
       <groupId>cn.hutool</groupId>
       <artifactId>hutool-all</artifactId>
-      <version>5.8.22</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -332,11 +541,6 @@
       <id>maven_central</id>
       <name>Maven Central</name>
       <url>https://repo.maven.apache.org/maven2/</url>
-    </repository>
-    <!-- jitpack -->
-    <repository>
-      <id>jitpack.io</id>
-      <url>https://jitpack.io</url>
     </repository>
   </repositories>
   <pluginRepositories>
