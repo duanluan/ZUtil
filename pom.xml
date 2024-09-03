@@ -48,6 +48,8 @@
     <module>zutil-core</module>
     <module>zutil-regex</module>
     <module>zutil-io</module>
+    <module>zutil-json</module>
+    <module>zutil-http</module>
     <module>zutil-pinyin</module>
     <module>zutil-date</module>
   </modules>

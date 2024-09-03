@@ -20,6 +20,8 @@ import java.util.function.Function;
 @Slf4j
 public class CollUtil {
 
+  // region org.apache.commons.collections4.CollectionUtils
+
   public static java.lang.Object get(java.lang.Object object, int index) {
     return org.apache.commons.collections4.CollectionUtils.get(object, index);
   }
@@ -250,6 +252,7 @@ public class CollUtil {
     return org.apache.commons.collections4.CollectionUtils.extractSingleton(collection);
   }
 
+  // endregion
 
   /**
    * 获取第一个元素

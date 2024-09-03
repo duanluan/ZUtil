@@ -10,10 +10,10 @@
     <version>2.0.0-alpha5</version>
   </parent>
 
-  <artifactId>zutil-pinyin</artifactId>
+  <artifactId>zutil-http</artifactId>
   <name>${project.artifactId}</name>
-  <url>https://github.com/duanluan/ZUtil/zutil-pinyin</url>
-  <description>Java Pinyin Util for ZUtil</description>
+  <url>https://github.com/duanluan/ZUtil/zutil-http</url>
+  <description>Java HTTP Util for ZUtil</description>
   <licenses>
     <license>
       <name>Apache License 2.0</name>
@@ -34,26 +34,50 @@
     </developer>
   </developers>
   <scm>
-    <url>https://github.com/duanluan/ZUtil/tree/main/zutil-pinyin</url>
+    <url>https://github.com/duanluan/ZUtil/tree/main/zutil-http</url>
   </scm>
 
   <dependencies>
     <dependency>
       <groupId>top.csaf</groupId>
-      <artifactId>zutil-io</artifactId>
+      <artifactId>zutil-regex</artifactId>
       <version>${project.parent.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>io.github.biezhi</groupId>
-      <artifactId>TinyPinyin</artifactId>
-      <version>2.0.3.RELEASE</version>
-      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>top.csaf</groupId>
-      <artifactId>zutil-http</artifactId>
+      <artifactId>zutil-json</artifactId>
       <version>${project.parent.version}</version>
+    </dependency>
+
+    <!-- HTTP、WebSocket、Stomp 请求 -->
+    <dependency>
+      <groupId>cn.zhxu</groupId>
+      <artifactId>okhttps-fastjson2-jsonb</artifactId>
+      <version>4.0.2</version>
+      <exclusions>
+        <!-- 解决 okhttp 和 okio 版本不兼容导致的 java.lang.NoSuchFieldError: Companion 错误：https://ok.zhxu.cn/v4/questions.html#java-lang-nosuchfielderror-companion -->
+        <exclusion>
+          <groupId>com.squareup.okio</groupId>
+          <artifactId>okio</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>com.squareup.okio</groupId>
+      <artifactId>okio</artifactId>
+      <version>3.7.0</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>2.16.0</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.jsoup</groupId>
+      <artifactId>jsoup</artifactId>
+      <version>1.16.2</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

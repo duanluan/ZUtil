@@ -22,13 +22,13 @@ import static org.junit.jupiter.api.Assertions.*;
 class CollUtilTest {
 
   public static void main(String[] args) {
-    genCollections4Fn();
+    genCollectionUtilsFn();
   }
 
   /**
    * 调用 {@link org.apache.commons.collections4.CollectionUtils } 的方法
    */
-  static void genCollections4Fn() {
+  static void genCollectionUtilsFn() {
     // 获取 org.apache.commons.collections4.CollectionUtils 中所有的方法名
     Class<?> clazz = org.apache.commons.collections4.CollectionUtils.class;
     Method[] methods = clazz.getDeclaredMethods();

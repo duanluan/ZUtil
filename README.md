@@ -13,7 +13,7 @@
 
 工具类使用请查看<a href='https://duanluan.github.io/ZUtil' target='_blank' style='font-size:25px'>文档</a>、[javadoc](https://apidoc.gitee.com/duanluan/ZUtil)。
 
-和 Hutool 的性能对比测试请查看 [jmh.contrast](zutil-all/src/test/java/top/csaf/jmh/contrast)。
+和 Hutool 的性能对比测试请查看 [jmh.comparison](zutil-all/src/test/java/top/csaf/jmh/comparison)。
 
 ## 特性
 

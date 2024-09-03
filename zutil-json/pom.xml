@@ -10,10 +10,10 @@
     <version>2.0.0-alpha5</version>
   </parent>
 
-  <artifactId>zutil-pinyin</artifactId>
+  <artifactId>zutil-json</artifactId>
   <name>${project.artifactId}</name>
-  <url>https://github.com/duanluan/ZUtil/zutil-pinyin</url>
-  <description>Java Pinyin Util for ZUtil</description>
+  <url>https://github.com/duanluan/ZUtil/zutil-json</url>
+  <description>Java JSON Util for ZUtil</description>
   <licenses>
     <license>
       <name>Apache License 2.0</name>
@@ -34,25 +34,30 @@
     </developer>
   </developers>
   <scm>
-    <url>https://github.com/duanluan/ZUtil/tree/main/zutil-pinyin</url>
+    <url>https://github.com/duanluan/ZUtil/tree/main/zutil-json</url>
   </scm>
 
   <dependencies>
     <dependency>
       <groupId>top.csaf</groupId>
-      <artifactId>zutil-io</artifactId>
+      <artifactId>zutil-core</artifactId>
       <version>${project.parent.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.alibaba.fastjson2</groupId>
+      <artifactId>fastjson2</artifactId>
+      <version>2.0.43</version>
     </dependency>
 
     <dependency>
-      <groupId>io.github.biezhi</groupId>
-      <artifactId>TinyPinyin</artifactId>
-      <version>2.0.3.RELEASE</version>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>2.16.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>top.csaf</groupId>
-      <artifactId>zutil-http</artifactId>
+      <artifactId>zutil-regex</artifactId>
       <version>${project.parent.version}</version>
       <scope>test</scope>
     </dependency>

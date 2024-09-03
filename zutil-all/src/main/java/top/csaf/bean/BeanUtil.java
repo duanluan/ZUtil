@@ -1,11 +1,11 @@
 package top.csaf.bean;
 
 
-import com.alibaba.fastjson2.JSON;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.beanutils.PropertyUtils;
 import top.csaf.coll.CollUtil;
+import top.csaf.json.JsonUtil;
 import top.csaf.lang.StrUtil;
 
 import java.beans.Introspector;
@@ -365,7 +365,8 @@ public class BeanUtil extends org.springframework.beans.BeanUtils {
    * @return 深克隆后的对象
    */
   public static <T> T deepClone(T source) {
-    return (T) JSON.parseObject(JSON.toJSONString(source), source.getClass());
+    // return (T) JSON.parseObject(JSON.toJSONString(source), source.getClass());
+    return (T) JsonUtil.parseObject(JsonUtil.toJsonNoFeature(source), source.getClass());
   }
 
   /**
