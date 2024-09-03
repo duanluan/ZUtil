@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
  * 注意：没有捕获组时则为匹配项本身
  */
 @Slf4j
-public class RegExUtil extends org.apache.commons.lang3.RegExUtils {
+public class RegExUtil {
 
   public static final Pattern SPECIAL_CHAR_PATTERN = Pattern.compile("([/\\\\()\\[\\]{},.?*+|^$])");
 
@@ -658,6 +658,201 @@ public class RegExUtil extends org.apache.commons.lang3.RegExUtils {
    */
   public static String replaceAll(@NonNull final String text, @NonNull final String regex, @NonNull final String replacement) {
     return replaceAll(text, regex, replacement, 0);
+  }
+
+  /**
+   * 删除指定匹配项的指定捕获组的匹配值
+   *
+   * @param text  需要删除的内容
+   * @param regex 正则
+   * @param item  匹配项，从 0 开始
+   * @param group 捕获组，从 1 开始，0 为所在匹配项所有捕获组
+   * @param flags 匹配模式
+   * @return 替换后的内容
+   */
+  public static String remove(@NonNull final String text, @NonNull final String regex, final int item, final int group, final int flags) {
+    return replace(text, regex, "", item, group, flags);
+  }
+
+  /**
+   * 删除指定匹配项的第一个捕获组的匹配值
+   *
+   * @param text  需要删除的内容
+   * @param regex 正则
+   * @param item  匹配项，从 0 开始
+   * @param group 捕获组，从 1 开始，0 为所在匹配项所有捕获组
+   * @return 替换后的内容
+   */
+  public static String remove(@NonNull final String text, @NonNull final String regex, final int item, final int group) {
+    return replace(text, regex, "", item, group);
+  }
+
+  /**
+   * 删除第一个匹配项的指定捕获组的匹配值
+   *
+   * @param text  需要删除的内容
+   * @param regex 正则
+   * @param group 捕获组，从 1 开始，0 为所在匹配项所有捕获组
+   * @param flags 匹配模式
+   * @return 删除后的内容
+   */
+  public static String removeFirstItem(@NonNull final String text, @NonNull final String regex, final int group, final int flags) {
+    return replaceFirstItem(text, regex, "", group, flags);
+  }
+
+  /**
+   * 删除第一个匹配项的指定捕获组的匹配值
+   *
+   * @param text  需要删除的内容
+   * @param regex 正则
+   * @param group 捕获组，从 1 开始，0 为所在匹配项所有捕获组
+   * @return 删除后的内容
+   */
+  public static String removeFirstItem(@NonNull final String text, @NonNull final String regex, final int group) {
+    return replaceFirstItem(text, regex, "", group);
+  }
+
+  /**
+   * 删除指定匹配项的第一个捕获组的匹配值
+   *
+   * @param text  需要删除的内容
+   * @param regex 正则
+   * @param item  匹配项，从 0 开始
+   * @param flags 匹配模式
+   * @return 删除后的内容
+   */
+  public static String removeFirstGroup(@NonNull final String text, @NonNull final String regex, final int item, final int flags) {
+    return replaceFirstGroup(text, regex, "", item, flags);
+  }
+
+  /**
+   * 删除指定匹配项的第一个捕获组的匹配值
+   *
+   * @param text  需要删除的内容
+   * @param regex 正则
+   * @param item  匹配项，从 0 开始
+   * @return 删除后的内容
+   */
+  public static String removeFirstGroup(@NonNull final String text, @NonNull final String regex, final int item) {
+    return replaceFirstGroup(text, regex, "", item);
+  }
+
+  /**
+   * 删除第一个匹配项的第一个捕获组的匹配值
+   *
+   * @param text  需要删除的内容
+   * @param regex 正则
+   * @param flags 匹配模式
+   * @return 删除后的内容
+   */
+  public static String removeFirstItemGroup(@NonNull final String text, @NonNull final String regex, final int flags) {
+    return replaceFirstItemGroup(text, regex, "", flags);
+  }
+
+  /**
+   * 删除第一个匹配项的第一个捕获组的匹配值
+   *
+   * @param text  需要删除的内容
+   * @param regex 正则
+   * @return 删除后的内容
+   */
+  public static String removeFirstItemGroup(@NonNull final String text, @NonNull final String regex) {
+    return replaceFirstItemGroup(text, regex, "");
+  }
+
+  /**
+   * 删除所有匹配项的指定捕获组的匹配值
+   *
+   * @param text  需要删除的内容
+   * @param regex 正则
+   * @param group 捕获组，从 1 开始，0 为所在匹配项所有捕获组
+   * @param flags 匹配模式
+   * @return 删除后的内容
+   */
+  public static String removeAllItems(@NonNull final String text, @NonNull final String regex, final int group, final int flags) {
+    return replaceAllItems(text, regex, "", group, flags);
+  }
+
+  /**
+   * 删除所有匹配项的指定捕获组的匹配值
+   *
+   * @param text  需要删除的内容
+   * @param regex 正则
+   * @param group 捕获组，从 1 开始，0 为所在匹配项所有捕获组
+   * @return 删除后的内容
+   */
+  public static String removeAllItems(@NonNull final String text, @NonNull final String regex, final int group) {
+    return replaceAllItems(text, regex, "", group);
+  }
+
+  /**
+   * 删除所有匹配项的第一个捕获组的匹配值
+   *
+   * @param text  需要删除的内容
+   * @param regex 正则
+   * @param flags 匹配模式
+   * @return 删除后的内容
+   */
+  public static String removeAllItemsFirstGroup(@NonNull final String text, @NonNull final String regex, final int flags) {
+    return replaceAllItemsFirstGroup(text, regex, "", flags);
+  }
+
+  /**
+   * 删除所有匹配项的第一个捕获组的匹配值
+   *
+   * @param text  需要删除的内容
+   * @param regex 正则
+   * @return 删除后的内容
+   */
+  public static String removeAllItemsFirstGroup(@NonNull final String text, @NonNull final String regex) {
+    return replaceAllItemsFirstGroup(text, regex, "");
+  }
+
+  /**
+   * 删除指定匹配项的所有捕获组的匹配值
+   *
+   * @param text  需要删除的内容
+   * @param regex 正则
+   * @param flags 匹配模式
+   * @return 删除后的内容
+   */
+  public static String removeAllGroups(@NonNull final String text, @NonNull final String regex, final int item, final int flags) {
+    return replaceAllGroups(text, regex, "", item, flags);
+  }
+
+  /**
+   * 删除指定匹配项的所有捕获组的匹配值
+   *
+   * @param text  需要删除的内容
+   * @param regex 正则
+   * @param item  匹配项，从 0 开始
+   * @return 删除后的内容
+   */
+  public static String removeAllGroups(@NonNull final String text, @NonNull final String regex, final int item) {
+    return replaceAllGroups(text, regex, "", item);
+  }
+
+  /**
+   * 删除所有匹配项的所有捕获组的匹配值
+   *
+   * @param text  需要删除的内容
+   * @param regex 正则
+   * @param flags 匹配模式
+   * @return 删除后的内容
+   */
+  public static String removeAll(@NonNull final String text, @NonNull final String regex, final int flags) {
+    return replaceAll(text, regex, "", flags);
+  }
+
+  /**
+   * 删除所有匹配项的所有捕获组的匹配值
+   *
+   * @param text  需要删除的内容
+   * @param regex 正则
+   * @return 删除后的内容
+   */
+  public static String removeAll(@NonNull final String text, @NonNull final String regex) {
+    return replaceAll(text, regex, "");
   }
 
   /**
