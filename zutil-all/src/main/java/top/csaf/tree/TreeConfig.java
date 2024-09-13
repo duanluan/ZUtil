@@ -14,7 +14,7 @@ public class TreeConfig {
    */
   private boolean isSort = false;
   /**
-   * 排序规则，默认按照 ID 排序，null 值排在开始
+   * 排序规则
    */
   private Comparator<TreeNode> comparator;
   /**
