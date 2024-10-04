@@ -61,7 +61,7 @@ public class BlockCipher {
     if (StrUtil.isBlank(type)) {
       throw new IllegalArgumentException("type must not be blank");
     }
-    if (!NumberUtil.geThanZero(keyLength)) {
+    if (!NumberUtil.gtZero(keyLength)) {
       // 不同加解密算法有默认的密钥长度
       switch (type) {
         case DES:
@@ -73,7 +73,7 @@ public class BlockCipher {
     } else {
       this.keyLength = keyLength;
     }
-    if (!NumberUtil.geThanZero(ivLength)) {
+    if (!NumberUtil.gtZero(ivLength)) {
       // 不同加解密算法有默认的 iv 长度
       switch (type) {
         case DES:
