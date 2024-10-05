@@ -480,7 +480,7 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
    * @param pattern    格式
    * @return 指定时区和格式的字符串
    */
-  public static String format(final long epochMilli, final ZoneId zoneId, @NonNull final String pattern) {
+  public static String format(@NonNull final Long epochMilli, final ZoneId zoneId, @NonNull final String pattern) {
     return format(new Date(epochMilli), zoneId, pattern);
   }
 
@@ -491,7 +491,7 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
    * @param zoneId     时区
    * @return 指定时区的字符串
    */
-  public static String format(final long epochMilli, @NonNull final ZoneId zoneId) {
+  public static String format(@NonNull final Long epochMilli, @NonNull final ZoneId zoneId) {
     return format(epochMilli, zoneId, DateConst.DEFAULT_LOCAL_DATE_TIME_PATTERN);
   }
 
@@ -502,7 +502,7 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
    * @param pattern    格式
    * @return 指定时区和格式的字符串
    */
-  public static String format(final long epochMilli, @NonNull final String pattern) {
+  public static String format(@NonNull final Long epochMilli, @NonNull final String pattern) {
     return format(epochMilli, null, pattern);
   }
 
@@ -512,7 +512,7 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
    * @param epochMilli 时间戳
    * @return DateConstant.DEFAULT_LOCAL_DATE_TIME_PATTERN 格式的字符串
    */
-  public static String format(final long epochMilli) {
+  public static String format(@NonNull final Long epochMilli) {
     return format(epochMilli, DateConst.DEFAULT_LOCAL_DATE_TIME_PATTERN);
   }
 
@@ -523,19 +523,20 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
    * @param pattern    格式
    * @return 指定格式的倒计时字符串
    */
-  public static String formatCountdown(long epochMilli, @NonNull String pattern) {
+  public static String formatCountdown(@NonNull final Long epochMilli, @NonNull String pattern) {
     if (epochMilli <= 0) {
       throw new IllegalArgumentException("epochMilli must be greater than 0");
     }
     if (StrUtil.isBlank(pattern)) {
       throw new IllegalArgumentException("pattern must not be blank");
     }
+    long epochMilli1 = epochMilli;
     String lowerCasePattern = pattern.toLowerCase();
 
     if (pattern.contains("W")) {
-      long week = epochMilli / DateDuration.WEEK_MILLIS;
+      long week = epochMilli1 / DateDuration.WEEK_MILLIS;
       if (week > 0) {
-        epochMilli -= week * DateDuration.WEEK_MILLIS;
+        epochMilli1 -= week * DateDuration.WEEK_MILLIS;
       }
 
       // 1 位且前后都不是 W：1
@@ -546,9 +547,9 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
       }
     }
     if (lowerCasePattern.contains("d")) {
-      long dayOfMonth = epochMilli / DateDuration.DAY_OF_MONTH_MILLIS;
+      long dayOfMonth = epochMilli1 / DateDuration.DAY_OF_MONTH_MILLIS;
       if (dayOfMonth > 0) {
-        epochMilli -= dayOfMonth * DateDuration.DAY_OF_MONTH_MILLIS;
+        epochMilli1 -= dayOfMonth * DateDuration.DAY_OF_MONTH_MILLIS;
       }
 
       pattern = DateRegExPattern.DAY_OF_MONTH.matcher(pattern).replaceAll(String.valueOf(dayOfMonth));
@@ -557,9 +558,9 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
       }
     }
     if (lowerCasePattern.contains("h") || lowerCasePattern.contains("k")) {
-      long hour = epochMilli / DateDuration.HOUR_MILLIS;
+      long hour = epochMilli1 / DateDuration.HOUR_MILLIS;
       if (hour > 0) {
-        epochMilli -= hour * DateDuration.HOUR_MILLIS;
+        epochMilli1 -= hour * DateDuration.HOUR_MILLIS;
       }
 
       if (pattern.contains("H")) {
@@ -591,9 +592,9 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
       }
     }
     if (pattern.contains("m")) {
-      long minute = epochMilli / DateDuration.MINUTE_MILLIS;
+      long minute = epochMilli1 / DateDuration.MINUTE_MILLIS;
       if (minute > 0) {
-        epochMilli -= minute * DateDuration.MINUTE_MILLIS;
+        epochMilli1 -= minute * DateDuration.MINUTE_MILLIS;
       }
 
       if (pattern.contains("m")) {
@@ -604,9 +605,9 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
       }
     }
     if (pattern.contains("s")) {
-      long second = epochMilli / DateDuration.SECOND_MILLIS;
+      long second = epochMilli1 / DateDuration.SECOND_MILLIS;
       if (second > 0) {
-        epochMilli -= second * DateDuration.SECOND_MILLIS;
+        epochMilli1 -= second * DateDuration.SECOND_MILLIS;
       }
 
       if (pattern.contains("s")) {
@@ -617,7 +618,7 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
       }
     }
     if (pattern.contains("S")) {
-      long millis = epochMilli / DateDuration.MILLIS_1000;
+      long millis = epochMilli1 / DateDuration.MILLIS_1000;
       if (pattern.contains("S")) {
         pattern = DateRegExPattern.FRACTION_OF_SECOND3.matcher(pattern).replaceAll(String.format("%03d", millis));
       }
@@ -845,7 +846,7 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
    * @param epochMilli 时间戳
    * @return LocalDateTime 对象
    */
-  public static LocalDateTime parseLocalDateTime(final long epochMilli) {
+  public static LocalDateTime parseLocalDateTime(@NonNull final Long epochMilli) {
     return parseLocalDateTime(epochMilli, null);
   }
 
@@ -997,7 +998,7 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
    * @param epochMilli 时间戳
    * @return LocalDate 对象
    */
-  public static LocalDate parseLocalDate(final long epochMilli) {
+  public static LocalDate parseLocalDate(@NonNull final Long epochMilli) {
     return parseLocalDate(epochMilli, null);
   }
 
@@ -1130,7 +1131,7 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
    * @param epochMilli 时间戳
    * @return LocalTime 对象
    */
-  public static LocalTime parseLocalTime(final long epochMilli) {
+  public static LocalTime parseLocalTime(@NonNull final Long epochMilli) {
     return parseLocalTime(epochMilli, null);
   }
 
@@ -1227,7 +1228,7 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
    * @param zoneId     时区
    * @return 指定时区的 Date 对象
    */
-  public static Date parseDate(final long epochMilli, final ZoneId zoneId) {
+  public static Date parseDate(@NonNull final Long epochMilli, final ZoneId zoneId) {
     Date date = new Date(epochMilli);
     if (zoneId != null) {
       date = Date.from(date.toInstant().atZone(DateFeat.getZoneId()).withZoneSameInstant(DateFeat.get(zoneId)).toInstant());
@@ -1241,7 +1242,7 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
    * @param epochMilli 时间戳
    * @return Date 对象
    */
-  public static Date parseDate(final long epochMilli) {
+  public static Date parseDate(@NonNull final Long epochMilli) {
     return parseDate(epochMilli, null);
   }
 
@@ -1318,7 +1319,7 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
    * @param <T>        时间类
    * @return 指定时区的时间对象
    */
-  public static <T> T parse(final long epochMilli, final ZoneId zoneId, @NonNull final Class<T> clazz) {
+  public static <T> T parse(@NonNull final Long epochMilli, final ZoneId zoneId, @NonNull final Class<T> clazz) {
     if (LocalDateTime.class.equals(clazz)) {
       return (T) parseLocalDateTime(epochMilli, zoneId);
     } else if (LocalDate.class.equals(clazz)) {
@@ -1339,7 +1340,7 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
    * @param <T>        时间类
    * @return 时间对象
    */
-  public static <T> T parse(final long epochMilli, @NonNull final Class<T> clazz) {
+  public static <T> T parse(@NonNull final Long epochMilli, @NonNull final Class<T> clazz) {
     return parse(epochMilli, null, clazz);
   }
 
