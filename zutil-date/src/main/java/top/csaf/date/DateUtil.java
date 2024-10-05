@@ -364,7 +364,7 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
         } else {
           localDateTime = ((LocalTime) temporal).atDate(LocalDate.now());
         }
-        return localDateTime.atZone(DateConst.SYSTEM_ZONE_ID).withZoneSameInstant(zoneId1).format(dateTimeFormatter);
+        return localDateTime.atZone(DateFeat.getZoneId()).withZoneSameInstant(zoneId1).format(dateTimeFormatter);
       } else if (temporal instanceof ZonedDateTime) {
         return ((ZonedDateTime) temporal).withZoneSameInstant(zoneId1).format(dateTimeFormatter);
       } else {
@@ -714,7 +714,7 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
           return null;
         });
       } else {
-        zonedDateTime[0] = localDateTime.atZone(DateConst.SYSTEM_ZONE_ID);
+        zonedDateTime[0] = localDateTime.atZone(DateFeat.getZoneId());
       }
       return Date.from(zonedDateTime[0].toInstant());
     } else if (temporal instanceof LocalDate) {
@@ -762,7 +762,7 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
    * @return LocalDateTime 对象
    */
   public static LocalDateTime toLocalDateTime(@NonNull final Date date) {
-    return date.toInstant().atZone(DateConst.SYSTEM_ZONE_ID).toLocalDateTime();
+    return date.toInstant().atZone(DateFeat.getZoneId()).toLocalDateTime();
   }
 
   /**
@@ -772,7 +772,7 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
    * @return LocalDate 对象
    */
   public static LocalDate toLocalDate(@NonNull final Date date) {
-    return date.toInstant().atZone(DateConst.SYSTEM_ZONE_ID).toLocalDate();
+    return date.toInstant().atZone(DateFeat.getZoneId()).toLocalDate();
   }
 
   /**
@@ -782,7 +782,7 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
    * @return LocalTime 对象
    */
   public static LocalTime toLocalTime(@NonNull final Date date) {
-    return date.toInstant().atZone(DateConst.SYSTEM_ZONE_ID).toLocalTime();
+    return date.toInstant().atZone(DateFeat.getZoneId()).toLocalTime();
   }
 
   /**
@@ -801,9 +801,9 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
     } else if (LocalTime.class.equals(clazz)) {
       return (T) toLocalTime(date);
     } else if (ZonedDateTime.class.equals(clazz)) {
-      return (T) toLocalDateTime(date).atZone(DateConst.SYSTEM_ZONE_ID);
+      return (T) toLocalDateTime(date).atZone(DateFeat.getZoneId());
     } else if (OffsetDateTime.class.equals(clazz)) {
-      return (T) toLocalDateTime(date).atZone(DateConst.SYSTEM_ZONE_ID).toOffsetDateTime();
+      return (T) toLocalDateTime(date).atZone(DateFeat.getZoneId()).toOffsetDateTime();
     }
     return null;
   }
@@ -821,7 +821,7 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
   // }
 
   public static long toEpochSecond(@NonNull final Date date) {
-    return date.toInstant().atZone(DateConst.SYSTEM_ZONE_ID).toEpochSecond();
+    return date.toInstant().atZone(DateFeat.getZoneId()).toEpochSecond();
   }
 
   /**
@@ -831,8 +831,8 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
    * @param zoneId     时区
    * @return 指定时区的 LocalDateTime 对象
    */
-  public static LocalDateTime parseLocalDateTime(final long epochMilli, final ZoneId zoneId) {
-    ZonedDateTime zonedDateTime = Instant.ofEpochMilli(epochMilli).atZone(DateConst.SYSTEM_ZONE_ID);
+  public static LocalDateTime parseLocalDateTime(@NonNull final Long epochMilli, final ZoneId zoneId) {
+    ZonedDateTime zonedDateTime = Instant.ofEpochMilli(epochMilli).atZone(DateFeat.getZoneId());
     if (zoneId != null) {
       zonedDateTime = zonedDateTime.withZoneSameInstant(DateFeat.get(zoneId));
     }
@@ -869,7 +869,7 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
       } catch (DateTimeParseException e) {
         continue;
       }
-      ZonedDateTime zonedDateTime = localDateTime.atZone(DateConst.SYSTEM_ZONE_ID);
+      ZonedDateTime zonedDateTime = localDateTime.atZone(DateFeat.getZoneId());
       if (zoneId != null) {
         zonedDateTime = zonedDateTime.withZoneSameInstant(DateFeat.get(zoneId));
       }
@@ -983,8 +983,8 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
    * @param zoneId     时区
    * @return 指定时区的 LocalDate 对象
    */
-  public static LocalDate parseLocalDate(final long epochMilli, final ZoneId zoneId) {
-    ZonedDateTime zonedDateTime = Instant.ofEpochMilli(epochMilli).atZone(DateConst.SYSTEM_ZONE_ID);
+  public static LocalDate parseLocalDate(@NonNull final Long epochMilli, final ZoneId zoneId) {
+    ZonedDateTime zonedDateTime = Instant.ofEpochMilli(epochMilli).atZone(DateFeat.getZoneId());
     if (zoneId != null) {
       zonedDateTime = zonedDateTime.withZoneSameInstant(DateFeat.get(zoneId));
     }
@@ -1024,7 +1024,7 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
         continue;
       }
       if (zoneId != null) {
-        return localDate.atTime(LocalTime.MIN).atZone(DateConst.SYSTEM_ZONE_ID).withZoneSameInstant(DateFeat.get(zoneId)).toLocalDate();
+        return localDate.atTime(LocalTime.MIN).atZone(DateFeat.getZoneId()).withZoneSameInstant(DateFeat.get(zoneId)).toLocalDate();
       }
       return localDate;
     }
@@ -1116,8 +1116,8 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
    * @param zoneId     时区
    * @return 指定时区的 LocalTime 对象
    */
-  public static LocalTime parseLocalTime(final long epochMilli, final ZoneId zoneId) {
-    ZonedDateTime zonedDateTime = Instant.ofEpochMilli(epochMilli).atZone(DateConst.SYSTEM_ZONE_ID);
+  public static LocalTime parseLocalTime(@NonNull final Long epochMilli, final ZoneId zoneId) {
+    ZonedDateTime zonedDateTime = Instant.ofEpochMilli(epochMilli).atZone(DateFeat.getZoneId());
     if (zoneId != null) {
       zonedDateTime = zonedDateTime.withZoneSameInstant(DateFeat.get(zoneId));
     }
@@ -1157,7 +1157,7 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
         continue;
       }
       if (zoneId != null) {
-        return localTime.atDate(LocalDate.now()).atZone(DateConst.SYSTEM_ZONE_ID).withZoneSameInstant(DateFeat.get(zoneId)).toLocalTime();
+        return localTime.atDate(LocalDate.now()).atZone(DateFeat.getZoneId()).withZoneSameInstant(DateFeat.get(zoneId)).toLocalTime();
       }
       return localTime;
     }
@@ -1230,7 +1230,7 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
   public static Date parseDate(final long epochMilli, final ZoneId zoneId) {
     Date date = new Date(epochMilli);
     if (zoneId != null) {
-      date = Date.from(date.toInstant().atZone(DateConst.SYSTEM_ZONE_ID).withZoneSameInstant(DateFeat.get(zoneId)).toInstant());
+      date = Date.from(date.toInstant().atZone(DateFeat.getZoneId()).withZoneSameInstant(DateFeat.get(zoneId)).toInstant());
     }
     return date;
   }
@@ -1471,7 +1471,7 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
    * @return 转换时区后的时间对象
    */
   public static <T extends Temporal> T withZoneInstant(@NonNull final T temporal, @NonNull final ZoneId newZoneId) {
-    return withZoneInstant(temporal, DateConst.SYSTEM_ZONE_ID, newZoneId);
+    return withZoneInstant(temporal, DateFeat.getZoneId(), newZoneId);
   }
 
   /**
@@ -1483,7 +1483,7 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
    * @return 转换时区后的 Date 对象
    */
   public static Date withZoneInstant(@NonNull final Date date, @NonNull final ZoneId oldZoneId, final @NonNull ZoneId newZoneId) {
-    LocalDateTime localDateTime = withZoneInstant(LocalDateTime.ofInstant(date.toInstant(), DateConst.SYSTEM_ZONE_ID), oldZoneId, newZoneId);
+    LocalDateTime localDateTime = withZoneInstant(LocalDateTime.ofInstant(date.toInstant(), DateFeat.getZoneId()), oldZoneId, newZoneId);
     if (localDateTime == null) {
       return null;
     }
@@ -1498,7 +1498,7 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
    * @return 转换时区后的 Date 对象
    */
   public static Date withZoneInstant(@NonNull final Date date, @NonNull final ZoneId newZoneId) {
-    return withZoneInstant(date, DateConst.SYSTEM_ZONE_ID, newZoneId);
+    return withZoneInstant(date, DateFeat.getZoneId(), newZoneId);
   }
 
   /**
@@ -1700,7 +1700,7 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
       localDateTime = plusOrMinus(localDateTime, addOrSubtractDays, ChronoUnit.DAYS);
     }
     if (zoneId != null) {
-      return localDateTime.atZone(DateConst.SYSTEM_ZONE_ID).withZoneSameInstant(DateFeat.get(zoneId)).toLocalDateTime();
+      return localDateTime.atZone(DateFeat.getZoneId()).withZoneSameInstant(DateFeat.get(zoneId)).toLocalDateTime();
     }
     return localDateTime;
   }
@@ -1789,7 +1789,7 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
       localDateTime = plusOrMinus(localDateTime, addOrSubtractDays, ChronoUnit.DAYS);
     }
     if (zoneId != null) {
-      return localDateTime.atZone(DateConst.SYSTEM_ZONE_ID).withZoneSameInstant(DateFeat.get(zoneId)).toLocalDateTime();
+      return localDateTime.atZone(DateFeat.getZoneId()).withZoneSameInstant(DateFeat.get(zoneId)).toLocalDateTime();
     }
     return localDateTime;
   }
