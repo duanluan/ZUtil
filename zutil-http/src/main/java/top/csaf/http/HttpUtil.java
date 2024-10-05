@@ -20,8 +20,10 @@ import top.csaf.coll.MapUtil;
 import top.csaf.constant.CommonPattern;
 import top.csaf.json.JsonUtil;
 import top.csaf.lang.StrUtil;
+import top.csaf.regex.RegExUtil;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -38,9 +40,9 @@ public class HttpUtil extends cn.zhxu.okhttps.HttpUtils {
    * @param params 参数
    * @return URL 参数
    */
-  public static String toUrlParams(@NonNull final String prefix, final Map<String, Object> params) {
+  public static String toUrlParams(@NonNull final CharSequence prefix, final Map<String, Object> params) {
     if (MapUtil.isEmpty(params)) {
-      return prefix;
+      return prefix.toString();
     }
     Set<Map.Entry<String, Object>> entrySet = params.entrySet();
     StringBuilder result = new StringBuilder();
@@ -54,7 +56,7 @@ public class HttpUtil extends cn.zhxu.okhttps.HttpUtils {
     for (Map.Entry<String, Object> entry : entrySet) {
       result.append("&").append(entry.getKey()).append("=").append(entry.getValue());
     }
-    return prefix + result;
+    return prefix.toString() + result;
   }
 
   /**
@@ -65,6 +67,44 @@ public class HttpUtil extends cn.zhxu.okhttps.HttpUtils {
    */
   public static String toUrlParams(final Map<String, Object> params) {
     return toUrlParams("?", params);
+  }
+
+  /**
+   * URL 参数转换为 Map 参数
+   *
+   * @param prefix 前缀，一般是“?”
+   * @param url    URL
+   * @return Map 参数
+   */
+  public static Map<String, String> toMapParams(@NonNull final CharSequence prefix, @NonNull final CharSequence url) {
+    if (StrUtil.isBlank(url)) {
+      throw new IllegalArgumentException("Url: must not be blank");
+    }
+    String[] split = url.toString().split(RegExUtil.replaceAllSpecialChar(prefix));
+    if (split.length < 2) {
+      throw new IllegalArgumentException("Url: must contain '" + prefix + "' or no parameters after the '" + prefix + "'");
+    }
+    String[] params = split[1].split("&");
+    Map<String, String> map = new HashMap<>(params.length);
+    for (String param : params) {
+      String[] split1 = param.split("=");
+      if (split1.length == 2) {
+        map.put(split1[0], split1[1]);
+      } else {
+        map.put(split1[0], "");
+      }
+    }
+    return map;
+  }
+
+  /**
+   * URL 参数转换为 Map 参数，默认前缀“?”
+   *
+   * @param url URL
+   * @return Map 参数
+   */
+  public static Map<String, String> toMapParams(@NonNull final CharSequence url) {
+    return toMapParams("?", url);
   }
 
   /**
