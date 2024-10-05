@@ -115,7 +115,7 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
     } else {
       dateTimeFormatter = formatterBuilder.toFormatter(DateFeat.getLocale());
     }
-    dateTimeFormatter.withResolverStyle(DateFeat.getResolverStyle());
+    dateTimeFormatter = dateTimeFormatter.withResolverStyle(DateFeat.getResolverStyle());
     if (zoneId != null) {
       dateTimeFormatter = dateTimeFormatter.withZone(DateFeat.get(zoneId));
     } else {
