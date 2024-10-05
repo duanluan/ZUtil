@@ -8,7 +8,7 @@
 <dependency>
   <groupId>top.csaf</groupId>
   <artifactId>ZUtil</artifactId>
-  <version>2.0.0-alpha7</version>
+  <version>2.0.0-alpha8</version>
 </dependency>
 ```
 
@@ -16,9 +16,9 @@
 
 ```groovy
 // groovy
-implementation 'top.csaf:ZUtil:2.0.0-alpha7'
+implementation 'top.csaf:ZUtil:2.0.0-alpha8'
 // kotlin
-implementation("top.csaf:ZUtil:2.0.0-alpha7")
+implementation("top.csaf:ZUtil:2.0.0-alpha8")
 ```
 
 ## 安装注意
@@ -32,7 +32,7 @@ implementation("top.csaf:ZUtil:2.0.0-alpha7")
 <dependency>
   <groupId>top.csaf</groupId>
   <artifactId>ZUtil</artifactId>
-  <version>2.0.0-alpha7</version>
+  <version>2.0.0-alpha8</version>
   <exclusions>
     <exclusion>
       <groupId>org.slf4j</groupId>
@@ -65,7 +65,7 @@ implementation("top.csaf:ZUtil:2.0.0-alpha7")
 // groovy
 dependencies {
   // 方式一：ZUtil 排除 slf4j
-  implementation('top.csaf:ZUtil:2.0.0-alpha7') {
+  implementation('top.csaf:ZUtil:2.0.0-alpha8') {
     exclude group: 'org.slf4j', module: 'slf4j-api'
     exclude group: 'org.slf4j', module: 'slf4j-simple'
   }
@@ -78,7 +78,7 @@ dependencies {
 // kotlin
 dependencies {
   // 方式一：ZUtil 排除 slf4j
-  implementation("top.csaf:ZUtil:2.0.0-alpha7") {
+  implementation("top.csaf:ZUtil:2.0.0-alpha8") {
     exclude(group = "org.slf4j", module = "slf4j-api")
     exclude(group = "org.slf4j", module = "slf4j-simple")
   }
