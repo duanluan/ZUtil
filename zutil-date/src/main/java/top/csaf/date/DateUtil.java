@@ -451,19 +451,19 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
   /**
    * 格式化为指定时区和格式的字符串
    *
-   * @param date              时间对象
+   * @param date              时间对象，时区为 {@link DateFeat#getZoneId()}
    * @param zoneId            时区
    * @param dateTimeFormatter 格式
    * @return 指定时区和格式的字符串
    */
   public static String format(@NonNull final Date date, final ZoneId zoneId, @NonNull final DateTimeFormatter dateTimeFormatter) {
-    return dateTimeFormatter.withZone(zoneId).format(date.toInstant().atZone(zoneId));
+    return dateTimeFormatter.withZone(zoneId).format(date.toInstant().atZone(DateFeat.getZoneId()));
   }
 
   /**
    * 格式化为指定时区和格式的字符串
    *
-   * @param date    时间对象
+   * @param date    时间对象，时区为 {@link DateFeat#getZoneId()}
    * @param zoneId  时区
    * @param pattern 格式
    * @return 指定时区和格式的字符串
@@ -472,7 +472,7 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
     if (StrUtil.isBlank(pattern)) {
       throw new IllegalArgumentException("pattern must not be blank");
     }
-    return getFormatter(pattern, zoneId, true).format(date.toInstant().atZone(zoneId));
+    return getFormatter(pattern, zoneId, true).format(date.toInstant().atZone(DateFeat.getZoneId()));
   }
 
   /**
@@ -521,7 +521,7 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
   /**
    * 格式化为指定时区和格式的字符串
    *
-   * @param epochMilli        时间戳
+   * @param epochMilli        时间戳（毫秒）
    * @param zoneId            时区
    * @param dateTimeFormatter 格式
    * @return 指定时区和格式的字符串
@@ -533,7 +533,7 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
   /**
    * 格式化为指定时区和格式的字符串
    *
-   * @param epochMilli 时间戳
+   * @param epochMilli 时间戳（毫秒）
    * @param zoneId     时区
    * @param pattern    格式
    * @return 指定时区和格式的字符串
@@ -545,7 +545,7 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
   /**
    * 格式化为 DateConstant.DEFAULT_LOCAL_DATE_TIME_PATTERN 的字符串
    *
-   * @param epochMilli 时间戳
+   * @param epochMilli 时间戳（毫秒）
    * @param zoneId     时区
    * @return 指定时区的字符串
    */
@@ -556,7 +556,7 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
   /**
    * 格式化为指定时区和格式的字符串
    *
-   * @param epochMilli        时间戳
+   * @param epochMilli        时间戳（毫秒）
    * @param dateTimeFormatter 格式
    * @return 指定时区和格式的字符串
    */
@@ -567,7 +567,7 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
   /**
    * 格式化为指定时区和格式的字符串
    *
-   * @param epochMilli 时间戳
+   * @param epochMilli 时间戳（毫秒）
    * @param pattern    格式
    * @return 指定时区和格式的字符串
    */
@@ -578,7 +578,7 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
   /**
    * 格式化为 DateConstant.DEFAULT_LOCAL_DATE_TIME_PATTERN 的字符串
    *
-   * @param epochMilli 时间戳
+   * @param epochMilli 时间戳（毫秒）
    * @return DateConstant.DEFAULT_LOCAL_DATE_TIME_PATTERN 格式的字符串
    */
   public static String format(@NonNull final Long epochMilli) {
@@ -588,7 +588,7 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
   /**
    * 格式化倒计时字符串
    *
-   * @param epochMilli 时间戳
+   * @param epochMilli 时间戳（毫秒）
    * @param pattern    格式
    * @return 指定格式的倒计时字符串
    */
@@ -698,7 +698,7 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
   /**
    * 格式化倒计时字符串
    *
-   * @param epochMilli       时间戳
+   * @param epochMilli       时间戳（毫秒）
    * @param isIgnoreZero     是否忽略为 0 的时间级别
    * @param weekSuffix       周后缀
    * @param dayOfMonthSuffix 天后缀
@@ -897,7 +897,7 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
   /**
    * 解析为指定时区的 LocalDateTime 对象
    *
-   * @param epochMilli 时间戳
+   * @param epochMilli 时间戳（毫秒）
    * @param zoneId     时区
    * @return 指定时区的 LocalDateTime 对象
    */
@@ -912,7 +912,7 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
   /**
    * 解析为 LocalDateTime 对象
    *
-   * @param epochMilli 时间戳
+   * @param epochMilli 时间戳（毫秒）
    * @return LocalDateTime 对象
    */
   public static LocalDateTime parseLocalDateTime(@NonNull final Long epochMilli) {
@@ -1049,7 +1049,7 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
   /**
    * 解析为指定时区的 LocalDate 对象
    *
-   * @param epochMilli 被解析的时间戳
+   * @param epochMilli 被解析的时间戳（毫秒）
    * @param zoneId     时区
    * @return 指定时区的 LocalDate 对象
    */
@@ -1064,7 +1064,7 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
   /**
    * 解析为 LocalDate 对象
    *
-   * @param epochMilli 时间戳
+   * @param epochMilli 时间戳（毫秒）
    * @return LocalDate 对象
    */
   public static LocalDate parseLocalDate(@NonNull final Long epochMilli) {
@@ -1182,7 +1182,7 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
   /**
    * 解析为指定时区的 LocalTime 对象
    *
-   * @param epochMilli 时间戳
+   * @param epochMilli 时间戳（毫秒）
    * @param zoneId     时区
    * @return 指定时区的 LocalTime 对象
    */
@@ -1197,7 +1197,7 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
   /**
    * 解析为 LocalTime 对象
    *
-   * @param epochMilli 时间戳
+   * @param epochMilli 时间戳（毫秒）
    * @return LocalTime 对象
    */
   public static LocalTime parseLocalTime(@NonNull final Long epochMilli) {
@@ -1293,7 +1293,7 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
   /**
    * 解析为指定时区的 Date 对象
    *
-   * @param epochMilli 时间戳
+   * @param epochMilli 时间戳（毫秒）
    * @param zoneId     时区
    * @return 指定时区的 Date 对象
    */
@@ -1308,7 +1308,7 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
   /**
    * 解析为 Date 对象
    *
-   * @param epochMilli 时间戳
+   * @param epochMilli 时间戳（毫秒）
    * @return Date 对象
    */
   public static Date parseDate(@NonNull final Long epochMilli) {
@@ -1382,7 +1382,7 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
   /**
    * 解析为指定时区的时间对象
    *
-   * @param epochMilli 时间戳
+   * @param epochMilli 时间戳（毫秒）
    * @param zoneId     时区
    * @param clazz      时间类
    * @param <T>        时间类
@@ -1404,7 +1404,7 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
   /**
    * 解析为时间对象
    *
-   * @param epochMilli 时间戳
+   * @param epochMilli 时间戳（毫秒）
    * @param clazz      时间类
    * @param <T>        时间类
    * @return 时间对象
