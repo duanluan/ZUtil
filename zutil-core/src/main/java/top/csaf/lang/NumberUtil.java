@@ -231,6 +231,16 @@ public class NumberUtil extends org.apache.commons.lang3.math.NumberUtils {
   }
 
   /**
+   * 是否为 Number，入参为 null 时返回 false
+   *
+   * @param str 字符串
+   * @return 是否为 Number
+   */
+  public static boolean isNumber(final String str) {
+    return isNumber((Object) str);
+  }
+
+  /**
    * 小于 0，入参为 null 时返回 false
    *
    * @param obj 对象
