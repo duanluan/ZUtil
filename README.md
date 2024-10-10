@@ -31,22 +31,22 @@
 
 #### Maven
 
-    ```xml
-    <dependency>
-      <groupId>top.csaf</groupId>
-      <artifactId>ZUtil</artifactId>
-      <version>2.0.0-alpha9</version>
-    </dependency>
-    ```
+```xml
+<dependency>
+  <groupId>top.csaf</groupId>
+  <artifactId>ZUtil</artifactId>
+  <version>2.0.0-alpha9</version>
+</dependency>
+```
 
 #### Gradle
 
-    ```groovy
-    // groovy
-    implementation 'top.csaf:ZUtil:2.0.0-alpha9'
-    // kotlin
-    implementation("top.csaf:ZUtil:2.0.0-alpha9")
-    ```
+```groovy
+// groovy
+implementation 'top.csaf:ZUtil:2.0.0-alpha9'
+// kotlin
+implementation("top.csaf:ZUtil:2.0.0-alpha9")
+```
 
 ### 安装注意
 
