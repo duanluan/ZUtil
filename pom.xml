@@ -67,6 +67,7 @@
     <okio.version>3.9.0</okio.version>
     <spring.beans.version>5.3.39</spring.beans.version>
     <bouncycastle.version>1.78.1</bouncycastle.version>
+    <commons.codec.version>1.17.1</commons.codec.version>
     <dom4j.version>2.1.4</dom4j.version>
     <snakeyaml.version>2.3</snakeyaml.version>
 
@@ -162,6 +163,11 @@
         <groupId>org.bouncycastle</groupId>
         <artifactId>bcprov-jdk18on</artifactId>
         <version>${bouncycastle.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>commons-codec</groupId>
+        <artifactId>commons-codec</artifactId>
+        <version>${commons.codec.version}</version>
       </dependency>
       <dependency>
         <groupId>org.dom4j</groupId>
