@@ -1,6 +1,6 @@
 {
   "name": "zutil-docs",
-  "version": "2.0.0-alpha10",
+  "version": "2.0.0-alpha11",
   "private": true,
   "scripts": {
     "docusaurus": "docusaurus",
