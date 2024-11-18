@@ -42,13 +42,20 @@ class TreeUtilTest {
   @DisplayName("构建树")
   @Test
   void build() {
+    List<TreeNode> treeNodeList1 = new ArrayList<>();
+    treeNodeList1.add(new TreeNode(null, "1", 1, "0"));
+    assertThrows(IllegalArgumentException.class, () -> TreeUtil.build(treeNodeList1));
+    List<TreeNode> treeNodeList2 = new ArrayList<>();
+    treeNodeList2.add(new TreeNode(1, "", 1, (String) null));
+    assertThrows(IllegalArgumentException.class, () -> TreeUtil.build(treeNodeList2, TreeConfig.builder().rootParentIdValues(new Object[]{"0"}).build()));
+
     /** {@link TreeUtil#bulid(List)} */
     List<TreeNode> treeNodeList = TreeUtil.build(TREE_NODE_LIST);
     // 默认不排序所以 1.2.3 在第一个
     assertEquals("1.2.3", treeNodeList.get(0).getChildren().get(1).getChildren().get(0).getName());
 
     /** {@link TreeUtil#bulid(List, TreeConfig)} */
-    TreeConfig treeConfig = new TreeConfig();
+    TreeConfig treeConfig = TreeConfig.builder().rootParentIdValues(new Object[]{"0"}).isIgnoreIdTypeMismatch(true).build();
     treeConfig.setSort(true);
     treeConfig.setComparator(null);
     assertThrows(IllegalArgumentException.class, () -> TreeUtil.build(TREE_NODE_LIST, treeConfig));
