@@ -64,8 +64,13 @@ public class BlockCipher {
     if (!NumberUtil.gtZero(keyLength)) {
       // 不同加解密算法有默认的密钥长度
       switch (type) {
+        // DES 密钥长度 8 字节 64 位
         case DES:
           this.keyLength = 8;
+          break;
+        // SM4 密钥长度 16 字节 128 位
+        case SM4:
+          this.keyLength = 16;
           break;
         default:
           throw new IllegalArgumentException("Unsupported type");
@@ -78,6 +83,9 @@ public class BlockCipher {
       switch (type) {
         case DES:
           this.ivLength = 8;
+          break;
+        case SM4:
+          this.ivLength = 16;
           break;
         default:
           throw new IllegalArgumentException("Unsupported type");
