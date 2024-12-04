@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 @Slf4j
-@DisplayName("加密解密工具类测试")
+@DisplayName("DES 加解密工具类测试")
 class DesUtilTest {
 
   private static final String KEY = "12345678";
@@ -18,13 +18,13 @@ class DesUtilTest {
   private static final String DATA = "我爱中国";
   private static final String ENCRYPTED_DATA = "3ef76bbdbd42334140329b65efe5864f";
 
-  @DisplayName("DES 加密")
+  @DisplayName("加密")
   @Test
   void encrypt() {
     assertEquals(ENCRYPTED_DATA, DesUtil.encryptHex(DATA, KEY, IV, top.csaf.crypto.enums.Mode.CBC, Padding.PKCS5));
   }
 
-  @DisplayName("DES 解密")
+  @DisplayName("解密")
   @Test
   void decrypt() {
     assertEquals(DATA, DesUtil.decryptHex(ENCRYPTED_DATA, KEY, IV, top.csaf.crypto.enums.Mode.CBC, Padding.PKCS5));
