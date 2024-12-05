@@ -1,5 +1,6 @@
 package top.csaf.crypto;
 
+import lombok.NonNull;
 import top.csaf.crypto.enums.BlockCipherType;
 import top.csaf.crypto.enums.EncodingType;
 import top.csaf.crypto.enums.Mode;
@@ -21,7 +22,6 @@ import top.csaf.crypto.enums.Padding;
 public class Sm4Util {
 
   private static final BlockCipher.Builder BUILDER = BlockCipher.builder(BlockCipherType.SM4);
-  private static final BlockCipher BLOCK_CIPHER = BUILDER.build();
 
   /**
    * 加密
@@ -36,10 +36,16 @@ public class Sm4Util {
    * @param encoding    编码类型
    * @return 密文
    */
-  public static String encrypt(String data, String key, EncodingType keyEncoding, String iv, EncodingType ivEncoding, Mode mode, Padding padding, EncodingType encoding) {
-    return BUILDER.keyEncoding(keyEncoding).ivEncoding(ivEncoding).build().encrypt(data, key, iv, mode, padding, encoding);
+  public static String encrypt(String data, @NonNull String key, EncodingType keyEncoding, String iv, EncodingType ivEncoding, @NonNull Mode mode, @NonNull Padding padding, EncodingType encoding) {
+    BlockCipher.Builder builder = BUILDER;
+    if (keyEncoding != null) {
+      builder.keyEncoding(keyEncoding);
+    }
+    if (ivEncoding != null) {
+      builder.ivEncoding(ivEncoding);
+    }
+    return builder.build().encrypt(data, key, iv, mode, padding, encoding);
   }
-
 
   /**
    * 加密
@@ -53,7 +59,7 @@ public class Sm4Util {
    * @param padding     填充方式
    * @return 密文
    */
-  public static String encrypt(String data, String key, EncodingType keyEncoding, String iv, EncodingType ivEncoding, Mode mode, Padding padding) {
+  public static String encrypt(String data, @NonNull String key, EncodingType keyEncoding, String iv, EncodingType ivEncoding, @NonNull Mode mode, @NonNull Padding padding) {
     return encrypt(data, key, keyEncoding, iv, ivEncoding, mode, padding, null);
   }
 
@@ -68,8 +74,8 @@ public class Sm4Util {
    * @param encoding 编码类型
    * @return 密文
    */
-  public static String encrypt(String data, String key, String iv, Mode mode, Padding padding, EncodingType encoding) {
-    return BLOCK_CIPHER.encrypt(data, key, iv, mode, padding, encoding);
+  public static String encrypt(String data, @NonNull String key, String iv, @NonNull Mode mode, @NonNull Padding padding, EncodingType encoding) {
+    return encrypt(data, key, null, iv, null, mode, padding, encoding);
   }
 
   /**
@@ -82,7 +88,7 @@ public class Sm4Util {
    * @param padding 填充方式
    * @return 密文
    */
-  public static String encrypt(String data, String key, String iv, Mode mode, Padding padding) {
+  public static String encrypt(String data, @NonNull String key, String iv, @NonNull Mode mode, @NonNull Padding padding) {
     return encrypt(data, key, iv, mode, padding, null);
   }
 
@@ -98,7 +104,7 @@ public class Sm4Util {
    * @param padding     填充方式
    * @return 密文
    */
-  public static String encryptBase64(String data, String key, EncodingType keyEncoding, String iv, EncodingType ivEncoding, Mode mode, Padding padding) {
+  public static String encryptBase64(String data, @NonNull String key, EncodingType keyEncoding, String iv, EncodingType ivEncoding, @NonNull Mode mode, @NonNull Padding padding) {
     return encrypt(data, key, keyEncoding, iv, ivEncoding, mode, padding, EncodingType.BASE_64);
   }
 
@@ -112,7 +118,7 @@ public class Sm4Util {
    * @param padding 填充方式
    * @return 密文
    */
-  public static String encryptBase64(String data, String key, String iv, Mode mode, Padding padding) {
+  public static String encryptBase64(String data, @NonNull String key, String iv, @NonNull Mode mode, @NonNull Padding padding) {
     return encrypt(data, key, iv, mode, padding, EncodingType.BASE_64);
   }
 
@@ -128,7 +134,7 @@ public class Sm4Util {
    * @param padding     填充方式
    * @return 密文
    */
-  public static String encryptHex(String data, String key, EncodingType keyEncoding, String iv, EncodingType ivEncoding, Mode mode, Padding padding) {
+  public static String encryptHex(String data, @NonNull String key, EncodingType keyEncoding, String iv, EncodingType ivEncoding, @NonNull Mode mode, @NonNull Padding padding) {
     return encrypt(data, key, keyEncoding, iv, ivEncoding, mode, padding, EncodingType.HEX);
   }
 
@@ -142,7 +148,7 @@ public class Sm4Util {
    * @param padding 填充方式
    * @return 密文
    */
-  public static String encryptHex(String data, String key, String iv, Mode mode, Padding padding) {
+  public static String encryptHex(String data, @NonNull String key, String iv, @NonNull Mode mode, @NonNull Padding padding) {
     return encrypt(data, key, iv, mode, padding, EncodingType.HEX);
   }
 
@@ -159,8 +165,15 @@ public class Sm4Util {
    * @param encoding      编码类型
    * @return 明文
    */
-  public static String decrypt(String encryptedData, String key, EncodingType keyEncoding, String iv, EncodingType ivEncoding, Mode mode, Padding padding, EncodingType encoding) {
-    return BUILDER.keyEncoding(keyEncoding).ivEncoding(ivEncoding).build().decrypt(encryptedData, key, iv, mode, padding, encoding);
+  public static String decrypt(String encryptedData, @NonNull String key, EncodingType keyEncoding, String iv, EncodingType ivEncoding, @NonNull Mode mode, @NonNull Padding padding, EncodingType encoding) {
+    BlockCipher.Builder builder = BUILDER;
+    if (keyEncoding != null) {
+      builder.keyEncoding(keyEncoding);
+    }
+    if (ivEncoding != null) {
+      builder.ivEncoding(ivEncoding);
+    }
+    return builder.build().decrypt(encryptedData, key, iv, mode, padding, encoding);
   }
 
   /**
@@ -175,7 +188,7 @@ public class Sm4Util {
    * @param padding       填充方式
    * @return 明文
    */
-  public static String decrypt(String encryptedData, String key, EncodingType keyEncoding, String iv, EncodingType ivEncoding, Mode mode, Padding padding) {
+  public static String decrypt(String encryptedData, @NonNull String key, EncodingType keyEncoding, String iv, EncodingType ivEncoding, @NonNull Mode mode, @NonNull Padding padding) {
     return decrypt(encryptedData, key, keyEncoding, iv, ivEncoding, mode, padding, null);
   }
 
@@ -190,8 +203,8 @@ public class Sm4Util {
    * @param encoding      编码类型
    * @return 明文
    */
-  public static String decrypt(String encryptedData, String key, String iv, Mode mode, Padding padding, EncodingType encoding) {
-    return BLOCK_CIPHER.decrypt(encryptedData, key, iv, mode, padding, encoding);
+  public static String decrypt(String encryptedData, @NonNull String key, String iv, @NonNull Mode mode, @NonNull Padding padding, EncodingType encoding) {
+    return decrypt(encryptedData, key, null, iv, null, mode, padding, encoding);
   }
 
   /**
@@ -204,7 +217,7 @@ public class Sm4Util {
    * @param padding       填充方式
    * @return 明文
    */
-  public static String decrypt(String encryptedData, String key, String iv, Mode mode, Padding padding) {
+  public static String decrypt(String encryptedData, @NonNull String key, String iv, @NonNull Mode mode, @NonNull Padding padding) {
     return decrypt(encryptedData, key, iv, mode, padding, null);
   }
 
@@ -220,7 +233,7 @@ public class Sm4Util {
    * @param padding       填充方式
    * @return 明文
    */
-  public static String decryptBase64(String encryptedData, String key, EncodingType keyEncoding, String iv, EncodingType ivEncoding, Mode mode, Padding padding) {
+  public static String decryptBase64(String encryptedData, @NonNull String key, EncodingType keyEncoding, String iv, EncodingType ivEncoding, @NonNull Mode mode, @NonNull Padding padding) {
     return decrypt(encryptedData, key, keyEncoding, iv, ivEncoding, mode, padding, EncodingType.BASE_64);
   }
 
@@ -234,7 +247,7 @@ public class Sm4Util {
    * @param padding       填充方式
    * @return 明文
    */
-  public static String decryptBase64(String encryptedData, String key, String iv, Mode mode, Padding padding) {
+  public static String decryptBase64(String encryptedData, @NonNull String key, String iv, @NonNull Mode mode, @NonNull Padding padding) {
     return decrypt(encryptedData, key, iv, mode, padding, EncodingType.BASE_64);
   }
 
@@ -250,7 +263,7 @@ public class Sm4Util {
    * @param padding       填充方式
    * @return 明文
    */
-  public static String decryptHex(String encryptedData, String key, EncodingType keyEncoding, String iv, EncodingType ivEncoding, Mode mode, Padding padding) {
+  public static String decryptHex(String encryptedData, @NonNull String key, EncodingType keyEncoding, String iv, EncodingType ivEncoding, @NonNull Mode mode, @NonNull Padding padding) {
     return decrypt(encryptedData, key, keyEncoding, iv, ivEncoding, mode, padding, EncodingType.HEX);
   }
 
@@ -264,7 +277,7 @@ public class Sm4Util {
    * @param padding       填充方式
    * @return 明文
    */
-  public static String decryptHex(String encryptedData, String key, String iv, Mode mode, Padding padding) {
+  public static String decryptHex(String encryptedData, @NonNull String key, String iv, @NonNull Mode mode, @NonNull Padding padding) {
     return decrypt(encryptedData, key, iv, mode, padding, EncodingType.HEX);
   }
 }
