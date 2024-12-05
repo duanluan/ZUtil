@@ -25,7 +25,7 @@ import java.util.Arrays;
 import java.util.Base64;
 
 /**
- * 分组加解密工具类
+ * 对称加密-分组密码
  */
 @Slf4j
 @Setter
@@ -61,25 +61,25 @@ public class BlockCipher {
     if (StrUtil.isBlank(type)) {
       throw new IllegalArgumentException("type must not be blank");
     }
+    // 如果未指定密钥长度，则使用默认值
     if (!NumberUtil.gtZero(keyLength)) {
-      // 不同加解密算法有默认的密钥长度
       switch (type) {
-        // DES 密钥长度 8 字节 64 位
+        // DES：8字节 64位
         case DES:
           this.keyLength = 8;
           break;
-        // SM4 密钥长度 16 字节 128 位
+        // SM4：16字节 128位
         case SM4:
           this.keyLength = 16;
           break;
         default:
-          throw new IllegalArgumentException("Unsupported type");
+          throw new IllegalArgumentException("keyLength must be greater than 0");
       }
     } else {
       this.keyLength = keyLength;
     }
+    // 如果未指定 iv 长度，则使用默认值
     if (!NumberUtil.gtZero(ivLength)) {
-      // 不同加解密算法有默认的 iv 长度
       switch (type) {
         case DES:
           this.ivLength = 8;
@@ -88,7 +88,7 @@ public class BlockCipher {
           this.ivLength = 16;
           break;
         default:
-          throw new IllegalArgumentException("Unsupported type");
+          throw new IllegalArgumentException("ivLength must be greater than 0");
       }
     } else {
       this.ivLength = ivLength;
@@ -102,14 +102,22 @@ public class BlockCipher {
    * 建造者模式
    */
   public static class Builder {
-    private final BlockCipherType type;
+    private BlockCipherType type;
     private Integer keyLength;
     private Integer ivLength;
     private EncodingType keyEncoding;
     private EncodingType ivEncoding;
 
-    public Builder(BlockCipherType type) {
+    private Builder() {
+    }
+
+    private Builder(BlockCipherType type) {
       this.type = type;
+    }
+
+    protected Builder type(BlockCipherType type) {
+      this.type = type;
+      return this;
     }
 
     public Builder keyLength(Integer keyLength) {
@@ -141,10 +149,27 @@ public class BlockCipher {
     return new Builder(type);
   }
 
-  private void check(Object plainOrCipherText, Padding padding) {
+  protected static Builder builder() {
+    return new Builder();
+  }
+
+  /**
+   * 检查明文或密文
+   * <p>
+   * <ul>
+   *   <li>明文或密文类型只能是字符串或字节数组</li>
+   *   <li>NoPadding 模式下，数据长度必须是密钥长度的整数倍</li>
+   * </ul>
+   *
+   * @param plainOrCipherText 明文或密文
+   * @param padding           填充方式
+   */
+  private void check(Object plainOrCipherText, @NonNull Padding padding) {
+    // 明文或密文类型只能是字符串或字节数组
     if (!(plainOrCipherText instanceof String || plainOrCipherText instanceof byte[])) {
-      throw new IllegalArgumentException("keyOrIv must be a String or byte[]");
+      throw new IllegalArgumentException("plaintext and ciphertext must be a String or byte[]");
     }
+    // NoPadding 模式下，数据长度必须是密钥长度的整数倍
     byte[] plainOrCipherTextBytes = plainOrCipherText instanceof String ? ((String) plainOrCipherText).getBytes() : (byte[]) plainOrCipherText;
     if (Padding.NO.equals(padding) && (plainOrCipherTextBytes.length % this.keyLength != 0)) {
       throw new IllegalArgumentException("Data not of proper length for NoPadding mode, length must be multiple of " + this.keyLength);
@@ -162,7 +187,7 @@ public class BlockCipher {
    * @param encoding  密文编码
    * @return 密文
    */
-  protected String encrypt(Object plaintext, Object key, Object iv, Mode mode, Padding padding, EncodingType encoding) {
+  protected String encrypt(@NonNull Object plaintext, @NonNull Object key, Object iv, @NonNull Mode mode, @NonNull Padding padding, EncodingType encoding) {
     check(plaintext, padding);
     byte[] plaintextBytes = plaintext instanceof String ? ((String) plaintext).getBytes() : (byte[]) plaintext;
     return encode(encryptOrDecrypt(plaintextBytes, key, iv, mode, padding, Cipher.ENCRYPT_MODE), encoding);
@@ -179,7 +204,7 @@ public class BlockCipher {
    * @param encoding   密文编码
    * @return 明文
    */
-  protected String decrypt(Object ciphertext, Object key, Object iv, Mode mode, Padding padding, EncodingType encoding) {
+  protected String decrypt(@NonNull Object ciphertext, @NonNull Object key, Object iv, @NonNull Mode mode, @NonNull Padding padding, EncodingType encoding) {
     check(ciphertext, padding);
     return new String(encryptOrDecrypt(ciphertext instanceof String ? decode((String) ciphertext, encoding) : (byte[]) ciphertext, key, iv, mode, padding, Cipher.DECRYPT_MODE));
   }
@@ -192,10 +217,10 @@ public class BlockCipher {
    * @param iv         初始化向量
    * @param mode       加密模式
    * @param padding    填充方式
-   * @param cipherMode Cipher 模式
+   * @param cipherMode Cipher 模式，ENCRYPT_MODE 或 DECRYPT_MODE
    * @return 加解密结果的字节数组
    */
-  private byte[] encryptOrDecrypt(byte[] data, Object key, Object iv, Mode mode, Padding padding, int cipherMode) {
+  private byte[] encryptOrDecrypt(byte @NonNull [] data, @NonNull Object key, Object iv, @NonNull Mode mode, @NonNull Padding padding, int cipherMode) {
     try {
       SecretKeySpec keySpec = new SecretKeySpec(decodeAndPad(key, this.keyEncoding, this.keyLength), this.type.getValue());
       IvParameterSpec ivSpec = "ECB".equals(mode.getValue()) ? null : new IvParameterSpec(decodeAndPad(iv, this.ivEncoding, this.ivLength));
