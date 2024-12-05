@@ -9,6 +9,10 @@ public enum BlockCipherType {
    */
   DES("DES"),
   /**
+   * 高级加密标准（Advanced Encryption Standard）
+   */
+  AES("AES"),
+  /**
    * 信息安全技术 SM4 分组密码算法：<a href="https://std.samr.gov.cn/gb/search/gbDetailed?id=71F772D81199D3A7E05397BE0A0AB82A">信息安全技术 SM4 分组密码算法 - 国家标准 - 全国标准信息公共服务平台</a>
    */
   SM4("SM4"),

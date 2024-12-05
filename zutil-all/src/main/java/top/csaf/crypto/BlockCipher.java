@@ -68,6 +68,10 @@ public class BlockCipher {
         case DES:
           this.keyLength = 8;
           break;
+        case AES:
+          // AES：16字节 128位
+          this.keyLength = 16;
+          break;
         // SM4：16字节 128位
         case SM4:
           this.keyLength = 16;
@@ -83,6 +87,9 @@ public class BlockCipher {
       switch (type) {
         case DES:
           this.ivLength = 8;
+          break;
+        case AES:
+          this.ivLength = 16;
           break;
         case SM4:
           this.ivLength = 16;
