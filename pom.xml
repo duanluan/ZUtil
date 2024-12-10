@@ -53,20 +53,20 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <serverId>central</serverId>
 
-    <lombok.version>1.18.34</lombok.version>
+    <lombok.version>1.18.36</lombok.version>
     <slf4j.version>1.7.36</slf4j.version>
     <gson.version>2.11.0</gson.version>
-    <jackson.version>2.17.2</jackson.version>
-    <fastjson.version>2.0.52</fastjson.version>
+    <jackson.version>2.18.2</jackson.version>
+    <fastjson.version>2.0.53</fastjson.version>
     <commons.lang.version>3.17.0</commons.lang.version>
     <commons.text.version>1.12.0</commons.text.version>
     <commons.collections.version>4.5.0-M2</commons.collections.version>
-    <commons.io.version>2.16.1</commons.io.version>
+    <commons.io.version>2.18.0</commons.io.version>
     <commons.beanutils.version>1.9.4</commons.beanutils.version>
     <okhttps.version>4.0.3</okhttps.version>
     <okio.version>3.9.0</okio.version>
     <spring.beans.version>5.3.39</spring.beans.version>
-    <bouncycastle.version>1.78.1</bouncycastle.version>
+    <bouncycastle.version>1.79</bouncycastle.version>
     <commons.codec.version>1.17.1</commons.codec.version>
     <dom4j.version>2.1.4</dom4j.version>
     <snakeyaml.version>2.3</snakeyaml.version>
