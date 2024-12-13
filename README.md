@@ -2,12 +2,12 @@
 
 # ZUtil
 
-[![](https://img.shields.io/maven-central/v/top.csaf/ZUtil?style=flat-square)](https://central.sonatype.com/artifact/top.csaf/zutil-all)
-[![](https://img.shields.io/hexpm/l/plug?style=flat-square)](./LICENSE)
-[![](https://img.shields.io/badge/JDK-8%2B-orange?style=flat-square)]()
-[![](https://img.shields.io/badge/273743748-加%20Q%20群-388adc.svg?style=flat-square)](https://jq.qq.com/?_wv=1027&k=pYzF0R18)
-[![](https://img.shields.io/github/stars/duanluan/ZUtil?style=social)](https://github.com/duanluan/ZUtil)
-[![star](https://gitee.com/duanluan/ZUtil/badge/star.svg?theme=white)](https://gitee.com/duanluan/ZUtil)
+[![](https://img.shields.io/hexpm/l/plug?style=for-the-badge&logo=apache)](./LICENSE) 
+[![](https://img.shields.io/maven-central/v/top.csaf/ZUtil?style=for-the-badge&logo=apachemaven)](https://central.sonatype.com/artifact/top.csaf/zutil-all) 
+[![](https://img.shields.io/badge/JDK-8%2B-orange?style=for-the-badge&logo=openjdk)]() 
+[![](https://img.shields.io/github/stars/duanluan/ZUtil?style=for-the-badge&logo=github)](https://github.com/duanluan/ZUtil) 
+[![GitHub commits](https://img.shields.io/github/commit-activity/m/duanluan/ZUtil?style=for-the-badge&label=Commits&logo=github)](https://github.com/duanluan/ZUtil/commits) 
+[![](https://img.shields.io/badge/QQ%20group-273743748-e76970.svg?style=for-the-badge&logo=tencentqq)](https://jq.qq.com/?_wv=1027&k=pYzF0R18) 
 
 追求更快更全的 Java 工具类。
 
