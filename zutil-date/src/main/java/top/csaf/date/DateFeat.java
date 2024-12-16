@@ -93,6 +93,85 @@ public class DateFeat {
   }
 
   /**
+   * 严格模式时，如果有 yyyy/yy 没有 uuuu/uu，前者转换为后者
+   */
+  private static final ThreadLocal<Boolean> STRICT_YY_TO_UU = new ThreadLocal<>();
+  /**
+   * 持久的严格模式时，如果有 yyyy/yy 没有 uuuu/uu，前者转换为后者
+   */
+  private static volatile Boolean STRICT_YY_TO_UU_ALWAYS = null;
+
+  /**
+   * 设置严格模式时，如果有 yyyy/yy 没有 uuuu/uu，前者转换为后者
+   *
+   * @param strictYyToUu 严格模式时，如果有 yyyy/yy 没有 uuuu/uu，前者转换为后者
+   */
+  public static void set(final Boolean strictYyToUu) {
+    STRICT_YY_TO_UU.set(strictYyToUu);
+  }
+
+  /**
+   * 设置持久的严格模式时，如果有 yyyy/yy 没有 uuuu/uu，前者转换为后者
+   *
+   * @param strictYyToUu 持久的严格模式时，如果有 yyyy/yy 没有 uuuu/uu，前者转换为后者
+   */
+  public static void setAlways(final Boolean strictYyToUu) {
+    STRICT_YY_TO_UU_ALWAYS = strictYyToUu;
+  }
+
+  /**
+   * 获取严格模式时，如果有 yyyy/yy 没有 uuuu/uu，前者转换为后者
+   *
+   * @param strictYyToUu 严格模式时，如果有 yyyy/yy 没有 uuuu/uu，前者转换为后者
+   * @return 严格模式时，如果有 yyyy/yy 没有 uuuu/uu，前者转换为后者，默认为 null
+   */
+  public static Boolean get(final Boolean strictYyToUu) {
+    if (strictYyToUu != null) {
+      return strictYyToUu;
+    } else if (STRICT_YY_TO_UU_ALWAYS != null) {
+      return STRICT_YY_TO_UU_ALWAYS;
+    } else if (STRICT_YY_TO_UU.get() != null) {
+      Boolean strictYyToUu1 = STRICT_YY_TO_UU.get();
+      STRICT_YY_TO_UU.remove();
+      return strictYyToUu1;
+    }
+    return null;
+  }
+
+  /**
+   * 获取严格模式时，如果有 yyyy/yy 没有 uuuu/uu，前者转换为后者
+   *
+   * @param strictYyToUu 严格模式时，如果有 yyyy/yy 没有 uuuu/uu，前者转换为后者
+   * @return 严格模式时，如果有 yyyy/yy 没有 uuuu/uu，前者转换为后者，默认为形参
+   */
+  public static Boolean getLazy(final Boolean strictYyToUu) {
+    if (STRICT_YY_TO_UU_ALWAYS != null) {
+      return STRICT_YY_TO_UU_ALWAYS;
+    } else if (STRICT_YY_TO_UU.get() != null) {
+      Boolean strictYyToUu1 = STRICT_YY_TO_UU.get();
+      STRICT_YY_TO_UU.remove();
+      return strictYyToUu1;
+    }
+    return strictYyToUu;
+  }
+
+  /**
+   * 获取严格模式时，如果有 yyyy/yy 没有 uuuu/uu，前者转换为后者
+   *
+   * @return 严格模式时，如果有 yyyy/yy 没有 uuuu/uu，前者转换为后者，默认为 true
+   */
+  public static Boolean getstrictYyToUu() {
+    if (STRICT_YY_TO_UU_ALWAYS != null) {
+      return STRICT_YY_TO_UU_ALWAYS;
+    } else if (STRICT_YY_TO_UU.get() != null) {
+      Boolean strictYyToUu1 = STRICT_YY_TO_UU.get();
+      STRICT_YY_TO_UU.remove();
+      return strictYyToUu1;
+    }
+    return true;
+  }
+
+  /**
    * 区域，比如月份是中文还是英文
    */
   private static final ThreadLocal<Locale> LOCALE = new ThreadLocal<>();

@@ -176,7 +176,7 @@ class DateUtilTest {
 
   @DisplayName("convertByPattern：转换需要格式化的字符串，比如英文月份转换为首字母大写")
   @Test
-  void convertByPattern() {
+  void convertSource() {
     assertThrows(IllegalArgumentException.class, () -> ReflectionTestUtil.invokeMethod(DateUtil.class, "convertByPattern", "mon", ""));
     assertEquals(ReflectionTestUtil.invokeMethod(DateUtil.class, "convertByPattern", "mon", "MMM"), "Mon");
   }

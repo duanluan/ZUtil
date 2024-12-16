@@ -108,8 +108,9 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
     fieldValueMap.put(ChronoField.HOUR_OF_DAY, 0L);
     fieldValueMap.put(ChronoField.MINUTE_OF_HOUR, 0L);
     fieldValueMap.put(ChronoField.SECOND_OF_MINUTE, 0L);
-    DateTimeFormatter dateTimeFormatter;
     DateTimeFormatterBuilder formatterBuilder = getFormatterBuilder(pattern, fieldValueMap);
+
+    DateTimeFormatter dateTimeFormatter;
     if (locale != null) {
       dateTimeFormatter = formatterBuilder.toFormatter(DateFeat.get(locale));
     } else {
@@ -208,13 +209,40 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
   }
 
   /**
-   * 转换需要格式化的字符串，比如英文月份转换为首字母大写
+   * 转换格式
+   * <ul>
+   *   <li>如果为严格模式，格式中有 yy 没有 uu，将前者替换为后者</li>
+   * </ul>
+   *
+   * @param pattern 格式
+   * @return 转换后的格式
+   */
+  private static String convertPattern(@NonNull final String pattern) {
+    if (StrUtil.isBlank(pattern)) {
+      throw new IllegalArgumentException("pattern must not be blank");
+    }
+    String pattern1 = pattern;
+    // 如果为严格模式，格式中有 yy/yyyy 没有 uu/uuuu，将前者替换为后者
+    if (ResolverStyle.STRICT.equals(DateFeat.getResolverStyle()) && Boolean.TRUE.equals(DateFeat.getstrictYyToUu()) && pattern.contains("yy") && !pattern.contains("uu")) {
+      // 精确匹配 yyyy 替换为 uuuu
+      pattern1 = pattern1.replaceAll("(?<!y)yyyy(?!y)", "uuuu");
+      // 精确匹配 yy 替换为 uu
+      pattern1 = pattern1.replaceAll("(?<!y)yy(?!y)", "uu");
+    }
+    return pattern1;
+  }
+
+  /**
+   * 转换需要格式化的字符串
+   * <ul>
+   *   <li>如果格式为英文月份，转换字符串为首字母大写</li>
+   * </ul>
    *
    * @param source  被转换的字符串
    * @param pattern 转换格式
    * @return 转换后的字符串
    */
-  private static String convertByPattern(@NonNull String source, @NonNull final String pattern) {
+  private static String convertSource(@NonNull String source, @NonNull final String pattern) {
     if (StrUtil.isBlank(pattern)) {
       throw new IllegalArgumentException("pattern must not be blank");
     }
@@ -932,7 +960,8 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
       throw new IllegalArgumentException("Patterns: must not be all blank");
     }
     for (String pattern : patterns) {
-      source = convertByPattern(source, pattern);
+      pattern = convertPattern(pattern);
+      source = convertSource(source, pattern);
       LocalDateTime localDateTime;
       try {
         localDateTime = LocalDateTime.parse(source, getFormatter(pattern));
@@ -1086,7 +1115,8 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
       throw new IllegalArgumentException("Patterns: must not be all blank");
     }
     for (String pattern : patterns) {
-      source = convertByPattern(source, pattern);
+      pattern = convertPattern(pattern);
+      source = convertSource(source, pattern);
       LocalDate localDate;
       try {
         localDate = LocalDate.parse(source, getFormatter(pattern));
@@ -1219,7 +1249,7 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
       return null;
     }
     for (String pattern : patterns) {
-      source = convertByPattern(source, pattern);
+      source = convertSource(source, pattern);
       LocalTime localTime;
       try {
         localTime = LocalTime.parse(source, getFormatter(pattern));
