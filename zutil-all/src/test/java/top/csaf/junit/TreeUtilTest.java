@@ -68,5 +68,14 @@ class TreeUtilTest {
     // 找不到父类也为顶级节点
     treeConfig.setRootByNullParent(true);
     assertEquals(999, TreeUtil.build(TREE_NODE_LIST, treeConfig).get(2).getId());
+    // 级别
+    treeConfig.setGenLevel(true);
+    assertEquals(3, TreeUtil.build(TREE_NODE_LIST, treeConfig).get(0).getChildren().get(1).getChildren().get(0).get("level"));
+    // 祖级 ID
+    treeConfig.setGenAncestors(true);
+    assertEquals("1,3,7", TreeUtil.build(TREE_NODE_LIST, treeConfig).get(0).getChildren().get(1).getChildren().get(0).get("ancestors"));
+    // 是否有子级
+    treeConfig.setGenHasChildren(true);
+    assertEquals(true, TreeUtil.build(TREE_NODE_LIST, treeConfig).get(0).getChildren().get(1).get("hasChildren"));
   }
 }

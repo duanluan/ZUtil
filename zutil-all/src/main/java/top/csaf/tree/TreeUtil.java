@@ -5,10 +5,7 @@ import top.csaf.bean.BeanUtil;
 import top.csaf.lang.ArrayUtil;
 import top.csaf.lang.StrUtil;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 树工具类
@@ -34,10 +31,11 @@ public class TreeUtil {
 
     // 排序
     if (treeConfig.isSort()) {
-      if (treeConfig.getComparator() == null) {
+      Comparator<TreeNode> comparator = treeConfig.getComparator();
+      if (comparator == null) {
         throw new IllegalArgumentException("Comparator: when sort is true, comparator can not be null");
       }
-      treeNodes1.sort(treeConfig.getComparator());
+      treeNodes1.sort(comparator);
     }
 
     // id 为 key，value 为自身存储到 Map 中
@@ -52,39 +50,87 @@ public class TreeUtil {
       }
       treeNodeMap.put(key, treeNode);
     }
+
+    // 级别
+    boolean isGenLevel = treeConfig.isGenLevel();
+    String levelKey = null;
+    if (isGenLevel) {
+      levelKey = treeConfig.getLevelKey();
+    }
+    // 祖级
+    boolean isGenAncestors = treeConfig.isGenAncestors();
+    String ancestorsKey = null;
+    if (isGenAncestors) {
+      ancestorsKey = treeConfig.getAncestorsKey();
+    }
+    // 是否有子级
+    boolean isGenHasChildren = treeConfig.isGenHasChildren();
+    String hasChildrenKey = null;
+    if (isGenHasChildren) {
+      hasChildrenKey = treeConfig.getHasChildrenKey();
+    }
     List<TreeNode> treeList = new ArrayList<>();
     for (TreeNode treeNode : treeNodes1) {
       // 如果父级 ID 满足顶级节点的值
       if (ArrayUtil.contains(treeConfig.getRootParentIdValues(), treeNode.getParentId())) {
-        // 则为顶级节点
+        if (isGenLevel) {
+          // 顶级节点的级别为 1
+          treeNode.put(levelKey, 1);
+        }
+        if (isGenAncestors) {
+          // 顶级节点的祖级为自身 ID
+          treeNode.put(ancestorsKey, treeNode.getId());
+        }
+        // 为顶级节点
         treeList.add(treeNode);
-      } else {
-        if (StrUtil.isBlank(treeNode.getParentId())) {
-          throw new IllegalArgumentException("TreeNode: parentId can not be blank");
+        continue;
+      }
+
+      if (StrUtil.isBlank(treeNode.getParentId())) {
+        throw new IllegalArgumentException("TreeNode: parentId can not be blank");
+      }
+      Object parentId = treeNode.getParentId();
+      if (treeConfig.isIgnoreIdTypeMismatch()) {
+        parentId = parentId.toString();
+      }
+      // 根据当前节点的父级 ID 获取父级节点
+      TreeNode parent = treeNodeMap.get(parentId);
+      // 如果没有父节点且配置为顶级节点
+      if (treeConfig.isRootByNullParent() && parent == null) {
+        if (isGenLevel) {
+          // 顶级节点的级别为 1
+          treeNode.put(levelKey, 1);
         }
-        Object parentId = treeNode.getParentId();
-        if (treeConfig.isIgnoreIdTypeMismatch()) {
-          parentId = parentId.toString();
+        if (isGenAncestors) {
+          // 顶级节点的祖级为自身 ID
+          treeNode.put(ancestorsKey, treeNode.getId());
         }
-        // 根据当前节点的父级 ID 获取父级节点
-        TreeNode parent = treeNodeMap.get(parentId);
-        // 如果没有父节点
-        if (treeConfig.isRootByNullParent() && parent == null) {
-          // 则为顶级节点
-          treeList.add(treeNode);
-          continue;
-        }
-        if (parent == null) {
-          log.warn("TreeNode: parent is null, id: {}, parentId: {}", treeNode.getId(), treeNode.getParentId());
-          // 丢弃该节点
-          continue;
-        }
-        // 如果没有子节点列表，则创建列表
-        if (parent.getChildren() == null) {
-          parent.setChildren(new ArrayList<>());
-        }
-        // 将自身添加到父节点的子节点列表中
-        parent.getChildren().add(treeNode);
+        // 为顶级节点
+        treeList.add(treeNode);
+        continue;
+      }
+      if (parent == null) {
+        log.warn("TreeNode: parent is null, id: {}, parentId: {}", treeNode.getId(), treeNode.getParentId());
+        // 丢弃该节点
+        continue;
+      }
+      // 如果没有子节点列表，则创建列表
+      if (parent.getChildren() == null) {
+        parent.setChildren(new ArrayList<>());
+      }
+      if (isGenLevel) {
+        // 级别为父级节点的级别 + 1
+        treeNode.put(levelKey, Integer.parseInt(parent.get(levelKey).toString()) + 1);
+      }
+      if (isGenAncestors) {
+        // 祖级为父级节点的祖级（包含父级 ID） + 自身 ID
+        treeNode.put(ancestorsKey, parent.get(ancestorsKey) + "," + treeNode.getId());
+      }
+      // 将自身添加到父节点的子节点列表中
+      parent.getChildren().add(treeNode);
+      if (isGenHasChildren) {
+        // 是否有子级
+        parent.put(hasChildrenKey, true);
       }
     }
     return treeList;
@@ -105,11 +151,6 @@ public class TreeUtil {
    * @return 树列表
    */
   public static List<TreeNode> build(List<TreeNode> treeNodes) {
-    return build(treeNodes, TreeConfig.builder()
-      .isSort(false)
-      .rootParentIdValues(new Object[]{0, 0L, "0", null, "", 0d, 0f, (short) 0})
-      .isRootByNullParent(false)
-      .isIgnoreIdTypeMismatch(true)
-      .build());
+    return build(treeNodes, TreeConfig.builder().build());
   }
 }
