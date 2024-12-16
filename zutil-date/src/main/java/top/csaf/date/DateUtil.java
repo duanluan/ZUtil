@@ -257,9 +257,9 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
       formatMm = DateFormatter.MM_ZH;
       formatMmm = DateFormatter.MMM_ZH;
     } else {
-      formatM = DateTimeFormatter.ofPattern("M", DateFeat.get(locale));
-      formatMm = DateTimeFormatter.ofPattern("MM", DateFeat.get(locale));
-      formatMmm = DateTimeFormatter.ofPattern("MMM", DateFeat.get(locale));
+      formatM = DateTimeFormatter.ofPattern("M", DateFeat.get(locale)).withResolverStyle(DateFeat.getResolverStyle());
+      formatMm = DateTimeFormatter.ofPattern("MM", DateFeat.get(locale)).withResolverStyle(DateFeat.getResolverStyle());
+      formatMmm = DateTimeFormatter.ofPattern("MMM", DateFeat.get(locale)).withResolverStyle(DateFeat.getResolverStyle());
     }
     String result;
     if (monthNumberLen == 1) {
@@ -312,9 +312,9 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
       formatMm = DateFormatter.MM_ZH;
       formatMmm = DateFormatter.MMMM_ZH;
     } else {
-      formatM = DateTimeFormatter.ofPattern("M", DateFeat.get(locale));
-      formatMm = DateTimeFormatter.ofPattern("MM", DateFeat.get(locale));
-      formatMmm = DateTimeFormatter.ofPattern("MMMM", DateFeat.get(locale));
+      formatM = DateTimeFormatter.ofPattern("M", DateFeat.get(locale)).withResolverStyle(DateFeat.getResolverStyle());
+      formatMm = DateTimeFormatter.ofPattern("MM", DateFeat.get(locale)).withResolverStyle(DateFeat.getResolverStyle());
+      formatMmm = DateTimeFormatter.ofPattern("MMMM", DateFeat.get(locale)).withResolverStyle(DateFeat.getResolverStyle());
     }
     String result;
     if (monthNumberLen == 1) {
