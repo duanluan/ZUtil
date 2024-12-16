@@ -17,6 +17,7 @@ import java.time.format.DateTimeParseException;
 import java.time.format.ResolverStyle;
 import java.time.temporal.*;
 import java.util.*;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
@@ -1522,8 +1523,10 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
     return null;
   }
 
+  private static Pattern LETTER_PATTERN = Pattern.compile("[a-zA-Z]");
+
   /**
-   * 校验字符串是否符合时间格式（parseLocalDateTime != null），如果调用处本身就要 parse，不要使用这个方法，自己 try catch
+   * 校验字符串是否符合时间格式，如果调用处本身就要 parse，不要使用这个方法，自己 try catch
    *
    * @param text    字符串
    * @param pattern 格式
@@ -1531,7 +1534,22 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
    */
   public static boolean validate(final String text, final String pattern) {
     try {
-      return parseLocalDateTime(text, pattern) != null;
+      // 从 pattern 中提取出字母
+      Matcher matcher = LETTER_PATTERN.matcher(pattern);
+      StringBuilder pattern1 = new StringBuilder();
+      while (matcher.find()) {
+        pattern1.append(matcher.group());
+      }
+      // 字母仅有 hKkHmsSAnN，使用 parseLocalTime
+      if (pattern1.toString().matches("[hKkHmsSAnN]+")) {
+        return parseLocalTime(text, pattern) != null;
+      }
+      // 字母没有 hKkHmsSAnN，使用 parseLocalDate
+      else if (pattern1.toString().matches("[^hKkHmsSAnN]+")) {
+        return parseLocalDate(text, pattern) != null;
+      } else {
+        return parseLocalDateTime(text, pattern) != null;
+      }
     } catch (DateTimeParseException e) {
       return false;
     }
