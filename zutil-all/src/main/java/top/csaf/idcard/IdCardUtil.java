@@ -62,13 +62,6 @@ public class IdCardUtil {
     if (number.charAt(0) == '0') {
       throw new IllegalArgumentException("Number: cannot start with 0");
     }
-    // 1~5 位必须是 0~9
-    for (int i = 1; i <= 5; i++) {
-      char c = number.charAt(i);
-      if (c < '0' || c > '9') {
-        throw new IllegalArgumentException("Number: the provice/city/district code of index 1~5 should be 0~9");
-      }
-    }
     // 18 位身份证号码
     if (len == NUMBER_LEN_CHINA2) {
       // 前 17 位必须是 0~9
@@ -84,7 +77,7 @@ public class IdCardUtil {
       //   return false;
       // }
       // 年月日校验
-      if (!DateUtil.validate(number.substring(6, 14), "yyyyMMdd")) {
+      if (!DateUtil.validate(number.substring(6, 14), "uuuuMMdd")) {
         throw new IllegalArgumentException("Number: the date of index 6~14 is invalid");
       }
       // 顺序码不能全为 0
@@ -103,8 +96,8 @@ public class IdCardUtil {
           throw new IllegalArgumentException("Number: ID Card number should be 0~9");
         }
       }
-      // 月份日期校验
-      if (!DateUtil.validate(number.substring(6, 12), "yyMMdd")) {
+      // 年月日校验
+      if (!DateUtil.validate(number.substring(6, 12), "uuMMdd")) {
         throw new IllegalArgumentException("Number: the date of index 6~12 is invalid");
       }
       // 顺序码不能全为 0
@@ -234,7 +227,7 @@ public class IdCardUtil {
     } else if (clazz == LocalDate.class) {
       return (T) LocalDate.of(Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day));
     } else if (clazz == Date.class) {
-      return (T) DateUtil.parseDate(year + month + day, "yyyyMMdd");
+      return (T) DateUtil.parseDate(year + month + day, "uuuuMMdd");
     } else if (clazz == String.class) {
       return (T) (year + "-" + month + "-" + day);
     } else if (clazz == Long.class || clazz == long.class) {
