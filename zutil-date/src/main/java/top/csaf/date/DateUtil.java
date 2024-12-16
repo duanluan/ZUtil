@@ -1493,7 +1493,7 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
   }
 
   /**
-   * 校验字符串是否符合时间格式，如果稍后就要再 parse，不要使用这个方法，自己 try catch。
+   * 校验字符串是否符合时间格式（parseLocalDateTime != null），如果调用处本身就要 parse，不要使用这个方法，自己 try catch
    *
    * @param text    字符串
    * @param pattern 格式
@@ -1501,11 +1501,10 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
    */
   public static boolean validate(final String text, final String pattern) {
     try {
-      parseLocalDateTime(text, pattern);
+      return parseLocalDateTime(text, pattern) != null;
     } catch (DateTimeParseException e) {
       return false;
     }
-    return true;
   }
 
   /**
