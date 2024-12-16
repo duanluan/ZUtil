@@ -227,7 +227,7 @@ public class IdCardUtil {
     } else if (clazz == LocalDate.class) {
       return (T) LocalDate.of(Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day));
     } else if (clazz == Date.class) {
-      return (T) DateUtil.parseDate(year + month + day, "uuuuMMdd");
+      return (T) DateUtil.parseDate(year + month + day, "yyyyMMdd");
     } else if (clazz == String.class) {
       return (T) (year + "-" + month + "-" + day);
     } else if (clazz == Long.class || clazz == long.class) {
