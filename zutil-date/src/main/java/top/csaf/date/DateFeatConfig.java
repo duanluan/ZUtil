@@ -13,6 +13,8 @@ public class DateFeatConfig {
 
   private ResolverStyle resolverStyle;
   private ResolverStyle resolverStyleAlways;
+  private Boolean strictYyToUu;
+  private Boolean strictYyToUuAlways;
   private Locale locale;
   private Locale localeAlways;
   private ZoneId zoneId;
@@ -30,6 +32,16 @@ public class DateFeatConfig {
 
   public static DateFeatConfig setAlways(ResolverStyle resolverStyle) {
     INSTANCE.resolverStyleAlways = resolverStyle;
+    return INSTANCE;
+  }
+
+  public static DateFeatConfig setStrictYyToUu(Boolean strictYyToUu) {
+    INSTANCE.strictYyToUu = strictYyToUu;
+    return INSTANCE;
+  }
+
+  public static DateFeatConfig setStrictYyToUuAlways(Boolean strictYyToUu) {
+    INSTANCE.strictYyToUuAlways = strictYyToUu;
     return INSTANCE;
   }
 
@@ -70,6 +82,12 @@ public class DateFeatConfig {
     if (INSTANCE.resolverStyleAlways != null) {
       DateFeat.setAlways(INSTANCE.resolverStyleAlways);
     }
+    if (INSTANCE.strictYyToUu != null) {
+      DateFeat.set(INSTANCE.strictYyToUu);
+    }
+    if (INSTANCE.strictYyToUuAlways != null) {
+      DateFeat.set(INSTANCE.strictYyToUuAlways);
+    }
     if (INSTANCE.locale != null) {
       DateFeat.set(INSTANCE.locale);
     }
@@ -94,6 +112,8 @@ public class DateFeatConfig {
   private void clear() {
     INSTANCE.resolverStyle = null;
     INSTANCE.resolverStyleAlways = null;
+    INSTANCE.strictYyToUu = null;
+    INSTANCE.strictYyToUuAlways = null;
     INSTANCE.locale = null;
     INSTANCE.localeAlways = null;
     INSTANCE.zoneId = null;
