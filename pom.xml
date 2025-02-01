@@ -46,6 +46,7 @@
     <module>zutil-http</module>
     <module>zutil-pinyin</module>
     <module>zutil-date</module>
+    <module>zutil-img</module>
   </modules>
 
   <properties>
@@ -70,6 +71,8 @@
     <commons.codec.version>1.17.1</commons.codec.version>
     <dom4j.version>2.1.4</dom4j.version>
     <snakeyaml.version>2.3</snakeyaml.version>
+    <batik.version>1.18</batik.version>
+    <thumbnailator.version>0.4.20</thumbnailator.version>
 
     <junit.version>5.11.0</junit.version>
     <junit.platform.version>1.11.0</junit.platform.version>
@@ -179,6 +182,24 @@
         <artifactId>snakeyaml</artifactId>
         <version>${snakeyaml.version}</version>
       </dependency>
+      <!-- Batik SVG transcoder -->
+      <dependency>
+        <groupId>org.apache.xmlgraphics</groupId>
+        <artifactId>batik-transcoder</artifactId>
+        <version>${batik.version}</version>
+      </dependency>
+      <!-- Batik image codecs -->
+      <dependency>
+        <groupId>org.apache.xmlgraphics</groupId>
+        <artifactId>batik-codec</artifactId>
+        <version>${batik.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>net.coobird</groupId>
+        <artifactId>thumbnailator</artifactId>
+        <version>${thumbnailator.version}</version>
+      </dependency>
+
 
       <dependency>
         <groupId>org.junit.jupiter</groupId>
