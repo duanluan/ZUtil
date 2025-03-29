@@ -68,6 +68,9 @@ class TreeUtilTest {
     // 找不到父类也为顶级节点
     treeConfig.setRootByNullParent(true);
     assertEquals(999, TreeUtil.build(TREE_NODE_LIST, treeConfig).get(2).getId());
+    // ID 类型
+    treeConfig.setIdType(String.class);
+    assertEquals(String.class, TreeUtil.build(TREE_NODE_LIST, treeConfig).get(0).getId().getClass());
     // 级别
     treeConfig.setGenLevel(true);
     assertEquals(3, TreeUtil.build(TREE_NODE_LIST, treeConfig).get(0).getChildren().get(1).getChildren().get(0).get("level"));

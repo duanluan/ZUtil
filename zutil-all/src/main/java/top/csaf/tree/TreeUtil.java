@@ -2,6 +2,7 @@ package top.csaf.tree;
 
 import lombok.extern.slf4j.Slf4j;
 import top.csaf.bean.BeanUtil;
+import top.csaf.bean.ConvertUtil;
 import top.csaf.lang.ArrayUtil;
 import top.csaf.lang.StrUtil;
 
@@ -38,14 +39,22 @@ public class TreeUtil {
       treeNodes1.sort(comparator);
     }
 
+    Class<?> idType = treeConfig.getIdType();
     // id 为 key，value 为自身存储到 Map 中
     Map<Object, TreeNode> treeNodeMap = new LinkedHashMap<>(treeNodes1.size());
     for (TreeNode treeNode : treeNodes1) {
       if (StrUtil.isBlank(treeNode.getId())) {
         throw new IllegalArgumentException("TreeNode: id can not be blank");
       }
+
+      // 根据指定的 ID 类型转换 ID、父级 ID
+      if (idType != null) {
+        treeNode.setId(ConvertUtil.convert(treeNode.getId(), idType));
+        treeNode.setParentId(ConvertUtil.convert(treeNode.getParentId(), idType));
+      }
+
       Object key = treeNode.getId();
-      if (treeConfig.isIgnoreIdTypeMismatch()) {
+      if (idType == null && treeConfig.isIgnoreIdTypeMismatch()) {
         key = key.toString();
       }
       treeNodeMap.put(key, treeNode);

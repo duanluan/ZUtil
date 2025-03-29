@@ -37,6 +37,10 @@ public class TreeConfig {
    */
   @Builder.Default
   private boolean isIgnoreIdTypeMismatch = true;
+  /**
+   * ID、父级 ID 类型，为 null 时保持原样，非 null 时 {@link TreeConfig#isIgnoreIdTypeMismatch} 失效
+   */
+  private Class<?> idType;
 
   /**
    * “级别”字段名
