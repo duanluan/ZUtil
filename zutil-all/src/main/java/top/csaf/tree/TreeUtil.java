@@ -6,7 +6,10 @@ import top.csaf.bean.ConvertUtil;
 import top.csaf.lang.ArrayUtil;
 import top.csaf.lang.StrUtil;
 
+import java.lang.reflect.Array;
+import java.lang.reflect.Field;
 import java.util.*;
+import java.util.function.Supplier;
 
 /**
  * 树工具类
@@ -161,5 +164,116 @@ public class TreeUtil {
    */
   public static List<TreeNode> build(List<TreeNode> treeNodes) {
     return build(treeNodes, TreeConfig.builder().build());
+  }
+
+  /**
+   * 将树结构拆分为平级列表
+   *
+   * @param treeNodes         树节点集合
+   * @param childrenFieldName 子级列表的字段名
+   * @param resultFactory     结果集合工厂方法，用于创建指定类型的集合
+   * @param <T>               树节点类型
+   * @param <R>               返回集合类型
+   * @return 平级节点集合（类型由resultFactory决定）
+   */
+  public static <T, R extends Collection<T>> R flatten(Object treeNodes, String childrenFieldName, Supplier<R> resultFactory) {
+    R result = resultFactory.get();
+    // 处理空输入
+    if (treeNodes == null) {
+      return result;
+    }
+
+    // 将输入转换为迭代器
+    Iterator<T> iterator;
+    if (treeNodes instanceof Iterable) {
+      iterator = ((Iterable<T>) treeNodes).iterator();
+    } else if (treeNodes instanceof Iterator) {
+      iterator = (Iterator<T>) treeNodes;
+    } else if (treeNodes instanceof Object[]) {
+      iterator = Arrays.stream((Object[]) treeNodes).map(obj -> (T) obj).iterator();
+    } else {
+      // 单个对象处理为只有一个元素的集合
+      result.add((T) treeNodes);
+      return result;
+    }
+
+    // 处理迭代器中的每个节点
+    while (iterator.hasNext()) {
+      T node = iterator.next();
+      // 将当前节点添加到结果集合
+      result.add(node);
+
+      try {
+        // 通过反射获取指定字段名的子级
+        Field field = node.getClass().getDeclaredField(childrenFieldName);
+        field.setAccessible(true);
+        Object childrenObj = field.get(node);
+
+        // 如果子级不为空，递归处理子级
+        if (childrenObj != null) {
+          // 递归调用并将结果添加到当前结果集合中
+          result.addAll(flatten(childrenObj, childrenFieldName, resultFactory));
+        }
+      } catch (NoSuchFieldException | IllegalAccessException e) {
+        log.error("Children field '{}' cannot be obtained from class: {}", childrenFieldName, node.getClass().getName(), e);
+      }
+    }
+
+    return result;
+  }
+
+  /**
+   * 将树结构拆分为平级数组
+   *
+   * @param treeNodes         树节点数组
+   * @param <T>               树节点类型
+   * @param childrenFieldName 子级列表的字段名
+   * @return 平级节点数组
+   */
+  public static <T> T[] flatten(T[] treeNodes, String childrenFieldName) {
+    if (treeNodes == null || treeNodes.length == 0) {
+      return treeNodes;
+    }
+
+    // 使用ArrayList暂存结果
+    List<T> tempResult = new ArrayList<>();
+
+    for (T node : treeNodes) {
+      // 将当前节点添加到结果列表
+      tempResult.add(node);
+
+      try {
+        // 通过反射获取指定字段名的子级
+        Field field = node.getClass().getDeclaredField(childrenFieldName);
+        field.setAccessible(true);
+        Object childrenObj = field.get(node);
+
+        // 根据子级类型分别处理
+        if (childrenObj instanceof Object[]) {
+          // 如果子级是数组
+          T[] childrenArray = (T[]) childrenObj;
+          if (childrenArray.length > 0) {
+            T[] flattenedChildren = flatten(childrenArray, childrenFieldName);
+            tempResult.addAll(Arrays.asList(flattenedChildren));
+          }
+        } else if (childrenObj instanceof Iterable || childrenObj instanceof Iterator) {
+          // 如果子级是集合或迭代器，先扁平化为集合，再添加到结果中
+          List<T> flattenedChildren = flatten(childrenObj, childrenFieldName, ArrayList::new);
+          tempResult.addAll(flattenedChildren);
+        } else {
+          // 如果子级是单个对象，直接添加到结果中
+          tempResult.add((T) childrenObj);
+        }
+      } catch (NoSuchFieldException | IllegalAccessException e) {
+        log.error("Children field '{}' cannot be obtained from class: {}", childrenFieldName, node.getClass().getName(), e);
+      }
+    }
+
+    // 将ArrayList转换回数组类型
+    // 获取原始数组的类型
+    Class<? extends Object[]> arrayClass = treeNodes.getClass();
+    T[] resultArray = (T[]) Array.newInstance(arrayClass.getComponentType(), tempResult.size());
+
+    return tempResult.toArray(resultArray);
   }
 }

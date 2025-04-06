@@ -8,6 +8,7 @@ import top.csaf.tree.TreeNode;
 import top.csaf.tree.TreeUtil;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
@@ -80,5 +81,23 @@ class TreeUtilTest {
     // 是否有子级
     treeConfig.setGenHasChildren(true);
     assertEquals(true, TreeUtil.build(TREE_NODE_LIST, treeConfig).get(0).getChildren().get(1).get("hasChildren"));
+  }
+
+  @DisplayName("将树结构拆分为平级列表")
+  @Test
+  void flatten() {
+    // List
+    List<TreeNode> treeNodeList = TreeUtil.build(TREE_NODE_LIST, TreeConfig.builder().isRootByNullParent(true).build());
+    assertEquals(TREE_NODE_LIST.size(), TreeUtil.flatten(treeNodeList, "children", ArrayList::new).size());
+    // 数组+List
+    TreeNode[] treeNodes = new TreeNode[treeNodeList.size()];
+    treeNodeList.toArray(treeNodes);
+    assertEquals(TREE_NODE_LIST.size(), TreeUtil.flatten(treeNodes, "children", ArrayList::new).size());
+    // 全数组
+    treeNodes = new TreeNode[1];
+    TreeNode treeNode = new TreeNode(1, "1", 1, "0");
+    treeNode.setChildren(Arrays.asList(new TreeNode(2, "1.1", 1, "1"), new TreeNode(3, "1.2", 2, "1")));
+    treeNodes[0] = treeNode;
+    assertEquals(3, TreeUtil.flatten(treeNodes, "children").length);
   }
 }
