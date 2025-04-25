@@ -428,7 +428,7 @@ public class RegExUtil {
     List<String> resultList = new ArrayList<>();
     Matcher matcher = pattern.matcher(text);
     while (matcher.find()) {
-      int group = 1;
+      int group = 0;
       while (group <= matcher.groupCount()) {
         resultList.add(matcher.group(group));
         group++;
