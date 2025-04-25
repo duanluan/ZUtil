@@ -1055,4 +1055,18 @@ public class CollUtil {
   public static boolean isNotAllEqualsSameIndex(final Function<Object, Boolean> continueFunction, @NonNull final Object... objects) {
     return isNotAllEqualsSameIndex(true, continueFunction, objects);
   }
+
+  /**
+   * 集合是否包含指定元素
+   *
+   * @param c 是否包含元素的集合
+   * @param o 集合是否包含的元素
+   * @return {@code true} 如果集合包含指定元素
+   */
+  public static boolean contains(Collection<?> c, Object o) {
+    if (CollUtil.isEmpty(c)) {
+      return false;
+    }
+    return c.contains(o);
+  }
 }
