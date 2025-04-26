@@ -6,7 +6,7 @@
 
   <groupId>top.csaf</groupId>
   <artifactId>zutil-parent</artifactId>
-  <version>2.0.0-alpha13</version>
+  <version>2.0.0-alpha14</version>
   <name>${project.artifactId}</name>
   <url>https://github.com/duanluan/ZUtil</url>
   <description>Java Util</description>
@@ -73,6 +73,7 @@
     <snakeyaml.version>2.3</snakeyaml.version>
     <batik.version>1.18</batik.version>
     <thumbnailator.version>0.4.20</thumbnailator.version>
+    <transmittable.thread.local.version>2.14.5</transmittable.thread.local.version>
 
     <junit.version>5.11.0</junit.version>
     <junit.platform.version>1.11.0</junit.platform.version>
@@ -194,10 +195,17 @@
         <artifactId>batik-codec</artifactId>
         <version>${batik.version}</version>
       </dependency>
+      <!-- Thumbnailator - a thumbnail generation library for Java -->
       <dependency>
         <groupId>net.coobird</groupId>
         <artifactId>thumbnailator</artifactId>
         <version>${thumbnailator.version}</version>
+      </dependency>
+      <!-- The missing Java™ std lib(simple & 0-dependency) for framework/middleware, provide an enhanced InheritableThreadLocal that transmits values between threads even using thread pooling components. -->
+      <dependency>
+        <groupId>com.alibaba</groupId>
+        <artifactId>transmittable-thread-local</artifactId>
+        <version>${transmittable.thread.local.version}</version>
       </dependency>
 
 
