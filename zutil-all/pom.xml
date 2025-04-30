@@ -12,7 +12,7 @@
 
   <artifactId>zutil-all</artifactId>
   <name>${project.artifactId}</name>
-  <url>https://github.com/duanluan/ZUtil</url>
+  <url>https://github.com/duanluan/zutil</url>
   <description>Java Util</description>
   <licenses>
     <license>
@@ -22,7 +22,7 @@
   </licenses>
   <issueManagement>
     <system>GitHub Issues</system>
-    <url>https://github.com/duanluan/ZUtil/issues</url>
+    <url>https://github.com/duanluan/zutil/issues</url>
   </issueManagement>
   <developers>
     <developer>
@@ -34,9 +34,9 @@
     </developer>
   </developers>
   <scm>
-    <url>https://github.com/duanluan/ZUtil/tree/main</url>
-    <connection>scm:git:git://github.com/duanluan/ZUtil.git</connection>
-    <developerConnection>scm:git:ssh://github.com:duanluan/ZUtil.git</developerConnection>
+    <url>https://github.com/duanluan/zutil/tree/main</url>
+    <connection>scm:git:git://github.com/duanluan/zutil.git</connection>
+    <developerConnection>scm:git:ssh://github.com:duanluan/zutil.git</developerConnection>
   </scm>
 
   <dependencies>

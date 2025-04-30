@@ -12,7 +12,7 @@
 
   <artifactId>zutil-core</artifactId>
   <name>${project.artifactId}</name>
-  <url>https://github.com/duanluan/ZUtil/zutil-core</url>
+  <url>https://github.com/duanluan/zutil/zutil-core</url>
   <description>Java Core Util for ZUtil</description>
   <licenses>
     <license>
@@ -22,7 +22,7 @@
   </licenses>
   <issueManagement>
     <system>GitHub Issues</system>
-    <url>https://github.com/duanluan/ZUtil/issues</url>
+    <url>https://github.com/duanluan/zutil/issues</url>
   </issueManagement>
   <developers>
     <developer>
@@ -34,7 +34,7 @@
     </developer>
   </developers>
   <scm>
-    <url>https://github.com/duanluan/ZUtil/tree/main/zutil-core</url>
+    <url>https://github.com/duanluan/zutil/tree/main/zutil-core</url>
   </scm>
 
   <dependencies>

@@ -12,8 +12,8 @@
 
   <artifactId>zutil-img</artifactId>
   <name>${project.artifactId}</name>
-  <url>https://github.com/duanluan/ZUtil/zutil-io</url>
-  <description>Java IO Util for ZUtil</description>
+  <url>https://github.com/duanluan/zutil/zutil-io</url>
+  <description>Java Image Util for ZUtil</description>
   <licenses>
     <license>
       <name>Apache License 2.0</name>
@@ -22,7 +22,7 @@
   </licenses>
   <issueManagement>
     <system>GitHub Issues</system>
-    <url>https://github.com/duanluan/ZUtil/issues</url>
+    <url>https://github.com/duanluan/zutil/issues</url>
   </issueManagement>
   <developers>
     <developer>
@@ -34,7 +34,7 @@
     </developer>
   </developers>
   <scm>
-    <url>https://github.com/duanluan/ZUtil/tree/main/zutil-io</url>
+    <url>https://github.com/duanluan/zutil/tree/main/zutil-io</url>
   </scm>
 
   <dependencies>

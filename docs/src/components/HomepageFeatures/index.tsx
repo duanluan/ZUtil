@@ -14,7 +14,7 @@ const FeatureList: FeatureItem[] = [
     // Svg: require('@site/static/img/.svg').default,
     description: (
       <>
-        使用 <a href='https://openjdk.org/projects/code-tools/jmh/' target='_blank'>JMH</a> 进行<a href='https://github.com/duanluan/ZUtil/tree/main/src/test/java/top/csaf/jmh' target='_blank'>性能测试</a>。
+        使用 <a href='https://openjdk.org/projects/code-tools/jmh/' target='_blank'>JMH</a> 进行<a href='https://github.com/duanluan/zutil/tree/main/src/test/java/top/csaf/jmh' target='_blank'>性能测试</a>。
       </>
     ),
   },
@@ -23,8 +23,8 @@ const FeatureList: FeatureItem[] = [
     // Svg: require('@site/static/img/.svg').default,
     description: (
       <>
-        <a href='https://github.com/duanluan/ZUtil/blob/main/zutil-date/src/main/java/top/csaf/date/DateUtil.java' target='_blank'>时间工具类</a> 130+ 个方法，2700+ 行；<br/>
-        <a href='https://github.com/duanluan/ZUtil/blob/main/zutil-regex/src/main/java/top/csaf/regex/RegExUtil.java' target='_blank'>正则工具类</a> 80+ 个方法，1100+ 行。<br/>
+        <a href='https://github.com/duanluan/zutil/blob/main/zutil-date/src/main/java/top/csaf/date/DateUtil.java' target='_blank'>时间工具类</a> 130+ 个方法，2700+ 行；<br/>
+        <a href='https://github.com/duanluan/zutil/blob/main/zutil-regex/src/main/java/top/csaf/regex/RegExUtil.java' target='_blank'>正则工具类</a> 80+ 个方法，1100+ 行。<br/>
       </>
     ),
   },
@@ -33,7 +33,7 @@ const FeatureList: FeatureItem[] = [
     // Svg: require('@site/static/img/.svg').default,
     description: (
       <>
-        使用 <a href='https://junit.org/junit5' target='_blank'>JUnit</a> 进行套件测试，<a href='https://www.jacoco.org/jacoco/index.html' target='_blank'>JaCoCo</a> 进行<a href='https://github.com/duanluan/ZUtil/tree/main/zutil-all/src/test/java/top/csaf/junit'>代码覆盖率测试</a>，保证每行代码都符合预期，更少出 BUG。<br/>
+        使用 <a href='https://junit.org/junit5' target='_blank'>JUnit</a> 进行套件测试，<a href='https://www.jacoco.org/jacoco/index.html' target='_blank'>JaCoCo</a> 进行<a href='https://github.com/duanluan/zutil/tree/main/zutil-all/src/test/java/top/csaf/junit'>代码覆盖率测试</a>，保证每行代码都符合预期，更少出 BUG。<br/>
       </>
     ),
   },

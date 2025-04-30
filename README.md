@@ -1,29 +1,29 @@
-![](https://socialify.git.ci/duanluan/ZUtil/image?description=1&font=Bitter&forks=1&issues=1&language=1&logo=https%3A%2F%2Fduanluan.github.io%2FZUtil%2Fimg%2Flogo.png&name=1&owner=1&pattern=Floating%20Cogs&pulls=1&stargazers=1&theme=Light)
+![](https://socialify.git.ci/duanluan/zutil/image?description=1&font=Bitter&forks=1&issues=1&language=1&logo=https%3A%2F%2Fduanluan.github.io%2Fzutil%2Fimg%2Flogo.png&name=1&owner=1&pattern=Floating%20Cogs&pulls=1&stargazers=1&theme=Light)
 
 # ZUtil
 
 [![](https://img.shields.io/hexpm/l/plug?style=for-the-badge&logo=apache)](./LICENSE) 
-[![](https://img.shields.io/maven-central/v/top.csaf/ZUtil?style=for-the-badge&logo=apachemaven)](https://central.sonatype.com/artifact/top.csaf/zutil-all) 
+[![](https://img.shields.io/maven-central/v/top.csaf/zutil-all?style=for-the-badge&logo=apachemaven)](https://central.sonatype.com/artifact/top.csaf/zutil-all) 
 [![](https://img.shields.io/badge/JDK-8%2B-orange?style=for-the-badge&logo=openjdk)]() 
-[![](https://img.shields.io/github/stars/duanluan/ZUtil?style=for-the-badge&logo=github)](https://github.com/duanluan/ZUtil) 
-[![GitHub commits](https://img.shields.io/github/commit-activity/m/duanluan/ZUtil?style=for-the-badge&label=Commits&logo=github)](https://github.com/duanluan/ZUtil/commits) 
+[![](https://img.shields.io/github/stars/duanluan/zutil?style=for-the-badge&logo=github)](https://github.com/duanluan/zutil) 
+[![GitHub commits](https://img.shields.io/github/commit-activity/m/duanluan/zutil?style=for-the-badge&label=Commits&logo=github)](https://github.com/duanluan/zutil/commits) 
 [![](https://img.shields.io/badge/QQ%20group-273743748-e76970.svg?style=for-the-badge&logo=tencentqq)](https://jq.qq.com/?_wv=1027&k=pYzF0R18) 
 
 追求更快更全的 Java 工具类。
 
-工具类使用请查看<a href='https://duanluan.github.io/ZUtil' target='_blank' style='font-size:25px'>文档</a>、[javadoc](https://apidoc.gitee.com/duanluan/ZUtil)。
+工具类使用请查看<a href='https://duanluan.github.io/zutil' target='_blank' style='font-size:25px'>文档</a>、[javadoc](https://apidoc.gitee.com/duanluan/zutil)。
 
 和 Hutool 的性能对比测试请查看 [jmh.comparison](zutil-all/src/test/java/top/csaf/jmh/comparison)。
 
 ## 特性
 
-* 更快：使用 [JMH](https://openjdk.org/projects/code-tools/jmh/) 进行[性能测试](https://github.com/duanluan/ZUtil/tree/main/zutil-all/src/test/java/top/csaf/jmh)。
-* 更全：[时间工具类](https://github.com/duanluan/ZUtil/blob/main/zutil-date/src/main/java/top/csaf/date/DateUtil.java) 130+ 个方法，2700+ 行；[正则工具类](https://github.com/duanluan/ZUtil/blob/main/zutil-regex/src/main/java/top/csaf/regex/RegExUtil.java) 80+ 个方法，1100+ 行。
-* 更安全：使用 [JUnit](https://junit.org/junit5) 进行套件测试，[JaCoCo](https://www.jacoco.org/jacoco/index.html) 进行[代码覆盖率测试](https://github.com/duanluan/ZUtil/tree/main/zutil-all/src/test/java/top/csaf/junit)，保证每行代码都符合预期，更少出 BUG。
+* 更快：使用 [JMH](https://openjdk.org/projects/code-tools/jmh/) 进行[性能测试](https://github.com/duanluan/zutil/tree/main/zutil-all/src/test/java/top/csaf/jmh)。
+* 更全：[时间工具类](https://github.com/duanluan/zutil/blob/main/zutil-date/src/main/java/top/csaf/date/DateUtil.java) 130+ 个方法，2700+ 行；[正则工具类](https://github.com/duanluan/zutil/blob/main/zutil-regex/src/main/java/top/csaf/regex/RegExUtil.java) 80+ 个方法，1100+ 行。
+* 更安全：使用 [JUnit](https://junit.org/junit5) 进行套件测试，[JaCoCo](https://www.jacoco.org/jacoco/index.html) 进行[代码覆盖率测试](https://github.com/duanluan/zutil/tree/main/zutil-all/src/test/java/top/csaf/junit)，保证每行代码都符合预期，更少出 BUG。
 
 ## Stargazers over time
 
-[![Stargazers over time](https://starchart.cc/duanluan/ZUtil.svg)](https://starchart.cc/duanluan/ZUtil)
+[![Stargazers over time](https://starchart.cc/duanluan/zutil.svg)](https://starchart.cc/duanluan/zutil)
 
 ## 说明
 
@@ -155,7 +155,7 @@ Mode 即为`org.openjdk.jmh.annotations.Mode`，分为：
 
 ### 参与开发
 
-1. **[Fork](https://github.com/duanluan/ZUtil/fork)** 并 **Clone** 项目到本地。
+1. **[Fork](https://github.com/duanluan/zutil/fork)** 并 **Clone** 项目到本地。
 2. 开发内容：
    * **新增类或方法**需提前[加群](https://jq.qq.com/?_wv=1027&k=pYzF0R18)沟通。
    * **修复 BUG**（fix）、**优化性能**（perf）或**新增/更正测试**（test）。

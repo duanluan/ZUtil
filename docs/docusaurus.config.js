@@ -9,7 +9,7 @@ const config = {
   title: 'ZUtil',
   tagline: '追求更快更全的 Java 工具类',
   url: 'https://duanluan.github.io',
-  baseUrl: '/ZUtil/',
+  baseUrl: '/zutil/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
@@ -17,7 +17,7 @@ const config = {
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
   organizationName: 'duanluan', // Usually your GitHub org/user name.
-  projectName: 'ZUtil', // Usually your repo name.
+  projectName: 'zutil', // Usually your repo name.
   // deploymentBranch: 'gh-pages',
   trailingSlash: false,
 
@@ -38,13 +38,13 @@ const config = {
           sidebarPath: require.resolve('./sidebars.js'),
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
-          editUrl: 'https://github.com/duanluan/ZUtil/tree/main/docs',
+          editUrl: 'https://github.com/duanluan/zutil/tree/main/docs',
         },
         blog: {
           showReadingTime: true,
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
-          editUrl: 'https://github.com/duanluan/ZUtil/tree/main/docs',
+          editUrl: 'https://github.com/duanluan/zutil/tree/main/docs',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
@@ -76,7 +76,7 @@ const config = {
           },
           {
             type: 'html',
-            value: '<a href="https://github.com/duanluan/ZUtil" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link header-github-link" aria-label="GitHub repository"></a>',
+            value: '<a href="https://github.com/duanluan/zutil" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link header-github-link" aria-label="GitHub repository"></a>',
             position: 'right',
           },
         ],
@@ -102,7 +102,7 @@ const config = {
               },
               {
                 label: 'GitHub Discussions',
-                href: 'https://github.com/duanluan/ZUtil/discussions',
+                href: 'https://github.com/duanluan/zutil/discussions',
               },
               {
                 label: 'SegmentFault 问答',
@@ -127,11 +127,11 @@ const config = {
               },
               {
                 label: 'GitHub',
-                href: 'https://github.com/duanluan/ZUtil',
+                href: 'https://github.com/duanluan/zutil',
               },
               {
                 label: 'Gitee',
-                href: 'https://gitee.com/duanluan/ZUtil',
+                href: 'https://gitee.com/duanluan/zutil',
               }
             ],
           },
