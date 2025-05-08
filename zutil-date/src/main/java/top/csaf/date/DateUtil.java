@@ -1689,6 +1689,40 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
   }
 
   /**
+   * 获取当前时间戳（秒）
+   * @return 当前时间戳（秒）
+   */
+  public static Long nowEpochSecond() {
+    return Instant.now().getEpochSecond();
+  }
+
+  /**
+   * 获取指定时区的当前时间戳（秒）
+   * @param zoneId 时区
+   * @return 指定时区的当前时间戳（秒）
+   */
+  public static Long nowEpochSecond(@NonNull final ZoneId zoneId) {
+    return ZonedDateTime.now(DateFeat.get(zoneId)).toInstant().getEpochSecond();
+  }
+
+  /**
+   * 获取当前时间戳（毫秒）
+   * @return 当前时间戳（毫秒）
+   */
+  public static Long nowEpochMilli() {
+    return Instant.now().toEpochMilli();
+  }
+
+  /**
+   * 获取指定时区的当前时间戳（毫秒）
+   * @param zoneId 时区
+   * @return 指定时区的当前时间戳（毫秒）
+   */
+  public static Long nowEpochMilli(@NonNull final ZoneId zoneId) {
+    return ZonedDateTime.now(DateFeat.get(zoneId)).toInstant().toEpochMilli();
+  }
+
+  /**
    * 指定多个时间级别的最小时间
    *
    * @param temporal       时间对象
