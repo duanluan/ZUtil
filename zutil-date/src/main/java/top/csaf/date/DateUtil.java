@@ -907,20 +907,204 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
     return null;
   }
 
-  // TODO
-  // public static long toEpochSecond(@NonNull final Temporal temporal) {
-  //   if (LocalDateTime.class.equals(clazz)) {
-  //     return (T) toLocalDateTime(date);
-  //   } else if (LocalDate.class.equals(clazz)) {
-  //     return (T) toLocalDate(date);
-  //   } else if (LocalTime.class.equals(clazz)) {
-  //     return (T) toLocalTime(date);
-  //   }
-  //   return null;
-  // }
+  /**
+   * 转换为时间戳（秒）
+   *
+   * @param temporal 时间对象
+   * @param zoneId   时区
+   * @return 时间戳（秒）
+   */
+  public static long toEpochSecond(@NonNull final Temporal temporal, final ZoneId zoneId) {
+    ZoneId zoneId1 = DateFeat.get(zoneId);
+    if (temporal instanceof ZonedDateTime) {
+      return ((ZonedDateTime) temporal).withZoneSameInstant(zoneId1).toEpochSecond();
+    } else if (temporal instanceof LocalDateTime) {
+      return ((LocalDateTime) temporal).atZone(zoneId1).toEpochSecond();
+    } else if (temporal instanceof LocalDate) {
+      return ((LocalDate) temporal).atStartOfDay(zoneId1).toEpochSecond();
+    } else if (temporal instanceof LocalTime) {
+      return ((LocalTime) temporal).atDate(LocalDate.of(DateFeat.getLazyMinDateYear(DateConst.DEFAULT_MIN_DATE_YEAR).intValue(), 1, 1))
+        .atZone(zoneId1).toEpochSecond();
+    } else if (temporal instanceof OffsetDateTime) {
+      return ((OffsetDateTime) temporal).atZoneSameInstant(zoneId1).toEpochSecond();
+    }
+    throw new IllegalArgumentException("temporal must be ZonedDateTime, LocalDateTime, LocalDate, LocalTime, or OffsetDateTime");
+  }
 
+  /**
+   * 转换为时间戳（秒）
+   *
+   * @param temporal 时间对象
+   * @return 时间戳（秒）
+   */
+  public static long toEpochSecond(@NonNull final Temporal temporal) {
+    return toEpochSecond(temporal, null);
+  }
+
+  /**
+   * 转换为时间戳（秒）
+   *
+   * @param date   Date 对象
+   * @param zoneId 时区
+   * @return 时间戳（秒）
+   */
+  public static long toEpochSecond(@NonNull final Date date, final ZoneId zoneId) {
+    return date.toInstant().atZone(DateFeat.get(zoneId)).toEpochSecond();
+  }
+
+  /**
+   * 转换为时间戳（秒）
+   *
+   * @param date Date 对象
+   * @return 时间戳（秒）
+   */
   public static long toEpochSecond(@NonNull final Date date) {
-    return date.toInstant().atZone(DateFeat.getZoneId()).toEpochSecond();
+    return toEpochSecond(date, null);
+  }
+
+  /**
+   * 转换为时间戳（秒）
+   *
+   * @param source   字符串
+   * @param zoneId   时区
+   * @param patterns 字符串可能的格式
+   * @return 时间戳（秒）
+   */
+  public static long toEpochSecond(@NonNull final String source, final ZoneId zoneId, @NonNull final String... patterns) {
+    LocalDateTime localDateTime = parseLocalDateTime(source, zoneId, patterns);
+    if (localDateTime == null) {
+      throw new IllegalArgumentException("invalid date");
+    }
+    return localDateTime.toEpochSecond(ZoneOffset.UTC);
+  }
+
+  /**
+   * 转换为时间戳（秒）
+   *
+   * @param source 字符串
+   * @param zoneId 时区
+   * @return 时间戳（秒）
+   */
+  public static long toEpochSecond(@NonNull final String source, final ZoneId zoneId) {
+    LocalDateTime localDateTime = parseLocalDateTime(source, zoneId);
+    if (localDateTime == null) {
+      throw new IllegalArgumentException("invalid date");
+    }
+    return localDateTime.toEpochSecond(ZoneOffset.UTC);
+  }
+
+  /**
+   * 转换为时间戳（秒）
+   *
+   * @param source 字符串
+   * @return 时间戳（秒）
+   */
+  public static long toEpochSecond(@NonNull final String source) {
+    LocalDateTime localDateTime = parseLocalDateTime(source);
+    if (localDateTime == null) {
+      throw new IllegalArgumentException("invalid date");
+    }
+    return localDateTime.toEpochSecond(ZoneOffset.UTC);
+  }
+
+  /**
+   * 转换为时间戳（毫秒）
+   *
+   * @param temporal 时间对象
+   * @param zoneId   时区
+   * @return 时间戳（毫秒）
+   */
+  public static long toEpochMilli(@NonNull final Temporal temporal, final ZoneId zoneId) {
+    ZoneId zoneId1 = DateFeat.get(zoneId);
+    if (temporal instanceof ZonedDateTime) {
+      return ((ZonedDateTime) temporal).withZoneSameInstant(zoneId1).toInstant().toEpochMilli();
+    } else if (temporal instanceof LocalDateTime) {
+      return ((LocalDateTime) temporal).atZone(zoneId1).toInstant().toEpochMilli();
+    } else if (temporal instanceof LocalDate) {
+      return ((LocalDate) temporal).atStartOfDay(zoneId1).toInstant().toEpochMilli();
+    } else if (temporal instanceof LocalTime) {
+      return ((LocalTime) temporal).atDate(LocalDate.of(DateFeat.getLazyMinDateYear(DateConst.DEFAULT_MIN_DATE_YEAR).intValue(), 1, 1))
+        .atZone(zoneId1).toInstant().toEpochMilli();
+    } else if (temporal instanceof OffsetDateTime) {
+      return ((OffsetDateTime) temporal).atZoneSameInstant(zoneId1).toInstant().toEpochMilli();
+    }
+    throw new IllegalArgumentException("temporal must be ZonedDateTime, LocalDateTime, LocalDate, LocalTime, or OffsetDateTime");
+  }
+
+  /**
+   * 转换为时间戳（毫秒）
+   *
+   * @param temporal 时间对象
+   * @return 时间戳（毫秒）
+   */
+  public static long toEpochMilli(@NonNull final Temporal temporal) {
+    return toEpochMilli(temporal, null);
+  }
+
+  /**
+   * 转换为时间戳（毫秒）
+   *
+   * @param date   Date 对象
+   * @param zoneId 时区
+   * @return 时间戳（毫秒）
+   */
+  public static long toEpochMilli(@NonNull final Date date, final ZoneId zoneId) {
+    return date.toInstant().atZone(DateFeat.get(zoneId)).toInstant().toEpochMilli();
+  }
+
+  /**
+   * 转换为时间戳（毫秒）
+   *
+   * @param date Date 对象
+   * @return 时间戳（毫秒）
+   */
+  public static long toEpochMilli(@NonNull final Date date) {
+    return toEpochMilli(date, null);
+  }
+
+  /**
+   * 转换为时间戳（秒）
+   *
+   * @param source   字符串
+   * @param zoneId   时区
+   * @param patterns 字符串可能的格式
+   * @return 时间戳（秒）
+   */
+  public static long toEpochMilli(@NonNull final String source, final ZoneId zoneId, @NonNull final String... patterns) {
+    LocalDateTime localDateTime = parseLocalDateTime(source, zoneId, patterns);
+    if (localDateTime == null) {
+      throw new IllegalArgumentException("invalid date");
+    }
+    return localDateTime.toInstant(ZoneOffset.UTC).toEpochMilli();
+  }
+
+  /**
+   * 转换为时间戳（秒）
+   *
+   * @param source 字符串
+   * @param zoneId 时区
+   * @return 时间戳（秒）
+   */
+  public static long toEpochMilli(@NonNull final String source, final ZoneId zoneId) {
+    LocalDateTime localDateTime = parseLocalDateTime(source, zoneId);
+    if (localDateTime == null) {
+      throw new IllegalArgumentException("invalid date");
+    }
+    return localDateTime.toInstant(ZoneOffset.UTC).toEpochMilli();
+  }
+
+  /**
+   * 转换为时间戳（秒）
+   *
+   * @param source 字符串
+   * @return 时间戳（秒）
+   */
+  public static long toEpochMilli(@NonNull final String source) {
+    LocalDateTime localDateTime = parseLocalDateTime(source);
+    if (localDateTime == null) {
+      throw new IllegalArgumentException("invalid date");
+    }
+    return localDateTime.toInstant(ZoneOffset.UTC).toEpochMilli();
   }
 
   /**
@@ -1690,6 +1874,7 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
 
   /**
    * 获取当前时间戳（秒）
+   *
    * @return 当前时间戳（秒）
    */
   public static Long nowEpochSecond() {
@@ -1698,6 +1883,7 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
 
   /**
    * 获取指定时区的当前时间戳（秒）
+   *
    * @param zoneId 时区
    * @return 指定时区的当前时间戳（秒）
    */
@@ -1707,6 +1893,7 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
 
   /**
    * 获取当前时间戳（毫秒）
+   *
    * @return 当前时间戳（毫秒）
    */
   public static Long nowEpochMilli() {
@@ -1715,6 +1902,7 @@ public class DateUtil extends org.apache.commons.lang3.time.DateUtils {
 
   /**
    * 获取指定时区的当前时间戳（毫秒）
+   *
    * @param zoneId 时区
    * @return 指定时区的当前时间戳（毫秒）
    */
