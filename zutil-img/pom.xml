@@ -7,12 +7,12 @@
   <parent>
     <groupId>top.csaf</groupId>
     <artifactId>zutil-parent</artifactId>
-    <version>2.0.0-alpha14</version>
+    <version>2.0.0-beta1</version>
   </parent>
 
   <artifactId>zutil-img</artifactId>
   <name>${project.artifactId}</name>
-  <url>https://github.com/duanluan/zutil/zutil-io</url>
+  <url>https://github.com/duanluan/zutil/zutil-img</url>
   <description>Java Image Util for ZUtil</description>
   <licenses>
     <license>
@@ -34,14 +34,14 @@
     </developer>
   </developers>
   <scm>
-    <url>https://github.com/duanluan/zutil/tree/main/zutil-io</url>
+    <url>https://github.com/duanluan/zutil/tree/main/zutil-img</url>
   </scm>
 
   <dependencies>
     <dependency>
       <groupId>top.csaf</groupId>
       <artifactId>zutil-io</artifactId>
-      <version>2.0.0-alpha14</version>
+      <version>2.0.0-beta1</version>
     </dependency>
 
     <dependency>
