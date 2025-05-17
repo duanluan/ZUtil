@@ -128,13 +128,14 @@ public class RegExUtil {
   /**
    * 获取指定匹配项的指定捕获组的匹配值
    *
-   * @param text    需要匹配的内容
-   * @param pattern 正则
-   * @param item    匹配项，从 0 开始
-   * @param group   捕获组，从 1 开始，0 为所在匹配项所有捕获组
+   * @param text             需要匹配的内容
+   * @param pattern          正则
+   * @param item             匹配项，从 0 开始
+   * @param group            捕获组，从 1 开始，0 为所在匹配项所有捕获组
+   * @param useLocalGrouping 是否使用局部分组，即每个匹配项的捕获组序号从 1 开始
    * @return 匹配值
    */
-  public static String match(@NonNull final CharSequence text, @NonNull final Pattern pattern, final int item, final int group) {
+  public static String match(@NonNull final CharSequence text, @NonNull final Pattern pattern, final int item, final int group, final boolean useLocalGrouping) {
     if (item < 0) {
       throw new IllegalArgumentException("Item: should be greater than 0");
     }
@@ -145,11 +146,68 @@ public class RegExUtil {
     int i = 0;
     while (matcher.find()) {
       if (item == i) {
-        return matcher.group(group);
+        // 使用局部分组模式
+        if (useLocalGrouping && group > 0) {
+          int localGroup = 0;
+
+          for (int j = 1; j <= matcher.groupCount(); j++) {
+            if (matcher.group(j) != null) {
+              localGroup++;
+              if (localGroup == group) {
+                return matcher.group(j);
+              }
+            }
+          }
+          return null;
+        } else {
+          return matcher.group(group);
+        }
       }
       i++;
     }
     return null;
+  }
+
+  /**
+   * 获取指定匹配项的指定捕获组的匹配值
+   *
+   * @param regex            正则
+   * @param text             需要匹配的内容
+   * @param item             匹配项，从 0 开始
+   * @param group            捕获组，从 1 开始，0 为所在匹配项所有捕获组
+   * @param flags            匹配模式
+   * @param useLocalGrouping 是否使用局部分组，即每个匹配项的捕获组序号从 1 开始
+   * @return 匹配值
+   */
+  public static String match(@NonNull final CharSequence text, @NonNull final String regex, final int item, final int group, final int flags, final boolean useLocalGrouping) {
+    return match(text, Pattern.compile(regex, flags), item, group, useLocalGrouping);
+  }
+
+  /**
+   * 获取指定匹配项的指定捕获组的匹配值
+   *
+   * @param text             需要匹配的内容
+   * @param regex            正则
+   * @param item             匹配项，从 0 开始
+   * @param group            捕获组，从 1 开始，0 为所在匹配项所有捕获组
+   * @param useLocalGrouping 是否使用局部分组，即每个匹配项的捕获组序号从 1 开始
+   * @return 匹配值
+   */
+  public static String match(@NonNull final CharSequence text, @NonNull final String regex, final int item, final int group, final boolean useLocalGrouping) {
+    return match(text, Pattern.compile(regex), item, group, useLocalGrouping);
+  }
+
+  /**
+   * 获取指定匹配项的指定捕获组的匹配值
+   *
+   * @param text    需要匹配的内容
+   * @param pattern 正则
+   * @param item    匹配项，从 0 开始
+   * @param group   捕获组，从 1 开始，0 为所在匹配项所有捕获组
+   * @return 匹配值
+   */
+  public static String match(@NonNull final CharSequence text, @NonNull final Pattern pattern, final int item, final int group) {
+    return match(text, pattern, item, group, true);
   }
 
   /**
@@ -163,7 +221,7 @@ public class RegExUtil {
    * @return 匹配值
    */
   public static String match(@NonNull final CharSequence text, @NonNull final String regex, final int item, final int group, final int flags) {
-    return match(text, Pattern.compile(regex, flags), item, group);
+    return match(text, Pattern.compile(regex, flags), item, group, true);
   }
 
   /**
@@ -176,7 +234,47 @@ public class RegExUtil {
    * @return 匹配值
    */
   public static String match(@NonNull final CharSequence text, @NonNull final String regex, final int item, final int group) {
-    return match(text, Pattern.compile(regex), item, group);
+    return match(text, Pattern.compile(regex), item, group, true);
+  }
+
+  /**
+   * 获取第一个匹配项的指定捕获组的匹配值
+   *
+   * @param text             需要匹配的内容
+   * @param pattern          正则
+   * @param group            捕获组，从 1 开始，0 为所在匹配项所有捕获组
+   * @param useLocalGrouping 是否使用局部分组，即每个匹配项的捕获组序号从 1 开始
+   * @return 匹配值
+   */
+  public static String matchFirstItem(@NonNull final CharSequence text, @NonNull final Pattern pattern, final int group, final boolean useLocalGrouping) {
+    return match(text, pattern, 0, group, useLocalGrouping);
+  }
+
+  /**
+   * 获取第一个匹配项的指定捕获组的匹配值
+   *
+   * @param text             需要匹配的内容
+   * @param regex            正则
+   * @param group            捕获组，从 1 开始，0 为所在匹配项所有捕获组
+   * @param flags            匹配模式
+   * @param useLocalGrouping 是否使用局部分组，即每个匹配项的捕获组序号从 1 开始
+   * @return 匹配值
+   */
+  public static String matchFirstItem(@NonNull final CharSequence text, @NonNull final String regex, final int group, final int flags, final boolean useLocalGrouping) {
+    return match(text, regex, 0, group, flags, useLocalGrouping);
+  }
+
+  /**
+   * 获取第一个匹配项的指定捕获组的匹配值
+   *
+   * @param text             需要匹配的内容
+   * @param regex            正则
+   * @param group            捕获组，从 1 开始，0 为所在匹配项所有捕获组
+   * @param useLocalGrouping 是否使用局部分组，即每个匹配项的捕获组序号从 1 开始
+   * @return 匹配值
+   */
+  public static String matchFirstItem(@NonNull final CharSequence text, @NonNull final String regex, final int group, final boolean useLocalGrouping) {
+    return match(text, regex, 0, group, 0, useLocalGrouping);
   }
 
   /**
@@ -188,7 +286,7 @@ public class RegExUtil {
    * @return 匹配值
    */
   public static String matchFirstItem(@NonNull final CharSequence text, @NonNull final Pattern pattern, final int group) {
-    return match(text, pattern, 0, group);
+    return match(text, pattern, 0, group, true);
   }
 
   /**
@@ -201,7 +299,7 @@ public class RegExUtil {
    * @return 匹配值
    */
   public static String matchFirstItem(@NonNull final CharSequence text, @NonNull final String regex, final int group, final int flags) {
-    return match(text, regex, 0, group, flags);
+    return match(text, regex, 0, group, flags, true);
   }
 
   /**
@@ -213,7 +311,47 @@ public class RegExUtil {
    * @return 匹配值
    */
   public static String matchFirstItem(@NonNull final CharSequence text, @NonNull final String regex, final int group) {
-    return match(text, regex, 0, group, 0);
+    return match(text, regex, 0, group, 0, true);
+  }
+
+  /**
+   * 获取指定匹配项的第一个捕获组的匹配值
+   *
+   * @param text             需要匹配的内容
+   * @param pattern          正则
+   * @param item             匹配项，从 0 开始
+   * @param useLocalGrouping 是否使用局部分组，即每个匹配项的捕获组序号从 1 开始
+   * @return 匹配集合
+   */
+  public static String matchFirstGroup(@NonNull final CharSequence text, @NonNull final Pattern pattern, final int item, final boolean useLocalGrouping) {
+    return match(text, pattern, item, 1, useLocalGrouping);
+  }
+
+  /**
+   * 获取指定匹配项的第一个捕获组的匹配值
+   *
+   * @param text             需要匹配的内容
+   * @param regex            正则
+   * @param item             匹配项，从 0 开始
+   * @param flags            匹配模式
+   * @param useLocalGrouping 是否使用局部分组，即每个匹配项的捕获组序号从 1 开始
+   * @return 匹配集合
+   */
+  public static String matchFirstGroup(@NonNull final CharSequence text, @NonNull final String regex, final int item, final int flags, final boolean useLocalGrouping) {
+    return match(text, regex, item, 1, flags, useLocalGrouping);
+  }
+
+  /**
+   * 获取指定匹配项的第一个捕获组的匹配值
+   *
+   * @param text             需要匹配的内容
+   * @param regex            正则
+   * @param item             匹配项，从 0 开始
+   * @param useLocalGrouping 是否使用局部分组，即每个匹配项的捕获组序号从 1 开始
+   * @return 匹配集合
+   */
+  public static String matchFirstGroup(@NonNull final CharSequence text, @NonNull final String regex, final int item, final boolean useLocalGrouping) {
+    return match(text, regex, item, 1, 0, useLocalGrouping);
   }
 
   /**
@@ -225,7 +363,7 @@ public class RegExUtil {
    * @return 匹配集合
    */
   public static String matchFirstGroup(@NonNull final CharSequence text, @NonNull final Pattern pattern, final int item) {
-    return match(text, pattern, item, 1);
+    return match(text, pattern, item, 1, true);
   }
 
   /**
@@ -238,7 +376,7 @@ public class RegExUtil {
    * @return 匹配集合
    */
   public static String matchFirstGroup(@NonNull final CharSequence text, @NonNull final String regex, final int item, final int flags) {
-    return match(text, regex, item, 1, flags);
+    return match(text, regex, item, 1, flags, true);
   }
 
   /**
@@ -250,7 +388,44 @@ public class RegExUtil {
    * @return 匹配集合
    */
   public static String matchFirstGroup(@NonNull final CharSequence text, @NonNull final String regex, final int item) {
-    return match(text, regex, item, 1, 0);
+    return match(text, regex, item, 1, 0, true);
+  }
+
+  /**
+   * 获取第一个匹配项的第一个捕获组的匹配值
+   *
+   * @param text             需要匹配的内容
+   * @param pattern          正则
+   * @param useLocalGrouping 是否使用局部分组，即每个匹配项的捕获组序号从 1 开始
+   * @return 匹配集合
+   */
+  public static String matchFirstItemGroup(@NonNull final CharSequence text, @NonNull final Pattern pattern, final boolean useLocalGrouping) {
+    return match(text, pattern, 0, 1, useLocalGrouping);
+  }
+
+  /**
+   * 获取第一个匹配项的第一个捕获组的匹配值
+   *
+   * @param text             需要匹配的内容
+   * @param regex            正则
+   * @param flags            匹配模式
+   * @param useLocalGrouping 是否使用局部分组，即每个匹配项的捕获组序号从 1 开始
+   * @return 匹配集合
+   */
+  public static String matchFirstItemGroup(@NonNull final CharSequence text, @NonNull final String regex, final int flags, final boolean useLocalGrouping) {
+    return match(text, regex, 0, 1, flags, useLocalGrouping);
+  }
+
+  /**
+   * 获取第一个匹配项的第一个捕获组的匹配值
+   *
+   * @param text             需要匹配的内容
+   * @param regex            正则
+   * @param useLocalGrouping 是否使用局部分组，即每个匹配项的捕获组序号从 1 开始
+   * @return 匹配集合
+   */
+  public static String matchFirstItemGroup(@NonNull final CharSequence text, @NonNull final String regex, final boolean useLocalGrouping) {
+    return match(text, regex, 0, 1, 0, useLocalGrouping);
   }
 
   /**
@@ -261,7 +436,7 @@ public class RegExUtil {
    * @return 匹配集合
    */
   public static String matchFirstItemGroup(@NonNull final CharSequence text, @NonNull final Pattern pattern) {
-    return match(text, pattern, 0, 1);
+    return match(text, pattern, 0, 1, true);
   }
 
   /**
@@ -273,7 +448,7 @@ public class RegExUtil {
    * @return 匹配集合
    */
   public static String matchFirstItemGroup(@NonNull final CharSequence text, @NonNull final String regex, final int flags) {
-    return match(text, regex, 0, 1, flags);
+    return match(text, regex, 0, 1, flags, true);
   }
 
   /**
@@ -284,7 +459,69 @@ public class RegExUtil {
    * @return 匹配集合
    */
   public static String matchFirstItemGroup(@NonNull final CharSequence text, @NonNull final String regex) {
-    return match(text, regex, 0, 1, 0);
+    return match(text, regex, 0, 1, 0, true);
+  }
+
+  /**
+   * 获取所有匹配项的指定捕获组的匹配值集合
+   *
+   * @param text             需要匹配的内容
+   * @param pattern          正则
+   * @param group            捕获组，从 1 开始，0 为所在匹配项所有捕获组
+   * @param useLocalGrouping 是否使用局部分组，即每个匹配项的捕获组序号从 1 开始
+   * @return 匹配集合
+   */
+  public static List<String> matchAllItems(@NonNull final CharSequence text, @NonNull final Pattern pattern, final int group, final boolean useLocalGrouping) {
+    if (group < 0) {
+      throw new IllegalArgumentException("Group: should be greater than 0");
+    }
+    List<String> resultList = new ArrayList<>();
+    Matcher matcher = pattern.matcher(text);
+    while (matcher.find()) {
+      // 使用局部分组模式
+      if (useLocalGrouping && group > 0) {
+        int localGroup = 0;
+
+        for (int j = 1; j <= matcher.groupCount(); j++) {
+          if (matcher.group(j) != null) {
+            localGroup++;
+            if (localGroup == group) {
+              resultList.add(matcher.group(j));
+            }
+          }
+        }
+      } else {
+        resultList.add(matcher.group(group));
+      }
+    }
+    return resultList;
+  }
+
+  /**
+   * 获取所有匹配项的指定捕获组的匹配值集合
+   *
+   * @param text             需要匹配的内容
+   * @param regex            正则
+   * @param group            捕获组，从 1 开始，0 为所在匹配项所有捕获组
+   * @param flags            匹配模式
+   * @param useLocalGrouping 是否使用局部分组，即每个匹配项的捕获组序号从 1 开始
+   * @return 匹配集合
+   */
+  public static List<String> matchAllItems(@NonNull final CharSequence text, @NonNull final String regex, final int group, final int flags, final boolean useLocalGrouping) {
+    return matchAllItems(text, Pattern.compile(regex, flags), group, useLocalGrouping);
+  }
+
+  /**
+   * 获取所有匹配项的指定捕获组的匹配值集合
+   *
+   * @param text             需要匹配的内容
+   * @param regex            正则
+   * @param group            捕获组，从 1 开始，0 为所在匹配项所有捕获组
+   * @param useLocalGrouping 是否使用局部分组，即每个匹配项的捕获组序号从 1 开始
+   * @return 匹配集合
+   */
+  public static List<String> matchAllItems(@NonNull final CharSequence text, @NonNull final String regex, final int group, final boolean useLocalGrouping) {
+    return matchAllItems(text, regex, group, 0, useLocalGrouping);
   }
 
   /**
@@ -296,15 +533,7 @@ public class RegExUtil {
    * @return 匹配集合
    */
   public static List<String> matchAllItems(@NonNull final CharSequence text, @NonNull final Pattern pattern, final int group) {
-    if (group < 0) {
-      throw new IllegalArgumentException("Group: should be greater than 0");
-    }
-    List<String> resultList = new ArrayList<>();
-    Matcher matcher = pattern.matcher(text);
-    while (matcher.find()) {
-      resultList.add(matcher.group(group));
-    }
-    return resultList;
+    return matchAllItems(text, pattern, group, true);
   }
 
   /**
@@ -317,7 +546,7 @@ public class RegExUtil {
    * @return 匹配集合
    */
   public static List<String> matchAllItems(@NonNull final CharSequence text, @NonNull final String regex, final int group, final int flags) {
-    return matchAllItems(text, Pattern.compile(regex, flags), group);
+    return matchAllItems(text, Pattern.compile(regex, flags), group, true);
   }
 
   /**
@@ -329,7 +558,7 @@ public class RegExUtil {
    * @return 匹配集合
    */
   public static List<String> matchAllItems(@NonNull final CharSequence text, @NonNull final String regex, final int group) {
-    return matchAllItems(text, regex, group, 0);
+    return matchAllItems(text, regex, group, 0, true);
   }
 
   /**
@@ -383,7 +612,10 @@ public class RegExUtil {
     while (matcher.find()) {
       if (item == i) {
         for (int j = 1; j <= matcher.groupCount(); j++) {
-          resultList.add(matcher.group(j));
+          String groupVal = matcher.group(j);
+          if (groupVal != null) {
+            resultList.add(groupVal);
+          }
         }
         return resultList;
       }
@@ -420,21 +652,67 @@ public class RegExUtil {
   /**
    * 获取所有匹配项的所有捕获组的匹配值集合
    *
+   * @param text              需要匹配的内容
+   * @param pattern           正则
+   * @param useMatchIfNoGroup 如果没有捕获组是否使用匹配项本身
+   * @return 匹配集合
+   */
+  public static List<String> matchAll(@NonNull final CharSequence text, @NonNull final Pattern pattern, final boolean useMatchIfNoGroup) {
+    List<String> resultList = new ArrayList<>();
+    Matcher matcher = pattern.matcher(text);
+    while (matcher.find()) {
+      int groupCount = matcher.groupCount();
+      // 使用匹配项本身
+      if (useMatchIfNoGroup) {
+        resultList.add(matcher.group(0));
+      } else {
+        int group = 1;
+        while (group <= groupCount) {
+          String groupVal = matcher.group(group);
+          if (groupVal != null) {
+            resultList.add(groupVal);
+          }
+          group++;
+        }
+      }
+    }
+    return resultList;
+  }
+
+  /**
+   * 获取所有匹配项的所有捕获组的匹配值集合
+   *
+   * @param text              需要匹配的内容
+   * @param regex             正则
+   * @param flags             匹配模式
+   * @param useMatchIfNoGroup 如果没有捕获组是否使用匹配项本身
+   * @return 匹配集合
+   */
+  public static List<String> matchAll(@NonNull final CharSequence text, @NonNull final String regex, final int flags, final boolean useMatchIfNoGroup) {
+    return matchAll(text, Pattern.compile(regex, flags), useMatchIfNoGroup);
+  }
+
+  /**
+   * 获取所有匹配项的所有捕获组的匹配值集合
+   *
+   * @param text              需要匹配的内容
+   * @param regex             正则
+   * @param useMatchIfNoGroup 如果没有捕获组是否使用匹配项本身
+   * @return 匹配集合
+   */
+  public static List<String> matchAll(@NonNull final CharSequence text, @NonNull final String regex, final boolean useMatchIfNoGroup) {
+    return matchAll(text, Pattern.compile(regex), useMatchIfNoGroup);
+  }
+
+  /**
+   * 获取所有匹配项的所有捕获组的匹配值集合
+   *
    * @param text    需要匹配的内容
    * @param pattern 正则
    * @return 匹配集合
    */
   public static List<String> matchAll(@NonNull final CharSequence text, @NonNull final Pattern pattern) {
-    List<String> resultList = new ArrayList<>();
-    Matcher matcher = pattern.matcher(text);
-    while (matcher.find()) {
-      int group = 0;
-      while (group <= matcher.groupCount()) {
-        resultList.add(matcher.group(group));
-        group++;
-      }
-    }
-    return resultList;
+    return matchAll(text, pattern, false);
   }
 
   /**
@@ -446,7 +724,7 @@ public class RegExUtil {
    * @return 匹配集合
    */
   public static List<String> matchAll(@NonNull final CharSequence text, @NonNull final String regex, final int flags) {
-    return matchAll(text, Pattern.compile(regex, flags));
+    return matchAll(text, Pattern.compile(regex, flags), false);
   }
 
   /**
@@ -457,20 +735,21 @@ public class RegExUtil {
    * @return 匹配集合
    */
   public static List<String> matchAll(@NonNull final CharSequence text, @NonNull final String regex) {
-    return matchAll(text, Pattern.compile(regex));
+    return matchAll(text, Pattern.compile(regex), false);
   }
 
   /**
-   * 替换指定匹配项的第一个捕获组的匹配值
+   * 替换指定匹配项的指定捕获组的匹配值
    *
-   * @param text        需要替换的内容
-   * @param pattern     正则
-   * @param replacement 替换值
-   * @param item        匹配项，从 0 开始
-   * @param group       捕获组，从 1 开始，0 为所在匹配项所有捕获组
+   * @param text             需要替换的内容
+   * @param pattern          正则
+   * @param replacement      替换值
+   * @param item             匹配项，从 0 开始
+   * @param group            捕获组，从 1 开始，0 为所在匹配项所有捕获组
+   * @param useLocalGrouping 是否使用局部分组，即每个匹配项的捕获组序号从 1 开始
    * @return 替换后的内容
    */
-  public static String replace(@NonNull final String text, @NonNull final Pattern pattern, @NonNull final String replacement, final int item, final int group) {
+  public static String replace(@NonNull final String text, @NonNull final Pattern pattern, @NonNull final String replacement, final int item, final int group, final boolean useLocalGrouping) {
     if (item < 0) {
       throw new IllegalArgumentException("Item: should be greater than 0");
     }
@@ -480,14 +759,74 @@ public class RegExUtil {
     Matcher matcher = pattern.matcher(text);
     int i = 0;
     while (matcher.find()) {
-      if (i == item) {
-        int startIndex = matcher.start(group);
-        int endIndex = matcher.end(group);
-        return text.substring(0, startIndex) + replacement + text.substring(endIndex);
+      if (item == i) {
+        // 使用局部分组模式
+        if (useLocalGrouping && group == 0) {
+          int localGroup = 0;
+          for (int j = 1; j <= matcher.groupCount(); j++) {
+            if (matcher.group(j) != null) {
+              localGroup++;
+              if (localGroup == group) {
+                int startIndex = matcher.start(j);
+                int endIndex = matcher.end(j);
+                return text.substring(0, startIndex) + replacement + text.substring(endIndex);
+              }
+            }
+          }
+        } else {
+          int startIndex = matcher.start(group);
+          int endIndex = matcher.end(group);
+          return text.substring(0, startIndex) + replacement + text.substring(endIndex);
+        }
       }
       i++;
     }
     return null;
+  }
+
+  /**
+   * 替换指定匹配项的指定捕获组的匹配值
+   *
+   * @param text             需要替换的内容
+   * @param regex            正则
+   * @param replacement      替换值
+   * @param item             匹配项，从 0 开始
+   * @param group            捕获组，从 1 开始，0 为所在匹配项所有捕获组
+   * @param flags            匹配模式
+   * @param useLocalGrouping 是否使用局部分组，即每个匹配项的捕获组序号从 1 开始
+   * @return 替换后的内容
+   */
+  public static String replace(@NonNull final String text, @NonNull final String regex, @NonNull final String replacement, final int item, final int group, final int flags, final boolean useLocalGrouping) {
+    return replace(text, Pattern.compile(regex, flags), replacement, item, group, useLocalGrouping);
+  }
+
+  /**
+   * 替换指定匹配项的指定捕获组的匹配值
+   *
+   * @param text             需要替换的内容
+   * @param regex            正则
+   * @param replacement      替换值
+   * @param item             匹配项，从 0 开始
+   * @param group            捕获组，从 1 开始，0 为所在匹配项所有捕获组
+   * @param useLocalGrouping 是否使用局部分组，即每个匹配项的捕获组序号从 1 开始
+   * @return 替换后的内容
+   */
+  public static String replace(@NonNull final String text, @NonNull final String regex, @NonNull final String replacement, final int item, final int group, final boolean useLocalGrouping) {
+    return replace(text, Pattern.compile(regex), replacement, item, group, useLocalGrouping);
+  }
+
+  /**
+   * 替换指定匹配项的指定捕获组的匹配值
+   *
+   * @param text        需要替换的内容
+   * @param pattern     正则
+   * @param replacement 替换值
+   * @param item        匹配项，从 0 开始
+   * @param group       捕获组，从 1 开始，0 为所在匹配项所有捕获组
+   * @return 替换后的内容
+   */
+  public static String replace(@NonNull final String text, @NonNull final Pattern pattern, @NonNull final String replacement, final int item, final int group) {
+    return replace(text, pattern, replacement, item, group, true);
   }
 
   /**
@@ -502,11 +841,11 @@ public class RegExUtil {
    * @return 替换后的内容
    */
   public static String replace(@NonNull final String text, @NonNull final String regex, @NonNull final String replacement, final int item, final int group, final int flags) {
-    return replace(text, Pattern.compile(regex, flags), replacement, item, group);
+    return replace(text, Pattern.compile(regex, flags), replacement, item, group, true);
   }
 
   /**
-   * 替换指定匹配项的第一个捕获组的匹配值
+   * 替换指定匹配项的指定捕获组的匹配值
    *
    * @param text        需要替换的内容
    * @param regex       正则
@@ -516,7 +855,50 @@ public class RegExUtil {
    * @return 替换后的内容
    */
   public static String replace(@NonNull final String text, @NonNull final String regex, @NonNull final String replacement, final int item, final int group) {
-    return replace(text, Pattern.compile(regex), replacement, item, group);
+    return replace(text, Pattern.compile(regex), replacement, item, group, true);
+  }
+
+  /**
+   * 替换第一个匹配项的指定捕获组的匹配值
+   *
+   * @param text             需要替换的内容
+   * @param pattern          正则
+   * @param replacement      替换值
+   * @param group            捕获组，从 1 开始，0 为所在匹配项所有捕获组
+   * @param useLocalGrouping 是否使用局部分组，即每个匹配项的捕获组序号从 1 开始
+   * @return 替换后的内容
+   */
+  public static String replaceFirstItem(@NonNull final String text, @NonNull final Pattern pattern, @NonNull final String replacement, final int group, final boolean useLocalGrouping) {
+    return replace(text, pattern, replacement, 0, group, useLocalGrouping);
+  }
+
+  /**
+   * 替换第一个匹配项的指定捕获组的匹配值
+   *
+   * @param text             需要替换的内容
+   * @param regex            正则
+   * @param replacement      替换值
+   * @param group            捕获组，从 1 开始，0 为所在匹配项所有捕获组
+   * @param flags            匹配模式
+   * @param useLocalGrouping 是否使用局部分组，即每个匹配项的捕获组序号从 1 开始
+   * @return 替换后的内容
+   */
+  public static String replaceFirstItem(@NonNull final String text, @NonNull final String regex, @NonNull final String replacement, final int group, final int flags, final boolean useLocalGrouping) {
+    return replace(text, Pattern.compile(regex, flags), replacement, 0, group, useLocalGrouping);
+  }
+
+  /**
+   * 替换第一个匹配项的指定捕获组的匹配值
+   *
+   * @param text             需要替换的内容
+   * @param regex            正则
+   * @param replacement      替换值
+   * @param group            捕获组，从 1 开始，0 为所在匹配项所有捕获组
+   * @param useLocalGrouping 是否使用局部分组，即每个匹配项的捕获组序号从 1 开始
+   * @return 替换后的内容
+   */
+  public static String replaceFirstItem(@NonNull final String text, @NonNull final String regex, @NonNull final String replacement, final int group, final boolean useLocalGrouping) {
+    return replace(text, Pattern.compile(regex), replacement, 0, group, useLocalGrouping);
   }
 
   /**
@@ -529,7 +911,7 @@ public class RegExUtil {
    * @return 替换后的内容
    */
   public static String replaceFirstItem(@NonNull final String text, @NonNull final Pattern pattern, @NonNull final String replacement, final int group) {
-    return replace(text, pattern, replacement, 0, group);
+    return replace(text, pattern, replacement, 0, group, true);
   }
 
   /**
@@ -543,7 +925,7 @@ public class RegExUtil {
    * @return 替换后的内容
    */
   public static String replaceFirstItem(@NonNull final String text, @NonNull final String regex, @NonNull final String replacement, final int group, final int flags) {
-    return replace(text, Pattern.compile(regex, flags), replacement, 0, group);
+    return replace(text, Pattern.compile(regex, flags), replacement, 0, group, true);
   }
 
   /**
@@ -556,7 +938,50 @@ public class RegExUtil {
    * @return 替换后的内容
    */
   public static String replaceFirstItem(@NonNull final String text, @NonNull final String regex, @NonNull final String replacement, final int group) {
-    return replace(text, Pattern.compile(regex), replacement, 0, group);
+    return replace(text, Pattern.compile(regex), replacement, 0, group, true);
+  }
+
+  /**
+   * 替换指定匹配项的第一个捕获组的匹配值
+   *
+   * @param text             需要替换的内容
+   * @param pattern          正则
+   * @param replacement      替换值
+   * @param item             匹配项，从 0 开始
+   * @param useLocalGrouping 是否使用局部分组，即每个匹配项的捕获组序号从 1 开始
+   * @return 替换后的内容
+   */
+  public static String replaceFirstGroup(@NonNull final String text, @NonNull final Pattern pattern, @NonNull final String replacement, final int item, final boolean useLocalGrouping) {
+    return replace(text, pattern, replacement, item, 1, useLocalGrouping);
+  }
+
+  /**
+   * 替换指定匹配项的第一个捕获组的匹配值
+   *
+   * @param text             需要替换的内容
+   * @param regex            正则
+   * @param replacement      替换值
+   * @param item             匹配项，从 0 开始
+   * @param flags            匹配模式
+   * @param useLocalGrouping 是否使用局部分组，即每个匹配项的捕获组序号从 1 开始
+   * @return 替换后的内容
+   */
+  public static String replaceFirstGroup(@NonNull final String text, @NonNull final String regex, @NonNull final String replacement, final int item, final int flags, final boolean useLocalGrouping) {
+    return replace(text, Pattern.compile(regex, flags), replacement, item, 1, useLocalGrouping);
+  }
+
+  /**
+   * 替换指定匹配项的第一个捕获组的匹配值
+   *
+   * @param text             需要替换的内容
+   * @param regex            正则
+   * @param replacement      替换值
+   * @param item             匹配项，从 0 开始
+   * @param useLocalGrouping 是否使用局部分组，即每个匹配项的捕获组序号从 1 开始
+   * @return 替换后的内容
+   */
+  public static String replaceFirstGroup(@NonNull final String text, @NonNull final String regex, @NonNull final String replacement, final int item, final boolean useLocalGrouping) {
+    return replace(text, Pattern.compile(regex), replacement, item, 1, useLocalGrouping);
   }
 
   /**
@@ -569,7 +994,7 @@ public class RegExUtil {
    * @return 替换后的内容
    */
   public static String replaceFirstGroup(@NonNull final String text, @NonNull final Pattern pattern, @NonNull final String replacement, final int item) {
-    return replace(text, pattern, replacement, item, 1);
+    return replace(text, pattern, replacement, item, 1, true);
   }
 
   /**
@@ -583,7 +1008,7 @@ public class RegExUtil {
    * @return 替换后的内容
    */
   public static String replaceFirstGroup(@NonNull final String text, @NonNull final String regex, @NonNull final String replacement, final int item, final int flags) {
-    return replace(text, Pattern.compile(regex, flags), replacement, item, 1);
+    return replace(text, Pattern.compile(regex, flags), replacement, item, 1, true);
   }
 
   /**
@@ -596,7 +1021,47 @@ public class RegExUtil {
    * @return 替换后的内容
    */
   public static String replaceFirstGroup(@NonNull final String text, @NonNull final String regex, @NonNull final String replacement, final int item) {
-    return replace(text, Pattern.compile(regex), replacement, item, 1);
+    return replace(text, Pattern.compile(regex), replacement, item, 1, true);
+  }
+
+  /**
+   * 替换第一个匹配项的第一个捕获组的匹配值
+   *
+   * @param text             需要替换的内容
+   * @param pattern          正则
+   * @param replacement      替换值
+   * @param useLocalGrouping 是否使用局部分组，即每个匹配项的捕获组序号从 1 开始
+   * @return 替换后的内容
+   */
+  public static String replaceFirstItemGroup(@NonNull final String text, @NonNull final Pattern pattern, @NonNull final String replacement, final boolean useLocalGrouping) {
+    return replace(text, pattern, replacement, 0, 1, useLocalGrouping);
+  }
+
+  /**
+   * 替换第一个匹配项的第一个捕获组的匹配值
+   *
+   * @param text             需要替换的内容
+   * @param regex            正则
+   * @param replacement      替换值
+   * @param flags            匹配模式
+   * @param useLocalGrouping 是否使用局部分组，即每个匹配项的捕获组序号从 1 开始
+   * @return 替换后的内容
+   */
+  public static String replaceFirstItemGroup(@NonNull final String text, @NonNull final String regex, @NonNull final String replacement, final int flags, final boolean useLocalGrouping) {
+    return replace(text, Pattern.compile(regex, flags), replacement, 0, 1, useLocalGrouping);
+  }
+
+  /**
+   * 替换第一个匹配项的第一个捕获组的匹配值
+   *
+   * @param text             需要替换的内容
+   * @param regex            正则
+   * @param replacement      替换值
+   * @param useLocalGrouping 是否使用局部分组，即每个匹配项的捕获组序号从 1 开始
+   * @return 替换后的内容
+   */
+  public static String replaceFirstItemGroup(@NonNull final String text, @NonNull final String regex, @NonNull final String replacement, final boolean useLocalGrouping) {
+    return replace(text, Pattern.compile(regex), replacement, 0, 1, useLocalGrouping);
   }
 
   /**
@@ -608,7 +1073,7 @@ public class RegExUtil {
    * @return 替换后的内容
    */
   public static String replaceFirstItemGroup(@NonNull final String text, @NonNull final Pattern pattern, @NonNull final String replacement) {
-    return replace(text, pattern, replacement, 0, 1);
+    return replace(text, pattern, replacement, 0, 1, true);
   }
 
   /**
@@ -621,7 +1086,7 @@ public class RegExUtil {
    * @return 替换后的内容
    */
   public static String replaceFirstItemGroup(@NonNull final String text, @NonNull final String regex, @NonNull final String replacement, final int flags) {
-    return replace(text, Pattern.compile(regex, flags), replacement, 0, 1);
+    return replace(text, Pattern.compile(regex, flags), replacement, 0, 1, true);
   }
 
   /**
@@ -633,19 +1098,20 @@ public class RegExUtil {
    * @return 替换后的内容
    */
   public static String replaceFirstItemGroup(@NonNull final String text, @NonNull final String regex, @NonNull final String replacement) {
-    return replace(text, Pattern.compile(regex), replacement, 0, 1);
+    return replace(text, Pattern.compile(regex), replacement, 0, 1, true);
   }
 
   /**
    * 替换所有匹配项的指定捕获组的匹配值
    *
-   * @param text        需要替换的内容
-   * @param pattern     正则
-   * @param replacement 替换值
-   * @param group       捕获组，从 1 开始，0 为所在匹配项所有捕获组
+   * @param text             需要替换的内容
+   * @param pattern          正则
+   * @param replacement      替换值
+   * @param group            捕获组，从 1 开始，0 为所在匹配项所有捕获组
+   * @param useLocalGrouping 是否使用局部分组，即每个匹配项的捕获组序号从 1 开始
    * @return 替换后的内容
    */
-  public static String replaceAllItems(@NonNull final String text, @NonNull final Pattern pattern, @NonNull final String replacement, final int group) {
+  public static String replaceAllItems(@NonNull final String text, @NonNull final Pattern pattern, @NonNull final String replacement, final int group, final boolean useLocalGrouping) {
     if (group < 0) {
       throw new IllegalArgumentException("Group: should be greater than 0");
     }
@@ -653,9 +1119,24 @@ public class RegExUtil {
     List<long[]> startEndIndexList = new ArrayList<>();
     Matcher matcher = pattern.matcher(text);
     while (matcher.find()) {
-      long start = matcher.start(group);
-      long end = matcher.end(group);
-      startEndIndexList.add(new long[]{start, end});
+      // 使用局部分组模式
+      if (useLocalGrouping && group > 0) {
+        int localGroup = 0;
+        for (int j = 1; j <= matcher.groupCount(); j++) {
+          if (matcher.group(j) != null) {
+            localGroup++;
+            if (localGroup == group) {
+              long start = matcher.start(j);
+              long end = matcher.end(j);
+              startEndIndexList.add(new long[]{start, end});
+            }
+          }
+        }
+      } else {
+        long start = matcher.start(group);
+        long end = matcher.end(group);
+        startEndIndexList.add(new long[]{start, end});
+      }
     }
     // 构建替换后的字符串
     StringBuilder result = new StringBuilder();
@@ -678,6 +1159,48 @@ public class RegExUtil {
   /**
    * 替换所有匹配项的指定捕获组的匹配值
    *
+   * @param text             需要替换的内容
+   * @param regex            正则
+   * @param replacement      替换值
+   * @param group            捕获组，从 1 开始，0 为所在匹配项所有捕获组
+   * @param flags            匹配模式
+   * @param useLocalGrouping 是否使用局部分组，即每个匹配项的捕获组序号从 1 开始
+   * @return 替换后的内容
+   */
+  public static String replaceAllItems(@NonNull final String text, @NonNull final String regex, @NonNull final String replacement, final int group, final int flags, final boolean useLocalGrouping) {
+    return replaceAllItems(text, Pattern.compile(regex, flags), replacement, group, useLocalGrouping);
+  }
+
+  /**
+   * 替换所有匹配项的指定捕获组的匹配值
+   *
+   * @param text             需要替换的内容
+   * @param regex            正则
+   * @param replacement      替换值
+   * @param group            捕获组，从 1 开始，0 为所在匹配项所有捕获组
+   * @param useLocalGrouping 是否使用局部分组，即每个匹配项的捕获组序号从 1 开始
+   * @return 替换后的内容
+   */
+  public static String replaceAllItems(@NonNull final String text, @NonNull final String regex, @NonNull final String replacement, final int group, final boolean useLocalGrouping) {
+    return replaceAllItems(text, Pattern.compile(regex), replacement, group, useLocalGrouping);
+  }
+
+  /**
+   * 替换所有匹配项的指定捕获组的匹配值
+   *
+   * @param text        需要替换的内容
+   * @param pattern     正则
+   * @param replacement 替换值
+   * @param group       捕获组，从 1 开始，0 为所在匹配项所有捕获组
+   * @return 替换后的内容
+   */
+  public static String replaceAllItems(@NonNull final String text, @NonNull final Pattern pattern, @NonNull final String replacement, final int group) {
+    return replaceAllItems(text, pattern, replacement, group, true);
+  }
+
+  /**
+   * 替换所有匹配项的指定捕获组的匹配值
+   *
    * @param text        需要替换的内容
    * @param regex       正则
    * @param replacement 替换值
@@ -686,7 +1209,7 @@ public class RegExUtil {
    * @return 替换后的内容
    */
   public static String replaceAllItems(@NonNull final String text, @NonNull final String regex, @NonNull final String replacement, final int group, final int flags) {
-    return replaceAllItems(text, Pattern.compile(regex, flags), replacement, group);
+    return replaceAllItems(text, Pattern.compile(regex, flags), replacement, group, true);
   }
 
   /**
@@ -699,7 +1222,47 @@ public class RegExUtil {
    * @return 替换后的内容
    */
   public static String replaceAllItems(@NonNull final String text, @NonNull final String regex, @NonNull final String replacement, final int group) {
-    return replaceAllItems(text, Pattern.compile(regex), replacement, group);
+    return replaceAllItems(text, Pattern.compile(regex), replacement, group, true);
+  }
+
+  /**
+   * 替换所有匹配项的第一个捕获组的匹配值
+   *
+   * @param text             需要替换的内容
+   * @param pattern          正则
+   * @param replacement      替换值
+   * @param useLocalGrouping 是否使用局部分组，即每个匹配项的捕获组序号从 1 开始
+   * @return 替换后的内容
+   */
+  public static String replaceAllItemsFirstGroup(@NonNull final String text, @NonNull final Pattern pattern, @NonNull final String replacement, final boolean useLocalGrouping) {
+    return replaceAllItems(text, pattern, replacement, 1, useLocalGrouping);
+  }
+
+  /**
+   * 替换所有匹配项的第一个捕获组的匹配值
+   *
+   * @param text             需要替换的内容
+   * @param regex            正则
+   * @param replacement      替换值
+   * @param flags            匹配模式
+   * @param useLocalGrouping 是否使用局部分组，即每个匹配项的捕获组序号从 1 开始
+   * @return 替换后的内容
+   */
+  public static String replaceAllItemsFirstGroup(@NonNull final String text, @NonNull final String regex, @NonNull final String replacement, final int flags, final boolean useLocalGrouping) {
+    return replaceAllItems(text, Pattern.compile(regex, flags), replacement, 1, useLocalGrouping);
+  }
+
+  /**
+   * 替换所有匹配项的第一个捕获组的匹配值
+   *
+   * @param text             需要替换的内容
+   * @param regex            正则
+   * @param replacement      替换值
+   * @param useLocalGrouping 是否使用局部分组，即每个匹配项的捕获组序号从 1 开始
+   * @return 替换后的内容
+   */
+  public static String replaceAllItemsFirstGroup(@NonNull final String text, @NonNull final String regex, @NonNull final String replacement, final boolean useLocalGrouping) {
+    return replaceAllItems(text, Pattern.compile(regex), replacement, 1, useLocalGrouping);
   }
 
   /**
@@ -711,7 +1274,7 @@ public class RegExUtil {
    * @return 替换后的内容
    */
   public static String replaceAllItemsFirstGroup(@NonNull final String text, @NonNull final Pattern pattern, @NonNull final String replacement) {
-    return replaceAllItems(text, pattern, replacement, 1);
+    return replaceAllItems(text, pattern, replacement, 1, true);
   }
 
   /**
@@ -724,7 +1287,7 @@ public class RegExUtil {
    * @return 替换后的内容
    */
   public static String replaceAllItemsFirstGroup(@NonNull final String text, @NonNull final String regex, @NonNull final String replacement, final int flags) {
-    return replaceAllItems(text, Pattern.compile(regex, flags), replacement, 1);
+    return replaceAllItems(text, Pattern.compile(regex, flags), replacement, 1, true);
   }
 
   /**
@@ -736,7 +1299,7 @@ public class RegExUtil {
    * @return 替换后的内容
    */
   public static String replaceAllItemsFirstGroup(@NonNull final String text, @NonNull final String regex, @NonNull final String replacement) {
-    return replaceAllItems(text, Pattern.compile(regex), replacement, 1);
+    return replaceAllItems(text, Pattern.compile(regex), replacement, 1, true);
   }
 
   /**
@@ -814,20 +1377,32 @@ public class RegExUtil {
   /**
    * 替换所有匹配项的所有捕获组的匹配值
    *
-   * @param text        需要替换的内容
-   * @param pattern     正则
-   * @param replacement 替换值
+   * @param text              需要替换的内容
+   * @param pattern           正则
+   * @param replacement       替换值
+   * @param useMatchIfNoGroup 如果没有捕获组是否使用匹配项本身
    * @return 替换后的内容
    */
-  public static String replaceAll(@NonNull final String text, @NonNull final Pattern pattern, @NonNull final String replacement) {
+  public static String replaceAll(@NonNull final String text, @NonNull final Pattern pattern, @NonNull final String replacement, final boolean useMatchIfNoGroup) {
     // 每个匹配项的所有捕获组的匹配值的起始和结束下标
     List<long[]> startEndIndexList = new ArrayList<>();
     Matcher matcher = pattern.matcher(text);
     while (matcher.find()) {
-      for (int j = 1; j <= matcher.groupCount(); j++) {
-        long start = matcher.start(j);
-        long end = matcher.end(j);
+      int groupCount = matcher.groupCount();
+      // 使用匹配项本身
+      if (useMatchIfNoGroup) {
+        long start = matcher.start();
+        long end = matcher.end();
         startEndIndexList.add(new long[]{start, end});
+      } else {
+        for (int j = 1; j <= groupCount; j++) {
+          long start = matcher.start(j);
+          if (start == -1) {
+            continue;
+          }
+          long end = matcher.end(j);
+          startEndIndexList.add(new long[]{start, end});
+        }
       }
     }
     // 构建替换后的字符串
@@ -851,6 +1426,45 @@ public class RegExUtil {
   /**
    * 替换所有匹配项的所有捕获组的匹配值
    *
+   * @param text              需要替换的内容
+   * @param regex             正则
+   * @param replacement       替换值
+   * @param flags             匹配模式
+   * @param useMatchIfNoGroup 如果没有捕获组是否使用匹配项本身
+   * @return 替换后的内容
+   */
+  public static String replaceAll(@NonNull final String text, @NonNull final String regex, @NonNull final String replacement, final int flags, final boolean useMatchIfNoGroup) {
+    return replaceAll(text, Pattern.compile(regex, flags), replacement, useMatchIfNoGroup);
+  }
+
+  /**
+   * 替换所有匹配项的所有捕获组的匹配值
+   *
+   * @param text              需要替换的内容
+   * @param regex             正则
+   * @param replacement       替换值
+   * @param useMatchIfNoGroup 如果没有捕获组是否使用匹配项本身
+   * @return 替换后的内容
+   */
+  public static String replaceAll(@NonNull final String text, @NonNull final String regex, @NonNull final String replacement, final boolean useMatchIfNoGroup) {
+    return replaceAll(text, Pattern.compile(regex), replacement, useMatchIfNoGroup);
+  }
+
+  /**
+   * 替换所有匹配项的所有捕获组的匹配值
+   *
+   * @param text        需要替换的内容
+   * @param pattern     正则
+   * @param replacement 替换值
+   * @return 替换后的内容
+   */
+  public static String replaceAll(@NonNull final String text, @NonNull final Pattern pattern, @NonNull final String replacement) {
+    return replaceAll(text, pattern, replacement, false);
+  }
+
+  /**
+   * 替换所有匹配项的所有捕获组的匹配值
+   *
    * @param text        需要替换的内容
    * @param regex       正则
    * @param replacement 替换值
@@ -858,7 +1472,7 @@ public class RegExUtil {
    * @return 替换后的内容
    */
   public static String replaceAll(@NonNull final String text, @NonNull final String regex, @NonNull final String replacement, final int flags) {
-    return replaceAll(text, Pattern.compile(regex, flags), replacement);
+    return replaceAll(text, Pattern.compile(regex, flags), replacement, false);
   }
 
   /**
@@ -870,7 +1484,50 @@ public class RegExUtil {
    * @return 替换后的内容
    */
   public static String replaceAll(@NonNull final String text, @NonNull final String regex, @NonNull final String replacement) {
-    return replaceAll(text, Pattern.compile(regex), replacement);
+    return replaceAll(text, Pattern.compile(regex), replacement, false);
+  }
+
+  /**
+   * 删除指定匹配项的第一个捕获组的匹配值
+   *
+   * @param text             需要删除的内容
+   * @param pattern          正则
+   * @param item             匹配项，从 0 开始
+   * @param group            捕获组，从 1 开始，0 为所在匹配项所有捕获组
+   * @param useLocalGrouping 是否使用局部分组，即每个匹配项的捕获组序号从 1 开始
+   * @return 替换后的内容
+   */
+  public static String remove(@NonNull final String text, @NonNull final Pattern pattern, final int item, final int group, final boolean useLocalGrouping) {
+    return replace(text, pattern, "", item, group, useLocalGrouping);
+  }
+
+  /**
+   * 删除指定匹配项的指定捕获组的匹配值
+   *
+   * @param text             需要删除的内容
+   * @param regex            正则
+   * @param item             匹配项，从 0 开始
+   * @param group            捕获组，从 1 开始，0 为所在匹配项所有捕获组
+   * @param flags            匹配模式
+   * @param useLocalGrouping 是否使用局部分组，即每个匹配项的捕获组序号从 1 开始
+   * @return 替换后的内容
+   */
+  public static String remove(@NonNull final String text, @NonNull final String regex, final int item, final int group, final int flags, final boolean useLocalGrouping) {
+    return replace(text, regex, "", item, group, flags, useLocalGrouping);
+  }
+
+  /**
+   * 删除指定匹配项的第一个捕获组的匹配值
+   *
+   * @param text             需要删除的内容
+   * @param regex            正则
+   * @param item             匹配项，从 0 开始
+   * @param group            捕获组，从 1 开始，0 为所在匹配项所有捕获组
+   * @param useLocalGrouping 是否使用局部分组，即每个匹配项的捕获组序号从 1 开始
+   * @return 替换后的内容
+   */
+  public static String remove(@NonNull final String text, @NonNull final String regex, final int item, final int group, final boolean useLocalGrouping) {
+    return replace(text, regex, "", item, group, useLocalGrouping);
   }
 
   /**
@@ -883,7 +1540,7 @@ public class RegExUtil {
    * @return 替换后的内容
    */
   public static String remove(@NonNull final String text, @NonNull final Pattern pattern, final int item, final int group) {
-    return replace(text, pattern, "", item, group);
+    return replace(text, pattern, "", item, group, true);
   }
 
   /**
@@ -897,7 +1554,7 @@ public class RegExUtil {
    * @return 替换后的内容
    */
   public static String remove(@NonNull final String text, @NonNull final String regex, final int item, final int group, final int flags) {
-    return replace(text, regex, "", item, group, flags);
+    return replace(text, regex, "", item, group, flags, true);
   }
 
   /**
@@ -910,7 +1567,47 @@ public class RegExUtil {
    * @return 替换后的内容
    */
   public static String remove(@NonNull final String text, @NonNull final String regex, final int item, final int group) {
-    return replace(text, regex, "", item, group);
+    return replace(text, regex, "", item, group, true);
+  }
+
+  /**
+   * 删除第一个匹配项的指定捕获组的匹配值
+   *
+   * @param text             需要删除的内容
+   * @param pattern          正则
+   * @param group            捕获组，从 1 开始，0 为所在匹配项所有捕获组
+   * @param useLocalGrouping 是否使用局部分组，即每个匹配项的捕获组序号从 1 开始
+   * @return 删除后的内容
+   */
+  public static String removeFirstItem(@NonNull final String text, @NonNull final Pattern pattern, final int group, final boolean useLocalGrouping) {
+    return replaceFirstItem(text, pattern, "", group, useLocalGrouping);
+  }
+
+  /**
+   * 删除第一个匹配项的指定捕获组的匹配值
+   *
+   * @param text             需要删除的内容
+   * @param regex            正则
+   * @param group            捕获组，从 1 开始，0 为所在匹配项所有捕获组
+   * @param flags            匹配模式
+   * @param useLocalGrouping 是否使用局部分组，即每个匹配项的捕获组序号从 1 开始
+   * @return 删除后的内容
+   */
+  public static String removeFirstItem(@NonNull final String text, @NonNull final String regex, final int group, final int flags, final boolean useLocalGrouping) {
+    return replaceFirstItem(text, regex, "", group, flags, useLocalGrouping);
+  }
+
+  /**
+   * 删除第一个匹配项的指定捕获组的匹配值
+   *
+   * @param text             需要删除的内容
+   * @param regex            正则
+   * @param group            捕获组，从 1 开始，0 为所在匹配项所有捕获组
+   * @param useLocalGrouping 是否使用局部分组，即每个匹配项的捕获组序号从 1 开始
+   * @return 删除后的内容
+   */
+  public static String removeFirstItem(@NonNull final String text, @NonNull final String regex, final int group, final boolean useLocalGrouping) {
+    return replaceFirstItem(text, regex, "", group, useLocalGrouping);
   }
 
   /**
@@ -922,7 +1619,7 @@ public class RegExUtil {
    * @return 删除后的内容
    */
   public static String removeFirstItem(@NonNull final String text, @NonNull final Pattern pattern, final int group) {
-    return replaceFirstItem(text, pattern, "", group);
+    return replaceFirstItem(text, pattern, "", group, true);
   }
 
   /**
@@ -935,7 +1632,7 @@ public class RegExUtil {
    * @return 删除后的内容
    */
   public static String removeFirstItem(@NonNull final String text, @NonNull final String regex, final int group, final int flags) {
-    return replaceFirstItem(text, regex, "", group, flags);
+    return replaceFirstItem(text, regex, "", group, flags, true);
   }
 
   /**
@@ -947,7 +1644,47 @@ public class RegExUtil {
    * @return 删除后的内容
    */
   public static String removeFirstItem(@NonNull final String text, @NonNull final String regex, final int group) {
-    return replaceFirstItem(text, regex, "", group);
+    return replaceFirstItem(text, regex, "", group, true);
+  }
+
+  /**
+   * 删除指定匹配项的第一个捕获组的匹配值
+   *
+   * @param text             需要删除的内容
+   * @param pattern          正则
+   * @param item             匹配项，从 0 开始
+   * @param useLocalGrouping 是否使用局部分组，即每个匹配项的捕获组序号从 1 开始
+   * @return 删除后的内容
+   */
+  public static String removeFirstGroup(@NonNull final String text, @NonNull final Pattern pattern, final int item, final boolean useLocalGrouping) {
+    return replace(text, pattern, "", item, 1, useLocalGrouping);
+  }
+
+  /**
+   * 删除指定匹配项的第一个捕获组的匹配值
+   *
+   * @param text             需要删除的内容
+   * @param regex            正则
+   * @param item             匹配项，从 0 开始
+   * @param flags            匹配模式
+   * @param useLocalGrouping 是否使用局部分组，即每个匹配项的捕获组序号从 1 开始
+   * @return 删除后的内容
+   */
+  public static String removeFirstGroup(@NonNull final String text, @NonNull final String regex, final int item, final int flags, final boolean useLocalGrouping) {
+    return replaceFirstGroup(text, regex, "", item, flags, useLocalGrouping);
+  }
+
+  /**
+   * 删除指定匹配项的第一个捕获组的匹配值
+   *
+   * @param text             需要删除的内容
+   * @param regex            正则
+   * @param item             匹配项，从 0 开始
+   * @param useLocalGrouping 是否使用局部分组，即每个匹配项的捕获组序号从 1 开始
+   * @return 删除后的内容
+   */
+  public static String removeFirstGroup(@NonNull final String text, @NonNull final String regex, final int item, final boolean useLocalGrouping) {
+    return replaceFirstGroup(text, regex, "", item, useLocalGrouping);
   }
 
   /**
@@ -959,7 +1696,7 @@ public class RegExUtil {
    * @return 删除后的内容
    */
   public static String removeFirstGroup(@NonNull final String text, @NonNull final Pattern pattern, final int item) {
-    return replace(text, pattern, "", item, 1);
+    return replace(text, pattern, "", item, 1, true);
   }
 
   /**
@@ -972,7 +1709,7 @@ public class RegExUtil {
    * @return 删除后的内容
    */
   public static String removeFirstGroup(@NonNull final String text, @NonNull final String regex, final int item, final int flags) {
-    return replaceFirstGroup(text, regex, "", item, flags);
+    return replaceFirstGroup(text, regex, "", item, flags, true);
   }
 
   /**
@@ -984,7 +1721,44 @@ public class RegExUtil {
    * @return 删除后的内容
    */
   public static String removeFirstGroup(@NonNull final String text, @NonNull final String regex, final int item) {
-    return replaceFirstGroup(text, regex, "", item);
+    return replaceFirstGroup(text, regex, "", item, true);
+  }
+
+  /**
+   * 删除第一个匹配项的第一个捕获组的匹配值
+   *
+   * @param text             需要删除的内容
+   * @param pattern          正则
+   * @param useLocalGrouping 是否使用局部分组，即每个匹配项的捕获组序号从 1 开始
+   * @return 删除后的内容
+   */
+  public static String removeFirstItemGroup(@NonNull final String text, @NonNull final Pattern pattern, final boolean useLocalGrouping) {
+    return replaceFirstItemGroup(text, pattern, "", useLocalGrouping);
+  }
+
+  /**
+   * 删除第一个匹配项的第一个捕获组的匹配值
+   *
+   * @param text             需要删除的内容
+   * @param regex            正则
+   * @param flags            匹配模式
+   * @param useLocalGrouping 是否使用局部分组，即每个匹配项的捕获组序号从 1 开始
+   * @return 删除后的内容
+   */
+  public static String removeFirstItemGroup(@NonNull final String text, @NonNull final String regex, final int flags, final boolean useLocalGrouping) {
+    return replaceFirstItemGroup(text, regex, "", flags, useLocalGrouping);
+  }
+
+  /**
+   * 删除第一个匹配项的第一个捕获组的匹配值
+   *
+   * @param text             需要删除的内容
+   * @param regex            正则
+   * @param useLocalGrouping 是否使用局部分组，即每个匹配项的捕获组序号从 1 开始
+   * @return 删除后的内容
+   */
+  public static String removeFirstItemGroup(@NonNull final String text, @NonNull final String regex, final boolean useLocalGrouping) {
+    return replaceFirstItemGroup(text, regex, "", useLocalGrouping);
   }
 
   /**
@@ -995,7 +1769,7 @@ public class RegExUtil {
    * @return 删除后的内容
    */
   public static String removeFirstItemGroup(@NonNull final String text, @NonNull final Pattern pattern) {
-    return replaceFirstItemGroup(text, pattern, "");
+    return replaceFirstItemGroup(text, pattern, "", true);
   }
 
   /**
@@ -1007,7 +1781,7 @@ public class RegExUtil {
    * @return 删除后的内容
    */
   public static String removeFirstItemGroup(@NonNull final String text, @NonNull final String regex, final int flags) {
-    return replaceFirstItemGroup(text, regex, "", flags);
+    return replaceFirstItemGroup(text, regex, "", flags, true);
   }
 
   /**
@@ -1018,7 +1792,47 @@ public class RegExUtil {
    * @return 删除后的内容
    */
   public static String removeFirstItemGroup(@NonNull final String text, @NonNull final String regex) {
-    return replaceFirstItemGroup(text, regex, "");
+    return replaceFirstItemGroup(text, regex, "", true);
+  }
+
+  /**
+   * 删除所有匹配项的指定捕获组的匹配值
+   *
+   * @param text             需要删除的内容
+   * @param pattern          正则
+   * @param group            捕获组，从 1 开始，0 为所在匹配项所有捕获组
+   * @param useLocalGrouping 是否使用局部分组，即每个匹配项的捕获组序号从 1 开始
+   * @return 删除后的内容
+   */
+  public static String removeAllItems(@NonNull final String text, @NonNull final Pattern pattern, final int group, final boolean useLocalGrouping) {
+    return replaceAllItems(text, pattern, "", group, useLocalGrouping);
+  }
+
+  /**
+   * 删除所有匹配项的指定捕获组的匹配值
+   *
+   * @param text             需要删除的内容
+   * @param regex            正则
+   * @param group            捕获组，从 1 开始，0 为所在匹配项所有捕获组
+   * @param flags            匹配模式
+   * @param useLocalGrouping 是否使用局部分组，即每个匹配项的捕获组序号从 1 开始
+   * @return 删除后的内容
+   */
+  public static String removeAllItems(@NonNull final String text, @NonNull final String regex, final int group, final int flags, final boolean useLocalGrouping) {
+    return replaceAllItems(text, regex, "", group, flags, useLocalGrouping);
+  }
+
+  /**
+   * 删除所有匹配项的指定捕获组的匹配值
+   *
+   * @param text             需要删除的内容
+   * @param regex            正则
+   * @param group            捕获组，从 1 开始，0 为所在匹配项所有捕获组
+   * @param useLocalGrouping 是否使用局部分组，即每个匹配项的捕获组序号从 1 开始
+   * @return 删除后的内容
+   */
+  public static String removeAllItems(@NonNull final String text, @NonNull final String regex, final int group, final boolean useLocalGrouping) {
+    return replaceAllItems(text, regex, "", group, useLocalGrouping);
   }
 
   /**
@@ -1030,7 +1844,7 @@ public class RegExUtil {
    * @return 删除后的内容
    */
   public static String removeAllItems(@NonNull final String text, @NonNull final Pattern pattern, final int group) {
-    return replaceAllItems(text, pattern, "", group);
+    return replaceAllItems(text, pattern, "", group, true);
   }
 
   /**
@@ -1043,7 +1857,7 @@ public class RegExUtil {
    * @return 删除后的内容
    */
   public static String removeAllItems(@NonNull final String text, @NonNull final String regex, final int group, final int flags) {
-    return replaceAllItems(text, regex, "", group, flags);
+    return replaceAllItems(text, regex, "", group, flags, true);
   }
 
   /**
@@ -1055,7 +1869,44 @@ public class RegExUtil {
    * @return 删除后的内容
    */
   public static String removeAllItems(@NonNull final String text, @NonNull final String regex, final int group) {
-    return replaceAllItems(text, regex, "", group);
+    return replaceAllItems(text, regex, "", group, true);
+  }
+
+  /**
+   * 删除所有匹配项的第一个捕获组的匹配值
+   *
+   * @param text             需要删除的内容
+   * @param pattern          正则
+   * @param useLocalGrouping 是否使用局部分组，即每个匹配项的捕获组序号从 1 开始
+   * @return 删除后的内容
+   */
+  public static String removeAllItemsFirstGroup(@NonNull final String text, @NonNull final Pattern pattern, final boolean useLocalGrouping) {
+    return replaceAllItemsFirstGroup(text, pattern, "", useLocalGrouping);
+  }
+
+  /**
+   * 删除所有匹配项的第一个捕获组的匹配值
+   *
+   * @param text             需要删除的内容
+   * @param regex            正则
+   * @param flags            匹配模式
+   * @param useLocalGrouping 是否使用局部分组，即每个匹配项的捕获组序号从 1 开始
+   * @return 删除后的内容
+   */
+  public static String removeAllItemsFirstGroup(@NonNull final String text, @NonNull final String regex, final int flags, final boolean useLocalGrouping) {
+    return replaceAllItemsFirstGroup(text, regex, "", flags, useLocalGrouping);
+  }
+
+  /**
+   * 删除所有匹配项的第一个捕获组的匹配值
+   *
+   * @param text             需要删除的内容
+   * @param regex            正则
+   * @param useLocalGrouping 是否使用局部分组，即每个匹配项的捕获组序号从 1 开始
+   * @return 删除后的内容
+   */
+  public static String removeAllItemsFirstGroup(@NonNull final String text, @NonNull final String regex, final boolean useLocalGrouping) {
+    return replaceAllItemsFirstGroup(text, regex, "", useLocalGrouping);
   }
 
   /**
@@ -1066,7 +1917,7 @@ public class RegExUtil {
    * @return 删除后的内容
    */
   public static String removeAllItemsFirstGroup(@NonNull final String text, @NonNull final Pattern pattern) {
-    return replaceAllItemsFirstGroup(text, pattern, "");
+    return replaceAllItemsFirstGroup(text, pattern, "", true);
   }
 
   /**
@@ -1078,7 +1929,7 @@ public class RegExUtil {
    * @return 删除后的内容
    */
   public static String removeAllItemsFirstGroup(@NonNull final String text, @NonNull final String regex, final int flags) {
-    return replaceAllItemsFirstGroup(text, regex, "", flags);
+    return replaceAllItemsFirstGroup(text, regex, "", flags, true);
   }
 
   /**
@@ -1089,7 +1940,7 @@ public class RegExUtil {
    * @return 删除后的内容
    */
   public static String removeAllItemsFirstGroup(@NonNull final String text, @NonNull final String regex) {
-    return replaceAllItemsFirstGroup(text, regex, "");
+    return replaceAllItemsFirstGroup(text, regex, "", true);
   }
 
   /**
@@ -1131,12 +1982,49 @@ public class RegExUtil {
   /**
    * 删除所有匹配项的所有捕获组的匹配值
    *
+   * @param text              需要删除的内容
+   * @param pattern           正则
+   * @param useMatchIfNoGroup 如果没有捕获组是否使用匹配项本身
+   * @return 删除后的内容
+   */
+  public static String removeAll(@NonNull final String text, @NonNull final Pattern pattern, final boolean useMatchIfNoGroup) {
+    return replaceAll(text, pattern, "", useMatchIfNoGroup);
+  }
+
+  /**
+   * 删除所有匹配项的所有捕获组的匹配值
+   *
+   * @param text              需要删除的内容
+   * @param regex             正则
+   * @param flags             匹配模式
+   * @param useMatchIfNoGroup 如果没有捕获组是否使用匹配项本身
+   * @return 删除后的内容
+   */
+  public static String removeAll(@NonNull final String text, @NonNull final String regex, final int flags, final boolean useMatchIfNoGroup) {
+    return replaceAll(text, regex, "", flags, useMatchIfNoGroup);
+  }
+
+  /**
+   * 删除所有匹配项的所有捕获组的匹配值
+   *
+   * @param text              需要删除的内容
+   * @param regex             正则
+   * @param useMatchIfNoGroup 如果没有捕获组是否使用匹配项本身
+   * @return 删除后的内容
+   */
+  public static String removeAll(@NonNull final String text, @NonNull final String regex, final boolean useMatchIfNoGroup) {
+    return replaceAll(text, regex, "", useMatchIfNoGroup);
+  }
+
+  /**
+   * 删除所有匹配项的所有捕获组的匹配值
+   *
    * @param text    需要删除的内容
    * @param pattern 正则
    * @return 删除后的内容
    */
   public static String removeAll(@NonNull final String text, @NonNull final Pattern pattern) {
-    return replaceAll(text, pattern, "");
+    return replaceAll(text, pattern, "", false);
   }
 
   /**
@@ -1148,7 +2036,7 @@ public class RegExUtil {
    * @return 删除后的内容
    */
   public static String removeAll(@NonNull final String text, @NonNull final String regex, final int flags) {
-    return replaceAll(text, regex, "", flags);
+    return replaceAll(text, regex, "", flags, false);
   }
 
   /**
@@ -1159,7 +2047,7 @@ public class RegExUtil {
    * @return 删除后的内容
    */
   public static String removeAll(@NonNull final String text, @NonNull final String regex) {
-    return replaceAll(text, regex, "");
+    return replaceAll(text, regex, "", false);
   }
 
   /**
