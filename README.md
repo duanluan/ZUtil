@@ -18,7 +18,7 @@
 ## 特性
 
 * 更快：使用 [JMH](https://openjdk.org/projects/code-tools/jmh/) 进行[性能测试](https://github.com/duanluan/zutil/tree/main/zutil-all/src/test/java/top/csaf/jmh)。
-* 更全：[时间工具类](https://github.com/duanluan/zutil/blob/main/zutil-date/src/main/java/top/csaf/date/DateUtil.java) 130+ 个方法，2700+ 行；[正则工具类](https://github.com/duanluan/zutil/blob/main/zutil-regex/src/main/java/top/csaf/regex/RegExUtil.java) 80+ 个方法，1100+ 行。
+* 更全：[时间工具类](https://github.com/duanluan/zutil/blob/main/zutil-date/src/main/java/top/csaf/date/DateUtil.java) 170+ 个方法，3300+ 行；[正则工具类](https://github.com/duanluan/zutil/blob/main/zutil-regex/src/main/java/top/csaf/regex/RegExUtil.java) 140+ 个方法，2000+ 行。
 * 更安全：使用 [JUnit](https://junit.org/junit5) 进行套件测试，[JaCoCo](https://www.jacoco.org/jacoco/index.html) 进行[代码覆盖率测试](https://github.com/duanluan/zutil/tree/main/zutil-all/src/test/java/top/csaf/junit)，保证每行代码都符合预期，更少出 BUG。
 
 ## Stargazers over time
