@@ -7,11 +7,6 @@ import top.csaf.lang.ObjUtil;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
- * @Description Object 工具类测试
- * @Author Rick
- * @Date 2024/5/29 10:34
- **/
 @Slf4j
 @DisplayName("ObjUtil 工具类测试")
 public class ObjUtilTest {

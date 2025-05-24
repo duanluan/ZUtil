@@ -4,28 +4,24 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.DefaultParameterNameDiscoverer;
-import top.csaf.coll.MapUtil;
 import top.csaf.lang.StrUtil;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static top.csaf.coll.MapUtil.*;
 
-/**
- * @Description MapUtil 工具类测试
- * @Author Rick
- * @Date 2024/5/30 09:21
- **/
 @Slf4j
 @DisplayName("MapUtil 工具类测试")
 public class MapUtilTest {
 
-  public static void main(String[] args) {
-    genMapUtilsFn();
-  }
+  // public static void main(String[] args) {
+  //   genMapUtilsFn();
+  // }
 
   /**
    * 调用 {@link org.apache.commons.collections4.MapUtils } 的方法
@@ -79,5 +75,161 @@ public class MapUtilTest {
       System.out.println("  " + (method.getReturnType().getSimpleName().equals("void") ? "" : "return ") + "org.apache.commons.collections4.MapUtils." + method.getName() + "(" + StrUtil.join(paramNames, ", ") + ");");
       System.out.println("}\n");
     }
+  }
+
+  @DisplayName("containsKeys：根据 Key 数组从 Map 中获取包含的 Key 列表")
+  @Test
+  void testContainsKeys() {
+    // 准备测试数据
+    Map<String, Integer> map = new HashMap<>();
+    map.put("a", 1);
+    map.put("b", 2);
+    map.put("c", 3);
+
+    // 测试正常情况
+    List<String> result = containsKeys(map, "a", "c", "d");
+    assertEquals(2, result.size());
+    assertTrue(result.contains("a"));
+    assertTrue(result.contains("c"));
+    assertFalse(result.contains("d"));
+
+    // 测试空 key 数组
+    result = containsKeys(map);
+    assertEquals(0, result.size());
+
+    // 测试 map 为 null
+    result = containsKeys(null, "a", "b");
+    assertEquals(0, result.size());
+  }
+
+  @DisplayName("containsKeysFirst：根据 Key 数组从 Map 中获取第一个包含的 Key")
+  @Test
+  void testContainsKeysFirst() {
+    // 准备测试数据
+    Map<String, Integer> map = new HashMap<>();
+    map.put("a", 1);
+    map.put("b", 2);
+    map.put("c", 3);
+
+    // 测试正常情况
+    assertEquals("b", containsKeysFirst(map, "b", "a", "d"));
+    assertEquals("c", containsKeysFirst(map, "d", "c", "a"));
+
+    // 测试都不包含的情况
+    assertNull(containsKeysFirst(map, "d", "e"));
+
+    // 测试空 key 数组
+    assertNull(containsKeysFirst(map));
+
+    // 测试 map 为 null
+    assertNull(containsKeysFirst(null, "a", "b"));
+  }
+
+  @DisplayName("getAll：根据 Key 数组从 Map 中获取多个 Value")
+  @Test
+  void testGetAll() {
+    // 准备测试数据
+    Map<String, Integer> map = new HashMap<>();
+    map.put("a", 1);
+    map.put("b", 2);
+    map.put("c", null);
+
+    // 测试有 isAddNull 参数的方法，isAddNull=true
+    List<Integer> result = getAll(map, true, "a", "d", "c", "b");
+    assertEquals(4, result.size());
+    assertEquals(1, result.get(0)); // a->1
+    assertNull(result.get(1));      // d->null (不存在，添加null)
+    assertNull(result.get(2));      // c->null (存在，值为null)
+    assertEquals(2, result.get(3)); // b->2
+
+    // 测试有 isAddNull 参数的方法，isAddNull=false
+    result = getAll(map, false, "a", "d", "c", "b");
+    assertEquals(3, result.size());
+    assertEquals(1, result.get(0)); // a->1
+    assertNull(result.get(1));      // c->null
+    assertEquals(2, result.get(2)); // b->2
+
+    // 测试无 isAddNull 参数的方法（默认false）
+    result = getAll(map, "a", "d", "c", "b");
+    assertEquals(3, result.size());
+
+    // 测试空 key 数组
+    result = getAll(map, true);
+    assertEquals(0, result.size());
+
+    // 测试 map 为 null
+    result = getAll((Map<String, Integer>) null, true, "a", "b");
+    assertEquals(0, result.size());
+  }
+
+  @DisplayName("getAllNotNull：根据 Key 数组从 Map 中获取 Value 列表（不包含 null）")
+  @Test
+  void testGetAllNotNull() {
+    // 准备测试数据
+    Map<String, Integer> map = new HashMap<>();
+    map.put("a", 1);
+    map.put("b", 2);
+    map.put("c", null);
+
+    // 测试正常情况
+    List<Integer> result = getAllNotNull(map, "a", "c", "d", "b");
+    assertEquals(2, result.size());
+    assertEquals(1, result.get(0)); // a->1
+    assertEquals(2, result.get(1)); // b->2
+
+    // 测试空 key 数组
+    result = getAllNotNull(map);
+    assertEquals(0, result.size());
+
+    // 测试 map 为 null
+    result = getAllNotNull(null, "a", "b");
+    assertEquals(0, result.size());
+  }
+
+  @DisplayName("getAny：根据 Key 数组从 Map 中获取第一个符合的 Value")
+  @Test
+  void testGetAny() {
+    // 准备测试数据
+    Map<String, Integer> map = new HashMap<>();
+    map.put("a", 1);
+    map.put("b", 2);
+    map.put("c", null);
+
+    // 测试正常情况
+    assertEquals(1, getAny(map, "a", "b"));
+    assertEquals(2, getAny(map, "d", "b", "a"));
+    assertNull(getAny(map, "c", "d")); // c 存在但值为 null
+
+    // 测试都不包含的情况
+    assertNull(getAny(map, "d", "e"));
+
+    // 测试空 key 数组
+    assertNull(getAny(map));
+
+    // 测试 map 为 null
+    assertNull(getAny(null, "a", "b"));
+  }
+
+  @DisplayName("getAnyNotNull：根据 Key 数组从 Map 中获取第一个符合的 Value（不包含 null）")
+  @Test
+  void testGetAnyNotNull() {
+    // 准备测试数据
+    Map<String, Integer> map = new HashMap<>();
+    map.put("a", 1);
+    map.put("b", 2);
+    map.put("c", null);
+
+    // 测试正常情况
+    assertEquals(1, getAnyNotNull(map, "a", "b"));
+    assertEquals(2, getAnyNotNull(map, "c", "b", "a")); // c 的值为 null，跳过
+
+    // 测试都不含有非null值的情况
+    assertNull(getAnyNotNull(map, "c", "d", "e"));
+
+    // 测试空 key 数组
+    assertNull(getAnyNotNull(map));
+
+    // 测试 map 为 null
+    assertNull(getAnyNotNull(null, "a", "b"));
   }
 }
